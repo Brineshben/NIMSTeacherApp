@@ -21,7 +21,8 @@ class LeaveRequest extends StatefulWidget {
   State<LeaveRequest> createState() => _LeaveRequestState();
 }
 
-class _LeaveRequestState extends State<LeaveRequest> with WidgetsBindingObserver {
+class _LeaveRequestState extends State<LeaveRequest>
+    with WidgetsBindingObserver {
   LeaveRequestController leaveRequestController =
       Get.find<LeaveRequestController>();
   final TextEditingController _searchController = TextEditingController();
@@ -53,9 +54,7 @@ class _LeaveRequestState extends State<LeaveRequest> with WidgetsBindingObserver
 
   @override
   void didChangeMetrics() {
-    setState(() {
-
-    });
+    setState(() {});
     super.didChangeMetrics();
   }
 
@@ -266,7 +265,8 @@ class _LeaveRequestState extends State<LeaveRequest> with WidgetsBindingObserver
                                 cursorColor: Colors.grey,
                                 keyboardType: TextInputType.text,
                                 decoration: InputDecoration(
-                                    hintStyle: const TextStyle(color: Colors.grey),
+                                    hintStyle:
+                                        const TextStyle(color: Colors.grey),
                                     hintText: "Search Student Name or Adm.No",
                                     prefixIcon: const Icon(
                                       Icons.search,
@@ -314,7 +314,14 @@ class _LeaveRequestState extends State<LeaveRequest> with WidgetsBindingObserver
                                   return SizedBox(
                                     height: ScreenUtil().screenHeight * 0.7,
                                     child: SingleChildScrollView(
-                                      padding: EdgeInsets.only(bottom: View.of(context).viewInsets.bottom == 0 ? 200 : 400).h,
+                                      padding: EdgeInsets.only(
+                                              bottom: View.of(context)
+                                                          .viewInsets
+                                                          .bottom ==
+                                                      0
+                                                  ? 200
+                                                  : 400)
+                                          .h,
                                       child: Column(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
@@ -373,48 +380,58 @@ class _LeaveRequestState extends State<LeaveRequest> with WidgetsBindingObserver
                                                                     .chatcolor),
                                                           ),
                                                           child: ClipRRect(
-                                                            borderRadius: BorderRadius.circular(100).r,
-                                                            child: CachedNetworkImage(
-                                                                                                                          imageUrl: "${ApiConstants.downloadUrl}${studentList[i].profileImage}",
-                                                                                                                          placeholder:
-                                                              (context,
-                                                                      url) =>
-                                                                  Text(
-                                                            studentList[i]
-                                                                    .name
-                                                                    ?.substring(
-                                                                        0,
-                                                                        1) ??
-                                                                '',
-                                                            style: const TextStyle(
-                                                                color: Color(
-                                                                    0xFFB1BFFF),
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontSize:
-                                                                    20),
-                                                                                                                          ),
-                                                                                                                          errorWidget:
-                                                              (context, url,
-                                                                      error) =>
-                                                                  Text(
-                                                            studentList[i]
-                                                                    .name
-                                                                    ?.substring(
-                                                                        0,
-                                                                        1) ??
-                                                                '',
-                                                            style: const TextStyle(
-                                                                color: Color(
-                                                                    0xFFB1BFFF),
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontSize:
-                                                                    20),
-                                                                                                                          ),
-                                                                                                                        ),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                        .circular(
+                                                                            100)
+                                                                    .r,
+                                                            child:
+                                                                CachedNetworkImage(
+                                                              imageUrl:
+                                                                  "${ApiConstants.downloadUrl}${studentList[i].profileImage}",
+                                                              placeholder:
+                                                                  (context,
+                                                                          url) =>
+                                                                      Center(
+                                                                child: Text(
+                                                                  studentList[i]
+                                                                          .name
+                                                                          ?.substring(
+                                                                              0,
+                                                                              1) ??
+                                                                      '',
+                                                                  style: const TextStyle(
+                                                                      color: Color(
+                                                                          0xFFB1BFFF),
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontSize:
+                                                                          20),
+                                                                ),
+                                                              ),
+                                                              errorWidget:
+                                                                  (context, url,
+                                                                          error) =>
+                                                                      Center(
+                                                                child: Text(
+                                                                  studentList[i]
+                                                                          .name
+                                                                          ?.substring(
+                                                                              0,
+                                                                              1) ??
+                                                                      '',
+                                                                  style: const TextStyle(
+                                                                      color: Color(
+                                                                          0xFFB1BFFF),
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontSize:
+                                                                          20),
+                                                                ),
+                                                              ),
+                                                            ),
                                                           ),
                                                         ),
                                                         SizedBox(
