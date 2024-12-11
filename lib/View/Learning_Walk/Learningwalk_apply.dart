@@ -262,7 +262,7 @@ class _LessonWalkApplyState extends State<LessonWalkApply> {
                                         child: TextFormField(
                                           maxLength: 1000,
                                           validator: (val) => val!.isEmpty
-                                              ? 'Please Enter the Summary'
+                                              ? 'Please Enter Summary'
                                               : null,
                                           controller: _summaryController,
                                           focusNode: keyboardController.summaryFocusNode.value,

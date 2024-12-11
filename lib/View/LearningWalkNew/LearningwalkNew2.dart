@@ -365,7 +365,7 @@ class _LearningWalknew2State extends State<LearningWalknew2> {
                               child: TextFormField(
                                 maxLength: 1000,
                                 validator: (val) => val!.isEmpty
-                                    ? 'Please Enter the Summary'
+                                    ? 'Please Enter Summary'
                                     : null,
                                 controller: _FocusLWController,
                                 // focusNode: keyboardController.summaryFocusNode.value,
@@ -440,7 +440,7 @@ class _LearningWalknew2State extends State<LearningWalknew2> {
                                         child: TextFormField(
                                           maxLength: 1000,
                                           validator: (val) => val!.isEmpty
-                                              ? 'Please Enter the Question to Ask Pupils'
+                                              ? 'Please Enter Question to Ask Pupils'
                                               : null,
                                           controller: _Questiontopupilontroller,
                                           // focusNode: keyboardController.summaryFocusNode.value,
@@ -494,7 +494,7 @@ class _LearningWalknew2State extends State<LearningWalknew2> {
                                         child: TextFormField(
                                           maxLength: 1000,
                                           validator: (val) => val!.isEmpty
-                                              ? 'Please Enter the Question to Ask Teacher'
+                                              ? 'Please Enter Question to Ask Teacher'
                                               : null,
                                           controller:
                                               _QuestiontoaskteacherController,
@@ -552,7 +552,7 @@ class _LearningWalknew2State extends State<LearningWalknew2> {
                               child: TextFormField(
                                 maxLength: 1000,
                                 validator: (val) => val!.isEmpty
-                                    ? 'Please Enter the Summary'
+                                    ? 'Please Enter Summary'
                                     : null,
                                 controller: _summaryController,
                                 // focusNode: keyboardController.summaryFocusNode.value,
