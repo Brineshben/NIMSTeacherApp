@@ -273,7 +273,7 @@ class _LessonObservationApplyState extends State<LessonObservationApply> {
                                         child: TextFormField(
                                           maxLength: 1000,
                                           validator: (val) => val!.isEmpty
-                                              ? 'Please Enter  Summary.'
+                                              ? 'Please Enter the  Summary.'
                                               : null,
                                           controller: _summaryController,
                                           focusNode: keyboardController.summaryFocusNode.value,
@@ -321,7 +321,7 @@ class _LessonObservationApplyState extends State<LessonObservationApply> {
                                           focusNode: keyboardController.whatWentWellFocusNode.value,
                                           maxLength: 1000,
                                           validator: (val) => val!.isEmpty
-                                              ? 'Please Enter What went well.'
+                                              ? 'Please Enter the What went well.'
                                               : null,
                                           decoration: InputDecoration(
                                               hintStyle:
@@ -367,7 +367,7 @@ class _LessonObservationApplyState extends State<LessonObservationApply> {
                                         child: TextFormField(
                                           maxLength: 1000,
                                           validator: (val) => val!.isEmpty
-                                              ? 'Please Enter Even better if.'
+                                              ? 'Please Enter the Even better if.'
                                               : null,
                                           controller: _evenBetterIfController,
                                           focusNode: keyboardController.evenBetterIfFocusNode.value,

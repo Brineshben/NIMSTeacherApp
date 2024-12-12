@@ -463,7 +463,7 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                         child: TextFormField(
                                           maxLength: 1000,
                                           validator: (val) => val!.isEmpty
-                                              ? 'Please Enter Question to Ask Pupils'
+                                              ? 'Please Enter the Question to Ask Pupils'
                                               : null,
                                           controller:
                                           _Questiontopupilontroller,
@@ -522,7 +522,7 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                         child: TextFormField(
                                           maxLength: 1000,
                                           validator: (val) => val!.isEmpty
-                                              ? 'Please Enter Question to Ask Teacher'
+                                              ? 'Please Enter the Question to Ask Teacher'
                                               : null,
                                           controller:
                                           _QuestiontoaskteacherController,
@@ -584,7 +584,7 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                     child: TextFormField(
                                       maxLength: 1000,
                                       validator: (val) => val!.isEmpty
-                                          ? 'Please Enter  Summary'
+                                          ? 'Please Enter the Summary'
                                           : null,
                                       controller: _summaryController,
                                       // focusNode: keyboardController.summaryFocusNode.value,
