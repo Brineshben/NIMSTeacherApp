@@ -24,11 +24,11 @@ class _TeacherState extends State<Teacher> {
 
   @override
   void initState() {
+    print("-------------Arun print-here---");
 
 
     initialize();
     Get.find<Popupcontoller>().fetchAllStudentDateList();
-    print("-------------Arun print-here---");
     super.initState();
   }
 

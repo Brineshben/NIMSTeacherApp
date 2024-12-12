@@ -1078,53 +1078,53 @@ class _NonTeacherStudentListState extends State<NonTeacherStudentList> {
   //   super.dispose();
   // }
 
-  Widget button() {
-    if (isStudentListnull.isEmpty || disableKey || newSpinner) {
-      // return FloatingActionButton.extended(
-      //     elevation: 0,
-      //     onPressed: () {},
-      //     backgroundColor: Colors.white,
-      //     label: CircularProgressIndicator(color: ColorUtils.BLUE,));
-      return const SizedBox();
-    } else {
-      return FloatingActionButton.extended(
-        elevation:
-            isStudentListnull.isEmpty || disableKey || newSpinner ? 0 : 8,
-        onPressed: isStudentListnull.isEmpty || disableKey
-            ? () {}
-            : () {
-                if (_searchController.text.isNotEmpty && newResult.isEmpty) {
-                  snackBar(
-                      context: context,
-                      message: "No Data Available to Submit",
-                      color: Colors.red);
-                  // Utils.showToastError("No Data Available to Submit")
-                  //     .show(context);
-                } else {
-                  setState(() {
-                    newSpinner = true;
-                    disableKey = true;
-                  });
-                  if (attendance_flag == true) {
-                    print("kckkckckckkkckc");
-                    snackBar(
-                        context: context,
-                        message: "Please wait the data is uploading",
-                        color: Colors.red);
-                    // Utils.showToastError("Please wait the data is uploading")
-                    //     .show(context);
-                  } else {
-                    SubmitAttendance();
-                  }
-                }
-              },
-        backgroundColor: isStudentListnull.isEmpty || disableKey
-            ? Colors.transparent
-            : Colors.blue,
-        label: const Text("SUBMIT"),
-      );
-    }
-  }
+  // Widget button() {
+  //   if (isStudentListnull.isEmpty || disableKey || newSpinner) {
+  //     // return FloatingActionButton.extended(
+  //     //     elevation: 0,
+  //     //     onPressed: () {},
+  //     //     backgroundColor: Colors.white,
+  //     //     label: CircularProgressIndicator(color: ColorUtils.BLUE,));
+  //     return const SizedBox();
+  //   } else {
+  //     return FloatingActionButton.extended(
+  //       elevation:
+  //           isStudentListnull.isEmpty || disableKey || newSpinner ? 0 : 8,
+  //       onPressed: isStudentListnull.isEmpty || disableKey
+  //           ? () {}
+  //           : () {
+  //               if (_searchController.text.isNotEmpty && newResult.isEmpty) {
+  //                 snackBar(
+  //                     context: context,
+  //                     message: "No Data Available to Submit",
+  //                     color: Colors.red);
+  //                 // Utils.showToastError("No Data Available to Submit")
+  //                 //     .show(context);
+  //               } else {
+  //                 setState(() {
+  //                   newSpinner = true;
+  //                   disableKey = true;
+  //                 });
+  //                 if (attendance_flag == true) {
+  //                   print("kckkckckckkkckc");
+  //                   snackBar(
+  //                       context: context,
+  //                       message: "Please wait the data is uploading",
+  //                       color: Colors.red);
+  //                   // Utils.showToastError("Please wait the data is uploading")
+  //                   //     .show(context);
+  //                 } else {
+  //                   SubmitAttendance();
+  //                 }
+  //               }
+  //             },
+  //       backgroundColor: isStudentListnull.isEmpty || disableKey
+  //           ? Colors.transparent
+  //           : Colors.blue,
+  //       label: const Text("SUBMIT"),
+  //     );
+  //   }
+  // }
 }
 
 String capitalizeFirstLetterOfEachWord(String input) {
