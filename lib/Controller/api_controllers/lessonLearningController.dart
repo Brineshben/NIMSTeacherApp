@@ -119,8 +119,7 @@ class LessonLearningController extends GetxController {
     List<LearningwalkSubmitModel> lerningLearn =
         await LearningWalkDB.instance.fetchLearningWalks();
 
-    learningData.value =
-        lerningLearn.where((data) => data.addedDate == false).toList();
+    learningData.value = lerningLearn;
     lessonData.value =
         lessLearn.where((data) => data.isLesson == true).toList();
     print('lesson learn db length-------${lessLearn.length}');
