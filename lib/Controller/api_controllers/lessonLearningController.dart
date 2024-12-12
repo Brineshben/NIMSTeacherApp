@@ -126,6 +126,7 @@ class LessonLearningController extends GetxController {
   }
 
   Future<void> lessonSubmit(BuildContext context) async {
+    print("ben");
     bool result = await CheckConnectivity().check();
     if (!result) {
       await snackBar(
@@ -184,6 +185,7 @@ class LessonLearningController extends GetxController {
   }
 
   Future<void> learningSubmit(BuildContext context) async {
+    print("brineshhsh");
     bool result = await CheckConnectivity().check();
     if (!result) {
       await snackBar(
@@ -196,6 +198,7 @@ class LessonLearningController extends GetxController {
           Map<String, dynamic> resp =
               await ApiServices.getLearningwalksubmit(data: data);
           if (resp['status']['code'] == 200) {
+            await LearningWalkDB.instance.deleteLearningWalk(data.id!);
           } else {
             TeacherAppPopUps.submitFailed(
               title: "Error",
@@ -228,6 +231,7 @@ class LessonLearningController extends GetxController {
       }
     }
     await refreshLessLearnData().then((_) {
+      print("kakakakak");
       if (learningData.isEmpty) {
         TeacherAppPopUps.submitFailed(
           title: "Success",

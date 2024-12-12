@@ -273,7 +273,7 @@ class _LessonObservationApplyState extends State<LessonObservationApply> {
                                         child: TextFormField(
                                           maxLength: 1000,
                                           validator: (val) => val!.isEmpty
-                                              ? 'Please Enter the  Summary.'
+                                              ? 'Please Enter  Summary.'
                                               : null,
                                           controller: _summaryController,
                                           focusNode: keyboardController.summaryFocusNode.value,
@@ -321,7 +321,7 @@ class _LessonObservationApplyState extends State<LessonObservationApply> {
                                           focusNode: keyboardController.whatWentWellFocusNode.value,
                                           maxLength: 1000,
                                           validator: (val) => val!.isEmpty
-                                              ? 'Please Enter the What went well.'
+                                              ? 'Please Enter What went well.'
                                               : null,
                                           decoration: InputDecoration(
                                               hintStyle:
@@ -367,7 +367,7 @@ class _LessonObservationApplyState extends State<LessonObservationApply> {
                                         child: TextFormField(
                                           maxLength: 1000,
                                           validator: (val) => val!.isEmpty
-                                              ? 'Please Enter the Even better if.'
+                                              ? 'Please EnterEven better if.'
                                               : null,
                                           controller: _evenBetterIfController,
                                           focusNode: keyboardController.evenBetterIfFocusNode.value,

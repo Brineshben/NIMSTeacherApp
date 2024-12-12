@@ -290,8 +290,9 @@ class _LeaderState extends State<Leader> {
                                           iconColor: Colors.yellow.shade900,
                                         );
                                       }else{
-                                        print('-----notes${controller.learningData}');
                                         await controller.learningSubmit(context);
+                                        print('-----noteefefes${controller.learningData}');
+
                                       }
                                       context.loaderOverlay.hide();
                                     },

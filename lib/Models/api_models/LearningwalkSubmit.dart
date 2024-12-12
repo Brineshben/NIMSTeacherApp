@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 class LearningwalkSubmitModel {
+  int? id;
   String? academicYear;
   String? addedBy;
   String? addedDate;
@@ -20,7 +21,7 @@ class LearningwalkSubmitModel {
   String? whatWentWell;
 
   LearningwalkSubmitModel(
-      {this.academicYear,
+      {this.academicYear,this.id,
         this.addedBy,
         this.addedDate,
         this.batchId,
@@ -39,7 +40,7 @@ class LearningwalkSubmitModel {
         this.whatWentWell});
 
   LearningwalkSubmitModel.fromJson(Map<String, dynamic> json) {
-    academicYear = json['academic_year'];
+    academicYear = json['academic_year']; id = json['id'];
     addedBy = json['added_by'];
     addedDate = json['added_date'];
     batchId = json['batch_id'];
@@ -81,7 +82,7 @@ class LearningwalkSubmitModel {
   // }
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['academic_year'] = this.academicYear;
+    data['academic_year'] = this.academicYear; data['id'] = this.id;
     data['added_by'] = this.addedBy;
     data['added_date'] = this.addedDate;
     data['batch_id'] = this.batchId;
