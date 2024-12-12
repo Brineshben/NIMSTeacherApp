@@ -77,7 +77,8 @@ class _LearningWalknew1State extends State<LearningWalknew1> {
                         List<Details> ClassList = controller.classDetails.value;
                         List<Detailsbatch> batchList =
                             controller.batchDetils.value;
-                        List<DetailsTeacher> teacherDetails = controller.teacherDetails.value;
+                        List<DetailsTeacher> teacherDetails =
+                            controller.teacherDetails.value;
 
                         return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,8 +104,10 @@ class _LearningWalknew1State extends State<LearningWalknew1> {
                                             hintStyle: TextStyle(
                                                 color: Colors.black
                                                     .withOpacity(0.5)),
-                                            contentPadding: EdgeInsets.symmetric(
-                                                vertical: 18.h, horizontal: 20.w),
+                                            contentPadding:
+                                                EdgeInsets.symmetric(
+                                                    vertical: 18.h,
+                                                    horizontal: 20.w),
                                             hintText: "Class",
                                             border: OutlineInputBorder(
                                               borderRadius:
@@ -151,11 +154,8 @@ class _LearningWalknew1State extends State<LearningWalknew1> {
                                               child: Text(
                                                 Class.name ?? " ",
                                                 overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                    fontSize: 12
-                                                ),
+                                                style: TextStyle(fontSize: 12),
                                               ),
-
                                             )).toList(),
                                         value: _selectedValue1,
                                         onChanged: (classes) {
@@ -178,10 +178,13 @@ class _LearningWalknew1State extends State<LearningWalknew1> {
                                       child: DropdownButtonFormField(
                                         decoration: InputDecoration(
                                             hintStyle: TextStyle(
+
                                                 color: Colors.black
                                                     .withOpacity(0.5)),
-                                            contentPadding: EdgeInsets.symmetric(
-                                                vertical: 18.h, horizontal: 20.w),
+                                            contentPadding:
+                                                EdgeInsets.symmetric(
+                                                    vertical: 18.h,
+                                                    horizontal: 20.w),
                                             hintText: "Batch",
                                             border: OutlineInputBorder(
                                               borderRadius:
@@ -222,7 +225,6 @@ class _LearningWalknew1State extends State<LearningWalknew1> {
                                             value == null
                                                 ? 'Please Select the Batch'
                                                 : null,
-
                                         items: batchList
                                             .map((batch) =>
                                                 DropdownMenuItem<String>(
@@ -231,9 +233,8 @@ class _LearningWalknew1State extends State<LearningWalknew1> {
                                                     batch.name ?? "",
                                                     overflow:
                                                         TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                        fontSize: 12
-                                                    ),
+                                                    style:
+                                                        TextStyle(fontSize: 12),
                                                   ),
                                                 ))
                                             .toList(),
@@ -242,7 +243,8 @@ class _LearningWalknew1State extends State<LearningWalknew1> {
                                           setState(() {
                                             _selectedValue2 = batch ?? "";
                                           });
-                                          controller.fetchteacherdata(_selectedValue2!);
+                                          controller.fetchteacherdata(
+                                              _selectedValue2!);
                                         },
                                       ),
                                     ),
@@ -299,11 +301,9 @@ class _LearningWalknew1State extends State<LearningWalknew1> {
                                           DropdownMenuItem<String>(
                                             value: teacher.name,
                                             child: Text(
-                                              teacher.name?? "",
+                                              teacher.name ?? "",
                                               overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                fontSize: 12
-                                              ),
+                                              style: TextStyle(fontSize: 12),
                                             ),
                                           ))
                                       .toList(),
@@ -326,12 +326,21 @@ class _LearningWalknew1State extends State<LearningWalknew1> {
                                   padding: EdgeInsets.only(top: 25.h),
                                   child: GestureDetector(
                                     onTap: () {
-                                      if (_formKey.currentState!
-                                          .validate()){ Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  LearningWalknew2(teachername: _selectedValue3!, classsbatch: _selectedValue1!, Division: _selectedValue2!,)));}
+                                      if (_formKey.currentState!.validate()) {
+                                        Navigator.push(
+
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    LearningWalknew2(
+                                                      teachername:
+                                                          _selectedValue3!,
+                                                      classsbatch:
+                                                          _selectedValue1!,
+                                                      Division:
+                                                          _selectedValue2!,
+                                                    )));
+                                      }
 
                                       // if(_formKey.currentState!.validate()) {
                                       //   Navigator.push(

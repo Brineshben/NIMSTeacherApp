@@ -19,6 +19,8 @@ class LearningWalkController extends GetxController {
 
   void resetData() {
     classDetails.value = [];
+    batchDetils.value = [];
+    teacherDetails.value = [];
   }
 
   Future<void> fetchteacherclassdata() async {
