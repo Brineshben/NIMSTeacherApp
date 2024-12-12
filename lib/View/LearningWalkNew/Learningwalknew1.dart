@@ -185,7 +185,7 @@ class _LearningWalknew1State extends State<LearningWalknew1> {
                                                 EdgeInsets.symmetric(
                                                     vertical: 18.h,
                                                     horizontal: 20.w),
-                                            hintText: "Batch",
+                                            hintText: "Division",
                                             border: OutlineInputBorder(
                                               borderRadius:
                                                   const BorderRadius.all(
@@ -220,10 +220,10 @@ class _LearningWalknew1State extends State<LearningWalknew1> {
                                         isExpanded: true,
                                         padding: EdgeInsets.only(
                                             left: 10.w, right: 5.w),
-                                        hint: const Text('Batch'),
+                                        hint: const Text('Division'),
                                         validator: (dynamic value) =>
                                             value == null
-                                                ? 'Please Select the Batch'
+                                                ? 'Please Select the Division'
                                                 : null,
                                         items: batchList
                                             .map((batch) =>

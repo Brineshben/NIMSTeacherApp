@@ -56,6 +56,7 @@ class LearningWalkDB {
     final db = await database;
     return await db.insert('learning_walks', data);
   }
+
   Future<int> deleteLearningWalk(int id) async {
     final db = await database;
     return await db.delete(
@@ -64,12 +65,12 @@ class LearningWalkDB {
       whereArgs: [id], // Pass the id of the row to delete
     );
   }
+
   Future<List<LearningwalkSubmitModel>> fetchLearningWalks() async {
     final db = await database;
     List<Map<String, dynamic>> data = await db.query('learning_walks');
-    List<LearningwalkSubmitModel> resp = data.map((e) => LearningwalkSubmitModel.fromJson(e)).toList();
+    List<LearningwalkSubmitModel> resp =
+        data.map((e) => LearningwalkSubmitModel.fromJson(e)).toList();
     return resp;
   }
-
-
 }
