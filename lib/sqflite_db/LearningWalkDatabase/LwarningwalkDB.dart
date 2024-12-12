@@ -28,6 +28,7 @@ class LearningWalkDB {
         return db.execute('''
          CREATE TABLE learning_walks (
   id INTEGER PRIMARY KEY,
+  
   academic_year TEXT,
   added_by TEXT,
   added_date TEXT,

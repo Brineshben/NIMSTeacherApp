@@ -16,6 +16,7 @@ import '../../Services/check_connectivity.dart';
 import '../../Utils/Colors.dart';
 import '../../sqflite_db/LearningWalkDatabase/LwarningwalkDB.dart';
 import '../CWidgets/AppBarBackground.dart';
+import '../CWidgets/TeacherAppPopUps.dart';
 import '../CWidgets/commons.dart';
 import '../Home_Page/Home_Widgets/user_details.dart';
 import '../MorePage/scanData.dart';
@@ -38,6 +39,8 @@ class LearningWalknew2 extends StatefulWidget {
 class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBindingObserver{
   final _formKey = GlobalKey<FormState>();
   String? _selectedValue;
+  bool _isTextManuallyEdited = false;
+
 
   TextEditingController _FocusLWController = TextEditingController();
   TextEditingController _summaryController = TextEditingController();
@@ -69,8 +72,11 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
   }
   @override
   Widget build(BuildContext context) {
+    String iconname = "${widget.classsbatch}${widget.Division}";
     List<String> nameParts = widget.teachername?.split(" ") ?? [];
     String? placeholderName;
+
+
     try {
       placeholderName = nameParts.length > 1
           ? "${nameParts[0].trim().substring(0, 1)}${nameParts[1].trim().substring(0, 1)}"
@@ -179,7 +185,7 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                                           (context, url, error) =>
                                                           Center(
                                                             child: Text(
-                                                              placeholderName ?? '--',
+                                                              iconname ?? '--',
                                                               style: TextStyle(
                                                                   color: const Color(
                                                                       0xFFB1BFFF),
@@ -233,7 +239,7 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                                   SizedBox(
                                                     height: 2.h,
                                                   ),
-                                                  widget.teachername!=null ? SizedBox(
+                                                  widget.teachername==null ? SizedBox():SizedBox(
                                                     child: SingleChildScrollView(
                                                       child: Text(
                                                         "TEACHER : ${widget.teachername}",
@@ -244,7 +250,7 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                                             FontWeight.w400),
                                                       ),
                                                     ),
-                                                  ):SizedBox()
+                                                  )
                                                 ],
                                               )
                                             ],
@@ -342,10 +348,10 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                           left: 10.w, right: 5.w),
                                       hint: const Text(
                                           'Select Focus of Learning Walk'),
-                                      validator: (dynamic value) =>
-                                      value == null
-                                          ? 'Select Focus of Learning Walk'
-                                          : null,
+                                      // validator: (dynamic value) =>
+                                      // value == null
+                                      //     ? 'Select Focus of Learning Walk'
+                                      //     : null,
                                       items: focusdata
                                           .map((focus) =>
                                           DropdownMenuItem<String>(
@@ -385,9 +391,11 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                         right: 20.w,
                                         bottom: 5.h),
                                     child: TextFormField(
+                                      autovalidateMode:AutovalidateMode.onUserInteraction,
+
                                       maxLength: 1000,
                                       validator: (val) => val!.isEmpty
-                                          ? 'Please Enter the Summary'
+                                          ? 'Please Enter Summary'
                                           : null,
                                       controller:    _FocusLWController,
                                       // focusNode: keyboardController.summaryFocusNode.value,
@@ -461,9 +469,11 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                             right: 20.w,
                                             bottom: 5.h),
                                         child: TextFormField(
+                                          autovalidateMode:AutovalidateMode.onUserInteraction,
+
                                           maxLength: 1000,
                                           validator: (val) => val!.isEmpty
-                                              ? 'Please Enter the Question to Ask Pupils'
+                                              ? 'Please Enter Question to Ask Pupils'
                                               : null,
                                           controller:
                                           _Questiontopupilontroller,
@@ -520,9 +530,11 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                             right: 20.w,
                                             bottom: 5.h),
                                         child: TextFormField(
+                                          autovalidateMode:AutovalidateMode.onUserInteraction,
+
                                           maxLength: 1000,
                                           validator: (val) => val!.isEmpty
-                                              ? 'Please Enter the Question to Ask Teacher'
+                                              ? 'Please Enter Question to Ask Teacher'
                                               : null,
                                           controller:
                                           _QuestiontoaskteacherController,
@@ -582,9 +594,11 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                         right: 20.w,
                                         bottom: 5.h),
                                     child: TextFormField(
+                                      autovalidateMode:AutovalidateMode.onUserInteraction,
+
                                       maxLength: 1000,
                                       validator: (val) => val!.isEmpty
-                                          ? 'Please Enter the Summary'
+                                          ? 'Please Enter  Summary'
                                           : null,
                                       controller: _summaryController,
                                       // focusNode: keyboardController.summaryFocusNode.value,
@@ -630,6 +644,8 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                         right: 20.w,
                                         bottom: 5.h),
                                     child: TextFormField(
+                                      autovalidateMode:AutovalidateMode.onUserInteraction,
+
                                       controller: _whatWentWellController,
                                       // focusNode: keyboardController.whatWentWellFocusNode.value,
                                       maxLength: 1000,
@@ -679,6 +695,8 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                       bottom: 5.h,
                                     ),
                                     child: TextFormField(
+                                      autovalidateMode:AutovalidateMode.onUserInteraction,
+
                                       maxLength: 1000,
                                       validator: (val) => val!.isEmpty
                                           ? 'Please Enter Even better if'
@@ -825,15 +843,18 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                                     .insertLearningWalk(
                                                     submitLW.toMap());
                                                 print("brineshDB${result}");
-
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(
-                                                  SnackBar(
-                                                      backgroundColor: Colors.green,
-                                                      content: Text(
-                                                          'Learning Walk saved successfully!')),
+                                                TeacherAppPopUps.submitFailedThreeLearningBack(
+                                                  title: "Success",
+                                                  message: "Learning Walk Added Successfully",
+                                                  actionName: "Close",
+                                                  iconData: Icons.done,
+                                                  iconColor: Colors.green,
                                                 );
-                                                Navigator.pop(context);
+
+
+
+
+
                                               }
                                             }
                                           } catch (e) {

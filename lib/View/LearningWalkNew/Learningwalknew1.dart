@@ -152,7 +152,7 @@ class _LearningWalknew1State extends State<LearningWalknew1> {
                                             DropdownMenuItem<String>(
                                               value: Class.name,
                                               child: Text(
-                                                Class.name ?? " ",
+                                                "CLASS :${ Class.name ?? " "}",
                                                 overflow: TextOverflow.ellipsis,
                                                 style: TextStyle(fontSize: 12),
                                               ),
@@ -170,6 +170,19 @@ class _LearningWalknew1State extends State<LearningWalknew1> {
                                           // controller.fetchteacherdata();
                                           // print("bweghrebghrghk$_selectedValue1");
                                         },
+                                        selectedItemBuilder:
+                                            (BuildContext context) {
+                                          return ClassList.map((Class) {
+                                            return Text(
+                                              "CLASS : ${Class.name}",
+                                              // Display formatted value for selected item
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  overflow:
+                                                      TextOverflow.ellipsis),
+                                            );
+                                          }).toList();
+                                        },
                                       ),
                                     ),
                                     Padding(
@@ -178,14 +191,13 @@ class _LearningWalknew1State extends State<LearningWalknew1> {
                                       child: DropdownButtonFormField(
                                         decoration: InputDecoration(
                                             hintStyle: TextStyle(
-
                                                 color: Colors.black
                                                     .withOpacity(0.5)),
                                             contentPadding:
                                                 EdgeInsets.symmetric(
                                                     vertical: 18.h,
                                                     horizontal: 20.w),
-                                            hintText: "Batch",
+                                            hintText: "Division",
                                             border: OutlineInputBorder(
                                               borderRadius:
                                                   const BorderRadius.all(
@@ -220,17 +232,17 @@ class _LearningWalknew1State extends State<LearningWalknew1> {
                                         isExpanded: true,
                                         padding: EdgeInsets.only(
                                             left: 10.w, right: 5.w),
-                                        hint: const Text('Batch'),
+                                        hint: const Text('Division'),
                                         validator: (dynamic value) =>
                                             value == null
-                                                ? 'Please Select the Batch'
+                                                ? 'Please Select the Division'
                                                 : null,
                                         items: batchList
                                             .map((batch) =>
                                                 DropdownMenuItem<String>(
                                                   value: batch.name,
                                                   child: Text(
-                                                    batch.name ?? "",
+                                                    "DIVISION :${  batch.name ?? ""}",
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                     style:
@@ -246,6 +258,19 @@ class _LearningWalknew1State extends State<LearningWalknew1> {
                                           controller.fetchteacherdata(
                                               _selectedValue2!);
                                         },
+                                        selectedItemBuilder:
+                                            (BuildContext context) {
+                                          return batchList.map((batch) {
+                                            return Text(
+                                              "DIVISION : ${batch.name}",
+                                              // Display formatted value for selected item
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  overflow:
+                                                      TextOverflow.ellipsis),
+                                            );
+                                          }).toList();
+                                        },
                                       ),
                                     ),
                                   ],
@@ -255,68 +280,80 @@ class _LearningWalknew1State extends State<LearningWalknew1> {
                                 padding: EdgeInsets.only(
                                     left: 15.w, right: 20.w, top: 20.h),
                                 child: DropdownButtonFormField(
-                                  decoration: InputDecoration(
-                                      hintStyle: TextStyle(
-                                          color: Colors.black.withOpacity(0.5)),
-                                      contentPadding: EdgeInsets.symmetric(
-                                          vertical: 18.h, horizontal: 20.w),
-                                      hintText: "Teacher",
-                                      border: OutlineInputBorder(
-                                        borderRadius: const BorderRadius.all(
-                                          Radius.circular(10.0),
-                                        ).r,
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                          color:
-                                              Color.fromRGBO(230, 236, 254, 8),
-                                          width: 1.0,
+                                    decoration: InputDecoration(
+                                        hintStyle: TextStyle(
+                                            color:
+                                                Colors.black.withOpacity(0.5)),
+                                        contentPadding: EdgeInsets.symmetric(
+                                            vertical: 18.h, horizontal: 20.w),
+                                        hintText: "Teacher",
+                                        border: OutlineInputBorder(
+                                          borderRadius: const BorderRadius.all(
+                                            Radius.circular(10.0),
+                                          ).r,
                                         ),
-                                        borderRadius: const BorderRadius.all(
-                                                Radius.circular(10.0))
-                                            .r,
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                          color:
-                                              Color.fromRGBO(230, 236, 254, 8),
-                                          width: 1.0,
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                            color: Color.fromRGBO(
+                                                230, 236, 254, 8),
+                                            width: 1.0,
+                                          ),
+                                          borderRadius: const BorderRadius.all(
+                                                  Radius.circular(10.0))
+                                              .r,
                                         ),
-                                        borderRadius: const BorderRadius.all(
-                                                Radius.circular(10.0))
-                                            .r,
-                                      ),
-                                      fillColor: const Color.fromRGBO(
-                                          230, 236, 254, 8),
-                                      filled: true),
-                                  isExpanded: true,
-                                  padding:
-                                      EdgeInsets.only(left: 10.w, right: 5.w),
-                                  hint: const Text('Teacher'),
-                                  validator: (dynamic value) => value == null
-                                      ? 'Please Select the Teacher'
-                                      : null,
-                                  items: teacherDetails
-                                      .map((teacher) =>
-                                          DropdownMenuItem<String>(
-                                            value: teacher.name,
-                                            child: Text(
-                                              teacher.name ?? "",
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(fontSize: 12),
-                                            ),
-                                          ))
-                                      .toList(),
-                                  value: _selectedValue3,
-                                  onChanged: (teacher) {
-                                    setState(() {
-                                      _selectedValue3 = teacher ?? "";
-                                    });
-                                    // controller.getTeacherClassData(
-                                    //     teacherName:
-                                    //     teacher.toString());
-                                  },
-                                ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                            color: Color.fromRGBO(
+                                                230, 236, 254, 8),
+                                            width: 1.0,
+                                          ),
+                                          borderRadius: const BorderRadius.all(
+                                                  Radius.circular(10.0))
+                                              .r,
+                                        ),
+                                        fillColor: const Color.fromRGBO(
+                                            230, 236, 254, 8),
+                                        filled: true),
+                                    isExpanded: true,
+                                    padding:
+                                        EdgeInsets.only(left: 10.w, right: 5.w),
+                                    hint: const Text('Teacher'),
+                                    validator: (dynamic value) => value == null
+                                        ? 'Please Select the Teacher'
+                                        : null,
+                                    items: teacherDetails
+                                        .map((teacher) =>
+                                            DropdownMenuItem<String>(
+                                              value: teacher.name,
+                                              child: Text(
+                                               "TEACHER :${ teacher.name ?? ""}",
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(fontSize: 12),
+                                              ),
+                                            ))
+                                        .toList(),
+                                    value: _selectedValue3,
+                                    onChanged: (teacher) {
+                                      setState(() {
+                                        _selectedValue3 = teacher ?? "";
+                                      });
+                                      // controller.getTeacherClassData(
+                                      //     teacherName:
+                                      //     teacher.toString());
+                                    },
+                                    selectedItemBuilder:
+                                        (BuildContext context) {
+                                      return teacherDetails.map((teacher) {
+                                        return Text(
+                                          "TEACHER : ${teacher.name}",
+                                          // Display formatted value for selected item
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              overflow: TextOverflow.ellipsis),
+                                        );
+                                      }).toList();
+                                    }),
                               ),
                               SizedBox(
                                 height: 70.h,
@@ -327,18 +364,18 @@ class _LearningWalknew1State extends State<LearningWalknew1> {
                                   child: GestureDetector(
                                     onTap: () {
                                       if (_formKey.currentState!.validate()) {
+                                        print("kaaajjhksadjhksdjhk$_selectedValue3");
                                         Navigator.push(
-
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     LearningWalknew2(
                                                       teachername:
-                                                          _selectedValue3!,
+                                                          _selectedValue3,
                                                       classsbatch:
-                                                          _selectedValue1!,
+                                                          _selectedValue1 ?? "",
                                                       Division:
-                                                          _selectedValue2!,
+                                                          _selectedValue2 ?? "",
                                                     )));
                                       }
 
