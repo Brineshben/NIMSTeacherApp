@@ -123,7 +123,7 @@ class LessonLearningController extends GetxController {
         lerningLearn.where((data) => data.addedDate == false).toList();
     lessonData.value =
         lessLearn.where((data) => data.isLesson == true).toList();
-    print('lesson learn db length-------${lessLearn.length}');
+    print('lesson learn db length-------${lessonData.length}');
   }
 
   Future<void> lessonSubmit(BuildContext context) async {
