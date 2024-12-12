@@ -119,14 +119,14 @@ class LessonLearningController extends GetxController {
     List<LearningwalkSubmitModel> lerningLearn =
         await LearningWalkDB.instance.fetchLearningWalks();
 
-    learningData.value =
-        lerningLearn.where((data) => data.addedDate == false).toList();
+    learningData.value = lerningLearn;
     lessonData.value =
         lessLearn.where((data) => data.isLesson == true).toList();
-    print('lesson learn db length-------${lessLearn.length}');
+    print('lesson learn db length-------${lessonData.length}');
   }
 
   Future<void> lessonSubmit(BuildContext context) async {
+    print("ben");
     bool result = await CheckConnectivity().check();
     if (!result) {
       await snackBar(
@@ -185,6 +185,7 @@ class LessonLearningController extends GetxController {
   }
 
   Future<void> learningSubmit(BuildContext context) async {
+    print("brineshhsh");
     bool result = await CheckConnectivity().check();
     if (!result) {
       await snackBar(
@@ -197,6 +198,7 @@ class LessonLearningController extends GetxController {
           Map<String, dynamic> resp =
               await ApiServices.getLearningwalksubmit(data: data);
           if (resp['status']['code'] == 200) {
+            await LearningWalkDB.instance.deleteLearningWalk(data.id!);
           } else {
             TeacherAppPopUps.submitFailed(
               title: "Error",
@@ -229,6 +231,7 @@ class LessonLearningController extends GetxController {
       }
     }
     await refreshLessLearnData().then((_) {
+      print("kakakakak");
       if (learningData.isEmpty) {
         TeacherAppPopUps.submitFailed(
           title: "Success",
