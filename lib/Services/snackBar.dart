@@ -14,13 +14,13 @@ void showSnackBar(BuildContext context, String msg, Color clr) {
 snackBar(
     {required BuildContext context,
       required String message,
-      required Color color}) {
+      required Color color, Color? textColor}) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Text(
         message,
-        style: const TextStyle(
-          color: Colors.white,
+        style: TextStyle(
+          color: textColor ?? Colors.white,
           fontFamily: 'Montserrat-Regular',
           fontSize: 15,
         ),
