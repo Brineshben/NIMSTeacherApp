@@ -220,6 +220,7 @@ class _NonTeacherStudentListState extends State<NonTeacherStudentList> {
                 newStudentList[0]; // You can safely access the element here.
             // modifiedStudentList = newStudentList[0]['feeDetails'];
           }
+          print("-----gfsdgf-----${afterAttendanceTaken}");
           for (var index = 0; index < afterAttendanceTaken.length; index++) {
             afterAttendanceTaken[index].addAll({"is_present": true});
           }
@@ -399,6 +400,8 @@ class _NonTeacherStudentListState extends State<NonTeacherStudentList> {
 
     http.StreamedResponse response = await request.send();
 
+    print("------dfvds--------${await response.stream.bytesToString()}");
+
     if (response.statusCode == 200) {
       print("Successfully submitted");
       await snackBar(
@@ -416,6 +419,10 @@ class _NonTeacherStudentListState extends State<NonTeacherStudentList> {
       });
       log(await response.stream.bytesToString());
     } else {
+      await snackBar(
+          context: context,
+          message: "Failed to submit.",
+          color: Colors.red);
       print(response.reasonPhrase);
     }
   }
@@ -892,28 +899,40 @@ class _NonTeacherStudentListState extends State<NonTeacherStudentList> {
                                                                 showOnOff: true,
                                                                 onToggle: (val) {
                                                                   setState(() {
-                                                                    afterAttendanceTaken == null ||
-                                                                            afterAttendanceTaken
-                                                                                .isEmpty
-                                                                        ? _searchController
-                                                                                .text
-                                                                                .isNotEmpty
-                                                                            ? newResult[index]["is_present"] =
-                                                                                val
-                                                                            : ourStudentList[index]["is_present"] =
-                                                                                val
-                                                                        : _searchController
-                                                                                .text
-                                                                                .isNotEmpty
-                                                                            ? newResult[index]["selected"] =
-                                                                                val
-                                                                            : afterAttendanceTaken[index]["selected"] =
-                                                                                val;
+                                                                    if(afterAttendanceTaken == null || afterAttendanceTaken.isEmpty) {
+                                                                      _searchController
+                                                                          .text
+                                                                          .isNotEmpty
+                                                                          ? newResult[index]["is_present"] =
+                                                                          val
+                                                                          : ourStudentList[index]["is_present"] =
+                                                                          val;
+                                                                    } else {
+                                                                      snackBar(
+                                                                          context: context,
+                                                                          message: "You cant edit attendance.",
+                                                                          color: Colors.red);
+                                                                    }
+                                                                    // afterAttendanceTaken == null ||
+                                                                    //         afterAttendanceTaken
+                                                                    //             .isEmpty
+                                                                    //     ? _searchController
+                                                                    //             .text
+                                                                    //             .isNotEmpty
+                                                                    //         ? newResult[index]["is_present"] =
+                                                                    //             val
+                                                                    //         : ourStudentList[index]["is_present"] =
+                                                                    //             val
+                                                                    //     : _searchController
+                                                                    //             .text
+                                                                    //             .isNotEmpty
+                                                                    //         ? newResult[index]["selected"] =
+                                                                    //             val
+                                                                    //         : afterAttendanceTaken[index]["selected"] =
+                                                                    //             val;
 
-                                                                    if (attendance_flag ==
-                                                                        true) {
-                                                                      attendance_flag =
-                                                                          false;
+                                                                    if (attendance_flag == true) {
+                                                                      attendance_flag = false;
                                                                     }
                                                                   });
 
@@ -949,7 +968,7 @@ class _NonTeacherStudentListState extends State<NonTeacherStudentList> {
           ),
         ),
         // floatingActionButton: button(),
-        floatingActionButton: SizedBox(
+        floatingActionButton: afterAttendanceTaken == null ? SizedBox(
           height: 50.w,
           width: 200.w,
           child: FloatingActionButton.extended(
@@ -995,7 +1014,7 @@ class _NonTeacherStudentListState extends State<NonTeacherStudentList> {
               style: TextStyle(color: Colors.white),
             ),
           ),
-        ),
+        ) : null,
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       ),
     );
