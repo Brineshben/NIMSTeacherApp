@@ -1,4 +1,5 @@
 
+import 'dart:convert';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,6 @@ import 'package:get/get.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:teacherapp/Services/fcm_service.dart';
 import 'package:teacherapp/Utils/Colors.dart';
-import 'package:vibration/vibration.dart';
 import 'Services/controller_handling.dart';
 import 'Services/shared_preferences.dart';
 import 'View/splash_screen.dart';
@@ -80,11 +80,22 @@ Future<void> _fcmBackgroundHandler(RemoteMessage message) async {
         'NotificationName', // Use a meaningful name here
         channelDescription: '',
         importance: Importance.max,
+        audioAttributesUsage: AudioAttributesUsage.alarm,
         playSound: playSound,
         sound: playSound ? RawResourceAndroidNotificationSound(sound) : null,
         icon: '@mipmap/ic_launcher',
+        fullScreenIntent: true,
+        styleInformation: BigTextStyleInformation(
+          notification['message'] ?? '',
+          htmlFormatBigText: true,
+          contentTitle: notification['title'] ?? '',
+          htmlFormatContentTitle: true,
+          // summaryText: "Swipe down to see more",
+          htmlFormatSummaryText: true,
+        ),
       ),
     ),
+    payload: json.encode(notification),
   );
 }
 

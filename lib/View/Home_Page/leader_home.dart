@@ -43,6 +43,12 @@ class _LeaderState extends State<Leader> {
   }
 
   @override
+  void dispose() {
+    context.loaderOverlay.hide();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     // String? hosName = Get.find<UserAuthController>().selectedHos.value?.hosName;
     return AnnotatedRegion<SystemUiOverlayStyle>(

@@ -1,3 +1,4 @@
+
 import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -11,185 +12,12 @@ import 'package:teacherapp/Controller/api_controllers/feedViewController.dart';
 import 'package:teacherapp/Controller/api_controllers/parentChatListController.dart';
 import 'package:teacherapp/Controller/home_controller/home_controller.dart';
 import 'package:teacherapp/Controller/ui_controllers/page_controller.dart';
-import 'package:teacherapp/Models/api_models/HierarchyModel.dart';
 import 'package:teacherapp/Models/api_models/chat_group_api_model.dart';
-import 'package:teacherapp/Services/controller_handling.dart';
-import 'package:teacherapp/Services/firebase_service.dart';
-import 'package:teacherapp/View/Chat_List/chat_list.dart';
 import 'package:teacherapp/View/Chat_View/feed_view%20_chat_screen.dart';
 import 'package:teacherapp/View/Menu/layer_dummy.dart';
 import 'package:teacherapp/View/Menu/main_page.dart';
+import '../../main.dart';
 import 'menu_page.dart';
-
-// final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-//     FlutterLocalNotificationsPlugin();
-//
-// @pragma('vm:entry-point')
-// Future<void> _fcmBackgroundHandler(RemoteMessage message) async {
-//   print("--------data---------${message.data}");
-//
-//   const String defaultChannelId = "notification_id_default";
-//
-//   AndroidNotificationChannel defaultChannel = const AndroidNotificationChannel(
-//     defaultChannelId, // id
-//     'Default Notifications', // name
-//     description: '',
-//     importance: Importance.max,
-//     enableVibration: true,
-//   );
-//
-//   await flutterLocalNotificationsPlugin
-//       .resolvePlatformSpecificImplementation<
-//           AndroidFlutterLocalNotificationsPlugin>()
-//       ?.createNotificationChannel(defaultChannel);
-//
-//   // Prepare the notification
-//   Map<String, dynamic> notification = message.data;
-//   flutterLocalNotificationsPlugin.show(
-//     notification.hashCode,
-//     notification['title'],
-//     notification['message'],
-//     const NotificationDetails(
-//       android: AndroidNotificationDetails(
-//         defaultChannelId,
-//         'Background Notification',
-//         channelDescription: '',
-//         importance: Importance.max,
-//         playSound: true,
-//         enableVibration: true,
-//         icon: '@mipmap/ic_launcher',
-//       ),
-//     ),
-//     payload: json.encode(notification),
-//   );
-// }
-//
-// Future<void> _handleMessageOnTap(NotificationResponse message, BuildContext context) async {
-//   print("-----message----${message.payload}");
-//
-//   Map<String, dynamic> data = json.decode(message.payload!);
-//   print("-----message----${data['class']}");
-//
-//   if (data['category'] == "chat") {
-//     // HandleControllers.deleteAllGetControllers();
-//     // HandleControllers.createGetControllers();
-//     Get.delete<FeedViewController>();
-//     Get.put(FeedViewController());
-//     Get.delete<ChatClassGroupController>();
-//     Get.put(ChatClassGroupController());
-//     Get.delete<ParentChatListController>();
-//     Get.put(ParentChatListController());
-//
-//     Navigator.of(context).pushAndRemoveUntil(
-//         MaterialPageRoute(builder: (context) => DrawerScreen()),
-//         (route) => false);
-//     Get.find<HomeController>().currentIndex.value = 2;
-//     Get.find<PageIndexController>().changePage(currentPage: 2);
-//
-//     // Navigator.of(context).push(MaterialPageRoute(
-//     //   builder: (context) => DrawerScreen(),
-//     // ));
-//
-//     // Navigator.push(
-//     //     context,
-//     //     MaterialPageRoute(
-//     //       builder: (context) => const ChatWithParentsPage(),
-//     //     ));
-//
-//     Navigator.push(
-//       context,
-//       MaterialPageRoute(
-//         builder: (context) => FeedViewChatScreen(
-//           msgData: ClassTeacherGroup(
-//             classTeacherClass: data['class'],
-//             batch: data['batch'],
-//             subjectId: data['subject_Id'],
-//             subjectName: data['subject'],
-//           ),
-//         ),
-//       ),
-//     );
-//
-//     // studentClass: data['class'],
-//     //   batch: data['batch'],
-//     //   subId: data['subject_Id'],
-//     //   subName: data['subject'],
-//     //   teacherId: data['teacher_id'],
-//     //   teacherImage: data['teacher_image'],
-//     //   teacherName: data['teacher_name'],
-//     //   isGroup: data['subject_Id'] == "class_group" ? true : false,
-//   }
-// }
-//
-// Future<void> _handleMessage(RemoteMessage message, BuildContext context) async {
-//   print("-----message----${message.data}");
-//
-//   Map<String, dynamic> data = message.data;
-//   print("-----message----${data['class']}");
-//
-//   if (data['category'] == "chat") {
-//     // HandleControllers.deleteAllGetControllers();
-//     // HandleControllers.createGetControllers();
-//     Get.delete<FeedViewController>();
-//     Get.put(FeedViewController());
-//     Get.delete<ChatClassGroupController>();
-//     Get.put(ChatClassGroupController());
-//     Get.delete<ParentChatListController>();
-//     Get.put(ParentChatListController());
-//
-//     Navigator.of(context).pushAndRemoveUntil(
-//         MaterialPageRoute(builder: (context) => DrawerScreen()),
-//         (route) => false);
-//     Get.find<HomeController>().currentIndex.value = 2;
-//     Get.find<PageIndexController>().changePage(currentPage: 2);
-//
-//     // Navigator.of(context).push(MaterialPageRoute(
-//     //   builder: (context) => DrawerScreen(),
-//     // ));
-//
-//     // Navigator.push(
-//     //     context,
-//     //     MaterialPageRoute(
-//     //       builder: (context) => const ChatWithParentsPage(),
-//     //     ));
-//
-//     Navigator.push(
-//       context,
-//       MaterialPageRoute(
-//         builder: (context) => FeedViewChatScreen(
-//           msgData: ClassTeacherGroup(
-//             classTeacherClass: data['class'],
-//             batch: data['batch'],
-//             subjectId: data['subject_Id'],
-//             subjectName: data['subject'],
-//           ),
-//         ),
-//       ),
-//     );
-//
-//     // studentClass: data['class'],
-//     //   batch: data['batch'],
-//     //   subId: data['subject_Id'],
-//     //   subName: data['subject'],
-//     //   teacherId: data['teacher_id'],
-//     //   teacherImage: data['teacher_image'],
-//     //   teacherName: data['teacher_name'],
-//     //   isGroup: data['subject_Id'] == "class_group" ? true : false,
-//   }
-// }
-//
-// Future<void> setupInteractedMessage(BuildContext context) async {
-//   RemoteMessage? initialMessage =
-//       await FirebaseMessaging.instance.getInitialMessage();
-//   if (initialMessage != null) {
-//     _handleMessage(initialMessage, context);
-//   }
-//   FirebaseMessaging.onMessageOpenedApp.listen(
-//     (event) {
-//       _handleMessage(event, context);
-//     },
-//   );
-// }
 
 class DrawerScreen extends StatefulWidget {
   const DrawerScreen({super.key});
@@ -201,36 +29,77 @@ class DrawerScreen extends StatefulWidget {
 class _DrawerScreenState extends State<DrawerScreen> {
   final ZoomDrawerController _drawerController = ZoomDrawerController();
 
+  Future<void> setupInteractedMessage() async {
+    RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+
+    if (initialMessage != null) {
+      _handleMessage(initialMessage);
+    }
+
+    FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
+
+    flutterLocalNotificationsPlugin.initialize(
+      const InitializationSettings(
+        android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+      ),
+      onDidReceiveNotificationResponse: (NotificationResponse response) {
+        if (response.payload != null) {
+          RemoteMessage message = RemoteMessage(
+            data: json.decode(response.payload!),
+          );
+          _handleMessage(message);
+        }
+      },
+    );
+  }
+
+  void _handleMessage(RemoteMessage message) {
+    if (message.data['category'] == 'student_tracking') {
+      if(Get.find<PageIndexController>().navLength.value == 4) {
+        Get.find<HomeController>().currentIndex.value = 3;
+        Get.find<PageIndexController>().changePage(currentPage: 3);
+      } else if(Get.find<PageIndexController>().navLength.value == 5) {
+        Get.find<HomeController>().currentIndex.value = 4;
+        Get.find<PageIndexController>().changePage(currentPage: 4);
+      }
+    } else if(message.data['category'] == 'chat') {
+      Get.delete<FeedViewController>();
+      Get.put(FeedViewController());
+      Get.delete<ChatClassGroupController>();
+      Get.put(ChatClassGroupController());
+      Get.delete<ParentChatListController>();
+      Get.put(ParentChatListController());
+
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const DrawerScreen()),
+              (route) => false);
+      Get.find<HomeController>().currentIndex.value = 2;
+      Get.find<PageIndexController>().changePage(currentPage: 2);
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => FeedViewChatScreen(
+            msgData: ClassTeacherGroup(
+              classTeacherClass: message.data['class'],
+              batch: message.data['batch'],
+              subjectId: message.data['subject_Id'],
+              subjectName: message.data['subject'],
+            ),
+          ),
+        ),
+      );
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setupInteractedMessage();
+  }
+
   @override
   Widget build(BuildContext context) {
-    print("rebuild -------------------------- ");
-    // WidgetsBinding.instance.addPostFrameCallback(
-    //   (timeStamp) async {
-    //     // print(
-    //     //     "firebase token ----------------------- ${await FireBaseService.fbToken()}");
-    //     FirebaseMessaging.onBackgroundMessage(_fcmBackgroundHandler);
-    //     await Get.putAsync(() => FireBaseService().init());
-    //
-    //     flutterLocalNotificationsPlugin.initialize(
-    //       const InitializationSettings(
-    //         android: AndroidInitializationSettings('@mipmap/ic_launcher'),
-    //       ),
-    //       onDidReceiveNotificationResponse: (NotificationResponse response) {
-    //         if (response.payload != null) {
-    //           _handleMessageOnTap(response, context);
-    //         }
-    //       },
-    //       onDidReceiveBackgroundNotificationResponse:
-    //           (NotificationResponse response) {
-    //         if (response.payload != null) {
-    //           _handleMessageOnTap(response, context);
-    //         }
-    //       },
-    //     );
-    //
-    //     await setupInteractedMessage(context);
-    //   },
-    // );
     return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
