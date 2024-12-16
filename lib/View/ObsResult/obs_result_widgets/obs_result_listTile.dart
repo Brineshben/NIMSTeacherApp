@@ -55,6 +55,7 @@ class ObsResultListTile extends StatelessWidget {
                   height: 10.h,
                 ),
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
                       width: 50.h,

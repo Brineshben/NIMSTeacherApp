@@ -48,6 +48,12 @@ class UserAuthController extends GetxController {
           }
           if((list.first.roleIds?.isNotEmpty ?? false) && list.first.roleIds != null && !list.first.roleIds!.contains("") && !list.first.roleIds!.contains("student")) {
             await SharedPrefs().setLoginData(loginApi);
+            await SharedPrefs().setLoginCreds(
+                {
+                  "username": username,
+                  "password": password
+                }
+            );
           }
           isLoaded.value = true;
         }
@@ -94,6 +100,11 @@ class UserAuthController extends GetxController {
           }
           if((list.first.roleIds?.isNotEmpty ?? false) && list.first.roleIds != null && !list.first.roleIds!.contains("") && !list.first.roleIds!.contains("student")) {
             await SharedPrefs().setLoginData(loginApi);
+            await SharedPrefs().setLoginCreds(
+                {
+                  "username": username
+                }
+            );
           }
           isLoaded.value = true;
         }
@@ -123,20 +134,81 @@ class UserAuthController extends GetxController {
 
   Future<void> getUserData() async {
     isLoading.value = true;
-    LoginApiModel? loginApi = await SharedPrefs().getLoginData();
-    userData.value = loginApi?.data?.data?.first ?? UserData();
-    String? userId = userData.value.userId;
-    if (userId != null) {
-      // await Get.find<ChatClassGroupController>().fetchClassGroupList();
-      isLoaded.value = true;
-      await setFirebaseToken();
-      getNotificationPeriodically();
-    } else {
-      isLoaded.value = false;
+    Map<String, dynamic>? loginCreds = await SharedPrefs().getLoginCreds();
+    if(loginCreds != null) {
+      if(loginCreds['username'] != null && loginCreds['password'] == null) {
+        try {
+          Map<String, dynamic> resp = await ApiServices.googleSignInApi(user: loginCreds['username']);
+          if (resp['status']['code'] == 200) {
+            LoginApiModel loginApi = LoginApiModel.fromJson(resp);
+            List<UserData> list = loginApi.data?.data ?? [];
+            if (list.isNotEmpty) {
+              userData.value = loginApi.data?.data?.first ?? UserData();
+              String? schoolId = userData.value.schoolId;
+              if (schoolId != null) {
+                await setFirebaseToken();
+                setSchoolTokenAndRoll(schoolId);
+                getNotificationPeriodically();
+              }
+              if((list.first.roleIds?.isNotEmpty ?? false) && list.first.roleIds != null && !list.first.roleIds!.contains("") && !list.first.roleIds!.contains("student")) {
+                await SharedPrefs().setLoginData(loginApi);
+                await SharedPrefs().setLoginCreds(
+                    {
+                      "username": loginCreds['username']
+                    }
+                );
+              }
+            }
+          }
+        } catch (e) {} finally {}
+      } else {
+        try {
+          Map<String, dynamic> resp =
+          await ApiServices.userLogin(userName: loginCreds['username'], psw: loginCreds['password']);
+          if (resp['status']['code'] == 200) {
+            LoginApiModel loginApi = LoginApiModel.fromJson(resp);
+            List<UserData> list = loginApi.data?.data ?? [];
+            if (list.isNotEmpty) {
+              userData.value = loginApi.data?.data?.first ?? UserData();
+              String? schoolId = userData.value.schoolId;
+              if (schoolId != null) {
+                await setFirebaseToken();
+                setSchoolTokenAndRoll(schoolId);
+                getNotificationPeriodically();
+              }
+              if((list.first.roleIds?.isNotEmpty ?? false) && list.first.roleIds != null && !list.first.roleIds!.contains("") && !list.first.roleIds!.contains("student")) {
+                await SharedPrefs().setLoginData(loginApi);
+                await SharedPrefs().setLoginCreds(
+                    {
+                      "username": loginCreds['username'],
+                      "password": loginCreds['password']
+                    }
+                );
+              }
+            }
+          }
+        } catch (e) {} finally {}
+      }
     }
-    String? schoolId = userData.value.schoolId;
-    if (schoolId != null) {
-      await setSchoolTokenAndRoll(schoolId);
+
+    if((userData.value.roleIds?.isNotEmpty ?? false) && userData.value.roleIds != null && !userData.value.roleIds!.contains("") && !userData.value.roleIds!.contains("student")) {
+
+    } else {
+      LoginApiModel? loginApi = await SharedPrefs().getLoginData();
+        userData.value = loginApi?.data?.data?.first ?? UserData();
+      String? userId = userData.value.userId;
+      if (userId != null) {
+        // await Get.find<ChatClassGroupController>().fetchClassGroupList();
+        isLoaded.value = true;
+        await setFirebaseToken();
+        getNotificationPeriodically();
+      } else {
+        isLoaded.value = false;
+      }
+      String? schoolId = userData.value.schoolId;
+      if (schoolId != null) {
+        await setSchoolTokenAndRoll(schoolId);
+      }
     }
     isLoading.value = false;
   }

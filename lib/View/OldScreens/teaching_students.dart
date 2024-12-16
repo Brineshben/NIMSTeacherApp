@@ -439,6 +439,8 @@ class _StudentListViewState extends State<StudentListView> {
       'Content-Type': 'application/json'
     };
 
+    print('---------url-----------${ApiConstants.baseUrl + ApiConstants.attendanceSubmit}');
+
     var request =
     http.Request('POST',
         Uri.parse(ApiConstants.baseUrl + ApiConstants.attendanceSubmit));
@@ -514,6 +516,10 @@ class _StudentListViewState extends State<StudentListView> {
       log('--------------b-o-d-d-y-y-r-e-s-p-n-c-e--------${await response
           .stream.bytesToString()}------------------enddddd');
     } else {
+      await snackBar(
+          context: context,
+          message: "Failed to submit.",
+          color: Colors.red);
       print(response.reasonPhrase);
 
       // print('------------<<<absent>>>>>>><<<>>><><><><><$')

@@ -44,7 +44,9 @@ class _LeaderState extends State<Leader> {
 
   @override
   void dispose() {
-    context.loaderOverlay.hide();
+    if(!mounted) {
+      context.loaderOverlay.hide();
+    }
     super.dispose();
   }
 

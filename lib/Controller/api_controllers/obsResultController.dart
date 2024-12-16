@@ -29,6 +29,7 @@ class ObsResultController extends GetxController {
       if (resp['status']['code'] == 200) {
         ObservationResultApiModel observationResultApiModel = ObservationResultApiModel.fromJson(resp);
         obsResultList.value = observationResultApiModel.data?.details ?? [];
+        obsResultList.value = obsResultList.value.where((element) => element.type == "lesson_observation").toList();
         isLoaded.value = true;
       }
     } catch (e) {

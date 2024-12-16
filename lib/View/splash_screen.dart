@@ -33,7 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Get.find<PageIndexController>().changePage(currentPage: 0);
     await userAuthController.getUserData();
     String? userId = userAuthController.userData.value.userId;
-    await Future.delayed(const Duration(seconds: 1));
+    // await Future.delayed(const Duration(seconds: 1));
     if (userId != null) {
       UserRole? userRole = userAuthController.userRole.value;
       if (userRole != null) {
@@ -68,6 +68,7 @@ class _SplashScreenState extends State<SplashScreen> {
       } else {
         HandleControllers.deleteAllGetControllers();
         await SharedPrefs().removeLoginData();
+        await SharedPrefs().removeLoginCreds();
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => const LoginPage()),
             (_) => false);

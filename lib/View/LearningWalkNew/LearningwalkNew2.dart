@@ -22,13 +22,13 @@ import '../Home_Page/Home_Widgets/user_details.dart';
 import '../MorePage/scanData.dart';
 
 class LearningWalknew2 extends StatefulWidget {
-  String? teachername;
+  // String? teachername;
   String? classsbatch;
   String? Division;
 
   LearningWalknew2(
       {super.key,
-        this.teachername,
+        // this.teachername,
         this.classsbatch,
         this.Division});
 
@@ -73,16 +73,16 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
   @override
   Widget build(BuildContext context) {
     String iconname = "${widget.classsbatch}${widget.Division}";
-    List<String> nameParts = widget.teachername?.split(" ") ?? [];
+    // List<String> nameParts = widget.teachername?.split(" ") ?? [];
     String? placeholderName;
 
 
-    try {
-      placeholderName = nameParts.length > 1
-          ? "${nameParts[0].trim().substring(0, 1)}${nameParts[1].trim().substring(0, 1)}"
-          .toUpperCase()
-          : nameParts[0].trim().substring(0, 2).toUpperCase();
-    } catch (e) {}
+    // try {
+    //   placeholderName = nameParts.length > 1
+    //       ? "${nameParts[0].trim().substring(0, 1)}${nameParts[1].trim().substring(0, 1)}"
+    //       .toUpperCase()
+    //       : nameParts[0].trim().substring(0, 2).toUpperCase();
+    // } catch (e) {}
     DateTime now = DateTime.now();
 
     // Format the date
@@ -155,8 +155,8 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                         children: [
                                           SizedBox(height: 8.w),
                                           Row(
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                            // crossAxisAlignment:
+                                            // CrossAxisAlignment.start,
                                             children: [
                                               Padding(
                                                 padding: const EdgeInsets.symmetric(
@@ -199,8 +199,9 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                                 ),
                                               ),
                                               Column(
-                                                crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                                // crossAxisAlignment:
+                                                // CrossAxisAlignment.start,
+                                                mainAxisAlignment: MainAxisAlignment.center,
                                                 children: [
                                                   SizedBox(
                                                     width: 180.w,
@@ -236,21 +237,21 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                                       ),
                                                     ),
                                                   ),
-                                                  SizedBox(
-                                                    height: 2.h,
-                                                  ),
-                                                  widget.teachername==null ? SizedBox():SizedBox(
-                                                    child: SingleChildScrollView(
-                                                      child: Text(
-                                                        "TEACHER : ${widget.teachername}",
-                                                        style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize: 12.sp,
-                                                            fontWeight:
-                                                            FontWeight.w400),
-                                                      ),
-                                                    ),
-                                                  )
+                                                  // SizedBox(
+                                                  //   height: 2.h,
+                                                  // ),
+                                                  // widget.teachername==null ? SizedBox():SizedBox(
+                                                  //   child: SingleChildScrollView(
+                                                  //     child: Text(
+                                                  //       "TEACHER : ${widget.teachername}",
+                                                  //       style: TextStyle(
+                                                  //           color: Colors.white,
+                                                  //           fontSize: 12.sp,
+                                                  //           fontWeight:
+                                                  //           FontWeight.w400),
+                                                  //     ),
+                                                  //   ),
+                                                  // )
                                                 ],
                                               )
                                             ],
