@@ -2089,7 +2089,7 @@ class _StudentListViewState extends State<StudentListView> {
                                                         width: 50,
                                                         height: 50,
                                                         fit: BoxFit.fill,
-                                                        imageUrl: "${ApiConstants.downloadUrl}${ourStudentList[index]['feeDetails']["image"]}",
+                                                        imageUrl: "${ApiConstants.downloadUrl}${ourStudentList[index]['feeDetails']?["image"] ?? ''}",
                                                         placeholder: (context,
                                                             url) =>
                                                             Center(
