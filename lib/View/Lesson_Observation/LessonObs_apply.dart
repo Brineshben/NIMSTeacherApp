@@ -9,6 +9,7 @@ import 'package:teacherapp/Controller/api_controllers/userAuthController.dart';
 import 'package:teacherapp/Controller/ui_controllers/keyboardController.dart';
 import 'package:teacherapp/Services/api_services.dart';
 import 'package:teacherapp/Services/check_connectivity.dart';
+import 'package:teacherapp/Utils/api_constants.dart';
 import 'package:teacherapp/View/CWidgets/TeacherAppPopUps.dart';
 import 'package:teacherapp/View/CWidgets/custom_check_box.dart';
 import 'package:teacherapp/View/Learning_Walk/learning_walk_widgets/question_radio_fields.dart';
@@ -48,7 +49,8 @@ class _LessonObservationApplyState extends State<LessonObservationApply> {
 
   @override
   Widget build(BuildContext context) {
-    List<String> nameParts = widget.teacherName.split(" ");
+    List<String> nameParts = widget.teacherName.split(" ").map((name) => name.trim()).toList();
+    nameParts = nameParts.where((name) => name.isNotEmpty).toList();
     String? placeholderName;
     try {
       placeholderName = nameParts.length > 1 ? "${nameParts[0].trim().substring(0, 1)}${nameParts[1].trim().substring(0, 1)}".toUpperCase() : nameParts[0].trim().substring(0, 2).toUpperCase();
@@ -152,7 +154,7 @@ class _LessonObservationApplyState extends State<LessonObservationApply> {
                                                           width: 50.h,
                                                           height: 50.h,
                                                           fit: BoxFit.fill,
-                                                          imageUrl: "__",
+                                                          imageUrl: "${ApiConstants.downloadUrl}${Get.find<LessonLearningController>().selectedTeacher.value?.teacherImage}",
                                                           errorWidget: (context,
                                                               url, error) =>
                                                               Center(

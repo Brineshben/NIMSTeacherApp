@@ -246,17 +246,20 @@ class TeacherData {
   TeacherData({
     this.teacherId,
     this.teacherName,
+    this.teacherImage,
     this.details,
   });
 
   final String? teacherId;
   final String? teacherName;
+  final String? teacherImage;
   final List<TeacherDetails>? details;
 
   factory TeacherData.fromJson(Map<String, dynamic> json){
     return TeacherData(
       teacherId: json["teacher_id"],
       teacherName: json["teacher_name"],
+      teacherImage: json["teacher_image"],
       details: json["details"] == null ? [] : List<TeacherDetails>.from(json["details"]!.map((x) => TeacherDetails.fromJson(x))),
     );
   }
@@ -264,6 +267,7 @@ class TeacherData {
   Map<String, dynamic> toJson() => {
     "teacher_id": teacherId,
     "teacher_name": teacherName,
+    "teacher_image": teacherImage,
     "details": details?.map((x) => x.toJson()).toList(),
   };
 
