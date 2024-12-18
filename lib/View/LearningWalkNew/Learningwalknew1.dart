@@ -1,5 +1,7 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -24,9 +26,12 @@ class LearningWalknew1 extends StatefulWidget {
 
 class _LearningWalknew1State extends State<LearningWalknew1> {
   final _formKey = GlobalKey<FormState>();
+  TextEditingController controller1 = TextEditingController();
+  TextEditingController controller2 = TextEditingController();
 
   String? _selectedValue1;
   String? _selectedValue2;
+
   // String? _selectedValue3;
 
   @override
@@ -98,181 +103,416 @@ class _LearningWalknew1State extends State<LearningWalknew1> {
                                   children: [
                                     Padding(
                                       padding: EdgeInsets.only(
-                                          left: 15.w, right: 20.w, top: 20.h),
-                                      child: DropdownButtonFormField(
-                                        decoration: InputDecoration(
-                                            hintStyle: TextStyle(
-                                                color: Colors.black
-                                                    .withOpacity(0.5)),
-                                            contentPadding:
-                                                EdgeInsets.symmetric(
-                                                    vertical: 18.h,
-                                                    horizontal: 20.w),
-                                            hintText: "Class",
-                                            border: OutlineInputBorder(
-                                              borderRadius:
-                                                  const BorderRadius.all(
-                                                Radius.circular(10.0),
-                                              ).r,
-                                            ),
-                                            enabledBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                color: Color.fromRGBO(
-                                                    230, 236, 254, 8),
-                                                width: 1.0,
-                                              ),
-                                              borderRadius:
-                                                  const BorderRadius.all(
-                                                          Radius.circular(10.0))
-                                                      .r,
-                                            ),
-                                            focusedBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                color: Color.fromRGBO(
-                                                    230, 236, 254, 8),
-                                                width: 1.0,
-                                              ),
-                                              borderRadius:
-                                                  const BorderRadius.all(
-                                                          Radius.circular(10.0))
-                                                      .r,
-                                            ),
-                                            fillColor: const Color.fromRGBO(
-                                                230, 236, 254, 8),
-                                            filled: true),
-                                        isExpanded: true,
-                                        padding: EdgeInsets.only(
-                                            left: 10.w, right: 5.w),
-                                        hint: const Text('Class'),
-                                        validator: (dynamic value) =>
-                                            value == null
-                                                ? 'Please Select the Class'
-                                                : null,
-                                        items: ClassList.map((Class) =>
-                                            DropdownMenuItem<String>(
-                                              value: Class.name,
-                                              child: Text(
-                                                "CLASS :${ Class.name ?? " "}",
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(fontSize: 12),
-                                              ),
-                                            )).toList(),
-                                        value: _selectedValue1,
-                                        onChanged: (classes) {
-                                          setState(() {
-                                            _selectedValue1 = classes ?? "";
-                                            controller.fetchteacherbatchdata(
-                                                _selectedValue1!);
-                                            print(
-                                                "bweghrebghrghk$_selectedValue1");
-                                          });
-                                          // _selectedValue1=Class;
-                                          // controller.fetchteacherdata();
-                                          // print("bweghrebghrghk$_selectedValue1");
-                                        },
-                                        selectedItemBuilder:
-                                            (BuildContext context) {
-                                          return ClassList.map((Class) {
-                                            return Text(
-                                              "CLASS : ${Class.name}",
-                                              // Display formatted value for selected item
+                                          left: 25.w, right: 25.w, top: 20.h),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                              Radius.circular(10.0),
+                                            ).r,
+                                            color: Color.fromRGBO(
+                                                230, 236, 254, 8)),
+                                        height: 55.w,
+                                        child: DropdownButtonHideUnderline(
+
+
+                                          child: DropdownButton2<String>(
+
+                                            isExpanded: true,
+                                            hint: Text(
+                                              'CLASS',
                                               style: TextStyle(
-                                                  fontSize: 14,
-                                                  overflow:
-                                                      TextOverflow.ellipsis),
-                                            );
-                                          }).toList();
-                                        },
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                          left: 15.w, right: 20.w, top: 20.h),
-                                      child: DropdownButtonFormField(
-                                        decoration: InputDecoration(
-                                            hintStyle: TextStyle(
                                                 color: Colors.black
-                                                    .withOpacity(0.5)),
-                                            contentPadding:
-                                                EdgeInsets.symmetric(
-                                                    vertical: 18.h,
-                                                    horizontal: 20.w),
-                                            hintText: "Division",
-                                            border: OutlineInputBorder(
-                                              borderRadius:
-                                                  const BorderRadius.all(
-                                                Radius.circular(10.0),
-                                              ).r,
-                                            ),
-                                            enabledBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                color: Color.fromRGBO(
-                                                    230, 236, 254, 8),
-                                                width: 1.0,
+                                                    .withOpacity(0.6),
+                                                fontSize: 14,
                                               ),
-                                              borderRadius:
-                                                  const BorderRadius.all(
-                                                          Radius.circular(10.0))
-                                                      .r,
                                             ),
-                                            focusedBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                color: Color.fromRGBO(
-                                                    230, 236, 254, 8),
-                                                width: 1.0,
-                                              ),
-                                              borderRadius:
-                                                  const BorderRadius.all(
-                                                          Radius.circular(10.0))
-                                                      .r,
-                                            ),
-                                            fillColor: const Color.fromRGBO(
-                                                230, 236, 254, 8),
-                                            filled: true),
-                                        isExpanded: true,
-                                        padding: EdgeInsets.only(
-                                            left: 10.w, right: 5.w),
-                                        hint: const Text('Division'),
-                                        validator: (dynamic value) =>
-                                            value == null
-                                                ? 'Please Select the Division'
-                                                : null,
-                                        items: batchList
-                                            .map((batch) =>
+                                            items: ClassList.map((Class) =>
                                                 DropdownMenuItem<String>(
-                                                  value: batch.name,
+
+                                                  value: Class.name,
                                                   child: Text(
-                                                    "DIVISION :${  batch.name ?? ""}",
+                                                    "CLASS :${Class.name ?? " "}",
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                     style:
-                                                        TextStyle(fontSize: 12),
+                                                        TextStyle(fontSize: 14),
                                                   ),
-                                                ))
-                                            .toList(),
-                                        value: _selectedValue2,
-                                        onChanged: (batch) {
-                                          setState(() {
-                                            _selectedValue2 = batch ?? "";
-                                          });
-                                          // controller.fetchteacherdata(
-                                          //     _selectedValue2!);
-                                        },
-                                        selectedItemBuilder:
-                                            (BuildContext context) {
-                                          return batchList.map((batch) {
-                                            return Text(
-                                              "DIVISION : ${batch.name}",
-                                              // Display formatted value for selected item
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  overflow:
-                                                      TextOverflow.ellipsis),
-                                            );
-                                          }).toList();
-                                        },
+                                                )).toList(),
+                                            value: _selectedValue1,
+                                            onChanged: (classes) {
+                                              setState(() {
+                                                _selectedValue1 = classes ?? "";
+                                                controller
+                                                    .fetchteacherbatchdata(
+                                                        _selectedValue1!);
+                                                print(
+                                                    "bweghrebghrghk$_selectedValue1");
+                                              });
+                                              // _selectedValue1=Class;
+                                              // controller.fetchteacherdata();
+                                              // print("bweghrebghrghk$_selectedValue1");
+                                            },
+                                            buttonStyleData:
+                                                const ButtonStyleData(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 16),
+                                              // height: 40,
+                                              // width: 200,
+                                            ),
+                                            dropdownStyleData:
+                                                const DropdownStyleData(
+                                              maxHeight: 600,
+                                            ),
+                                            menuItemStyleData:
+                                                const MenuItemStyleData(
+                                              height: 40,
+                                            ),
+                                            dropdownSearchData:
+                                                DropdownSearchData(
+                                              searchController: controller1,
+                                              searchInnerWidgetHeight: 50,
+                                              searchInnerWidget: Container(
+                                                height: 50,
+                                                padding: const EdgeInsets.only(
+                                                  top: 8,
+                                                  bottom: 4,
+                                                  right: 8,
+                                                  left: 8,
+                                                ),
+                                                child: TextField(
+                                                  controller: controller1,
+                                                  decoration: InputDecoration(
+                                                    isDense: true,
+                                                    contentPadding:
+                                                        const EdgeInsets
+                                                            .symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 8,
+                                                    ),
+
+                                                    hintText: 'Search Class',
+                                                    hintStyle:
+                                                        TextStyle(fontSize: 12),
+                                                    border: OutlineInputBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              searchMatchFn:
+                                                  (item, searchValue) {
+                                                return item.value
+                                                    .toString()
+                                                    .toLowerCase()
+                                                    .contains(searchValue
+                                                        .toLowerCase());
+                                              },
+                                            ),
+                                            onMenuStateChange: (isOpen) {
+                                              if (!isOpen) {
+                                                controller1.clear();
+                                              }
+                                            },
+                                          ),
+
+                                        ),
                                       ),
                                     ),
+                                    // Padding(
+                                    //   padding: EdgeInsets.only(
+                                    //       left: 15.w, right: 20.w, top: 20.h),
+                                    //   child: DropdownButtonFormField(
+                                    //     decoration: InputDecoration(
+                                    //         hintStyle: TextStyle(
+                                    //             color: Colors.black
+                                    //                 .withOpacity(0.5)),
+                                    //         contentPadding:
+                                    //             EdgeInsets.symmetric(
+                                    //                 vertical: 18.h,
+                                    //                 horizontal: 20.w),
+                                    //         hintText: "Class",
+                                    //         border: OutlineInputBorder(
+                                    //           borderRadius:
+                                    //               const BorderRadius.all(
+                                    //             Radius.circular(10.0),
+                                    //           ).r,
+                                    //         ),
+                                    //         enabledBorder: OutlineInputBorder(
+                                    //           borderSide: const BorderSide(
+                                    //             color: Color.fromRGBO(
+                                    //                 230, 236, 254, 8),
+                                    //             width: 1.0,
+                                    //           ),
+                                    //           borderRadius:
+                                    //               const BorderRadius.all(
+                                    //                       Radius.circular(10.0))
+                                    //                   .r,
+                                    //         ),
+                                    //         focusedBorder: OutlineInputBorder(
+                                    //           borderSide: const BorderSide(
+                                    //             color: Color.fromRGBO(
+                                    //                 230, 236, 254, 8),
+                                    //             width: 1.0,
+                                    //           ),
+                                    //           borderRadius:
+                                    //               const BorderRadius.all(
+                                    //                       Radius.circular(10.0))
+                                    //                   .r,
+                                    //         ),
+                                    //         fillColor: const Color.fromRGBO(
+                                    //             230, 236, 254, 8),
+                                    //         filled: true),
+                                    //     isExpanded: true,
+                                    //     padding: EdgeInsets.only(
+                                    //         left: 10.w, right: 5.w),
+                                    //     hint: const Text('Class'),
+                                    //     validator: (dynamic value) =>
+                                    //         value == null
+                                    //             ? 'Please Select the Class'
+                                    //             : null,
+                                    //     items: ClassList.map((Class) =>
+                                    //         DropdownMenuItem<String>(
+                                    //           value: Class.name,
+                                    //           child: Text(
+                                    //             "CLASS :${ Class.name ?? " "}",
+                                    //             overflow: TextOverflow.ellipsis,
+                                    //             style: TextStyle(fontSize: 12),
+                                    //           ),
+                                    //         )).toList(),
+                                    //     value: _selectedValue1,
+                                    //     onChanged: (classes) {
+                                    //       setState(() {
+                                    //         _selectedValue1 = classes ?? "";
+                                    //         controller.fetchteacherbatchdata(
+                                    //             _selectedValue1!);
+                                    //         print(
+                                    //             "bweghrebghrghk$_selectedValue1");
+                                    //       });
+                                    //       // _selectedValue1=Class;
+                                    //       // controller.fetchteacherdata();
+                                    //       // print("bweghrebghrghk$_selectedValue1");
+                                    //     },
+                                    //     selectedItemBuilder:
+                                    //         (BuildContext context) {
+                                    //       return ClassList.map((Class) {
+                                    //         return Text(
+                                    //           "CLASS : ${Class.name}",
+                                    //           // Display formatted value for selected item
+                                    //           style: TextStyle(
+                                    //               fontSize: 14,
+                                    //               overflow:
+                                    //                   TextOverflow.ellipsis),
+                                    //         );
+                                    //       }).toList();
+                                    //     },
+                                    //   ),
+                                    // ),
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          left: 25.w, right: 25.w, top: 20.h),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                            const BorderRadius.all(
+                                              Radius.circular(10.0),
+                                            ).r,
+                                            color: Color.fromRGBO(
+                                                230, 236, 254, 8)),
+                                        height: 55.w,
+                                        child: DropdownButtonHideUnderline(
+
+
+                                          child: DropdownButton2<String>(
+
+
+
+                                            isExpanded: true,
+                                            hint: Text(
+                                              'DIVISION',
+                                              style: TextStyle(
+                                                color: Colors.black
+                                                    .withOpacity(0.6),
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                            items: batchList.map((Class) =>
+                                                DropdownMenuItem<String>(
+
+                                                  value: Class.name,
+                                                  child: Text(
+                                                    "DIVISION :${Class.name ?? " "}",
+                                                    overflow:
+                                                    TextOverflow.ellipsis,
+                                                    style:
+                                                    TextStyle(fontSize: 14),
+                                                  ),
+                                                )).toList(),
+                                            value: _selectedValue2,
+                                            onChanged: (batch) {
+                                              setState(() {
+                                                _selectedValue2 = batch ?? "";
+                                              });
+                                              // controller.fetchteacherdata(
+                                              //     _selectedValue2!);
+                                            },
+                                            buttonStyleData:
+                                            const ButtonStyleData(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 16),
+                                              // height: 40,
+                                              // width: 200,
+                                            ),
+                                            dropdownStyleData:
+                                            const DropdownStyleData(
+                                              maxHeight: 600,
+                                            ),
+                                            menuItemStyleData:
+                                            const MenuItemStyleData(
+                                              height: 40,
+                                            ),
+                                            dropdownSearchData:
+                                            DropdownSearchData(
+                                              searchController: controller2,
+                                              searchInnerWidgetHeight: 50,
+                                              searchInnerWidget: Container(
+                                                height: 50,
+                                                padding: const EdgeInsets.only(
+                                                  top: 8,
+                                                  bottom: 4,
+                                                  right: 8,
+                                                  left: 8,
+                                                ),
+                                                child: TextField(
+                                                  controller: controller2,
+                                                  decoration: InputDecoration(
+                                                    isDense: true,
+                                                    contentPadding:
+                                                    const EdgeInsets
+                                                        .symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 8,
+                                                    ),
+                                                    hintText: 'Search Division',
+                                                    hintStyle:
+                                                    TextStyle(fontSize: 12),
+                                                    border: OutlineInputBorder(
+                                                      borderRadius:
+                                                      BorderRadius.circular(
+                                                          8),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              searchMatchFn:
+                                                  (item, searchValue) {
+                                                return item.value
+                                                    .toString()
+                                                    .toLowerCase()
+                                                    .contains(searchValue
+                                                    .toLowerCase());
+                                              },
+                                            ),
+                                            onMenuStateChange: (isOpen) {
+                                              if (!isOpen) {
+                                                controller2.clear();
+                                              }
+                                            },
+                                          ),
+
+                                        ),
+                                      ),
+                                    ),
+                                    // Padding(
+                                    //   padding: EdgeInsets.only(
+                                    //       left: 15.w, right: 20.w, top: 20.h),
+                                    //   child: DropdownButtonFormField(
+                                    //     decoration: InputDecoration(
+                                    //         hintStyle: TextStyle(
+                                    //             color: Colors.black
+                                    //                 .withOpacity(0.5)),
+                                    //         contentPadding:
+                                    //             EdgeInsets.symmetric(
+                                    //                 vertical: 18.h,
+                                    //                 horizontal: 20.w),
+                                    //         hintText: "Division",
+                                    //         border: OutlineInputBorder(
+                                    //           borderRadius:
+                                    //               const BorderRadius.all(
+                                    //             Radius.circular(10.0),
+                                    //           ).r,
+                                    //         ),
+                                    //         enabledBorder: OutlineInputBorder(
+                                    //           borderSide: const BorderSide(
+                                    //             color: Color.fromRGBO(
+                                    //                 230, 236, 254, 8),
+                                    //             width: 1.0,
+                                    //           ),
+                                    //           borderRadius:
+                                    //               const BorderRadius.all(
+                                    //                       Radius.circular(10.0))
+                                    //                   .r,
+                                    //         ),
+                                    //         focusedBorder: OutlineInputBorder(
+                                    //           borderSide: const BorderSide(
+                                    //             color: Color.fromRGBO(
+                                    //                 230, 236, 254, 8),
+                                    //             width: 1.0,
+                                    //           ),
+                                    //           borderRadius:
+                                    //               const BorderRadius.all(
+                                    //                       Radius.circular(10.0))
+                                    //                   .r,
+                                    //         ),
+                                    //         fillColor: const Color.fromRGBO(
+                                    //             230, 236, 254, 8),
+                                    //         filled: true),
+                                    //     isExpanded: true,
+                                    //     padding: EdgeInsets.only(
+                                    //         left: 10.w, right: 5.w),
+                                    //     hint: const Text('Division'),
+                                    //     validator: (dynamic value) =>
+                                    //         value == null
+                                    //             ? 'Please Select the Division'
+                                    //             : null,
+                                    //     items: batchList
+                                    //         .map((batch) =>
+                                    //             DropdownMenuItem<String>(
+                                    //               value: batch.name,
+                                    //               child: Text(
+                                    //                 "DIVISION :${batch.name ?? ""}",
+                                    //                 overflow:
+                                    //                     TextOverflow.ellipsis,
+                                    //                 style:
+                                    //                     TextStyle(fontSize: 12),
+                                    //               ),
+                                    //             ))
+                                    //         .toList(),
+                                    //     value: _selectedValue2,
+                                    //     onChanged: (batch) {
+                                    //       setState(() {
+                                    //         _selectedValue2 = batch ?? "";
+                                    //       });
+                                    //       // controller.fetchteacherdata(
+                                    //       //     _selectedValue2!);
+                                    //     },
+                                    //     selectedItemBuilder:
+                                    //         (BuildContext context) {
+                                    //       return batchList.map((batch) {
+                                    //         return Text(
+                                    //           "DIVISION : ${batch.name}",
+                                    //           // Display formatted value for selected item
+                                    //           style: TextStyle(
+                                    //               fontSize: 14,
+                                    //               overflow:
+                                    //                   TextOverflow.ellipsis),
+                                    //         );
+                                    //       }).toList();
+                                    //     },
+                                    //   ),
+                                    // ),
                                   ],
                                 ),
                               ),

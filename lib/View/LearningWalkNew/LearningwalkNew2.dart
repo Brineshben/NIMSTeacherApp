@@ -191,7 +191,7 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                                                       0xFFB1BFFF),
                                                                   fontWeight:
                                                                   FontWeight.bold,
-                                                                  fontSize: 22.h),
+                                                                  fontSize: 16.h),
                                                             ),
                                                           ),
                                                     ),
