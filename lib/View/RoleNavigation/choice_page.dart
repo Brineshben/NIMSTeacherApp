@@ -112,7 +112,7 @@ class _ChoicePageState extends State<ChoicePage> {
                         Center(
                           child: SizedBox(
                             child: Text(
-                              "Select your role",
+                              "Select your Role",
                               style: TextStyle(
                                   fontSize: 14.sp, color: Colors.cyan),
                             ),
@@ -220,6 +220,7 @@ Widget _Loader() {
           ),
           child: AnimatedTextKit(
             animatedTexts: [
+
               TypewriterAnimatedText(
                   'Teaching is a calling too. And I have always thought that teachers in their way are holy-angels leading their flocks out of the darkness. \n :- Jeannette Walls'),
               TypewriterAnimatedText(

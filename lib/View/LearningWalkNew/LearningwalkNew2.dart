@@ -828,11 +828,20 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                                 whatWentWell:
                                                 _whatWentWellController.text,
                                                 observationDate: formattedDate,
-                                                observerRoles: [],
+                                                observerRoles: Get.find<UserAuthController>()
+                                                    .userData
+                                                    .value
+                                                    .roleIds ??
+                                                    [],
                                               );
                                               bool connection =
                                               await CheckConnectivity().check();
                                               if (connection) {
+                                                print("brineshDB${Get.find<UserAuthController>()
+                                                    .userData
+                                                    .value
+                                                    .roleIds ??
+                                                    []}");
                                                 await Get.find<
                                                     LearningwalksubmitController>()
                                                     .Sendlearningwalksubmit(
