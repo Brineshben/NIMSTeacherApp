@@ -834,6 +834,7 @@ backgroundColor: Colors.white,
                       HandleControllers.deleteAllGetControllers();
 
                       await SharedPrefs().removeLoginData();
+                      await SharedPrefs().removeLoginCreds();
 
                       Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(

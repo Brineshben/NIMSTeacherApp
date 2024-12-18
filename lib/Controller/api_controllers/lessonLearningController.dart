@@ -63,6 +63,7 @@ class LessonLearningController extends GetxController {
       if (resp['status']['code'] == 200) {
         teacherNameList.value =
             lessonDataApi.value.data?.details?.response ?? [];
+        teacherNameList.value.removeWhere((element) => element.details?.isEmpty ?? true);
         learningWalkList.value =
             lessonDataApi.value.data?.details?.learningWalk?.list ?? [];
         lessonObservationList.value =

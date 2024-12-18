@@ -48,4 +48,29 @@ class SharedPrefs {
     bool done = await prefs.remove("loginData");
     return done;
   }
+
+  Future<bool> setLoginCreds(Map<String, dynamic> loginCreds) async {
+    String encodedData = json.encode(loginCreds);
+    final sharedPrefs = GetIt.instance<SharedPrefs>();
+    final prefs = sharedPrefs.prefs;
+    return await prefs.setString("loginCreds", encodedData);
+  }
+
+  Future<Map<String, dynamic>?> getLoginCreds() async {
+    final sharedPrefs = GetIt.instance<SharedPrefs>();
+    final prefs = sharedPrefs.prefs;
+    String? res = prefs.getString("loginCreds");
+    if (res != null) {
+      Map<String, dynamic> api = json.decode(res);
+      return api;
+    }
+    return null;
+  }
+
+  Future<bool> removeLoginCreds() async {
+    final sharedPrefs = GetIt.instance<SharedPrefs>();
+    final prefs = sharedPrefs.prefs;
+    bool done = await prefs.remove("loginCreds");
+    return done;
+  }
 }

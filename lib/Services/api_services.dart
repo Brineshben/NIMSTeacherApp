@@ -148,6 +148,9 @@ class ApiServices {
       http.StreamedResponse response = await request.send();
       var respString = await response.stream.bytesToString();
       if (response.statusCode == 200) {
+        print("----fgbfgb---------$url");
+        print("----fgbfgb---------$apiBody");
+        print("----fgbfgb---------$respString");
         return json.decode(respString);
       } else {
         throw Exception(response.statusCode);

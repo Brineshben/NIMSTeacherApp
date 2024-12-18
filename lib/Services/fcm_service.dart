@@ -1,5 +1,5 @@
+import 'dart:convert';
 import 'dart:io';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -33,7 +33,7 @@ class FcmService extends GetxService {
   }
 
   //Display Notification
-  displayNotification(Map<String, dynamic> notification) {
+  displayNotification(Map<String, dynamic> notification) async {
     print("Sound parameter: ${notification['sound']}"); // Debug print
     print("=========Notification==========$notification");
 
@@ -51,12 +51,23 @@ class FcmService extends GetxService {
           channel.name,
           color: Colors.yellow,
           importance: Importance.max,
+          audioAttributesUsage: AudioAttributesUsage.alarm,
           playSound: playSound, // Use the boolean value to set this
           sound: playSound ? RawResourceAndroidNotificationSound(notification['sound']) : null,
           icon: '@mipmap/ic_launcher',
           enableVibration: true,
+          fullScreenIntent: true,
+          styleInformation: BigTextStyleInformation(
+            notification['message'] ?? '',
+            htmlFormatBigText: true,
+            contentTitle: notification['title'] ?? '',
+            htmlFormatContentTitle: true,
+            // summaryText: "Swipe down to see more",
+            htmlFormatSummaryText: true,
+          ),
         ),
       ),
+      payload: json.encode(notification),
     );
   }
 

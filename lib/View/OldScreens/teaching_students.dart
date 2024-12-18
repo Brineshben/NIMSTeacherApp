@@ -248,10 +248,8 @@ class _StudentListViewState extends State<StudentListView> {
           newStudentList.add(
               StudentList!["data"]["attendance_settings"][i]["full_students"]);
           if (newStudentList != null && newStudentList.length != 0) {
-            ourStudentList = newStudentList[0]
-            ["feeDetails"];
-            ourStudentList
-                .sort((a, b) => a['username'].compareTo(b['username']));
+            ourStudentList = newStudentList[0]["feeDetails"];
+            ourStudentList.sort((a, b) => a['username'].compareTo(b['username']));
             // You can safely access the element here.
             // modifiedStudentList = newStudentList[0]['feeDetails'];
           }
@@ -439,6 +437,8 @@ class _StudentListViewState extends State<StudentListView> {
       'Content-Type': 'application/json'
     };
 
+    print('---------url-----------${ApiConstants.baseUrl + ApiConstants.attendanceSubmit}');
+
     var request =
     http.Request('POST',
         Uri.parse(ApiConstants.baseUrl + ApiConstants.attendanceSubmit));
@@ -514,6 +514,10 @@ class _StudentListViewState extends State<StudentListView> {
       log('--------------b-o-d-d-y-y-r-e-s-p-n-c-e--------${await response
           .stream.bytesToString()}------------------enddddd');
     } else {
+      await snackBar(
+          context: context,
+          message: "Failed to submit.",
+          color: Colors.red);
       print(response.reasonPhrase);
 
       // print('------------<<<absent>>>>>>><<<>>><><><><><$')
@@ -2085,9 +2089,7 @@ class _StudentListViewState extends State<StudentListView> {
                                                         width: 50,
                                                         height: 50,
                                                         fit: BoxFit.fill,
-                                                        imageUrl: ApiConstants
-                                                            .downloadUrl +
-                                                            "${ourStudentList[index]["image"]}",
+                                                        imageUrl: "${ApiConstants.downloadUrl}${ourStudentList[index]['feeDetails']?["image"] ?? ''}",
                                                         placeholder: (context,
                                                             url) =>
                                                             Center(
@@ -2133,9 +2135,7 @@ class _StudentListViewState extends State<StudentListView> {
                                                         width: 50,
                                                         height: 50,
                                                         fit: BoxFit.fill,
-                                                        imageUrl: ApiConstants
-                                                            .downloadUrl +
-                                                            "${afterAttendanceTaken[index]["image"]}",
+                                                        imageUrl: "${ApiConstants.downloadUrl}${afterAttendanceTaken[index]['feeDetails']["image"]}",
                                                         placeholder: (context,
                                                             url) =>
                                                             Center(

@@ -24,11 +24,11 @@ class _TeacherState extends State<Teacher> {
 
   @override
   void initState() {
+    print("-------------Arun print-here---");
 
 
     initialize();
     Get.find<Popupcontoller>().fetchAllStudentDateList();
-    print("-------------Arun print-here---");
     super.initState();
   }
 
@@ -38,6 +38,14 @@ class _TeacherState extends State<Teacher> {
     await timeTableController.fetchWorkLoad();
     if (!mounted) return;
     context.loaderOverlay.hide();
+  }
+
+  @override
+  void dispose() {
+    if(!mounted) {
+      context.loaderOverlay.hide();
+    }
+    super.dispose();
   }
 
   @override
