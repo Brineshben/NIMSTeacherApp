@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:get/get.dart';
 import 'package:teacherapp/Controller/api_controllers/userAuthController.dart';
+import 'package:teacherapp/Utils/api_constants.dart';
 import 'package:text_scroll/text_scroll.dart';
 import '../../../Controller/api_controllers/notificationController.dart';
 import '../../../Utils/Colors.dart';
@@ -202,7 +203,7 @@ class UserDetails extends StatelessWidget {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(100).r,
                           child: CachedNetworkImage(
-                            imageUrl: controller.userData.value.image ?? '--',
+                            imageUrl: "${ApiConstants.downloadUrl}${controller.userData.value.image}",
                             errorWidget: (context, url, error) {
                               return const Icon(
                                 Icons.person,

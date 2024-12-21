@@ -11,6 +11,7 @@ import 'package:teacherapp/Controller/api_controllers/userAuthController.dart';
 import 'package:teacherapp/Controller/home_controller/home_controller.dart';
 import 'package:teacherapp/Controller/ui_controllers/page_controller.dart';
 import 'package:teacherapp/Utils/Colors.dart';
+import 'package:teacherapp/Utils/api_constants.dart';
 import 'package:teacherapp/Utils/font_util.dart';
 import 'package:teacherapp/View/CWidgets/TeacherAppPopUps.dart';
 import 'package:text_scroll/text_scroll.dart';
@@ -117,21 +118,20 @@ class _MenuScreenState extends State<MenuScreen> {
                                   shape: BoxShape.circle),
                               // backgroundImage:
                               //     AssetImage('assets/images/profile2.png'),
-                              child: CachedNetworkImage(
-                                imageUrl: Get.find<UserAuthController>()
-                                        .userData
-                                        .value
-                                        .image ??
-                                    '--',
-                                placeholder: (context, url) => const Icon(
-                                  Icons.person,
-                                  color: Colors.grey,
-                                  size: 40,
-                                ),
-                                errorWidget: (context, url, error) => const Icon(
-                                  Icons.person,
-                                  color: Colors.grey,
-                                  size: 40,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(100).r,
+                                child: CachedNetworkImage(
+                                  imageUrl: "${ApiConstants.downloadUrl}${Get.find<UserAuthController>().userData.value.image}",
+                                  placeholder: (context, url) => const Icon(
+                                    Icons.person,
+                                    color: Colors.grey,
+                                    size: 40,
+                                  ),
+                                  errorWidget: (context, url, error) => const Icon(
+                                    Icons.person,
+                                    color: Colors.grey,
+                                    size: 40,
+                                  ),
                                 ),
                               )),
                           // CircleAvatar(

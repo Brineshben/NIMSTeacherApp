@@ -55,6 +55,9 @@ class _DrawerScreenState extends State<DrawerScreen> {
 
   void _handleMessage(RemoteMessage message) {
     if (message.data['category'] == 'student_tracking') {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const DrawerScreen()),
+              (route) => false);
       if(Get.find<PageIndexController>().navLength.value == 4) {
         Get.find<HomeController>().currentIndex.value = 3;
         Get.find<PageIndexController>().changePage(currentPage: 3);
