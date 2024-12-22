@@ -286,7 +286,7 @@ class _StudentListViewState extends State<StudentListView> {
             // Utils.showToastSuccess("Attendance Taken").show(context);
             newStudentList.add(
                 StudentList!["data"]["attendance_settings"][i]["full_students"]);
-            log('--qqqqqqqqq----${StudentList!["data"]["attendance_settings"]}');
+            log('--qqqqqqqqq----$newStudentList');
             if (newStudentList != null && newStudentList.length != 0) {
               afterAttendanceTaken =
               newStudentList[0]; //
@@ -294,16 +294,17 @@ class _StudentListViewState extends State<StudentListView> {
               //     .sort((a, b) => a['username'].compareTo(b['username']));
               // You can safely access the element here.
               // modifiedStudentList = newStudentList[0]['feeDetails'];
-              print(">>>>>>>>>>>>>>>>>>newstudentlist>>>>>>>>> $ourStudentList");
+              print(">>>>>>>>>>>>>>>>>>newstudentlist>>>>>>>>> $afterAttendanceTaken");
             }
-            print(">>>>>>>>>>>>>>>>>>newstudentlist>>>>>>>>> $ourStudentList");
+            print(">>>>>>>>>>>>>>>>>>ourStudentList>>>>>>>>> $ourStudentList");
             for (var index = 0; index < afterAttendanceTaken.length; index++) {
               afterAttendanceTaken[index].addAll({"is_present": true});
             }
 
             log("the after taken $afterAttendanceTaken");
             setState(() {
-              newResult = afterAttendanceTaken;
+              isStudentListnull = afterAttendanceTaken;
+              newResult = isStudentListnull;
             });
             for (var ind = 0; ind < afterAttendanceTaken.length; ind++) {
               modifiedStudentList.add({
@@ -320,26 +321,26 @@ class _StudentListViewState extends State<StudentListView> {
                 "birth_date": afterAttendanceTaken[ind]["birth_date"]
               });
             }
-            setState(() {
-              isStudentListnull = afterAttendanceTaken;
-              for (var j = 0; j < isStudentListnull.length; j++) {
-                if (isStudentListnull[j]["feeDetails"].containsKey(
-                    "roll_number")) {
-                  try {
-                    isStudentListnull.sort((a, b) {
-                      return
-                        a["feeDetails"]["roll_number"]
-                            .compareTo(b["feeDetails"]["roll_number"]);
-                    });
-                  } catch(e) {}
-                } else {
-                  print("jjjjjjjjjjjjjjjjjjjjjjjjjj");
-                }
-              }
-            });
-            setState(() {
-              newResult = afterAttendanceTaken;
-            });
+            // setState(() {
+            //   isStudentListnull = afterAttendanceTaken;
+            //   for (var j = 0; j < isStudentListnull.length; j++) {
+            //     if (isStudentListnull[j]["feeDetails"].containsKey(
+            //         "roll_number")) {
+            //       try {
+            //         isStudentListnull.sort((a, b) {
+            //           return
+            //             a["feeDetails"]["roll_number"]
+            //                 .compareTo(b["feeDetails"]["roll_number"]);
+            //         });
+            //       } catch(e) {}
+            //     } else {
+            //       print("jjjjjjjjjjjjjjjjjjjjjjjjjj");
+            //     }
+            //   }
+            // });
+            // setState(() {
+            //   newResult = afterAttendanceTaken;
+            // });
           }
           print('newResult------------1$newResult');
         }
@@ -2229,17 +2230,89 @@ class _StudentListViewState extends State<StudentListView> {
                                                     SizedBox(
                                                       height: 6.h,
                                                     ),
-                                                    afterAttendanceTaken == null
-                                                        ? (ourStudentList[index]["fee_arrear"] ==
-                                                        false ||
-                                                        newResult[index]["fee_arrear"] ==
-                                                            false
-                                                        || double.parse(
-                                                            ourStudentList[index]["fee_amount"]
-                                                                .toString()
-                                                                .replaceAll(
-                                                                ',', '')) < 1)
-                                                        ? Text(
+                                                    _searchController.text.isNotEmpty
+                                                        ? (afterAttendanceTaken == null ||
+                                                        afterAttendanceTaken.isEmpty)
+                                                        ? newResult[index]["fee_arrear"] == false
+                                                        ? Text("No Pending Fees")
+                                                        : ((double.tryParse(
+                                                        newResult[index]["fee_amount"]
+                                                            .toString()
+                                                            .replaceAll(
+                                                            ',', '')) ?? 0) < 1) ? Text("No Pending Fees")
+                                                        : Row(
+                                                      mainAxisAlignment: MainAxisAlignment
+                                                          .spaceBetween,
+                                                      children: [
+                                                        Container(
+                                                          child: Text(
+                                                            "AED : ",
+                                                            style: TextStyle(
+                                                                fontSize:
+                                                                13),
+                                                          ),
+                                                        ),
+                                                        Container(
+                                                          child: Text(
+                                                            newResult[index]["fee_amount"]
+                                                                .toString(),
+                                                            style: TextStyle(
+                                                                fontSize: 13,
+                                                                color: Colors
+                                                                    .red,
+                                                                fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                          ),
+                                                        ),
+
+                                                      ],
+                                                    )
+                                                        : newResult[index]['feeDetails']["fee_arrear"] == false
+                                                        ? Text("No Pending Fees") : ((double.tryParse(
+                                                        newResult[index]['feeDetails']["fee_amount"]
+                                                            .toString()
+                                                            .replaceAll(
+                                                            ',', '')) ?? 0) < 1) ? Text("No Pending Fees")
+                                                        : Row(
+                                                      mainAxisAlignment: MainAxisAlignment
+                                                          .spaceBetween,
+                                                      children: [
+                                                        Container(
+                                                          child: Text(
+                                                            "AED : ",
+                                                            style: TextStyle(
+                                                                fontSize:
+                                                                13),
+                                                          ),
+                                                        ),
+                                                        Container(
+                                                          child: Text(
+                                                            newResult[index]['feeDetails']["fee_amount"]
+                                                                .toString(),
+                                                            style: TextStyle(
+                                                                fontSize: 13,
+                                                                color: Colors
+                                                                    .red,
+                                                                fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                          ),
+                                                        ),
+
+                                                      ],
+                                                    )
+                                                        :
+                                                    afterAttendanceTaken ==
+                                                        null ||
+                                                        afterAttendanceTaken
+                                                            .isEmpty
+                                                        ? ourStudentList[index]["fee_arrear"] == false
+                                                        ? ((double.tryParse(
+                                                        newResult[index]["fee_amount"]
+                                                            .toString()
+                                                            .replaceAll(
+                                                            ',', '')) ?? 0) < 1) ? Text("No Pending Fees") : Text(
                                                       "No Pending Fees",)
                                                         : Row(
                                                       mainAxisAlignment: MainAxisAlignment
@@ -2255,25 +2328,9 @@ class _StudentListViewState extends State<StudentListView> {
                                                         ),
                                                         Container(
                                                           child: Text(
-                                                            (afterAttendanceTaken ==
-                                                                null ||
-                                                                afterAttendanceTaken
-                                                                    .isEmpty)
-                                                                ? _searchController
-                                                                .text.isNotEmpty
-                                                                ? newResult[index]["fee_amount"]
-                                                                .toString()
-
-                                                                : ourStudentList[index]
+                                                            ourStudentList[index]
                                                             ["fee_amount"]
-                                                                .toString()
-                                                                : _searchController
-                                                                .text.isNotEmpty
-                                                                ? newResult[index]["fee_amount"]
-                                                                .toString()
-
-                                                                : afterAttendanceTaken[index]["feeDetails"]
-                                                            ["fee_amount"],
+                                                                .toString(),
                                                             style: TextStyle(
                                                                 fontSize: 13,
                                                                 color: Colors
@@ -2286,17 +2343,12 @@ class _StudentListViewState extends State<StudentListView> {
 
                                                       ],
                                                     )
-                                                        : (afterAttendanceTaken[
-                                                    index]
-                                                    [
-                                                    "feeDetails"]
-                                                    ["fee_arrear"] ==
-                                                        false || double.parse(
-                                                        afterAttendanceTaken[index]["feeDetails"]["fee_amount"]
+                                                        : afterAttendanceTaken[index]["feeDetails"]["fee_arrear"] == false
+                                                        ? ((double.tryParse(
+                                                        newResult[index]["fee_amount"]
                                                             .toString()
                                                             .replaceAll(
-                                                            ',', '')) < 1)
-                                                        ? Row(
+                                                            ',', '')) ?? 0) < 1) ? Text("No Pending Fees") : Row(
                                                       children: [
                                                         Text(
                                                             "No Pending Fees"),
@@ -2320,22 +2372,7 @@ class _StudentListViewState extends State<StudentListView> {
                                                         Container(
                                                           width: 90.w,
                                                           child: Text(
-                                                            afterAttendanceTaken ==
-                                                                null ||
-                                                                afterAttendanceTaken
-                                                                    .isEmpty
-                                                                ? _searchController
-                                                                .text.isNotEmpty
-                                                                ? newResult[index]["fee_amount"]
-                                                                .toString()
-                                                                : ourStudentList[index]
-                                                            [
-                                                            "fee_amount"]
-                                                                : _searchController
-                                                                .text.isNotEmpty
-                                                                ? newResult[index]["feeDetails"]["fee_amount"]
-                                                                .toString()
-                                                                : afterAttendanceTaken[index]["feeDetails"]["fee_amount"],
+                                                            afterAttendanceTaken[index]["feeDetails"]["fee_amount"].toString(),
                                                             style: TextStyle(
                                                                 fontSize: 13,
                                                                 color: Colors
@@ -2664,10 +2701,193 @@ class _StudentListViewState extends State<StudentListView> {
                                             mainAxisAlignment: MainAxisAlignment
                                                 .end,
                                             children: [
+                                              _searchController.text.isNotEmpty
+                                                  ? newResult[index]["late"] ==
+                                                  true ? GestureDetector(
+                                                  onTap: () async {
+                                                    showDialog(
 
+                                                      context: context,
+                                                      builder: (
+                                                          BuildContext context) =>
+                                                          AlertDialog(
+                                                            backgroundColor: Colors
+                                                                .transparent,
+                                                            title: Container(
+                                                              width: 300,
+                                                              height: 150,
+                                                              margin: EdgeInsets
+                                                                  .only(top: 40,
+                                                                  bottom: 10),
+                                                              decoration: BoxDecoration(
+                                                                color: Colors.white,
+                                                                borderRadius: BorderRadius
+                                                                    .all(
+                                                                    Radius.circular(
+                                                                        20)),
+                                                                boxShadow: [
+                                                                  BoxShadow(
+                                                                    color: Colors
+                                                                        .black
+                                                                        .withOpacity(
+                                                                        0.2),
+                                                                    spreadRadius: 2,
+                                                                    blurRadius: 10,
+                                                                    offset: Offset(
+                                                                        0, 4),
+                                                                  ),
+                                                                ],
+                                                              ),
+
+                                                              child: Column(
+                                                                crossAxisAlignment: CrossAxisAlignment
+                                                                    .start,
+                                                                children: [
+                                                                  Row(
+
+                                                                    children: [
+
+                                                                      Padding(
+                                                                        padding: const EdgeInsets
+                                                                            .only(
+                                                                            top: 10,
+                                                                            left: 40),
+                                                                        child: Text(
+                                                                          'Remarks ',
+                                                                          style: TextStyle(
+                                                                              fontSize: 18
+                                                                                  .sp,
+                                                                              fontWeight: FontWeight
+                                                                                  .bold),
+                                                                        ),
+                                                                      ),
+                                                                      SizedBox(
+                                                                          width: 45),
+
+                                                                    ],
+                                                                    mainAxisAlignment: MainAxisAlignment
+                                                                        .center,
+                                                                  ),
+                                                                  SizedBox(
+                                                                      height: 15),
+                                                                  Padding(
+                                                                    padding: const EdgeInsets
+                                                                        .only(
+                                                                      left: 10,
+                                                                      right: 10,),
+                                                                    child: Container(
+                                                                      height: 60,
+                                                                      decoration: BoxDecoration(
+                                                                        borderRadius: BorderRadius
+                                                                            .circular(
+                                                                            10),
+                                                                        color: Colorutils
+                                                                            .chatcolor
+                                                                            .withOpacity(
+                                                                            0.2),
+                                                                      ),
+
+                                                                      child: Row(
+                                                                        mainAxisAlignment: MainAxisAlignment
+                                                                            .center,
+                                                                        children: [
+                                                                          Padding(
+                                                                            padding: const EdgeInsets
+                                                                                .only(
+                                                                                left: 3,
+                                                                                right: 3),
+                                                                            child: Text(
+                                                                              newResult[index]["remarks"] ??
+                                                                                  "No Remarks Added",
+                                                                              style: TextStyle(
+                                                                                  fontSize: 16
+                                                                                      .sp,
+                                                                                  fontWeight: FontWeight
+                                                                                      .w500),
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  SizedBox(
+                                                                      height: 10),
+                                                                  Center(
+                                                                    child: GestureDetector(
+                                                                      onTap: () {
+                                                                        Navigator
+                                                                            .pop(
+                                                                            context);
+                                                                      },
+                                                                      child: Container(
+                                                                        decoration: BoxDecoration(
+                                                                          color: Colors
+                                                                              .red,
+                                                                          borderRadius: BorderRadius
+                                                                              .all(
+                                                                              Radius
+                                                                                  .circular(
+                                                                                  10)),
+                                                                          boxShadow: [
+                                                                            BoxShadow(
+                                                                              color: Colors
+                                                                                  .grey
+                                                                                  .withOpacity(
+                                                                                  0.1),
+                                                                              spreadRadius: 1,
+                                                                              blurRadius: 1,
+                                                                              offset: Offset(
+                                                                                  0,
+                                                                                  1),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+
+                                                                        height: 25,
+                                                                        width: 50,
+                                                                        child: Center(
+                                                                          child: Text(
+                                                                            "Close",
+                                                                            style: TextStyle(
+                                                                                fontSize: 15,
+                                                                                color: Colors
+                                                                                    .white
+                                                                            ),),
+                                                                        ),
+
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                    );
+                                                  },
+                                                  child: Padding(
+                                                    padding: const EdgeInsets
+                                                        .only(right: 15),
+                                                    child: Container(child: Row(
+
+                                                      children: [
+                                                        Icon(Icons
+                                                            .remove_red_eye_outlined,
+                                                          size: 18,),
+                                                        SizedBox(width: 5.w,),
+                                                        Text('Late',
+                                                          style: TextStyle(
+                                                              fontWeight: FontWeight
+                                                                  .w900,
+                                                              color: Colors.red,
+                                                              fontSize: 15
+                                                                  .sp),),
+                                                      ],
+                                                    )),
+                                                  )) : Text('') :
                                               isStudentListnull[index]["late"] ==
                                                   true ?
-                                              GestureDetector(onTap: () async {
+                                              GestureDetector(
+                                                  onTap: () async {
                                                 showDialog(
 
                                                   context: context,
@@ -2827,7 +3047,6 @@ class _StudentListViewState extends State<StudentListView> {
                                                       ),
                                                 );
                                               },
-
                                                   child: Padding(
                                                     padding: const EdgeInsets
                                                         .only(right: 15),
