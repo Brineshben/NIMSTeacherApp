@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -8,6 +9,7 @@ import 'package:teacherapp/Services/common_services.dart';
 import 'package:teacherapp/Utils/font_util.dart';
 import 'package:teacherapp/View/Chat_View/parent_chat_screen.dart';
 import '../../../Models/api_models/parent_chat_list_api_model.dart';
+import '../../../Models/api_models/parent_list_api_model.dart';
 import '../../../Utils/Colors.dart';
 
 class NewParentChat extends StatefulWidget {
@@ -62,9 +64,9 @@ class _NewParentChatState extends State<NewParentChat> {
               child: GetX<ParentChatListController>(
                 builder: (ParentChatListController controller) {
                   // controller.filterByClass('All');
-                  List<String> classNameList = controller.allClasses.value;
-                  List<Datum> filteredChatList =
-                      controller.filteredChatList.value;
+                  List<ParentFilterClass> classNameList = controller.allClasses.value;
+                  List<ParentData> filteredChatList =
+                      controller.filteredParentList.value;
                   return Column(
                     children: [
                       Padding(
@@ -221,7 +223,7 @@ class _NewParentChatState extends State<NewParentChat> {
                                           ),
                                           child: FittedBox(
                                             child: Text(
-                                              classNameList[index],
+                                              "${classNameList[index].stdClass}${classNameList[index].stdBatch}",
                                               style: GoogleFonts.inter(
                                                 fontSize: 16.0,
                                                 color: Colors.white,
@@ -245,16 +247,29 @@ class _NewParentChatState extends State<NewParentChat> {
                           padding: EdgeInsets.only(
                               bottom: View.of(context).viewInsets.bottom * 0.5),
                           itemBuilder: (BuildContext context, int index) {
-                            String subtile =
-                                "${filteredChatList[index].relation} of ${capitalizeEachWord(filteredChatList[index].parentName)}";
+                            String subtile = "${filteredChatList[index].gender?.toUpperCase()[0] == "F" ? "Daughter" : filteredChatList[index].gender?.toUpperCase()[0] == "M" ? "Son" : ""} of ${capitalizeEachWord(filteredChatList[index].name)}";
+                            List<String> nameParts = filteredChatList[index].studentName.toString().split(" ").map((name) => name.trim()).toList();
+                            nameParts = nameParts.where((name) => name.isNotEmpty).toList();
+                            String? placeholderName;
+                            try {
+                              placeholderName = nameParts.length > 1 ? "${nameParts[0].trim().substring(0, 1)}${nameParts[1].trim().substring(0, 1)}".toUpperCase() : nameParts[0].trim().substring(0, 2).toUpperCase();
+                            } catch(e) {}
                             return ListTile(
                               contentPadding: const EdgeInsets.all(0),
                               minVerticalPadding: 0,
-                              leading: CircleAvatar(
-                                radius: 25.r,
-                                backgroundImage: const AssetImage(
-                                    'assets/images/profile image.png'),
+                              leading: CachedNetworkImage(
+                                  imageUrl: filteredChatList[index].image ?? '',
+                                errorWidget: (context, url, error) {
+                                  return Text(
+                                    placeholderName ?? '--',
+                                  );
+                                },
                               ),
+                              // leading: CircleAvatar(
+                              //   radius: 25.r,
+                              //   backgroundImage: const AssetImage(
+                              //       'assets/images/profile image.png'),
+                              // ),
                               title: Padding(
                                 padding: const EdgeInsets.only(right: 16).w,
                                 child: Text(
@@ -280,10 +295,10 @@ class _NewParentChatState extends State<NewParentChat> {
                                 ),
                               ),
                               onTap: () {
-                                Navigator.of(context).pop();
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => ParentChatScreen(
-                                        msgData: filteredChatList[index])));
+                                // Navigator.of(context).pop();
+                                // Navigator.of(context).push(MaterialPageRoute(
+                                //     builder: (context) => ParentChatScreen(
+                                //         msgData: filteredChatList[index])));
                               },
                             );
                           },

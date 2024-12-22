@@ -172,3 +172,9 @@ class Status {
   };
 
 }
+
+class ParentFilterClass {
+  final String? stdClass;
+  final String? stdBatch;
+  const ParentFilterClass({this.stdClass, this.stdBatch});
+}
