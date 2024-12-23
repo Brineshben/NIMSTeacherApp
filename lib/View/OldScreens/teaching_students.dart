@@ -196,159 +196,162 @@ class _StudentListViewState extends State<StudentListView> {
     setState(() {
       isSpinner = true;
     });
-    var headers = {
-      'x-auth-token': 'tq355lY3MJyd8Uj2ySzm',
-      'Content-Type': 'application/json'
-    };
-    var request = http.Request(
-        'POST', Uri.parse(ApiConstants.baseUrl + ApiConstants.studentListApi));
-    request.body = json.encode({
-      "school_id": widget.school_id,
-      "academic_year": widget.academic_year,
-      "session_id": widget.session_id,
-      "curriculum_id": widget.curriculam_id,
-      "class_id": widget.class_id,
-      "batch_id": widget.batch_id,
-      "for_attendance": true,
-      "selected_date":
-      DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(DateTime.now()),
-      // "selected_date": "2022-03-10T00:00:00.000Z",
-      "att_type": "once",
-      "fileServerUrl": ApiConstants.downloadUrl,
-      "xclass": widget.className.toString().split(" ")[0],
-      "batch": widget.className.toString().split(" ")[1],
-      "is_report": false,
-      "date": DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(DateTime.now()),
-      "user_id": widget.userId,
-      "selected_period": {
-        "_id": "once",
-        "name": "Full Day - Lite",
-        "period_number": false,
-        "lite": true
-      }
-    });
-    request.headers.addAll(headers);
-
-    print("--------url---------${ApiConstants.baseUrl +
-        ApiConstants.studentListApi}");
-    print('-----new----bodyyy${request.body}');
-
-    http.StreamedResponse response = await request.send();
-    if (response.statusCode == 200) {
-      var jsonResponse = await response.stream.bytesToString();
-      log('student  list-------->${jsonResponse}->>>>endddddd');
-      setState(() {
-        StudentList = json.decode(jsonResponse);
-      });
-      for (var i = 0;
-      i < StudentList!["data"]["attendance_settings"].length;
-      i++) {
-        if (StudentList!["data"]["attendance_settings"][i]["taken_status"] ==
-            false) {
-          newStudentList.add(
-              StudentList!["data"]["attendance_settings"][i]["full_students"]);
-          if (newStudentList != null && newStudentList.length != 0) {
-            ourStudentList = newStudentList[0]["feeDetails"];
-            ourStudentList.sort((a, b) => a['username'].compareTo(b['username']));
-            // You can safely access the element here.
-            // modifiedStudentList = newStudentList[0]['feeDetails'];
-          }
-          log(
-              '--qqqqqqgtguutqqq----${StudentList!["data"]["attendance_settings"]}');
-          for (var index = 0; index < ourStudentList.length; index++) {
-            ourStudentList[index].addAll({"is_present": true});
-          }
-          setState(() {
-            isStudentListnull = ourStudentList;
-            newResult = isStudentListnull;
-          });
-          for (var ind = 0; ind < ourStudentList.length; ind++) {
-            modifiedStudentList.add({
-              "_id": ourStudentList[ind]["_id"],
-              "user_id": ourStudentList[ind]["user_id"],
-              "roll_number": ourStudentList[ind].containsValue("roll_number")
-                  ? ourStudentList[ind]["roll_number"]
-                  : " ",
-              "subjects": json.encode(SubjectIds),
-              "user_name": ourStudentList[ind]["username"],
-              "admission_number": ourStudentList[ind]["admission_number"],
-              "gender": ourStudentList[ind]["gender"],
-              "birth_date": ourStudentList[ind]["birth_date"]
-            });
-          }
-        } else {
-          lateMark = true;
-          print("attendance taken");
-          snackBar(context: context,
-              message: "Attendance Taken",
-              color: Colors.green);
-          // Utils.showToastSuccess("Attendance Taken").show(context);
-          newStudentList.add(
-              StudentList!["data"]["attendance_settings"][i]["full_students"]);
-          log('--qqqqqqqqq----${StudentList!["data"]["attendance_settings"]}');
-          if (newStudentList != null && newStudentList.length != 0) {
-            afterAttendanceTaken =
-            newStudentList[0]; //
-            // afterAttendanceTaken
-            //     .sort((a, b) => a['username'].compareTo(b['username']));
-            // You can safely access the element here.
-            // modifiedStudentList = newStudentList[0]['feeDetails'];
-            print(">>>>>>>>>>>>>>>>>>newstudentlist>>>>>>>>> $ourStudentList");
-          }
-          print(">>>>>>>>>>>>>>>>>>newstudentlist>>>>>>>>> $ourStudentList");
-          for (var index = 0; index < afterAttendanceTaken.length; index++) {
-            afterAttendanceTaken[index].addAll({"is_present": true});
-          }
-
-          log("the after taken $afterAttendanceTaken");
-          setState(() {
-            newResult = afterAttendanceTaken;
-          });
-          for (var ind = 0; ind < afterAttendanceTaken.length; ind++) {
-            modifiedStudentList.add({
-              "_id": afterAttendanceTaken[ind]["_id"],
-              "user_id": afterAttendanceTaken[ind]["user_id"],
-              "roll_number": afterAttendanceTaken[ind].containsValue(
-                  "roll_number")
-                  ? afterAttendanceTaken[ind]["roll_number"]
-                  : " ",
-              "subjects": json.encode(SubjectIds),
-              "user_name": afterAttendanceTaken[ind]["username"],
-              "admission_number": afterAttendanceTaken[ind]["admission_number"],
-              "gender": afterAttendanceTaken[ind]["gender"],
-              "birth_date": afterAttendanceTaken[ind]["birth_date"]
-            });
-          }
-          setState(() {
-            isStudentListnull = afterAttendanceTaken;
-            for (var j = 0; j < isStudentListnull.length; j++) {
-              if (isStudentListnull[j]["feeDetails"].containsKey(
-                  "roll_number")) {
-                try {
-                  isStudentListnull.sort((a, b) {
-                    return
-                      a["feeDetails"]["roll_number"]
-                          .compareTo(b["feeDetails"]["roll_number"]);
-                  });
-                } catch(e) {}
-              } else {
-                print("jjjjjjjjjjjjjjjjjjjjjjjjjj");
-              }
-            }
-          });
-          setState(() {
-            newResult = afterAttendanceTaken;
-          });
+    try {
+      var headers = {
+        'x-auth-token': 'tq355lY3MJyd8Uj2ySzm',
+        'Content-Type': 'application/json'
+      };
+      var request = http.Request(
+          'POST', Uri.parse(ApiConstants.baseUrl + ApiConstants.studentListApi));
+      request.body = json.encode({
+        "school_id": widget.school_id,
+        "academic_year": widget.academic_year,
+        "session_id": widget.session_id,
+        "curriculum_id": widget.curriculam_id,
+        "class_id": widget.class_id,
+        "batch_id": widget.batch_id,
+        "for_attendance": true,
+        "selected_date":
+        DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(DateTime.now()),
+        // "selected_date": "2022-03-10T00:00:00.000Z",
+        "att_type": "once",
+        "fileServerUrl": ApiConstants.downloadUrl,
+        "xclass": widget.className.toString().split(" ")[0],
+        "batch": widget.className.toString().split(" ")[1],
+        "is_report": false,
+        "date": DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(DateTime.now()),
+        "user_id": widget.userId,
+        "selected_period": {
+          "_id": "once",
+          "name": "Full Day - Lite",
+          "period_number": false,
+          "lite": true
         }
-        print('newResult------------1$newResult');
+      });
+      request.headers.addAll(headers);
+
+      print("--------url---------${ApiConstants.baseUrl +
+          ApiConstants.studentListApi}");
+      print('-----new----bodyyy${request.body}');
+
+      http.StreamedResponse response = await request.send();
+      if (response.statusCode == 200) {
+        var jsonResponse = await response.stream.bytesToString();
+        log('student  list-------->${jsonResponse}->>>>endddddd');
+        setState(() {
+          StudentList = json.decode(jsonResponse);
+        });
+        for (var i = 0;
+        i < StudentList!["data"]["attendance_settings"].length;
+        i++) {
+          if (StudentList!["data"]["attendance_settings"][i]["taken_status"] ==
+              false) {
+            newStudentList.add(
+                StudentList!["data"]["attendance_settings"][i]["full_students"]);
+            if (newStudentList != null && newStudentList.length != 0) {
+              ourStudentList = newStudentList[0]["feeDetails"];
+              ourStudentList.sort((a, b) => a['username'].compareTo(b['username']));
+              // You can safely access the element here.
+              // modifiedStudentList = newStudentList[0]['feeDetails'];
+            }
+            log(
+                '--qqqqqqgtguutqqq----${StudentList!["data"]["attendance_settings"]}');
+            for (var index = 0; index < ourStudentList.length; index++) {
+              ourStudentList[index].addAll({"is_present": true});
+            }
+            setState(() {
+              isStudentListnull = ourStudentList;
+              newResult = isStudentListnull;
+            });
+            for (var ind = 0; ind < ourStudentList.length; ind++) {
+              modifiedStudentList.add({
+                "_id": ourStudentList[ind]["_id"],
+                "user_id": ourStudentList[ind]["user_id"],
+                "roll_number": ourStudentList[ind].containsValue("roll_number")
+                    ? ourStudentList[ind]["roll_number"]
+                    : " ",
+                "subjects": json.encode(SubjectIds),
+                "user_name": ourStudentList[ind]["username"],
+                "admission_number": ourStudentList[ind]["admission_number"],
+                "gender": ourStudentList[ind]["gender"],
+                "birth_date": ourStudentList[ind]["birth_date"]
+              });
+            }
+          } else {
+            lateMark = true;
+            print("attendance taken");
+            snackBar(context: context,
+                message: "Attendance Taken",
+                color: Colors.green);
+            // Utils.showToastSuccess("Attendance Taken").show(context);
+            newStudentList.add(
+                StudentList!["data"]["attendance_settings"][i]["full_students"]);
+            log('--qqqqqqqqq----$newStudentList');
+            if (newStudentList != null && newStudentList.length != 0) {
+              afterAttendanceTaken =
+              newStudentList[0]; //
+              // afterAttendanceTaken
+              //     .sort((a, b) => a['username'].compareTo(b['username']));
+              // You can safely access the element here.
+              // modifiedStudentList = newStudentList[0]['feeDetails'];
+              print(">>>>>>>>>>>>>>>>>>newstudentlist>>>>>>>>> $afterAttendanceTaken");
+            }
+            print(">>>>>>>>>>>>>>>>>>ourStudentList>>>>>>>>> $ourStudentList");
+            for (var index = 0; index < afterAttendanceTaken.length; index++) {
+              afterAttendanceTaken[index].addAll({"is_present": true});
+            }
+
+            log("the after taken $afterAttendanceTaken");
+            setState(() {
+              isStudentListnull = afterAttendanceTaken;
+              newResult = isStudentListnull;
+            });
+            for (var ind = 0; ind < afterAttendanceTaken.length; ind++) {
+              modifiedStudentList.add({
+                "_id": afterAttendanceTaken[ind]["_id"],
+                "user_id": afterAttendanceTaken[ind]["user_id"],
+                "roll_number": afterAttendanceTaken[ind].containsValue(
+                    "roll_number")
+                    ? afterAttendanceTaken[ind]["roll_number"]
+                    : " ",
+                "subjects": json.encode(SubjectIds),
+                "user_name": afterAttendanceTaken[ind]["username"],
+                "admission_number": afterAttendanceTaken[ind]["admission_number"],
+                "gender": afterAttendanceTaken[ind]["gender"],
+                "birth_date": afterAttendanceTaken[ind]["birth_date"]
+              });
+            }
+            // setState(() {
+            //   isStudentListnull = afterAttendanceTaken;
+            //   for (var j = 0; j < isStudentListnull.length; j++) {
+            //     if (isStudentListnull[j]["feeDetails"].containsKey(
+            //         "roll_number")) {
+            //       try {
+            //         isStudentListnull.sort((a, b) {
+            //           return
+            //             a["feeDetails"]["roll_number"]
+            //                 .compareTo(b["feeDetails"]["roll_number"]);
+            //         });
+            //       } catch(e) {}
+            //     } else {
+            //       print("jjjjjjjjjjjjjjjjjjjjjjjjjj");
+            //     }
+            //   }
+            // });
+            // setState(() {
+            //   newResult = afterAttendanceTaken;
+            // });
+          }
+          print('newResult------------1$newResult');
+        }
+
+        log("the modified list is $modifiedStudentList");
+
+        print("the student list is $ourStudentList");
+      } else {
+        print(response.reasonPhrase);
       }
-
-      log("the modified list is $modifiedStudentList");
-
-      print("the student list is $ourStudentList");
-    } else {
-      print(response.reasonPhrase);
-    }
+    } catch(e) {}
     setState(() {
       isSpinner = false;
     });
@@ -2227,17 +2230,89 @@ class _StudentListViewState extends State<StudentListView> {
                                                     SizedBox(
                                                       height: 6.h,
                                                     ),
-                                                    afterAttendanceTaken == null
-                                                        ? (ourStudentList[index]["fee_arrear"] ==
-                                                        false ||
-                                                        newResult[index]["fee_arrear"] ==
-                                                            false
-                                                        || double.parse(
-                                                            ourStudentList[index]["fee_amount"]
-                                                                .toString()
-                                                                .replaceAll(
-                                                                ',', '')) < 1)
-                                                        ? Text(
+                                                    _searchController.text.isNotEmpty
+                                                        ? (afterAttendanceTaken == null ||
+                                                        afterAttendanceTaken.isEmpty)
+                                                        ? newResult[index]["fee_arrear"] == false
+                                                        ? Text("No Pending Fees")
+                                                        : ((double.tryParse(
+                                                        newResult[index]["fee_amount"]
+                                                            .toString()
+                                                            .replaceAll(
+                                                            ',', '')) ?? 0) < 1) ? Text("No Pending Fees")
+                                                        : Row(
+                                                      mainAxisAlignment: MainAxisAlignment
+                                                          .spaceBetween,
+                                                      children: [
+                                                        Container(
+                                                          child: Text(
+                                                            "AED : ",
+                                                            style: TextStyle(
+                                                                fontSize:
+                                                                13),
+                                                          ),
+                                                        ),
+                                                        Container(
+                                                          child: Text(
+                                                            newResult[index]["fee_amount"]
+                                                                .toString(),
+                                                            style: TextStyle(
+                                                                fontSize: 13,
+                                                                color: Colors
+                                                                    .red,
+                                                                fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                          ),
+                                                        ),
+
+                                                      ],
+                                                    )
+                                                        : newResult[index]['feeDetails']["fee_arrear"] == false
+                                                        ? Text("No Pending Fees") : ((double.tryParse(
+                                                        newResult[index]['feeDetails']["fee_amount"]
+                                                            .toString()
+                                                            .replaceAll(
+                                                            ',', '')) ?? 0) < 1) ? Text("No Pending Fees")
+                                                        : Row(
+                                                      mainAxisAlignment: MainAxisAlignment
+                                                          .spaceBetween,
+                                                      children: [
+                                                        Container(
+                                                          child: Text(
+                                                            "AED : ",
+                                                            style: TextStyle(
+                                                                fontSize:
+                                                                13),
+                                                          ),
+                                                        ),
+                                                        Container(
+                                                          child: Text(
+                                                            newResult[index]['feeDetails']["fee_amount"]
+                                                                .toString(),
+                                                            style: TextStyle(
+                                                                fontSize: 13,
+                                                                color: Colors
+                                                                    .red,
+                                                                fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                          ),
+                                                        ),
+
+                                                      ],
+                                                    )
+                                                        :
+                                                    afterAttendanceTaken ==
+                                                        null ||
+                                                        afterAttendanceTaken
+                                                            .isEmpty
+                                                        ? ourStudentList[index]["fee_arrear"] == false
+                                                        ? ((double.tryParse(
+                                                        newResult[index]["fee_amount"]
+                                                            .toString()
+                                                            .replaceAll(
+                                                            ',', '')) ?? 0) < 1) ? Text("No Pending Fees") : Text(
                                                       "No Pending Fees",)
                                                         : Row(
                                                       mainAxisAlignment: MainAxisAlignment
@@ -2253,25 +2328,9 @@ class _StudentListViewState extends State<StudentListView> {
                                                         ),
                                                         Container(
                                                           child: Text(
-                                                            (afterAttendanceTaken ==
-                                                                null ||
-                                                                afterAttendanceTaken
-                                                                    .isEmpty)
-                                                                ? _searchController
-                                                                .text.isNotEmpty
-                                                                ? newResult[index]["fee_amount"]
-                                                                .toString()
-
-                                                                : ourStudentList[index]
+                                                            ourStudentList[index]
                                                             ["fee_amount"]
-                                                                .toString()
-                                                                : _searchController
-                                                                .text.isNotEmpty
-                                                                ? newResult[index]["fee_amount"]
-                                                                .toString()
-
-                                                                : afterAttendanceTaken[index]["feeDetails"]
-                                                            ["fee_amount"],
+                                                                .toString(),
                                                             style: TextStyle(
                                                                 fontSize: 13,
                                                                 color: Colors
@@ -2284,17 +2343,12 @@ class _StudentListViewState extends State<StudentListView> {
 
                                                       ],
                                                     )
-                                                        : (afterAttendanceTaken[
-                                                    index]
-                                                    [
-                                                    "feeDetails"]
-                                                    ["fee_arrear"] ==
-                                                        false || double.parse(
-                                                        afterAttendanceTaken[index]["feeDetails"]["fee_amount"]
+                                                        : afterAttendanceTaken[index]["feeDetails"]["fee_arrear"] == false
+                                                        ? ((double.tryParse(
+                                                        newResult[index]["fee_amount"]
                                                             .toString()
                                                             .replaceAll(
-                                                            ',', '')) < 1)
-                                                        ? Row(
+                                                            ',', '')) ?? 0) < 1) ? Text("No Pending Fees") : Row(
                                                       children: [
                                                         Text(
                                                             "No Pending Fees"),
@@ -2318,22 +2372,7 @@ class _StudentListViewState extends State<StudentListView> {
                                                         Container(
                                                           width: 90.w,
                                                           child: Text(
-                                                            afterAttendanceTaken ==
-                                                                null ||
-                                                                afterAttendanceTaken
-                                                                    .isEmpty
-                                                                ? _searchController
-                                                                .text.isNotEmpty
-                                                                ? newResult[index]["fee_amount"]
-                                                                .toString()
-                                                                : ourStudentList[index]
-                                                            [
-                                                            "fee_amount"]
-                                                                : _searchController
-                                                                .text.isNotEmpty
-                                                                ? newResult[index]["feeDetails"]["fee_amount"]
-                                                                .toString()
-                                                                : afterAttendanceTaken[index]["feeDetails"]["fee_amount"],
+                                                            afterAttendanceTaken[index]["feeDetails"]["fee_amount"].toString(),
                                                             style: TextStyle(
                                                                 fontSize: 13,
                                                                 color: Colors
@@ -2662,10 +2701,193 @@ class _StudentListViewState extends State<StudentListView> {
                                             mainAxisAlignment: MainAxisAlignment
                                                 .end,
                                             children: [
+                                              _searchController.text.isNotEmpty
+                                                  ? newResult[index]["late"] ==
+                                                  true ? GestureDetector(
+                                                  onTap: () async {
+                                                    showDialog(
 
+                                                      context: context,
+                                                      builder: (
+                                                          BuildContext context) =>
+                                                          AlertDialog(
+                                                            backgroundColor: Colors
+                                                                .transparent,
+                                                            title: Container(
+                                                              width: 300,
+                                                              height: 150,
+                                                              margin: EdgeInsets
+                                                                  .only(top: 40,
+                                                                  bottom: 10),
+                                                              decoration: BoxDecoration(
+                                                                color: Colors.white,
+                                                                borderRadius: BorderRadius
+                                                                    .all(
+                                                                    Radius.circular(
+                                                                        20)),
+                                                                boxShadow: [
+                                                                  BoxShadow(
+                                                                    color: Colors
+                                                                        .black
+                                                                        .withOpacity(
+                                                                        0.2),
+                                                                    spreadRadius: 2,
+                                                                    blurRadius: 10,
+                                                                    offset: Offset(
+                                                                        0, 4),
+                                                                  ),
+                                                                ],
+                                                              ),
+
+                                                              child: Column(
+                                                                crossAxisAlignment: CrossAxisAlignment
+                                                                    .start,
+                                                                children: [
+                                                                  Row(
+
+                                                                    children: [
+
+                                                                      Padding(
+                                                                        padding: const EdgeInsets
+                                                                            .only(
+                                                                            top: 10,
+                                                                            left: 40),
+                                                                        child: Text(
+                                                                          'Remarks ',
+                                                                          style: TextStyle(
+                                                                              fontSize: 18
+                                                                                  .sp,
+                                                                              fontWeight: FontWeight
+                                                                                  .bold),
+                                                                        ),
+                                                                      ),
+                                                                      SizedBox(
+                                                                          width: 45),
+
+                                                                    ],
+                                                                    mainAxisAlignment: MainAxisAlignment
+                                                                        .center,
+                                                                  ),
+                                                                  SizedBox(
+                                                                      height: 15),
+                                                                  Padding(
+                                                                    padding: const EdgeInsets
+                                                                        .only(
+                                                                      left: 10,
+                                                                      right: 10,),
+                                                                    child: Container(
+                                                                      height: 60,
+                                                                      decoration: BoxDecoration(
+                                                                        borderRadius: BorderRadius
+                                                                            .circular(
+                                                                            10),
+                                                                        color: Colorutils
+                                                                            .chatcolor
+                                                                            .withOpacity(
+                                                                            0.2),
+                                                                      ),
+
+                                                                      child: Row(
+                                                                        mainAxisAlignment: MainAxisAlignment
+                                                                            .center,
+                                                                        children: [
+                                                                          Padding(
+                                                                            padding: const EdgeInsets
+                                                                                .only(
+                                                                                left: 3,
+                                                                                right: 3),
+                                                                            child: Text(
+                                                                              newResult[index]["remarks"] ??
+                                                                                  "No Remarks Added",
+                                                                              style: TextStyle(
+                                                                                  fontSize: 16
+                                                                                      .sp,
+                                                                                  fontWeight: FontWeight
+                                                                                      .w500),
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  SizedBox(
+                                                                      height: 10),
+                                                                  Center(
+                                                                    child: GestureDetector(
+                                                                      onTap: () {
+                                                                        Navigator
+                                                                            .pop(
+                                                                            context);
+                                                                      },
+                                                                      child: Container(
+                                                                        decoration: BoxDecoration(
+                                                                          color: Colors
+                                                                              .red,
+                                                                          borderRadius: BorderRadius
+                                                                              .all(
+                                                                              Radius
+                                                                                  .circular(
+                                                                                  10)),
+                                                                          boxShadow: [
+                                                                            BoxShadow(
+                                                                              color: Colors
+                                                                                  .grey
+                                                                                  .withOpacity(
+                                                                                  0.1),
+                                                                              spreadRadius: 1,
+                                                                              blurRadius: 1,
+                                                                              offset: Offset(
+                                                                                  0,
+                                                                                  1),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+
+                                                                        height: 25,
+                                                                        width: 50,
+                                                                        child: Center(
+                                                                          child: Text(
+                                                                            "Close",
+                                                                            style: TextStyle(
+                                                                                fontSize: 15,
+                                                                                color: Colors
+                                                                                    .white
+                                                                            ),),
+                                                                        ),
+
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                    );
+                                                  },
+                                                  child: Padding(
+                                                    padding: const EdgeInsets
+                                                        .only(right: 15),
+                                                    child: Container(child: Row(
+
+                                                      children: [
+                                                        Icon(Icons
+                                                            .remove_red_eye_outlined,
+                                                          size: 18,),
+                                                        SizedBox(width: 5.w,),
+                                                        Text('Late',
+                                                          style: TextStyle(
+                                                              fontWeight: FontWeight
+                                                                  .w900,
+                                                              color: Colors.red,
+                                                              fontSize: 15
+                                                                  .sp),),
+                                                      ],
+                                                    )),
+                                                  )) : Text('') :
                                               isStudentListnull[index]["late"] ==
                                                   true ?
-                                              GestureDetector(onTap: () async {
+                                              GestureDetector(
+                                                  onTap: () async {
                                                 showDialog(
 
                                                   context: context,
@@ -2825,7 +3047,6 @@ class _StudentListViewState extends State<StudentListView> {
                                                       ),
                                                 );
                                               },
-
                                                   child: Padding(
                                                     padding: const EdgeInsets
                                                         .only(right: 15),
@@ -2879,38 +3100,42 @@ class _StudentListViewState extends State<StudentListView> {
             onPressed: isStudentListnull.isEmpty || disableKey
                 ? () {}
                 : () async {
-              if (_searchController.text.isNotEmpty && newResult.isEmpty) {
-                snackBar(context: context,
-                    message: "No Data Available to Submit",
-                    color: Colors.red);
-                // Utils.showToastError("No Data Available to Submit").show(context);
-              } else {
-                context.loaderOverlay.show();
-                setState(() {
-                  newSpinner = true;
-                  disableKey = true;
-                });
-                print('--latestudents--$latestudents');
-                if (afterAttendanceTaken != null) {
-                  for (int i = 0; i < afterAttendanceTaken.length; i++) {
-                    if (afterAttendanceTaken[i]['late'] == true) {
-                      print(
-                          '-----lat---------${afterAttendanceTaken[i]["username"]}');
-                      latestudents.add({
-                        "_id": afterAttendanceTaken[i]["user_id"],
-                        "username": afterAttendanceTaken[i]["username"],
-                        "selected": afterAttendanceTaken[i]["selected"],
-                        // "reason": afterAttendanceTaken[index]["reason"],
-                        "reason": "Late",
-                        "remarks": afterAttendanceTaken[i]["remarks"],
-                        "late": true,
-                      });
+              try {
+                if (_searchController.text.isNotEmpty && newResult.isEmpty) {
+                  snackBar(context: context,
+                      message: "No Data Available to Submit",
+                      color: Colors.red);
+                  // Utils.showToastError("No Data Available to Submit").show(context);
+                } else {
+                  context.loaderOverlay.show();
+                  setState(() {
+                    newSpinner = true;
+                    disableKey = true;
+                  });
+                  print('--latestudents--$latestudents');
+                  if (afterAttendanceTaken != null) {
+                    for (int i = 0; i < afterAttendanceTaken.length; i++) {
+                      if (afterAttendanceTaken[i]['late'] == true) {
+                        print(
+                            '-----lat---------${afterAttendanceTaken[i]["username"]}');
+                        latestudents.add({
+                          "_id": afterAttendanceTaken[i]["user_id"],
+                          "username": afterAttendanceTaken[i]["username"],
+                          "selected": afterAttendanceTaken[i]["selected"],
+                          // "reason": afterAttendanceTaken[index]["reason"],
+                          "reason": "Late",
+                          "remarks": afterAttendanceTaken[i]["remarks"],
+                          "late": true,
+                        });
+                      }
                     }
                   }
+                  try {
+                    await SubmitAttendance(latestudents);
+                  } catch(e) {}
+                  context.loaderOverlay.hide();
                 }
-                await SubmitAttendance(latestudents);
-                context.loaderOverlay.hide();
-              }
+              } catch(e) {}
             },
             backgroundColor:
             isStudentListnull.isEmpty ? Colors.transparent : Colorutils

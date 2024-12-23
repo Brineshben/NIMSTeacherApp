@@ -739,11 +739,9 @@ class _ReportListViewState extends State<ReportListView> {
                         Expanded(
 
                             child: teacherList== null
-                                ? const Center(
-                                    child: CircularProgressIndicator(
-
-                                      color: Colorutils.chatcolor,
-                                    ))
+                                ? Center(
+                                child: Image.asset(
+                                    "assets/images/nodata.gif"))
                                 : teacherList!["data_status"] == 0
                                     ? Center(
                                         child: Image.asset(

@@ -216,12 +216,14 @@ class _ChatWithParentsPageState extends State<ChatWithParentsPage>
                           padding: const EdgeInsets.only(left: 6).w,
                           child: InkWell(
                             onTap: () {
-                              parentChatListController.setCurrentFilterClass(
-                                  currentClass: 'All');
+                              if(parentChatListController.allClasses.isNotEmpty) {
+                                parentChatListController.setCurrentFilterClass(
+                                    currentClass: parentChatListController.allClasses.first);
+                              }
                               parentChatListController.filterParentList(
                                   text: '');
                               if (parentChatListController
-                                  .parentChatList.value.isNotEmpty) {
+                                  .filteredParentList.value.isNotEmpty) {
                                 showModalBottomSheet(
                                   barrierColor: Colors.transparent,
                                   context: context,

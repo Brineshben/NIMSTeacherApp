@@ -448,14 +448,14 @@ class ApiServices {
   }) async {
     String url =
         '${ApiConstants.baseUrl}${ApiConstants.notification}$userId${ApiConstants.notificationEnd}';
-    print(url);
+    // print(url);
     Map apiBody = {
       "user_id": userId,
     };
     try {
       var request = http.Request('GET', Uri.parse(url));
       request.body = (json.encode(apiBody));
-      print('Api body---------------------->${request.body}');
+      // print('Api body---------------------->${request.body}');
       request.headers.addAll(ApiConstants.headers);
       http.StreamedResponse response = await request.send();
       var respString = await response.stream.bytesToString();

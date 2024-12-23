@@ -3,8 +3,11 @@ import 'package:get/get.dart';
 import 'package:teacherapp/Controller/api_controllers/userAuthController.dart';
 import 'package:teacherapp/Controller/db_controller/parent_db_controller.dart';
 import 'package:teacherapp/Utils/constant_function.dart';
+import '../../Models/api_models/chat_group_api_model.dart';
 import '../../Models/api_models/parent_chat_list_api_model.dart';
+import '../../Models/api_models/parent_list_api_model.dart';
 import '../../Services/api_services.dart';
+import 'chatClassGroupController.dart';
 
 class ParentChatListController extends GetxController {
   RxBool isLoading = false.obs;
@@ -15,9 +18,11 @@ class ParentChatListController extends GetxController {
   RxList<Datum> parentChatListCopy = <Datum>[].obs;
   RxList<Datum> filteredChatList = <Datum>[].obs;
   RxList<Datum> allParentChatList = <Datum>[].obs;
-  RxList<String> allClasses = <String>['All'].obs;
+  RxList<ParentFilterClass> allClasses = <ParentFilterClass>[].obs;
+  RxList<ParentData> parentList = <ParentData>[].obs;
+  RxList<ParentData> filteredParentList = <ParentData>[].obs;
   RxInt unreadCount = 0.obs;
-  RxString currentFilterClass = 'All'.obs;
+  Rx<ParentFilterClass> currentFilterClass = const ParentFilterClass().obs;
   RxBool searchEnabled = false.obs;
   RxString isTextField = "".obs;
   RxInt selectedClassListIndex = 0.obs;
@@ -34,6 +39,8 @@ class ParentChatListController extends GetxController {
     parentChatList.value = [];
     filteredChatList.value = [];
     allClasses.value = [];
+    parentList.value = [];
+    filteredParentList.value = [];
   }
 
   Future<void> fetchParentChatList({required BuildContext context}) async {
@@ -82,8 +89,10 @@ class ParentChatListController extends GetxController {
           print("------parent chat list error 1---------");
           isLoaded.value = false;
         } finally {
-          filterByClass('All');
-          setClassList();
+          await setClassList();
+          if(allClasses.isNotEmpty) {
+            await filterByClass(allClasses.first);
+          }
           setChatList();
           resetStatus();
         }
@@ -142,8 +151,8 @@ class ParentChatListController extends GetxController {
             // unreadCount.value = parentChatListApiModel.data?.unreadCount ?? 0;
             // allParentChatList.value = parentChatListApiModel.data?.data ?? [];
             // parentChatListCopy.value = parentChatListApiModel.data?.data ?? [];
-            filterByClass(currentFilterClass.value);
-            setClassList();
+            await setClassList();
+            await filterByClass(currentFilterClass.value);
             setChatList();
           }
         } catch (e) {
@@ -155,7 +164,7 @@ class ParentChatListController extends GetxController {
     );
   }
 
-  void setCurrentFilterClass({required String currentClass}) {
+  void setCurrentFilterClass({required ParentFilterClass currentClass}) {
     currentFilterClass.value = currentClass;
   }
 
@@ -178,25 +187,26 @@ class ParentChatListController extends GetxController {
     }
   }
 
-  void setClassList() {
-    allClasses.value = ['All'];
-    Set<String> uniqueClassBatchSet = {};
-    for (var chatRoom in allParentChatList) {
-      uniqueClassBatchSet.add("${chatRoom.datumClass}${chatRoom.batch}");
+  Future<void> setClassList() async {
+    allClasses.value = [];
+    List<ClassTeacherGroup> classGrpLst = Get.find<ChatClassGroupController>().classGroupList.value;
+    print("----vdgbhg-----${classGrpLst.first.classTeacherClass}");
+    for (var chatRoom in classGrpLst) {
+      allClasses.value.add(ParentFilterClass(stdClass: chatRoom.classTeacherClass, stdBatch: chatRoom.batch));
     }
-    allClasses.addAll(uniqueClassBatchSet.toList());
+    allClasses.value = allClasses.value.toSet().toList();
+    print("----vfsdvf-----${allClasses.first.stdClass}");
   }
 
-  void filterByClass(String classBatch) {
-    filteredChatList.value = [];
-    if (classBatch == 'All') {
-      filteredChatList.value = allParentChatList;
-    } else {
-      for (var chatRoom in allParentChatList) {
-        if (classBatch == "${chatRoom.datumClass}${chatRoom.batch}") {
-          filteredChatList.add(chatRoom);
-        }
-      }
+  Future<void> filterByClass(ParentFilterClass classBatch) async {
+    parentList.value = [];
+    String schoolId = Get.find<UserAuthController>().userData.value.schoolId ?? '';
+    Map<String, dynamic> respJson = await ApiServices.getParentList(classs: classBatch.stdClass ?? '', batch: classBatch.stdBatch ?? '', subId: 'class_group', schoolId: schoolId);
+    print("-----parent resp--------$respJson");
+    if(respJson['status']['code'].toString() == "200") {
+      ParentListApiModel jsonToDart = ParentListApiModel.fromJson(respJson);
+      parentList.value = jsonToDart.data?.parentData ?? [];
+      filteredParentList.value = parentList.value;
     }
   }
 
@@ -210,9 +220,9 @@ class ParentChatListController extends GetxController {
   }
 
   void filterParentList({required String text}) {
-    filteredChatList.value = allParentChatList.value
+    filteredParentList.value = parentList.value
         .where((parent) =>
-            parent.parentName!.toUpperCase().contains(text.toUpperCase()))
+            parent.studentName.toString().toUpperCase().contains(text.toUpperCase()))
         .toList();
   }
 }
