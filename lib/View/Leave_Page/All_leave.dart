@@ -102,7 +102,6 @@ class _allleaveState extends State<allleave> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Container(
-
                                         decoration: BoxDecoration(
                                           shape: BoxShape.circle,
                                           border: Border.all(color:Colorutils.chatcolor),

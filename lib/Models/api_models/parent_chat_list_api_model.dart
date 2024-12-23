@@ -177,4 +177,14 @@ class ParentFilterClass {
   final String? stdClass;
   final String? stdBatch;
   const ParentFilterClass({this.stdClass, this.stdBatch});
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ParentFilterClass) return false;
+    return stdClass == other.stdClass && stdBatch == other.stdBatch;
+  }
+
+  @override
+  int get hashCode => stdClass.hashCode ^ stdBatch.hashCode;
 }

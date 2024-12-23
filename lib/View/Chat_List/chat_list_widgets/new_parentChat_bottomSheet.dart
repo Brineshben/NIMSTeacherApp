@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -163,154 +165,211 @@ class _NewParentChatState extends State<NewParentChat> {
                         height: 75,
                         child: SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
-                          child: SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            child: Row(
-                              children:
-                                  List.generate(classNameList.length, (index) {
-                                List<Color> colors = [
-                                  Colorutils.letters1,
-                                  Colorutils.svguicolour2,
-                                  Colorutils.Subjectcolor4
-                                ];
+                          child: Row(
+                            children:
+                                List.generate(classNameList.length, (index) {
+                              List<Color> colors = [
+                                Colorutils.letters1,
+                                Colorutils.svguicolour2,
+                                Colorutils.Subjectcolor4
+                              ];
 
-                                Color color = colors[index % colors.length];
+                              Color color = colors[index % colors.length];
 
-                                return Padding(
-                                  padding:
-                                      const EdgeInsets.only(right: 5, left: 5)
-                                          .w,
-                                  child: InkWell(
-                                    onTap: () {
-                                      controller.selectedClassListIndex.value =
-                                          index;
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.only(right: 5, left: 5)
+                                        .w,
+                                child: InkWell(
+                                  onTap: () {
+                                    controller.selectedClassListIndex.value =
+                                        index;
 
-                                      controller.setCurrentFilterClass(
-                                          currentClass: classNameList[index]);
-                                      controller
-                                          .filterByClass(classNameList[index]);
-                                    },
-                                    child: Container(
-                                      width: 60.w,
-                                      height: 60.w,
-                                      decoration: BoxDecoration(
-                                        boxShadow: controller
-                                                    .selectedClassListIndex
-                                                    .value ==
-                                                index
-                                            ? [
-                                                BoxShadow(
-                                                    color: Colors.grey
-                                                        .withOpacity(0.5),
-                                                    blurRadius: 5)
-                                              ]
-                                            : null,
-                                        shape: BoxShape.circle,
-                                        color: controller.selectedClassListIndex
-                                                    .value ==
-                                                index
-                                            ? Colors.white
-                                            : Colors.transparent,
-                                      ),
-                                      child: Center(
-                                        child: Container(
-                                          width: 55.w,
-                                          height: 55.w,
-                                          padding: const EdgeInsets.all(15).w,
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: color,
-                                          ),
-                                          child: FittedBox(
-                                            child: Text(
-                                              "${classNameList[index].stdClass}${classNameList[index].stdBatch}",
-                                              style: GoogleFonts.inter(
-                                                fontSize: 16.0,
-                                                color: Colors.white,
-                                              ),
+                                    controller.setCurrentFilterClass(
+                                        currentClass: classNameList[index]);
+                                    controller
+                                        .filterByClass(classNameList[index]);
+                                  },
+                                  child: Container(
+                                    width: 60.w,
+                                    height: 60.w,
+                                    decoration: BoxDecoration(
+                                      boxShadow: controller
+                                                  .selectedClassListIndex
+                                                  .value ==
+                                              index
+                                          ? [
+                                              BoxShadow(
+                                                  color: Colors.grey
+                                                      .withOpacity(0.5),
+                                                  blurRadius: 5)
+                                            ]
+                                          : null,
+                                      shape: BoxShape.circle,
+                                      color: controller.selectedClassListIndex
+                                                  .value ==
+                                              index
+                                          ? Colors.white
+                                          : Colors.transparent,
+                                    ),
+                                    child: Center(
+                                      child: Container(
+                                        width: 55.w,
+                                        height: 55.w,
+                                        padding: const EdgeInsets.all(15).w,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: color,
+                                        ),
+                                        child: FittedBox(
+                                          child: Text(
+                                            "${classNameList[index].stdClass}${classNameList[index].stdBatch}",
+                                            style: GoogleFonts.inter(
+                                              fontSize: 16.0,
+                                              color: Colors.white,
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                );
-                              }),
-                            ),
+                                ),
+                              );
+                            }),
                           ),
                         ),
                       ),
                       SizedBox(height: 5.w),
-                      Expanded(
-                        child: ListView.separated(
-                          itemCount: filteredChatList.length,
-                          padding: EdgeInsets.only(
-                              bottom: View.of(context).viewInsets.bottom * 0.5),
-                          itemBuilder: (BuildContext context, int index) {
-                            String subtile = "${filteredChatList[index].gender?.toUpperCase()[0] == "F" ? "Daughter" : filteredChatList[index].gender?.toUpperCase()[0] == "M" ? "Son" : ""} of ${capitalizeEachWord(filteredChatList[index].name)}";
-                            List<String> nameParts = filteredChatList[index].studentName.toString().split(" ").map((name) => name.trim()).toList();
-                            nameParts = nameParts.where((name) => name.isNotEmpty).toList();
-                            String? placeholderName;
-                            try {
-                              placeholderName = nameParts.length > 1 ? "${nameParts[0].trim().substring(0, 1)}${nameParts[1].trim().substring(0, 1)}".toUpperCase() : nameParts[0].trim().substring(0, 2).toUpperCase();
-                            } catch(e) {}
-                            return ListTile(
-                              contentPadding: const EdgeInsets.all(0),
-                              minVerticalPadding: 0,
-                              leading: CachedNetworkImage(
-                                  imageUrl: filteredChatList[index].image ?? '',
-                                errorWidget: (context, url, error) {
-                                  return Text(
-                                    placeholderName ?? '--',
-                                  );
-                                },
+                      if(controller.isNewChatLoading.value)
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                "Loading...",
                               ),
-                              // leading: CircleAvatar(
-                              //   radius: 25.r,
-                              //   backgroundImage: const AssetImage(
-                              //       'assets/images/profile image.png'),
-                              // ),
-                              title: Padding(
-                                padding: const EdgeInsets.only(right: 16).w,
+                              SizedBox(
+                                width: 200.w,
+                                child: LinearProgressIndicator(
+                                  color: const Color(0xFFB1BFFF),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      if(controller.isNewChatError.value)
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  controller
+                                      .filterByClass(controller.currentFilterClass.value);
+                                },
                                 child: Text(
-                                  capitalizeEachWord(filteredChatList[index]
-                                          .studentName) ??
-                                      "",
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 16.sp,
-                                    color: Colors.black,
+                                  controller.isNewChatErrorMsg.value,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      if(controller.isNewChatLoaded.value)
+                        Expanded(
+                          child: ListView.separated(
+                            itemCount: filteredChatList.length,
+                            padding: EdgeInsets.only(
+                                bottom: View.of(context).viewInsets.bottom * 0.5),
+                            itemBuilder: (BuildContext context, int index) {
+                              String subtile = filteredChatList[index].gender?.toUpperCase()[0] == "F" ? "Daughter" : filteredChatList[index].gender?.toUpperCase()[0] == "M" ? "Son" : "--";
+                              List<String> nameParts = filteredChatList[index].studentName.toString().split(" ").map((name) => name.trim()).toList();
+                              nameParts = nameParts.where((name) => name.isNotEmpty).toList();
+                              String? placeholderName;
+                              try {
+                                placeholderName = nameParts.length > 1 ? "${nameParts[0].trim().substring(0, 1)}${nameParts[1].trim().substring(0, 1)}".toUpperCase() : nameParts[0].trim().substring(0, 2).toUpperCase();
+                              } catch(e) {}
+                              return ListTile(
+                                contentPadding: const EdgeInsets.all(0),
+                                minVerticalPadding: 0,
+                                leading: Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(color:Colorutils.chatcolor),
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(100),
+                                    child: CachedNetworkImage(
+                                      width: 50.w,
+                                      height: 50.w,
+                                      fit: BoxFit.fill,
+                                      imageUrl: filteredChatList[index].image ?? '',
+                                      errorWidget: (context, url, error) => Center(
+                                        child: Text(
+                                          placeholderName ?? '--',
+                                          style: TextStyle(
+                                              color: const Color(0xFFB1BFFF),
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16.h),
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                              subtitle: Padding(
-                                padding: const EdgeInsets.only(right: 16).w,
-                                child: Text(
-                                  // filteredChatList[index].parentName ?? '--',
-                                  subtile,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TeacherAppFonts
-                                      .poppinsW500_12sp_lightGreenForParent,
+                                // leading: CircleAvatar(
+                                //   radius: 25.r,
+                                //   backgroundImage: const AssetImage(
+                                //       'assets/images/profile image.png'),
+                                // ),
+                                title: Padding(
+                                  padding: const EdgeInsets.only(right: 16).w,
+                                  child: Text(
+                                    capitalizeEachWord(filteredChatList[index]
+                                        .studentName) ??
+                                        "",
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 16.sp,
+                                      color: Colors.black,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                              onTap: () {
-                                // Navigator.of(context).pop();
-                                // Navigator.of(context).push(MaterialPageRoute(
-                                //     builder: (context) => ParentChatScreen(
-                                //         msgData: filteredChatList[index])));
-                              },
-                            );
-                          },
-                          separatorBuilder: (context, index) {
-                            return Divider(
-                              height: 0,
-                              endIndent: 50.w,
-                              color: const Color(0xffE3E3E3),
-                            );
-                          },
+                                subtitle: Padding(
+                                  padding: const EdgeInsets.only(right: 16).w,
+                                  child: Text(
+                                    // filteredChatList[index].parentName ?? '--',
+                                    "$subtile of ${capitalizeEachWord(filteredChatList[index].name)}",
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TeacherAppFonts
+                                        .poppinsW500_12sp_lightGreenForParent,
+                                  ),
+                                ),
+                                onTap: () {
+                                  Navigator.of(context).pop();
+                                  Datum data = Datum(
+                                    studentName: filteredChatList[index].studentName,
+                                    batch: controller.currentFilterClass.value.stdBatch,
+                                    datumClass: controller.currentFilterClass.value.stdClass,
+                                    parentId: filteredChatList[index].sId,
+                                    parentName: filteredChatList[index].name,
+                                    relation: subtile != "--" ? subtile : null,
+                                  );
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => ParentChatScreen(
+                                          msgData: data)));
+                                },
+                              );
+                            },
+                            separatorBuilder: (context, index) {
+                              return Divider(
+                                height: 0,
+                                endIndent: 50.w,
+                                color: const Color(0xffE3E3E3),
+                              );
+                            },
+                          ),
                         ),
-                      ),
                     ],
                   );
                 },
