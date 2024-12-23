@@ -31,7 +31,8 @@ class _LearningWalknew1State extends State<LearningWalknew1> {
 
   String? _selectedValue1;
   String? _selectedValue2;
-
+  bool _isClassValid = true;
+  bool _isDivisionValid = true;
   // String? _selectedValue3;
 
   @override
@@ -97,504 +98,277 @@ class _LearningWalknew1State extends State<LearningWalknew1> {
                                       fontWeight: FontWeight.w600),
                                 ),
                               ),
-                              Form(
-                                key: _formKey,
-                                child: Column(
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                          left: 25.w, right: 25.w, top: 20.h),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                              Radius.circular(10.0),
-                                            ).r,
-                                            color: Color.fromRGBO(
-                                                230, 236, 254, 8)),
-                                        height: 55.w,
-                                        child: DropdownButtonHideUnderline(
-
-
-                                          child: DropdownButton2<String>(
-
-                                            isExpanded: true,
-                                            hint: Text(
-                                              'CLASS',
-                                              style: TextStyle(
-                                                color: Colors.black
-                                                    .withOpacity(0.6),
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                            items: ClassList.map((Class) =>
-                                                DropdownMenuItem<String>(
-
-                                                  value: Class.name,
-                                                  child: Text(
-                                                    "CLASS :${Class.name ?? " "}",
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style:
-                                                        TextStyle(fontSize: 14),
-                                                  ),
-                                                )).toList(),
-                                            value: _selectedValue1,
-                                            onChanged: (classes) {
-                                              setState(() {
-                                                _selectedValue1 = classes ?? "";
-                                                controller
-                                                    .fetchteacherbatchdata(
-                                                        _selectedValue1!);
-                                                print(
-                                                    "bweghrebghrghk$_selectedValue1");
-                                              });
-                                              // _selectedValue1=Class;
-                                              // controller.fetchteacherdata();
-                                              // print("bweghrebghrghk$_selectedValue1");
-                                            },
-                                            buttonStyleData:
-                                                const ButtonStyleData(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 16),
-                                              // height: 40,
-                                              // width: 200,
-                                            ),
-                                            dropdownStyleData:
-                                                const DropdownStyleData(
-                                              maxHeight: 600,
-                                            ),
-                                            menuItemStyleData:
-                                                const MenuItemStyleData(
-                                              height: 40,
-                                            ),
-                                            dropdownSearchData:
-                                                DropdownSearchData(
-                                              searchController: controller1,
-                                              searchInnerWidgetHeight: 50,
-                                              searchInnerWidget: Container(
-                                                height: 50,
-                                                padding: const EdgeInsets.only(
-                                                  top: 8,
-                                                  bottom: 4,
-                                                  right: 8,
-                                                  left: 8,
-                                                ),
-                                                child: TextField(
-                                                  controller: controller1,
-                                                  decoration: InputDecoration(
-                                                    isDense: true,
-                                                    contentPadding:
-                                                        const EdgeInsets
-                                                            .symmetric(
-                                                      horizontal: 10,
-                                                      vertical: 8,
-                                                    ),
-
-                                                    hintText: 'Search Class',
-                                                    hintStyle:
-                                                        TextStyle(fontSize: 12),
-                                                    border: OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8),
-                                                    ),
-                                                  ),
+                              Column(
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            left: 25.w,
+                                            right: 25.w,
+                                            top: 20.h),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                Radius.circular(10.0),
+                                              ).r,
+                                              color: Color.fromRGBO(
+                                                  230, 236, 254, 8)),
+                                          height: 55.w,
+                                          child: DropdownButtonHideUnderline(
+                                            child: DropdownButton2<String>(
+                                              isExpanded: true,
+                                              hint: Text(
+                                                'CLASS',
+                                                style: TextStyle(
+                                                  color: Colors.black
+                                                      .withOpacity(0.6),
+                                                  fontSize: 14,
                                                 ),
                                               ),
-                                              searchMatchFn:
-                                                  (item, searchValue) {
-                                                return item.value
-                                                    .toString()
-                                                    .toLowerCase()
-                                                    .contains(searchValue
-                                                        .toLowerCase());
+                                              items: ClassList.map((Class) =>
+                                                  DropdownMenuItem<String>(
+                                                    value: Class.name,
+                                                    child: Text(
+                                                      "CLASS :${Class.name ?? " "}",
+                                                      overflow: TextOverflow
+                                                          .ellipsis,
+                                                      style: TextStyle(
+                                                          fontSize: 14),
+                                                    ),
+                                                  )).toList(),
+                                              value: _selectedValue1,
+                                              onChanged: (classes) {
+                                                setState(() {
+                                                  _selectedValue1 =
+                                                      classes ?? "";
+                                                  controller
+                                                      .fetchteacherbatchdata(
+                                                          _selectedValue1!);
+                                                  print(
+                                                      "bweghrebghrghk$_selectedValue1");
+                                                });
+                                                // _selectedValue1=Class;
+                                                // controller.fetchteacherdata();
+                                                // print("bweghrebghrghk$_selectedValue1");
+                                              },
+                                              buttonStyleData:
+                                                  const ButtonStyleData(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 16),
+                                                // height: 40,
+                                                // width: 200,
+                                              ),
+                                              dropdownStyleData:
+                                                  const DropdownStyleData(
+                                                maxHeight: 600,
+                                              ),
+                                              menuItemStyleData:
+                                                  const MenuItemStyleData(
+                                                height: 40,
+                                              ),
+                                              dropdownSearchData:
+                                                  DropdownSearchData(
+                                                searchController: controller1,
+                                                searchInnerWidgetHeight: 50,
+                                                searchInnerWidget: Container(
+                                                  height: 50,
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                    top: 8,
+                                                    bottom: 4,
+                                                    right: 8,
+                                                    left: 8,
+                                                  ),
+                                                  child: TextField(
+                                                    controller: controller1,
+                                                    decoration:
+                                                        InputDecoration(
+                                                      isDense: true,
+                                                      contentPadding:
+                                                          const EdgeInsets
+                                                              .symmetric(
+                                                        horizontal: 10,
+                                                        vertical: 8,
+                                                      ),
+                                                      hintText:
+                                                          'Search Class',
+                                                      hintStyle: TextStyle(
+                                                          fontSize: 12),
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                searchMatchFn:
+                                                    (item, searchValue) {
+                                                  return item.value
+                                                      .toString()
+                                                      .toLowerCase()
+                                                      .contains(searchValue
+                                                          .toLowerCase());
+                                                },
+                                              ),
+                                              onMenuStateChange: (isOpen) {
+                                                if (!isOpen) {
+                                                  controller1.clear();
+                                                }
                                               },
                                             ),
-                                            onMenuStateChange: (isOpen) {
-                                              if (!isOpen) {
-                                                controller1.clear();
-                                              }
-                                            },
                                           ),
-
                                         ),
                                       ),
-                                    ),
-                                    // Padding(
-                                    //   padding: EdgeInsets.only(
-                                    //       left: 15.w, right: 20.w, top: 20.h),
-                                    //   child: DropdownButtonFormField(
-                                    //     decoration: InputDecoration(
-                                    //         hintStyle: TextStyle(
-                                    //             color: Colors.black
-                                    //                 .withOpacity(0.5)),
-                                    //         contentPadding:
-                                    //             EdgeInsets.symmetric(
-                                    //                 vertical: 18.h,
-                                    //                 horizontal: 20.w),
-                                    //         hintText: "Class",
-                                    //         border: OutlineInputBorder(
-                                    //           borderRadius:
-                                    //               const BorderRadius.all(
-                                    //             Radius.circular(10.0),
-                                    //           ).r,
-                                    //         ),
-                                    //         enabledBorder: OutlineInputBorder(
-                                    //           borderSide: const BorderSide(
-                                    //             color: Color.fromRGBO(
-                                    //                 230, 236, 254, 8),
-                                    //             width: 1.0,
-                                    //           ),
-                                    //           borderRadius:
-                                    //               const BorderRadius.all(
-                                    //                       Radius.circular(10.0))
-                                    //                   .r,
-                                    //         ),
-                                    //         focusedBorder: OutlineInputBorder(
-                                    //           borderSide: const BorderSide(
-                                    //             color: Color.fromRGBO(
-                                    //                 230, 236, 254, 8),
-                                    //             width: 1.0,
-                                    //           ),
-                                    //           borderRadius:
-                                    //               const BorderRadius.all(
-                                    //                       Radius.circular(10.0))
-                                    //                   .r,
-                                    //         ),
-                                    //         fillColor: const Color.fromRGBO(
-                                    //             230, 236, 254, 8),
-                                    //         filled: true),
-                                    //     isExpanded: true,
-                                    //     padding: EdgeInsets.only(
-                                    //         left: 10.w, right: 5.w),
-                                    //     hint: const Text('Class'),
-                                    //     validator: (dynamic value) =>
-                                    //         value == null
-                                    //             ? 'Please Select the Class'
-                                    //             : null,
-                                    //     items: ClassList.map((Class) =>
-                                    //         DropdownMenuItem<String>(
-                                    //           value: Class.name,
-                                    //           child: Text(
-                                    //             "CLASS :${ Class.name ?? " "}",
-                                    //             overflow: TextOverflow.ellipsis,
-                                    //             style: TextStyle(fontSize: 12),
-                                    //           ),
-                                    //         )).toList(),
-                                    //     value: _selectedValue1,
-                                    //     onChanged: (classes) {
-                                    //       setState(() {
-                                    //         _selectedValue1 = classes ?? "";
-                                    //         controller.fetchteacherbatchdata(
-                                    //             _selectedValue1!);
-                                    //         print(
-                                    //             "bweghrebghrghk$_selectedValue1");
-                                    //       });
-                                    //       // _selectedValue1=Class;
-                                    //       // controller.fetchteacherdata();
-                                    //       // print("bweghrebghrghk$_selectedValue1");
-                                    //     },
-                                    //     selectedItemBuilder:
-                                    //         (BuildContext context) {
-                                    //       return ClassList.map((Class) {
-                                    //         return Text(
-                                    //           "CLASS : ${Class.name}",
-                                    //           // Display formatted value for selected item
-                                    //           style: TextStyle(
-                                    //               fontSize: 14,
-                                    //               overflow:
-                                    //                   TextOverflow.ellipsis),
-                                    //         );
-                                    //       }).toList();
-                                    //     },
-                                    //   ),
-                                    // ),
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                          left: 25.w, right: 25.w, top: 20.h),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                            const BorderRadius.all(
-                                              Radius.circular(10.0),
-                                            ).r,
-                                            color: Color.fromRGBO(
-                                                230, 236, 254, 8)),
-                                        height: 55.w,
-                                        child: DropdownButtonHideUnderline(
-
-
-                                          child: DropdownButton2<String>(
-
-
-
-                                            isExpanded: true,
-                                            hint: Text(
-                                              'DIVISION',
-                                              style: TextStyle(
-                                                color: Colors.black
-                                                    .withOpacity(0.6),
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                            items: batchList.map((Class) =>
-                                                DropdownMenuItem<String>(
-
-                                                  value: Class.name,
-                                                  child: Text(
-                                                    "DIVISION :${Class.name ?? " "}",
-                                                    overflow:
-                                                    TextOverflow.ellipsis,
-                                                    style:
-                                                    TextStyle(fontSize: 14),
-                                                  ),
-                                                )).toList(),
-                                            value: _selectedValue2,
-                                            onChanged: (batch) {
-                                              setState(() {
-                                                _selectedValue2 = batch ?? "";
-                                              });
-                                              // controller.fetchteacherdata(
-                                              //     _selectedValue2!);
-                                            },
-                                            buttonStyleData:
-                                            const ButtonStyleData(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 16),
-                                              // height: 40,
-                                              // width: 200,
-                                            ),
-                                            dropdownStyleData:
-                                            const DropdownStyleData(
-                                              maxHeight: 600,
-                                            ),
-                                            menuItemStyleData:
-                                            const MenuItemStyleData(
-                                              height: 40,
-                                            ),
-                                            dropdownSearchData:
-                                            DropdownSearchData(
-                                              searchController: controller2,
-                                              searchInnerWidgetHeight: 50,
-                                              searchInnerWidget: Container(
-                                                height: 50,
-                                                padding: const EdgeInsets.only(
-                                                  top: 8,
-                                                  bottom: 4,
-                                                  right: 8,
-                                                  left: 8,
+                                      const SizedBox(
+                                        height: 2,
+                                      ),
+                                      if (!_isClassValid)
+                                        const Padding(
+                                          padding: EdgeInsets.only(left: 25),
+                                          child: Text(
+                                            "Please Select the Class",
+                                            style: TextStyle(color: Colors.red, fontSize: 10),
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            left: 25.w, right: 25.w, top: 20.h),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                              const BorderRadius.all(
+                                                Radius.circular(10.0),
+                                              ).r,
+                                              color: Color.fromRGBO(
+                                                  230, 236, 254, 8)),
+                                          height: 55.w,
+                                          child: DropdownButtonHideUnderline(
+                                            child: DropdownButton2<String>(
+                                              isExpanded: true,
+                                              hint: Text(
+                                                'DIVISION',
+                                                style: TextStyle(
+                                                  color: Colors.black
+                                                      .withOpacity(0.6),
+                                                  fontSize: 14,
                                                 ),
-                                                child: TextField(
-                                                  controller: controller2,
-                                                  decoration: InputDecoration(
-                                                    isDense: true,
-                                                    contentPadding:
-                                                    const EdgeInsets
-                                                        .symmetric(
-                                                      horizontal: 10,
-                                                      vertical: 8,
+                                              ),
+                                              items: batchList.map((batch) =>
+                                                  DropdownMenuItem<String>(
+                                                    value: batch.name,
+                                                    child: Text(
+                                                      "DIVISION :${batch.name ?? " "}",
+                                                      overflow:
+                                                      TextOverflow.ellipsis,
+                                                      style:
+                                                      TextStyle(fontSize: 14),
                                                     ),
-                                                    hintText: 'Search Division',
-                                                    hintStyle:
-                                                    TextStyle(fontSize: 12),
-                                                    border: OutlineInputBorder(
-                                                      borderRadius:
-                                                      BorderRadius.circular(
-                                                          8),
+                                                  )).toList(),
+                                              value: _selectedValue2,
+                                              onChanged: (batch) {
+                                                setState(() {
+
+                                                  _selectedValue2 = batch ?? "";
+                                                });
+                                                // controller.fetchteacherdata(
+                                                //     _selectedValue2!);
+                                              },
+                                              buttonStyleData:
+                                              const ButtonStyleData(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 16),
+                                                // height: 40,
+                                                // width: 200,
+                                              ),
+                                              dropdownStyleData:
+                                              const DropdownStyleData(
+                                                maxHeight: 600,
+                                              ),
+                                              menuItemStyleData:
+                                              const MenuItemStyleData(
+                                                height: 40,
+                                              ),
+                                              dropdownSearchData:
+                                              DropdownSearchData(
+                                                searchController: controller2,
+                                                searchInnerWidgetHeight: 50,
+                                                searchInnerWidget: Container(
+                                                  height: 50,
+                                                  padding: const EdgeInsets.only(
+                                                    top: 8,
+                                                    bottom: 4,
+                                                    right: 8,
+                                                    left: 8,
+                                                  ),
+                                                  child: TextField(
+                                                    controller: controller2,
+                                                    decoration: InputDecoration(
+                                                      isDense: true,
+                                                      contentPadding:
+                                                      const EdgeInsets
+                                                          .symmetric(
+                                                        horizontal: 10,
+                                                        vertical: 8,
+                                                      ),
+                                                      hintText: 'Search Division',
+                                                      hintStyle:
+                                                      TextStyle(fontSize: 12),
+                                                      border: OutlineInputBorder(
+                                                        borderRadius:
+                                                        BorderRadius.circular(
+                                                            8),
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
+                                                searchMatchFn:
+                                                    (item, searchValue) {
+                                                  return item.value
+                                                      .toString()
+                                                      .toLowerCase()
+                                                      .contains(searchValue
+                                                      .toLowerCase());
+                                                },
                                               ),
-                                              searchMatchFn:
-                                                  (item, searchValue) {
-                                                return item.value
-                                                    .toString()
-                                                    .toLowerCase()
-                                                    .contains(searchValue
-                                                    .toLowerCase());
+                                              onMenuStateChange: (isOpen) {
+                                                if (!isOpen) {
+                                                  controller2.clear();
+                                                }
                                               },
                                             ),
-                                            onMenuStateChange: (isOpen) {
-                                              if (!isOpen) {
-                                                controller2.clear();
-                                              }
-                                            },
                                           ),
-
                                         ),
                                       ),
-                                    ),
-                                    // Padding(
-                                    //   padding: EdgeInsets.only(
-                                    //       left: 15.w, right: 20.w, top: 20.h),
-                                    //   child: DropdownButtonFormField(
-                                    //     decoration: InputDecoration(
-                                    //         hintStyle: TextStyle(
-                                    //             color: Colors.black
-                                    //                 .withOpacity(0.5)),
-                                    //         contentPadding:
-                                    //             EdgeInsets.symmetric(
-                                    //                 vertical: 18.h,
-                                    //                 horizontal: 20.w),
-                                    //         hintText: "Division",
-                                    //         border: OutlineInputBorder(
-                                    //           borderRadius:
-                                    //               const BorderRadius.all(
-                                    //             Radius.circular(10.0),
-                                    //           ).r,
-                                    //         ),
-                                    //         enabledBorder: OutlineInputBorder(
-                                    //           borderSide: const BorderSide(
-                                    //             color: Color.fromRGBO(
-                                    //                 230, 236, 254, 8),
-                                    //             width: 1.0,
-                                    //           ),
-                                    //           borderRadius:
-                                    //               const BorderRadius.all(
-                                    //                       Radius.circular(10.0))
-                                    //                   .r,
-                                    //         ),
-                                    //         focusedBorder: OutlineInputBorder(
-                                    //           borderSide: const BorderSide(
-                                    //             color: Color.fromRGBO(
-                                    //                 230, 236, 254, 8),
-                                    //             width: 1.0,
-                                    //           ),
-                                    //           borderRadius:
-                                    //               const BorderRadius.all(
-                                    //                       Radius.circular(10.0))
-                                    //                   .r,
-                                    //         ),
-                                    //         fillColor: const Color.fromRGBO(
-                                    //             230, 236, 254, 8),
-                                    //         filled: true),
-                                    //     isExpanded: true,
-                                    //     padding: EdgeInsets.only(
-                                    //         left: 10.w, right: 5.w),
-                                    //     hint: const Text('Division'),
-                                    //     validator: (dynamic value) =>
-                                    //         value == null
-                                    //             ? 'Please Select the Division'
-                                    //             : null,
-                                    //     items: batchList
-                                    //         .map((batch) =>
-                                    //             DropdownMenuItem<String>(
-                                    //               value: batch.name,
-                                    //               child: Text(
-                                    //                 "DIVISION :${batch.name ?? ""}",
-                                    //                 overflow:
-                                    //                     TextOverflow.ellipsis,
-                                    //                 style:
-                                    //                     TextStyle(fontSize: 12),
-                                    //               ),
-                                    //             ))
-                                    //         .toList(),
-                                    //     value: _selectedValue2,
-                                    //     onChanged: (batch) {
-                                    //       setState(() {
-                                    //         _selectedValue2 = batch ?? "";
-                                    //       });
-                                    //       // controller.fetchteacherdata(
-                                    //       //     _selectedValue2!);
-                                    //     },
-                                    //     selectedItemBuilder:
-                                    //         (BuildContext context) {
-                                    //       return batchList.map((batch) {
-                                    //         return Text(
-                                    //           "DIVISION : ${batch.name}",
-                                    //           // Display formatted value for selected item
-                                    //           style: TextStyle(
-                                    //               fontSize: 14,
-                                    //               overflow:
-                                    //                   TextOverflow.ellipsis),
-                                    //         );
-                                    //       }).toList();
-                                    //     },
-                                    //   ),
-                                    // ),
-                                  ],
-                                ),
+                                      SizedBox(
+                                        height: 2,
+                                      ),
+                                      if (!_isDivisionValid)
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 25),
+                                          child: Text(
+                                            "Please Select the Division",
+                                            style: TextStyle(color: Colors.red, fontSize: 10),
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+
+
+                                ],
                               ),
-                              // Padding(
-                              //   padding: EdgeInsets.only(
-                              //       left: 15.w, right: 20.w, top: 20.h),
-                              //   child: DropdownButtonFormField(
-                              //       decoration: InputDecoration(
-                              //           hintStyle: TextStyle(
-                              //               color:
-                              //                   Colors.black.withOpacity(0.5)),
-                              //           contentPadding: EdgeInsets.symmetric(
-                              //               vertical: 18.h, horizontal: 20.w),
-                              //           hintText: "Teacher",
-                              //           border: OutlineInputBorder(
-                              //             borderRadius: const BorderRadius.all(
-                              //               Radius.circular(10.0),
-                              //             ).r,
-                              //           ),
-                              //           enabledBorder: OutlineInputBorder(
-                              //             borderSide: const BorderSide(
-                              //               color: Color.fromRGBO(
-                              //                   230, 236, 254, 8),
-                              //               width: 1.0,
-                              //             ),
-                              //             borderRadius: const BorderRadius.all(
-                              //                     Radius.circular(10.0))
-                              //                 .r,
-                              //           ),
-                              //           focusedBorder: OutlineInputBorder(
-                              //             borderSide: const BorderSide(
-                              //               color: Color.fromRGBO(
-                              //                   230, 236, 254, 8),
-                              //               width: 1.0,
-                              //             ),
-                              //             borderRadius: const BorderRadius.all(
-                              //                     Radius.circular(10.0))
-                              //                 .r,
-                              //           ),
-                              //           fillColor: const Color.fromRGBO(
-                              //               230, 236, 254, 8),
-                              //           filled: true),
-                              //       isExpanded: true,
-                              //       padding:
-                              //           EdgeInsets.only(left: 10.w, right: 5.w),
-                              //       hint: const Text('Teacher'),
-                              //       validator: (dynamic value) => value == null
-                              //           ? 'Please Select the Teacher'
-                              //           : null,
-                              //       items: teacherDetails
-                              //           .map((teacher) =>
-                              //               DropdownMenuItem<String>(
-                              //                 value: teacher.name,
-                              //                 child: Text(
-                              //                  "TEACHER :${ teacher.name ?? ""}",
-                              //                   overflow: TextOverflow.ellipsis,
-                              //                   style: TextStyle(fontSize: 12),
-                              //                 ),
-                              //               ))
-                              //           .toList(),
-                              //       value: _selectedValue3,
-                              //       onChanged: (teacher) {
-                              //         setState(() {
-                              //           _selectedValue3 = teacher ?? "";
-                              //         });
-                              //         // controller.getTeacherClassData(
-                              //         //     teacherName:
-                              //         //     teacher.toString());
-                              //       },
-                              //       selectedItemBuilder:
-                              //           (BuildContext context) {
-                              //         return teacherDetails.map((teacher) {
-                              //           return Text(
-                              //             "TEACHER : ${teacher.name}",
-                              //             // Display formatted value for selected item
-                              //             style: TextStyle(
-                              //                 fontSize: 14,
-                              //                 overflow: TextOverflow.ellipsis),
-                              //           );
-                              //         }).toList();
-                              //       }),
-                              // ),
+
                               SizedBox(
                                 height: 70.h,
                               ),
@@ -603,21 +377,23 @@ class _LearningWalknew1State extends State<LearningWalknew1> {
                                   padding: EdgeInsets.only(top: 25.h),
                                   child: GestureDetector(
                                     onTap: () {
-                                      if (_formKey.currentState!.validate()) {
+                                      setState(() {
+                                        _isClassValid = _selectedValue1 != null && _selectedValue1!.isNotEmpty;
+                                        _isDivisionValid = _selectedValue2 != null && _selectedValue2!.isNotEmpty;
+                                      });
                                         // print("kaaajjhksadjhksdjhk$_selectedValue3");
+                                      if (_isClassValid && _isDivisionValid) {
                                         Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    LearningWalknew2(
-                                                      // teachername:
-                                                      //     _selectedValue3,
-                                                      classsbatch:
-                                                          _selectedValue1 ?? "",
-                                                      Division:
-                                                          _selectedValue2 ?? "",
-                                                    )));
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => LearningWalknew2(
+                                              classsbatch: _selectedValue1 ?? "",
+                                              Division: _selectedValue2 ?? "",
+                                            ),
+                                          ),
+                                        );
                                       }
+
 
                                       // if(_formKey.currentState!.validate()) {
                                       //   Navigator.push(
