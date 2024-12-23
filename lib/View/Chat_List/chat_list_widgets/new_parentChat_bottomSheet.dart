@@ -10,6 +10,7 @@ import 'package:teacherapp/Controller/api_controllers/parentChatListController.d
 import 'package:teacherapp/Services/common_services.dart';
 import 'package:teacherapp/Utils/font_util.dart';
 import 'package:teacherapp/View/Chat_View/parent_chat_screen.dart';
+import '../../../Controller/db_controller/parent_db_controller.dart';
 import '../../../Models/api_models/parent_chat_list_api_model.dart';
 import '../../../Models/api_models/parent_list_api_model.dart';
 import '../../../Utils/Colors.dart';
@@ -269,7 +270,11 @@ class _NewParentChatState extends State<NewParentChat> {
                                       .filterByClass(controller.currentFilterClass.value);
                                 },
                                 child: Text(
-                                  controller.isNewChatErrorMsg.value,
+                                  textAlign: TextAlign.center,
+                                  "${controller.isNewChatErrorMsg.value}\nTap to refresh.",
+                                  style: TextStyle(
+                                      color: Colors.blue,
+                                  ),
                                 ),
                               )
                             ],
@@ -345,7 +350,11 @@ class _NewParentChatState extends State<NewParentChat> {
                                         .poppinsW500_12sp_lightGreenForParent,
                                   ),
                                 ),
-                                onTap: () {
+                                onTap: () async {
+                                  await Get.find<ParentDbController>().createMessageTable(
+                                      parentId: filteredChatList[index].sId ?? '',
+                                      studentclass: controller.currentFilterClass.value.stdClass ?? '',
+                                      batch: controller.currentFilterClass.value.stdBatch ?? "");
                                   Navigator.of(context).pop();
                                   Datum data = Datum(
                                     studentName: filteredChatList[index].studentName,
@@ -354,6 +363,8 @@ class _NewParentChatState extends State<NewParentChat> {
                                     parentId: filteredChatList[index].sId,
                                     parentName: filteredChatList[index].name,
                                     relation: subtile != "--" ? subtile : null,
+                                    subjectName: "Class",
+                                    subjectId: "class_group",
                                   );
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (context) => ParentChatScreen(
