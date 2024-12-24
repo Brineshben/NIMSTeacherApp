@@ -223,7 +223,7 @@ class _ChatWithParentsPageState extends State<ChatWithParentsPage>
                               parentChatListController.filterParentList(
                                   text: '');
                               if (parentChatListController
-                                  .filteredParentList.value.isNotEmpty) {
+                                  .allClasses.value.isNotEmpty) {
                                 showModalBottomSheet(
                                   barrierColor: Colors.transparent,
                                   context: context,
@@ -242,7 +242,7 @@ class _ChatWithParentsPageState extends State<ChatWithParentsPage>
                               } else {
                                 snackBar(
                                     context: context,
-                                    message: "Parent chat list is empty.",
+                                    message: "New chat list is empty.",
                                     color: Colors.red);
                               }
                             },

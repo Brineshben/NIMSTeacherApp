@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:teacherapp/Controller/api_controllers/userAuthController.dart';
@@ -11,8 +13,12 @@ import 'chatClassGroupController.dart';
 
 class ParentChatListController extends GetxController {
   RxBool isLoading = false.obs;
+  RxBool isNewChatLoading = false.obs;
   RxBool isLoaded = false.obs;
+  RxBool isNewChatLoaded = false.obs;
   RxBool isError = false.obs;
+  RxBool isNewChatError = false.obs;
+  RxString isNewChatErrorMsg = "".obs;
   RxInt currentTab = 0.obs;
   RxList<Datum> parentChatList = <Datum>[].obs;
   RxList<Datum> parentChatListCopy = <Datum>[].obs;
@@ -91,7 +97,7 @@ class ParentChatListController extends GetxController {
         } finally {
           await setClassList();
           if(allClasses.isNotEmpty) {
-            await filterByClass(allClasses.first);
+            await filterByClass(allClasses.value.first);
           }
           setChatList();
           resetStatus();
@@ -151,8 +157,12 @@ class ParentChatListController extends GetxController {
             // unreadCount.value = parentChatListApiModel.data?.unreadCount ?? 0;
             // allParentChatList.value = parentChatListApiModel.data?.data ?? [];
             // parentChatListCopy.value = parentChatListApiModel.data?.data ?? [];
-            await setClassList();
-            await filterByClass(currentFilterClass.value);
+            if(allClasses.value.isEmpty) {
+              await setClassList();
+              if(allClasses.value.isNotEmpty) {
+                await filterByClass(allClasses.value.first);
+              }
+            }
             setChatList();
           }
         } catch (e) {
@@ -190,23 +200,40 @@ class ParentChatListController extends GetxController {
   Future<void> setClassList() async {
     allClasses.value = [];
     List<ClassTeacherGroup> classGrpLst = Get.find<ChatClassGroupController>().classGroupList.value;
-    print("----vdgbhg-----${classGrpLst.first.classTeacherClass}");
-    for (var chatRoom in classGrpLst) {
-      allClasses.value.add(ParentFilterClass(stdClass: chatRoom.classTeacherClass, stdBatch: chatRoom.batch));
+    if(classGrpLst.isNotEmpty) {
+      for (var chatRoom in classGrpLst) {
+        allClasses.value.add(ParentFilterClass(stdClass: chatRoom.classTeacherClass, stdBatch: chatRoom.batch));
+      }
+      allClasses.value = allClasses.value.toSet().toList();
+    } else {
+      // chat list empty
     }
-    allClasses.value = allClasses.value.toSet().toList();
-    print("----vfsdvf-----${allClasses.first.stdClass}");
   }
 
   Future<void> filterByClass(ParentFilterClass classBatch) async {
+    isNewChatLoading.value = true;
+    isNewChatLoaded.value = false;
+    isNewChatError.value = false;
     parentList.value = [];
     String schoolId = Get.find<UserAuthController>().userData.value.schoolId ?? '';
-    Map<String, dynamic> respJson = await ApiServices.getParentList(classs: classBatch.stdClass ?? '', batch: classBatch.stdBatch ?? '', subId: 'class_group', schoolId: schoolId);
-    print("-----parent resp--------$respJson");
-    if(respJson['status']['code'].toString() == "200") {
-      ParentListApiModel jsonToDart = ParentListApiModel.fromJson(respJson);
-      parentList.value = jsonToDart.data?.parentData ?? [];
-      filteredParentList.value = parentList.value;
+    try {
+      Map<String, dynamic> respJson = await ApiServices.getParentList(classs: classBatch.stdClass ?? '', batch: classBatch.stdBatch ?? '', subId: 'class_group', schoolId: schoolId);
+      print("-----parent resp--------$respJson");
+      if(respJson['status']['code'].toString() == "200") {
+        ParentListApiModel jsonToDart = ParentListApiModel.fromJson(respJson);
+        parentList.value = jsonToDart.data?.parentData ?? [];
+        filteredParentList.value = parentList.value;
+        isNewChatLoaded.value = true;
+      } else {
+        isNewChatError.value = true;
+        isNewChatErrorMsg.value = respJson['message'] ?? "Something went wrong.";
+      }
+    } catch(e) {
+      print("--------new chat list error-------------${e.toString()}");
+      isNewChatError.value = true;
+      isNewChatErrorMsg.value = "Something went wrong.";
+    } finally {
+      isNewChatLoading.value = false;
     }
   }
 
