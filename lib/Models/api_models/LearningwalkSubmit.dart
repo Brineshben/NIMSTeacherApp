@@ -12,7 +12,7 @@ class LearningwalkSubmitModel {
   String? lwFocus;
   String? notes;
   String? observationDate;
-  List<String>? observerRoles;
+  String? observerRoles;
   String? qsToPuple;
   String? qsToTeacher;
   String? schoolId;
@@ -92,7 +92,7 @@ class LearningwalkSubmitModel {
     data['lw_focus'] = this.lwFocus;
     data['notes'] = this.notes;
     data['observation_date'] = this.observationDate;
-    data['observer_roles'] = this.observerRoles?.join(',');  // Convert list to string
+    data['observer_roles'] = this.observerRoles;  // Convert list to string
     data['qs_to_puple'] = this.qsToPuple;
     data['qs_to_teacher'] = this.qsToTeacher;
     data['school_id'] = this.schoolId;

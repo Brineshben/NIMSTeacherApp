@@ -767,21 +767,24 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                               setState(() {
                                                 spinner = true;
                                               });
-                                              LearningwalkSubmitModel submitLW =
+
+                                              LearningwalkSubmitModel
+                                              submitLW =
                                               LearningwalkSubmitModel(
-                                                academicYear:
-                                                Get.find<UserAuthController>()
+                                                academicYear: Get.find<
+                                                    UserAuthController>()
                                                     .userData
                                                     .value
                                                     .academicYear ??
                                                     '',
-                                                addedBy:
-                                                Get.find<UserAuthController>()
+                                                addedBy: Get.find<
+                                                    UserAuthController>()
                                                     .userData
                                                     .value
                                                     .userId ??
                                                     '',
-                                                addedDate: formattedDate,
+                                                // addedDate: formattedDate,
+                                                addedDate: DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(DateTime.now()),
                                                 batchId: Get.find<
                                                     LearningWalkController>()
                                                     .batchDetails
@@ -800,13 +803,13 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                                     .value
                                                     ?.curriculum ??
                                                     "",
-                                                schoolId:
-                                                Get.find<UserAuthController>()
+                                                schoolId: Get.find<
+                                                    UserAuthController>()
                                                     .userData
                                                     .value
                                                     .schoolId,
-                                                senderId:
-                                                Get.find<UserAuthController>()
+                                                senderId: Get.find<
+                                                    UserAuthController>()
                                                     .userData
                                                     .value
                                                     .userId ??
@@ -817,23 +820,28 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                                     .value
                                                     ?.session ??
                                                     "",
-                                                lwFocus: _FocusLWController.text,
+                                                lwFocus:
+                                                _FocusLWController.text,
                                                 qsToPuple:
-                                                _Questiontopupilontroller.text,
+                                                _Questiontopupilontroller
+                                                    .text,
                                                 qsToTeacher:
                                                 _QuestiontoaskteacherController
                                                     .text,
-                                                notes: _summaryController.text,
+                                                notes:
+                                                _summaryController.text,
                                                 evenBetterIf:
-                                                _evenBetterIfController.text,
+                                                _evenBetterIfController
+                                                    .text,
                                                 whatWentWell:
-                                                _whatWentWellController.text,
-                                                observationDate: formattedDate,
-                                                observerRoles: Get.find<UserAuthController>()
-                                                    .userData
-                                                    .value
-                                                    .roleIds ??
-                                                    [],
+                                                _whatWentWellController
+                                                    .text,
+                                                // observationDate:
+                                                //     formattedDate,
+                                                observationDate:
+                                                DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(DateTime.now()),
+
+                                                observerRoles: Get.find<UserAuthController>().userData.value.roleIds.toString(),
                                               );
                                               bool connection =
                                               await CheckConnectivity().check();
