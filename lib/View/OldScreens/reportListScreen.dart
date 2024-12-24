@@ -81,7 +81,7 @@ class _ReportListViewState extends State<ReportListView> {
     final bdy = {
       "action": "getFeedbackTotalSummaryData",
       "token": userAuthController.schoolToken.value,
-      "employee_code": userAuthController.userData.value.userId
+      "employee_code": userAuthController.userData.value.employeeNo
     };
 
     log("the >>>>>>>>>>>>>>>>>>>>> $bdy");
