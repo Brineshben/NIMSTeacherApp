@@ -1172,11 +1172,11 @@ getParanetPopup({required BuildContext context}) async {
       .first
       .messageGroupdata;
   await Get.find<FeedViewController>().fetchParentList(
-      classs: classdata.classTeacherClass!,
-      batch: classdata.batch!,
-      subId: classdata.subjectId!,
-      schoolId: Get.find<UserAuthController>().userData.value.schoolId!,
-      );
+    classs: classdata.classTeacherClass!,
+    batch: classdata.batch!,
+    subId: classdata.subjectId!,
+    schoolId: Get.find<UserAuthController>().userData.value.schoolId!,
+  );
 
   Get.find<ForwardController>().convertPareNtListToForwardModel(
       Get.find<FeedViewController>().parentDataList);
@@ -1293,7 +1293,8 @@ getParanetPopup({required BuildContext context}) async {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          parentData.parentdata?.name ?? "--",
+                                          parentData.parentdata?.studentName ??
+                                              "--",
                                           style: TeacherAppFonts
                                               .interW700_16sp_black,
                                           overflow: TextOverflow.ellipsis,

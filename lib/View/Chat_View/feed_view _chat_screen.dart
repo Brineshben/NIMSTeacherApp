@@ -205,305 +205,365 @@ class _FeedViewChatScreenState extends State<FeedViewChatScreen>
 
   @override
   Widget build(BuildContext context) {
-    return ChatRoomDataInheritedWidget(
-      msgData: widget.msgData,
-      child: Scaffold(
-        backgroundColor: Color(0xffEDF3F3),
-        appBar: AppBar(
-          backgroundColor: Colorutils.userdetailcolor,
-          leadingWidth: 50.w,
-          titleSpacing: 5,
-          leading: InkWell(
-            onTap: () {
-              if (Get.find<ChatSearchController>().isSearch ||
-                  Get.find<GroupedViewListController>().isSearch.value) {
-                Get.find<GroupedViewListController>().isSearch.value = false;
-                Get.find<GroupedViewListController>().searchroomList.value = [];
+    return PopScope(
+      onPopInvoked: (didPop) {
+        Get.find<GroupedViewListController>().searchText.value = '';
+        Get.find<GroupedViewListController>().isSearch.value = false;
+      },
+      child: ChatRoomDataInheritedWidget(
+        msgData: widget.msgData,
+        child: Scaffold(
+          backgroundColor: Color(0xffEDF3F3),
+          appBar: AppBar(
+            backgroundColor: Colorutils.userdetailcolor,
+            leadingWidth: 50.w,
+            titleSpacing: 5,
+            leading: InkWell(
+              onTap: () {
+                if (Get.find<ChatSearchController>().isSearch ||
+                    Get.find<GroupedViewListController>().isSearch.value) {
+                  Get.find<GroupedViewListController>().isSearch.value = false;
+                  Get.find<GroupedViewListController>().searchroomList.value =
+                      [];
+                  Get.find<GroupedViewListController>().searchText.value = '';
 
-                Get.find<ChatSearchController>().hideSearch();
-                Get.find<ChatSearchController>().searchValue.value = "";
-                Get.find<ChatSearchController>().searchCtr.clear();
-                print("searchList ============== onsearch");
-              } else {
-                Navigator.of(context).pop();
-              }
-            },
-            child: const Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Icon(
-                  Icons.arrow_back_ios,
-                  color: Colors.white,
-                ),
-              ],
+                  Get.find<ChatSearchController>().hideSearch();
+                  Get.find<ChatSearchController>().searchValue.value = "";
+                  Get.find<ChatSearchController>().searchCtr.clear();
+
+                  print("searchList ============== onsearch");
+                } else {
+                  Navigator.of(context).pop();
+                }
+              },
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Icon(
+                    Icons.arrow_back_ios,
+                    color: Colors.white,
+                  ),
+                ],
+              ),
             ),
-          ),
-          title: GetBuilder<ChatSearchController>(builder: (controller) {
-            return controller.isSearch
-                ? ChatSearchTextFieldWidget(
-                    controller: controller,
-                    searchListType: "feedMsgList",
-                  )
-                : GetX<GroupedViewListController>(
-                    builder: (controller3) {
-                      return controller3.isSearch.value
-                          ? Padding(
-                              padding: EdgeInsets.only(right: 10),
-                              child: Container(
-                                height: 45,
-                                decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.all(
-                                          Radius.circular(15))
-                                      .r,
-                                  color: Colors.white,
-                                ),
-                                child: CupertinoSearchTextField(
-                                  backgroundColor: Colors.white,
-                                  onChanged: (value) {
-                                    controller3.searchChatRoom(value);
-                                  },
-                                ),
-                              ),
-                            )
-                          : Row(
-                              children: [
-                                Container(
-                                  width: 44.w,
-                                  height: 44.w,
-                                  padding: const EdgeInsets.all(10).w,
-                                  decoration: const BoxDecoration(
+            title: GetBuilder<ChatSearchController>(builder: (controller) {
+              return controller.isSearch
+                  ? ChatSearchTextFieldWidget(
+                      controller: controller,
+                      searchListType: "feedMsgList",
+                    )
+                  : GetX<GroupedViewListController>(
+                      builder: (controller3) {
+                        return controller3.isSearch.value
+                            ? Padding(
+                                padding: EdgeInsets.only(right: 10),
+                                child: Container(
+                                  height: 45,
+                                  decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.all(
+                                            Radius.circular(15))
+                                        .r,
                                     color: Colors.white,
-                                    shape: BoxShape.circle,
                                   ),
-                                  child: FittedBox(
-                                    child: Text(
-                                      "${widget.msgData?.classTeacherClass}${widget.msgData?.batch}",
-                                      style:
-                                          TeacherAppFonts.interW600_16sp_black,
+                                  child: CupertinoSearchTextField(
+                                    backgroundColor: Colors.white,
+                                    onChanged: (value) {
+                                      controller3.searchChatRoom(value);
+                                    },
+                                  ),
+                                ),
+                              )
+                            : Row(
+                                children: [
+                                  Container(
+                                    width: 44.w,
+                                    height: 44.w,
+                                    padding: const EdgeInsets.all(10).w,
+                                    decoration: const BoxDecoration(
+                                      color: Colors.white,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: FittedBox(
+                                      child: Text(
+                                        "${widget.msgData?.classTeacherClass}${widget.msgData?.batch}",
+                                        style: TeacherAppFonts
+                                            .interW600_16sp_black,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                SizedBox(width: 10.w),
-                                Container(
-                                  constraints: BoxConstraints(maxWidth: 170.w),
-                                  child: TextScroll(
-                                    widget.msgData?.subjectName ?? '--',
-                                    style: GoogleFonts.inter(
-                                        fontSize: 18.0,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.white),
-                                    mode: TextScrollMode.bouncing,
-                                    velocity: const Velocity(
-                                        pixelsPerSecond: Offset(40, 0)),
-                                    delayBefore: const Duration(seconds: 1),
-                                    numberOfReps: 3,
-                                    pauseBetween: const Duration(seconds: 1),
-                                    textAlign: TextAlign.right,
-                                    selectable: true,
-                                  ),
-                                ),
-                                const Spacer(),
-                                GetX<FeedViewController>(
-                                    builder: (controller2) {
-                                  return feedViewController
-                                              .tabControllerIndex.value ==
-                                          0
-                                      ? Padding(
-                                          padding:
-                                              const EdgeInsets.only(right: 20),
-                                          child: GestureDetector(
-                                            onTap: () {
-                                              controller.showSearch();
-                                            },
-                                            child: SizedBox(
-                                              height: 27.w,
-                                              width: 27.w,
-                                              child: SvgPicture.asset(
-                                                'assets/images/MagnifyingGlass.svg',
-                                                width: 200,
-                                                height: 200,
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                      : Padding(
-                                          padding:
-                                              const EdgeInsets.only(right: 20),
-                                          child: GestureDetector(
-                                            onTap: () {
-                                              // controller.showSearch();
-                                              controller3.isSearch.value = true;
-                                              // ""
-                                            },
-                                            child: SizedBox(
-                                              height: 27.w,
-                                              width: 27.w,
-                                              child: SvgPicture.asset(
-                                                'assets/images/MagnifyingGlass.svg',
-                                                width: 200,
-                                                height: 200,
-                                              ),
-                                            ),
-                                          ),
-                                        );
-                                  // : const SizedBox();
-                                })
-                              ],
-                            );
-                    },
-                  );
-          }),
-        ),
-        body: SizedBox(
-          // height: screenHeight,
-          child: Column(
-            children: [
-              // Container(height: 10.h, color: Colorutils.userdetailcolor),
-              widget.msgData?.isClassTeacher == true
-                  ? Column(
-                      children: [
-                        Container(
-                          color: Colorutils.userdetailcolor,
-                          child: GetX<FeedViewController>(
-                            builder: (controller) {
-                              return TabBar(
-                                onTap: (_) {
-                                  // for clearing the whole values in both search (feed and group) //
-                                  Get.find<GroupedViewListController>()
-                                      .isSearch
-                                      .value = false;
-                                  Get.find<GroupedViewListController>()
-                                      .searchroomList
-                                      .value = [];
-
-                                  Get.find<ChatSearchController>().hideSearch();
-                                  Get.find<ChatSearchController>()
-                                      .searchValue
-                                      .value = "";
-                                  Get.find<ChatSearchController>()
-                                      .searchCtr
-                                      .clear();
-                                },
-                                tabAlignment: TabAlignment.center,
-                                controller: tabController,
-                                indicatorColor: Colors.white,
-                                indicatorSize: TabBarIndicatorSize.tab,
-                                isScrollable: true,
-                                dividerHeight: 0,
-                                indicatorPadding:
-                                    const EdgeInsets.symmetric(horizontal: 10),
-                                tabs: <Widget>[
+                                  SizedBox(width: 10.w),
                                   Container(
-                                    width: 180.w,
-                                    height: 40.h,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          'Feed View',
-                                          style: TeacherAppFonts
-                                              .interW700_16sp_textWhite,
-                                        ),
-                                        const SizedBox(
-                                          width: 8,
-                                        ),
-                                        if (controller.feedUnreadCount.value !=
-                                            0)
-                                          CircleAvatar(
-                                            backgroundColor: Colors.white,
-                                            radius: 11.r,
-                                            child: FittedBox(
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(2.0).w,
-                                                child: Text(
-                                                  controller
-                                                      .feedUnreadCount.value
-                                                      .toString(),
-                                                  style: GoogleFonts.inter(
-                                                      fontSize: 13.0,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      color:
-                                                          Colorutils.letters1),
+                                    constraints:
+                                        BoxConstraints(maxWidth: 170.w),
+                                    child: TextScroll(
+                                      widget.msgData?.subjectName ?? '--',
+                                      style: GoogleFonts.inter(
+                                          fontSize: 18.0,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.white),
+                                      mode: TextScrollMode.bouncing,
+                                      velocity: const Velocity(
+                                          pixelsPerSecond: Offset(40, 0)),
+                                      delayBefore: const Duration(seconds: 1),
+                                      numberOfReps: 3,
+                                      pauseBetween: const Duration(seconds: 1),
+                                      textAlign: TextAlign.right,
+                                      selectable: true,
+                                    ),
+                                  ),
+                                  const Spacer(),
+                                  GetX<FeedViewController>(
+                                      builder: (controller2) {
+                                    return feedViewController
+                                                .tabControllerIndex.value ==
+                                            0
+                                        ? Padding(
+                                            padding: const EdgeInsets.only(
+                                                right: 20),
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                controller.showSearch();
+                                              },
+                                              child: SizedBox(
+                                                height: 27.w,
+                                                width: 27.w,
+                                                child: SvgPicture.asset(
+                                                  'assets/images/MagnifyingGlass.svg',
+                                                  width: 200,
+                                                  height: 200,
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
-                                    width: 180.w,
-                                    height: 40.h,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          'Grouped View',
-                                          style: TeacherAppFonts
-                                              .interW700_16sp_textWhite,
-                                        ),
-                                        const SizedBox(
-                                          width: 8,
-                                        ),
-                                        GetX<GroupedViewListController>(
-                                          builder: (GroupedViewListController
-                                              groupedViewController) {
-                                            int count = groupedViewController
-                                                .unreadCount.value;
-                                            print("-------count--------$count");
-                                            if (count != 0) {
-                                              return CircleAvatar(
-                                                backgroundColor: Colors.white,
-                                                radius: 11.r,
-                                                child: FittedBox(
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                                2.0)
-                                                            .w,
-                                                    child: Text(
-                                                      groupedViewController
-                                                          .unreadCount.value
-                                                          .toString(),
-                                                      style: GoogleFonts.inter(
-                                                          fontSize: 13.0,
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          color: Colorutils
-                                                              .letters1),
-                                                    ),
-                                                  ),
+                                          )
+                                        : Padding(
+                                            padding: const EdgeInsets.only(
+                                                right: 20),
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                // controller.showSearch();
+                                                controller3.isSearch.value =
+                                                    true;
+                                                // ""
+                                              },
+                                              child: SizedBox(
+                                                height: 27.w,
+                                                width: 27.w,
+                                                child: SvgPicture.asset(
+                                                  'assets/images/MagnifyingGlass.svg',
+                                                  width: 200,
+                                                  height: 200,
                                                 ),
-                                              );
-                                            } else {
-                                              return Container();
-                                            }
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                                              ),
+                                            ),
+                                          );
+                                    // : const SizedBox();
+                                  })
                                 ],
                               );
-                            },
+                      },
+                    );
+            }),
+          ),
+          body: SizedBox(
+            // height: screenHeight,
+            child: Column(
+              children: [
+                // Container(height: 10.h, color: Colorutils.userdetailcolor),
+                widget.msgData?.isClassTeacher == true
+                    ? Column(
+                        children: [
+                          Container(
+                            color: Colorutils.userdetailcolor,
+                            child: GetX<FeedViewController>(
+                              builder: (controller) {
+                                return TabBar(
+                                  onTap: (_) {
+                                    // for clearing the whole values in both search (feed and group) //
+                                    Get.find<GroupedViewListController>()
+                                        .isSearch
+                                        .value = false;
+                                    Get.find<GroupedViewListController>()
+                                        .searchroomList
+                                        .value = [];
+
+                                    Get.find<ChatSearchController>()
+                                        .hideSearch();
+                                    Get.find<ChatSearchController>()
+                                        .searchValue
+                                        .value = "";
+                                    Get.find<ChatSearchController>()
+                                        .searchCtr
+                                        .clear();
+                                  },
+                                  tabAlignment: TabAlignment.center,
+                                  controller: tabController,
+                                  indicatorColor: Colors.white,
+                                  indicatorSize: TabBarIndicatorSize.tab,
+                                  isScrollable: true,
+                                  dividerHeight: 0,
+                                  indicatorPadding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
+                                  tabs: <Widget>[
+                                    Container(
+                                      width: 180.w,
+                                      height: 40.h,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            'Feed View',
+                                            style: TeacherAppFonts
+                                                .interW700_16sp_textWhite,
+                                          ),
+                                          const SizedBox(
+                                            width: 8,
+                                          ),
+                                          if (controller
+                                                  .feedUnreadCount.value !=
+                                              0)
+                                            CircleAvatar(
+                                              backgroundColor: Colors.white,
+                                              radius: 11.r,
+                                              child: FittedBox(
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(2.0)
+                                                          .w,
+                                                  child: Text(
+                                                    controller
+                                                        .feedUnreadCount.value
+                                                        .toString(),
+                                                    style: GoogleFonts.inter(
+                                                        fontSize: 13.0,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        color: Colorutils
+                                                            .letters1),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                        ],
+                                      ),
+                                    ),
+                                    Container(
+                                      width: 180.w,
+                                      height: 40.h,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            'Grouped View',
+                                            style: TeacherAppFonts
+                                                .interW700_16sp_textWhite,
+                                          ),
+                                          const SizedBox(
+                                            width: 8,
+                                          ),
+                                          GetX<GroupedViewListController>(
+                                            builder: (GroupedViewListController
+                                                groupedViewController) {
+                                              int count = groupedViewController
+                                                  .unreadCount.value;
+                                              print(
+                                                  "-------count--------$count");
+                                              if (count != 0) {
+                                                return CircleAvatar(
+                                                  backgroundColor: Colors.white,
+                                                  radius: 11.r,
+                                                  child: FittedBox(
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                                  2.0)
+                                                              .w,
+                                                      child: Text(
+                                                        groupedViewController
+                                                            .unreadCount.value
+                                                            .toString(),
+                                                        style: GoogleFonts.inter(
+                                                            fontSize: 13.0,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            color: Colorutils
+                                                                .letters1),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                );
+                                              } else {
+                                                return Container();
+                                              }
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
                           ),
-                        ),
-                        Container(
-                          color: Colorutils.userdetailcolor,
-                          height: 1.h,
-                          width: double.infinity,
-                        ),
-                      ],
-                    )
-                  : const SizedBox(),
-              Expanded(
-                child: widget.msgData?.isClassTeacher == true
-                    ? TabBarView(controller: tabController, children: [
-                        Column(
+                          Container(
+                            color: Colorutils.userdetailcolor,
+                            height: 1.h,
+                            width: double.infinity,
+                          ),
+                        ],
+                      )
+                    : const SizedBox(),
+                Expanded(
+                  child: widget.msgData?.isClassTeacher == true
+                      ? TabBarView(controller: tabController, children: [
+                          Column(
+                            children: [
+                              Expanded(
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                    image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: AssetImage(
+                                        "assets/images/chatBg.png",
+                                      ),
+                                    ),
+                                  ),
+                                  child: Stack(
+                                    children: [
+                                      // Container(
+                                      //   color: Colors.white.withOpacity(0.4),
+                                      // ),
+                                      ChatList(widget: widget),
+                                      Positioned(
+                                        bottom: 0,
+                                        left: 0,
+                                        child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                    left: 10, bottom: 10)
+                                                .w,
+                                            child: GetX<FeedViewController>(
+                                                builder: (controller) {
+                                              return controller
+                                                      .showSelectAllIcon.value
+                                                  ? SizedBox()
+                                                  : const SelectedParentsList();
+                                            })),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              FeedViewTextField(
+                                  feedViewController: feedViewController,
+                                  messageCtr: messageCtr,
+                                  widget: widget,
+                                  userAuthController: userAuthController)
+                            ],
+                          ),
+                          GroupedViewChat(msgData: widget.msgData)
+                        ])
+                      : Column(
                           children: [
                             Expanded(
                               child: Container(
@@ -518,24 +578,29 @@ class _FeedViewChatScreenState extends State<FeedViewChatScreen>
                                 child: Stack(
                                   children: [
                                     // Container(
-                                    //   color: Colors.white.withOpacity(0.4),
+                                    //   color: Colors.white.withOpacity(0.6),
                                     // ),
-                                    ChatList(widget: widget),
+                                    ChatList(
+                                      widget: widget,
+                                    ),
                                     Positioned(
                                       bottom: 0,
                                       left: 0,
                                       child: Padding(
-                                          padding: const EdgeInsets.only(
-                                                  left: 10, bottom: 10)
-                                              .w,
-                                          child: GetX<FeedViewController>(
-                                              builder: (controller) {
-                                            return controller
-                                                    .showSelectAllIcon.value
-                                                ? SizedBox()
-                                                : const SelectedParentsList();
-                                          })),
-                                    )
+                                        padding: const EdgeInsets.only(
+                                                left: 10, bottom: 10)
+                                            .w,
+                                        child: GetX<FeedViewController>(
+                                            builder: (controller) {
+                                          print(
+                                              "dahsud --------- ${controller.showSelectAllIcon.value}");
+                                          return controller
+                                                  .showSelectAllIcon.value
+                                              ? SizedBox()
+                                              : const SelectedParentsList();
+                                        }),
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
@@ -547,64 +612,14 @@ class _FeedViewChatScreenState extends State<FeedViewChatScreen>
                                 userAuthController: userAuthController)
                           ],
                         ),
-                        GroupedViewChat(msgData: widget.msgData)
-                      ])
-                    : Column(
-                        children: [
-                          Expanded(
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: AssetImage(
-                                    "assets/images/chatBg.png",
-                                  ),
-                                ),
-                              ),
-                              child: Stack(
-                                children: [
-                                  // Container(
-                                  //   color: Colors.white.withOpacity(0.6),
-                                  // ),
-                                  ChatList(
-                                    widget: widget,
-                                  ),
-                                  Positioned(
-                                    bottom: 0,
-                                    left: 0,
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                              left: 10, bottom: 10)
-                                          .w,
-                                      child: GetX<FeedViewController>(
-                                          builder: (controller) {
-                                        print(
-                                            "dahsud --------- ${controller.showSelectAllIcon.value}");
-                                        return controller
-                                                .showSelectAllIcon.value
-                                            ? SizedBox()
-                                            : const SelectedParentsList();
-                                      }),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          FeedViewTextField(
-                              feedViewController: feedViewController,
-                              messageCtr: messageCtr,
-                              widget: widget,
-                              userAuthController: userAuthController)
-                        ],
-                      ),
-              ),
-              // FeedViewTextField(
-              //     feedViewController: feedViewController,
-              //     messageCtr: messageCtr,
-              //     widget: widget,
-              //     userAuthController: userAuthController)
-            ],
+                ),
+                // FeedViewTextField(
+                //     feedViewController: feedViewController,
+                //     messageCtr: messageCtr,
+                //     widget: widget,
+                //     userAuthController: userAuthController)
+              ],
+            ),
           ),
         ),
       ),
@@ -1061,64 +1076,71 @@ class FeedViewTextField extends StatelessWidget {
                           ),
                           Expanded(
                             child: Container(
-                              height: 40.w,
+                              // height: 40.w,
                               decoration: BoxDecoration(
                                   color: Colors.white,
-                                  borderRadius: BorderRadius.circular(50.h),
+                                  borderRadius: BorderRadius.circular(25.h),
                                   border: Border.all(
                                     width: 0.5.w,
                                     color: Colorutils.bordercolor1,
                                   )),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: TextField(
-                                      focusNode: controller.focusNode.value,
-                                      controller: messageCtr,
-                                      decoration: InputDecoration(
-                                        prefix: SizedBox(
-                                          width: 15.w,
+                              child: Padding(
+                                padding: const EdgeInsets.all(5.0),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: TextField(
+                                        focusNode: controller.focusNode.value,
+                                        controller: messageCtr,
+                                        minLines: 1,
+                                        maxLines: 2,
+                                        decoration: InputDecoration(
+                                          prefix: SizedBox(
+                                            width: 15.w,
+                                          ),
+                                          border: InputBorder.none,
+                                          contentPadding:
+                                              const EdgeInsets.all(0),
+                                          isDense: true,
+                                          hintText: "Message",
+                                          hintStyle: TeacherAppFonts
+                                              .interW400_16sp_letters1
+                                              .copyWith(
+                                                  color: Colors.black
+                                                      .withOpacity(0.2)),
                                         ),
-                                        border: InputBorder.none,
-                                        contentPadding: const EdgeInsets.all(0),
-                                        isDense: true,
-                                        hintText: "Message",
-                                        hintStyle: TeacherAppFonts
-                                            .interW400_16sp_letters1
-                                            .copyWith(
-                                                color: Colors.black
-                                                    .withOpacity(0.2)),
+                                        onChanged: (value) {
+                                          controller.ontype.value = value;
+                                        },
                                       ),
-                                      onChanged: (value) {
-                                        controller.ontype.value = value;
-                                      },
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 8).w,
-                                    child: InkWell(
-                                      child: SvgPicture.asset(
-                                        'assets/images/profileplus.svg',
-                                        height: 24.w,
-                                        fit: BoxFit.fitHeight,
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(right: 8).w,
+                                      child: InkWell(
+                                        child: SvgPicture.asset(
+                                          'assets/images/profileplus.svg',
+                                          height: 24.w,
+                                          fit: BoxFit.fitHeight,
+                                        ),
+                                        onTap: () {
+                                          controller
+                                              .showParentListFilteredToSelectedList();
+                                          // controller.rebuildSelectedParentList();
+                                          showModalBottomSheet(
+                                            barrierColor: Colors.transparent,
+                                            context: context,
+                                            backgroundColor: Colors.transparent,
+                                            isScrollControlled: true,
+                                            builder: (context) {
+                                              return ParentSelectionBottomSheet();
+                                            },
+                                          );
+                                        },
                                       ),
-                                      onTap: () {
-                                        controller
-                                            .showParentListFilteredToSelectedList();
-                                        // controller.rebuildSelectedParentList();
-                                        showModalBottomSheet(
-                                          barrierColor: Colors.transparent,
-                                          context: context,
-                                          backgroundColor: Colors.transparent,
-                                          isScrollControlled: true,
-                                          builder: (context) {
-                                            return ParentSelectionBottomSheet();
-                                          },
-                                        );
-                                      },
-                                    ),
-                                  )
-                                ],
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           ),

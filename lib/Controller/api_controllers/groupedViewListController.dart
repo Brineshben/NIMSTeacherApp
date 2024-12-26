@@ -17,6 +17,7 @@ class GroupedViewListController extends GetxController {
   RxString classs = ''.obs;
   RxString batch = ''.obs;
   RxString subjectId = ''.obs;
+  RxString searchText = RxString('');
   Rx<ScrollController> groupedViewScrollController = ScrollController().obs;
   RxBool isSearch = false.obs;
   void resetStatus() {
@@ -148,9 +149,11 @@ class GroupedViewListController extends GetxController {
   }
 
   searchChatRoom(String text) {
+    searchText.value = text;
     searchroomList.value = roomList.value
-        .where((chat) =>
-            chat.subjectName!.toUpperCase().contains(text.toUpperCase()))
+        .where((chat) => "${chat.classs}${chat.batch!}${chat.subjectName}"
+            .toUpperCase()
+            .contains(text.toUpperCase()))
         .toList();
   }
 }

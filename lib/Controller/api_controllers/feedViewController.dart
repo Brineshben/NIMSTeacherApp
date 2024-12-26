@@ -799,7 +799,11 @@ class FeedViewController extends GetxController {
   }) async {
     selectedParentDataList.value = await Get.find<FeedDBController>()
         .getParentList(subId: subId, batch: batch, studentClass: classs);
-
+    if (selectedParentDataList.isNotEmpty) {
+      selectedParentDataList.sort(
+        (a, b) => a.studentName!.compareTo(b.studentName!),
+      );
+    }
     selectedParentDataStack.value = selectedParentDataList;
     showSelectedParentDataStack.value = selectedParentDataList;
     tempList.value = selectedParentDataList;

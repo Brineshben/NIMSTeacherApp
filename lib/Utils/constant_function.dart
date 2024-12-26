@@ -12,6 +12,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:teacherapp/Services/check_connectivity.dart';
 import 'package:teacherapp/Services/snackBar.dart';
 
@@ -117,5 +118,17 @@ Future<String> getFormattedFileSize(String filePath) async {
     }
   } else {
     throw FileSystemException('File does not exist', filePath);
+  }
+}
+
+Future<void> requestStoragePermission() async {
+  var status = await Permission.storage.request();
+  if (status.isGranted) {
+    print("Storage permission granted.");
+  } else if (status.isDenied) {
+    print("Storage permission denied.");
+  } else if (status.isPermanentlyDenied) {
+    print(
+        "Storage permission permanently denied. Please enable it from settings.");
   }
 }

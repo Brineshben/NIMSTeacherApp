@@ -11,6 +11,7 @@ class ChatClassGroupController extends GetxController {
   RxBool isLoading = false.obs;
   RxBool isLoaded = false.obs;
   RxBool isError = false.obs;
+  RxBool dbLoader = false.obs;
   RxBool searchEnabled = false.obs;
   var currentChatTab = 0.obs;
   RxList<ClassTeacherGroup> classGroupList = <ClassTeacherGroup>[].obs;
@@ -35,8 +36,12 @@ class ChatClassGroupController extends GetxController {
     isLoaded.value = false;
     isError.value = false;
     // // for getting local storage data first when chat open //
-    // classGroupList.value = await Get.find<FeedDBController>().getRoomList();
-    // isLoading.value = false;
+    classGroupList.value = await Get.find<FeedDBController>().getRoomList();
+
+    isLoading.value = false;
+    if (classGroupList.isEmpty) {
+      dbLoader.value = true;
+    }
     checkInternetWithReturnBool(
       context: context,
       function: () async {
@@ -76,6 +81,7 @@ class ChatClassGroupController extends GetxController {
           isError.value = true;
         } finally {
           resetStatus();
+          dbLoader.value = false;
         }
       },
     ).then(

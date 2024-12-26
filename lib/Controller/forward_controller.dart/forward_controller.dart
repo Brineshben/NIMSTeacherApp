@@ -4,6 +4,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
+import 'package:teacherapp/Controller/api_controllers/chat_push_notification.dart';
+import 'package:teacherapp/Controller/api_controllers/feedViewController.dart';
 
 import 'package:teacherapp/Controller/api_controllers/userAuthController.dart';
 import 'package:teacherapp/Models/api_models/chat_group_api_model.dart';
@@ -165,7 +167,34 @@ class ForwardController extends GetxController {
               fileData: null,
               message: null,
               replyId: null);
-          final status = await ForwardService.sentMsgGroup(teacherMsg: data);
+          final status =
+              await ForwardService.sentMsgGroup(teacherMsg: data).then(
+            (value) {
+              Get.find<PushNotificationController>().sendNotification(
+                  teacherId:
+                      Get.find<UserAuthController>().userData.value.userId ??
+                          "",
+                  message:
+                      Get.find<FeedViewController>().seletedMsgData?.message ??
+                          "",
+                  teacherName:
+                      Get.find<UserAuthController>().userData.value.name ?? "",
+                  teacherImage:
+                      Get.find<UserAuthController>().userData.value.image ?? "",
+                  messageFrom:
+                      Get.find<UserAuthController>().userData.value.userId ??
+                          "",
+                  studentClass: singleChatData.classTeacherClass ?? "",
+                  batch: singleChatData.batch ?? "",
+                  subId: singleChatData.subjectId ?? "",
+                  subjectName: singleChatData.subjectName ?? "",
+                  fileName:
+                      Get.find<FeedViewController>().seletedMsgData?.fileName ??
+                          "",
+                  parentData: Get.find<FeedViewController>()
+                      .setFinalParentListForNotification());
+            },
+          );
           print("forward status ===================================== $status");
         });
 
@@ -198,7 +227,43 @@ class ForwardController extends GetxController {
                   message: null,
                   replyId: null);
               final status =
-                  await ForwardService.sentMsgSingle(teacherMsg: data);
+                  await ForwardService.sentMsgSingle(teacherMsg: data).then(
+                (value) {
+                  // Get.find<PushNotificationController>().sendNotification(
+                  //     teacherId: Get.find<UserAuthController>()
+                  //             .userData
+                  //             .value
+                  //             .userId ??
+                  //         "",
+                  //     message: Get.find<FeedViewController>()
+                  //             .seletedMsgData
+                  //             ?.message ??
+                  //         "",
+                  //     teacherName:
+                  //         Get.find<UserAuthController>().userData.value.name ??
+                  //             "",
+                  //     teacherImage:
+                  //         Get.find<UserAuthController>().userData.value.image ??
+                  //             "",
+                  //     messageFrom: Get.find<UserAuthController>()
+                  //             .userData
+                  //             .value
+                  //             .userId ??
+                  //         "",
+                  //     studentClass: singleChatData.datumClass ?? "",
+                  //     batch: singleChatData.batch ?? "",
+                  //     subId: singleChatData.subjectId ?? "",
+                  //     subjectName: singleChatData.subjectName ?? "",
+                  //     fileName:
+                  //         Get.find<FeedViewController>().filePath.value ?? "",
+                  //     parentData: [
+                  //       {
+                  //         "parent_id": singleChatData.parentId ?? "",
+                  //         "student_id": ""
+                  //       }
+                  //     ]);
+                },
+              );
               print(
                   "forward status ===================================== $status");
             },
