@@ -27,7 +27,7 @@ class GroupedViewChat extends StatelessWidget {
       child: GetX<GroupedViewListController>(
         builder: (GroupedViewListController controller) {
           List<RoomData> room = controller.roomList.value;
-          if (controller.searchroomList.isNotEmpty) {
+          if (controller.searchText.isNotEmpty) {
             return ListView.separated(
               shrinkWrap: true,
               itemCount: controller.searchroomList.length,

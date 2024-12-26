@@ -48,6 +48,8 @@ class ChatSearchController extends GetxController {
 
   int? searchIndex;
 
+  bool isShowSnackBar = false;
+
   showSearch() {
     isSearch = true;
     update();
@@ -202,6 +204,7 @@ class ChatSearchController extends GetxController {
 
   getSearchChatLsit(
       {required BuildContext context, required String searchListType}) {
+    late Timer timer;
     final messageList;
     // for search values contails in msg //
     if (searchListType == "parentMsgList") {
@@ -225,9 +228,30 @@ class ChatSearchController extends GetxController {
       }
     }
 
-    if (messageListIndex.isEmpty) {
-      snackBar(context: context, message: "Not found", color: Colorutils.black);
+    if (!isShowSnackBar) {
+      int count = 2;
+      if (messageListIndex.isEmpty) {
+        isShowSnackBar = true;
+        timer = Timer.periodic(
+          const Duration(seconds: 1),
+          (timer) {
+            count--;
+            if (count <= 0) {
+              timer.cancel();
+              isShowSnackBar = false;
+            }
+          },
+        );
+        snackBar(
+            context: context, message: "Not found", color: Colorutils.black);
+      }
+    } else {
+      print("success -------------- ");
     }
+
+    // if (messageListIndex.isEmpty) {
+    //   snackBar(context: context, message: "Not found", color: Colorutils.black);
+    // }
     // print("searchList ========== ${messageListIndex}");
   }
 

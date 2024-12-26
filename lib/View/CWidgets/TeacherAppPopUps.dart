@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:teacherapp/Controller/api_controllers/userAuthController.dart';
+import 'package:teacherapp/Controller/db_controller/Feed_db_controller.dart';
 import 'package:teacherapp/Services/shared_preferences.dart';
 import 'package:teacherapp/Utils/Colors.dart';
 import 'package:teacherapp/Utils/font_util.dart';
@@ -200,6 +201,7 @@ class TeacherAppPopUps {
       ),
     );
   }
+
   static submitFailedTwoBackforupdate({
     String? title,
     required String message,
@@ -273,14 +275,12 @@ class TeacherAppPopUps {
         padding: EdgeInsets.zero, // Removes side padding
 
         child: AlertDialog(
-
           insetPadding: const EdgeInsets.symmetric(
             horizontal: 15,
           ),
           // Removes inset padding
-backgroundColor: Colors.white,
+          backgroundColor: Colors.white,
           shape: const RoundedRectangleBorder(
-
             borderRadius: BorderRadius.all(Radius.circular(25.0)),
           ),
 
@@ -376,7 +376,6 @@ backgroundColor: Colors.white,
                   SizedBox(
                     width: 210,
                     child: Center(
-
                       child: ShaderMask(
                         shaderCallback: (Rect bounds) {
                           return const LinearGradient(
@@ -424,7 +423,8 @@ backgroundColor: Colors.white,
                     SizedBox(
                       width: 150,
                       child: Text(sendername,
-                          style: const TextStyle(color: Colors.grey, fontSize: 10)),
+                          style: const TextStyle(
+                              color: Colors.grey, fontSize: 10)),
                     ),
                     const Text("You",
                         style: TextStyle(color: Colors.grey, fontSize: 10)),
@@ -439,12 +439,11 @@ backgroundColor: Colors.white,
             GestureDetector(
               onTap: () {
                 Get.back();
-                Get.to( TrackingpageHod());
+                Get.to(TrackingpageHod());
                 // PageIndexController pageSwitchController =
                 //     Get.find<PageIndexController>();
                 // pageSwitchController.changePage(
                 //     currentPage: pageSwitchController.navLength.value - 1);
-
               },
               child: Container(
                 padding: const EdgeInsets.only(left: 10, right: 10),
@@ -490,7 +489,8 @@ backgroundColor: Colors.white,
     required String message,
     required String actionName,
     required Color iconColor,
-    required String timeText, required String image,
+    required String timeText,
+    required String image,
     required String sendername,
   }) {
     return Get.dialog(
@@ -517,7 +517,10 @@ backgroundColor: Colors.white,
                         Get.back();
                       },
                       child: Container(
-                        child: const Icon(Icons.clear,color: Colors.grey,),
+                        child: const Icon(
+                          Icons.clear,
+                          color: Colors.grey,
+                        ),
                       ),
                     ),
                   ],
@@ -536,7 +539,7 @@ backgroundColor: Colors.white,
               ],
             ),
           ),
-          content:  Column(
+          content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
@@ -567,7 +570,7 @@ backgroundColor: Colors.white,
                               placeholder: (context, url) => CircleAvatar(
                                 radius: 25.r,
                                 backgroundColor:
-                                Colorutils.chatcolor.withOpacity(0.1),
+                                    Colorutils.chatcolor.withOpacity(0.1),
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: SvgPicture.asset(
@@ -576,15 +579,15 @@ backgroundColor: Colors.white,
                               ),
                               errorWidget: (context, url, error) =>
                                   CircleAvatar(
-                                    radius: 25.r,
-                                    backgroundColor:
+                                radius: 25.r,
+                                backgroundColor:
                                     Colorutils.chatcolor.withOpacity(0.2),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: SvgPicture.asset(
-                                          "assets/images/profileOne.svg"),
-                                    ),
-                                  ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: SvgPicture.asset(
+                                      "assets/images/profileOne.svg"),
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -600,10 +603,7 @@ backgroundColor: Colors.white,
                       child: ShaderMask(
                         shaderCallback: (Rect bounds) {
                           return const LinearGradient(
-                            colors: <Color>[
-                              Colorutils.red,
-                              Colorutils.white
-                            ],
+                            colors: <Color>[Colorutils.red, Colorutils.white],
                             tileMode: TileMode.mirror,
                           ).createShader(bounds);
                         },
@@ -616,14 +616,12 @@ backgroundColor: Colors.white,
                   ),
                   // Right Avatar (You)
                   Padding(
-                    padding: const EdgeInsets.only(
-                      bottom: 10
-                    ),
+                    padding: const EdgeInsets.only(bottom: 10),
                     child: Column(
                       children: [
                         CircleAvatar(
                           backgroundColor:
-                          Colorutils.chatcolor.withOpacity(0.3),
+                              Colorutils.chatcolor.withOpacity(0.3),
                           radius: 18,
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -644,7 +642,8 @@ backgroundColor: Colors.white,
                     SizedBox(
                       width: 150,
                       child: Text(sendername,
-                          style: const TextStyle(color: Colors.grey, fontSize: 10)),
+                          style: const TextStyle(
+                              color: Colors.grey, fontSize: 10)),
                     ),
                     const Text("You",
                         style: TextStyle(color: Colors.grey, fontSize: 10)),
@@ -699,7 +698,6 @@ backgroundColor: Colors.white,
             //   ),
             // ),
           ],
-
         ),
       ),
     );
@@ -763,7 +761,7 @@ backgroundColor: Colors.white,
       ),
     ).then(
       (value) {
-        if(fromScan) {
+        if (fromScan) {
           Get.back();
         } else {
           Get.back();
@@ -830,7 +828,14 @@ backgroundColor: Colors.white,
                   width: 100.w,
                   child: FilledButton(
                     onPressed: () async {
-                      ApiServices.fcmtokenlogout(emailId:Get.find<UserAuthController>().userData.value.username ?? '');
+                      await Get.find<FeedDBController>()
+                          .deleteMessageDBLogout();
+                      ApiServices.fcmtokenlogout(
+                          emailId: Get.find<UserAuthController>()
+                                  .userData
+                                  .value
+                                  .username ??
+                              '');
                       HandleControllers.deleteAllGetControllers();
 
                       await SharedPrefs().removeLoginData();
@@ -862,7 +867,6 @@ backgroundColor: Colors.white,
   }
 }
 
-
 class DashedLinePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
@@ -884,7 +888,6 @@ class DashedLinePainter extends CustomPainter {
       startX += dashWidth + dashSpace;
     }
   }
-
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) => false;

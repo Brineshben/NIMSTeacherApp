@@ -10,6 +10,7 @@ import 'package:teacherapp/Controller/search_controller/search_controller.dart';
 import 'package:teacherapp/Models/api_models/chat_feed_view_model.dart';
 import 'package:teacherapp/Utils/Colors.dart';
 import 'package:teacherapp/Utils/api_constants.dart';
+import 'package:teacherapp/View/Chat_View/Chat_widgets/audio_file_widget.dart';
 import 'package:teacherapp/View/Chat_View/Chat_widgets/replay_in_message_widget.dart';
 import 'package:teacherapp/View/Chat_View/Chat_widgets/sent_bubble_widget.dart';
 
@@ -285,12 +286,20 @@ class ReceiveMessageBubble extends StatelessWidget {
                                                   )
                                                 : const SizedBox(),
                                             audio != null
-                                                ? AudioWidget2(
-                                                    content: audio!,
-                                                    messageId: messageData!
-                                                            .messageId ??
-                                                        "",
-                                                  )
+                                                ? audio?.split('.').last ==
+                                                        "wav"
+                                                    ? AudioWidget2(
+                                                        content: audio!,
+                                                        messageId: messageData!
+                                                                .messageId ??
+                                                            "",
+                                                      )
+                                                    : AudioFileWidget2(
+                                                        content: audio!,
+                                                        messageId: messageData!
+                                                                .messageId ??
+                                                            "",
+                                                      )
                                                 : const SizedBox(),
                                             message != null &&
                                                         fileName != null ||
