@@ -82,8 +82,8 @@ class _ReportListViewState extends State<ReportListView> {
     final bdy = {
       "action": "getFeedbackTotalSummaryData",
       "token": userAuthController.schoolToken.value,
-      "employee_code": employeeUnderHOS.isEmpty ? [userAuthController.userData.value.employeeNo] : employeeUnderHOS,
-      "employee_email": employeeEmailUnderHOS.isEmpty ? [userAuthController.userData.value.username] : employeeEmailUnderHOS,
+      "employee_code": json.encode(employeeUnderHOS.isEmpty ? [userAuthController.userData.value.employeeNo] : employeeUnderHOS),
+      "employee_email": json.encode(employeeEmailUnderHOS.isEmpty ? [userAuthController.userData.value.username] : employeeEmailUnderHOS),
     };
 
     log("the >>>>>>>>>>>>>>>>>>>>> $bdy");
