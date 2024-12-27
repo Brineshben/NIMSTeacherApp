@@ -1,12 +1,15 @@
+import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:teacherapp/Controller/db_controller/Feed_db_controller.dart';
 import 'package:teacherapp/Services/common_services.dart';
 import 'package:teacherapp/Utils/Colors.dart';
 import 'package:teacherapp/Utils/constant_function.dart';
-import 'package:url_launcher/url_launcher_string.dart';
+import 'package:sqflite/sqflite.dart';
 
 import '../../../Utils/font_util.dart';
 
@@ -23,6 +26,7 @@ class FileWidget1 extends StatefulWidget {
   final String fileType;
   final String fileLink;
   final String messageId;
+  ValueNotifier<double> progress = ValueNotifier(0.0);
 
   @override
   State<FileWidget1> createState() => _FileWidget1State();
@@ -90,7 +94,8 @@ class _FileWidget1State extends State<FileWidget1> {
               function: () async {
                 isLoading = true;
                 Get.find<FeedDBController>().uiUpdate();
-                await Get.find<FeedDBController>().dowloadMediaToDB(
+                // await Get.find<FeedDBController>().
+                await dowloadMediaToDB(
                     messageId: widget.messageId,
                     url: widget.fileLink,
                     type: "file");
@@ -185,11 +190,42 @@ class _FileWidget1State extends State<FileWidget1> {
                                   height: 35.w,
                                   child: Center(
                                     child: SizedBox(
-                                        width: 20.w,
-                                        height: 20.w,
-                                        child: const CircularProgressIndicator(
-                                          strokeWidth: 2,
-                                        )),
+                                      width: 25.w,
+                                      height: 25.w,
+                                      child: ValueListenableBuilder(
+                                        valueListenable: widget.progress,
+                                        builder: (context, value, child) {
+                                          print(
+                                              "rebuilding ----------------- dowuload ${value}");
+                                          // return DownloadProgress(
+                                          //     progress: widget.progress.value);
+                                          return Stack(
+                                            children: [
+                                              CircularProgressIndicator(
+                                                value: value /
+                                                    100, // Use the progress value (0.0 to 1.0)
+                                                strokeWidth: 2.0,
+                                                valueColor:
+                                                    const AlwaysStoppedAnimation<
+                                                        Color>(Colors.blue),
+                                                backgroundColor: Colors.white,
+                                              ),
+                                              Center(
+                                                  child: Text(
+                                                "${value.toStringAsFixed(0)}%",
+                                                style: TeacherAppFonts
+                                                    .interW400_8sp_textWhite
+                                                    .copyWith(
+                                                        color: Colors.blue),
+                                              ))
+                                            ],
+                                          );
+                                        },
+                                      ),
+                                      //  const CircularProgressIndicator(
+                                      //   strokeWidth: 2,
+                                      // ),
+                                    ),
                                   ),
                                 )
                               : SizedBox(
@@ -216,6 +252,91 @@ class _FileWidget1State extends State<FileWidget1> {
       ),
     );
   }
+
+  Future<void> dowloadMediaToDB({
+    required String messageId,
+    required String url,
+    required String type,
+  }) async {
+    String mediaTableName = "mediatable$type";
+
+    await Get.find<FeedDBController>().db.execute('''
+    CREATE TABLE IF NOT EXISTS $mediaTableName (
+     id INTEGER PRIMARY KEY AUTOINCREMENT,
+      filePath TEXT,
+      message_id TEXT,
+      file_name TEXT UNIQUE, 
+      file_url TEXT,
+      type TEXT
+     )
+    ''');
+    final fileName = url.split("/").last;
+    final path = await downloadFile(url, fileName);
+
+    Map<String, dynamic> values = {
+      'filePath': path,
+      'message_id': messageId,
+      'file_name': fileName,
+      'file_url': url,
+      'type': type
+    };
+
+    await Get.find<FeedDBController>().db.insert(
+          mediaTableName,
+          values,
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+  }
+
+  Future<String> downloadFile(String url, String fileName) async {
+    await requestStoragePermission(); // Ensure storage permission is granted
+
+    try {
+      // Define the download directory and create a new folder if it doesn't exist
+      // Directory downloadDirectory = Directory('/storage/emulated/0/Download');
+      Directory? downloadDirectory = await getApplicationDocumentsDirectory();
+      Directory schoolDiaryFolder =
+          Directory('${downloadDirectory.path}/School Diary');
+
+      // Create the SchoolDiary folder
+      if (!(await schoolDiaryFolder.exists())) {
+        await schoolDiaryFolder.create(recursive: true);
+      }
+
+      // Set the path where the file will be saved
+      String savePath = '${schoolDiaryFolder.path}/$fileName';
+
+      // Download the file from the URL
+      var response = await Dio().download(
+        url,
+        savePath,
+        onReceiveProgress: (count, total) {
+          double value = count / total * 100;
+          widget.progress.value = value;
+          // ChangeNotifier();
+
+          // print(
+          // "on receive progress ====================== $count  and $total = $value %");
+          print(
+              "on receive progress ====================== ${widget.progress.value}%");
+        },
+      );
+
+      // Check if the download was successful
+      if (response.statusCode == 200) {
+        print('File downloaded to: $savePath');
+        // Notify the media scanner to make the file visible in the gallery
+        // await _scanFile(savePath);
+      } else {
+        print('Failed to download file: ${response.statusCode}');
+      }
+
+      return savePath; // Return the path of the downloaded file
+    } catch (e) {
+      print('Failed to download file: $e');
+      throw e; // Rethrow the error for further handling
+    }
+  }
 }
 
 class FileWidget2 extends StatefulWidget {
@@ -231,6 +352,8 @@ class FileWidget2 extends StatefulWidget {
   final String fileType;
   final String fileLink;
   final String messageId;
+
+  ValueNotifier<double> progress = ValueNotifier(0.0);
 
   @override
   State<FileWidget2> createState() => _FileWidget2State();
@@ -297,7 +420,8 @@ class _FileWidget2State extends State<FileWidget2> {
               function: () async {
                 isLoading = true;
                 Get.find<FeedDBController>().uiUpdate();
-                await Get.find<FeedDBController>().dowloadMediaToDB(
+                // await Get.find<FeedDBController>().
+                await dowloadMediaToDB(
                     messageId: widget.messageId,
                     url: widget.fileLink,
                     type: "file");
@@ -392,11 +516,42 @@ class _FileWidget2State extends State<FileWidget2> {
                                   height: 35.w,
                                   child: Center(
                                     child: SizedBox(
-                                        width: 20.w,
-                                        height: 20.w,
-                                        child: const CircularProgressIndicator(
-                                          strokeWidth: 2,
-                                        )),
+                                      width: 25.w,
+                                      height: 25.w,
+                                      child: ValueListenableBuilder(
+                                        valueListenable: widget.progress,
+                                        builder: (context, value, child) {
+                                          print(
+                                              "rebuilding ----------------- dowuload ${value}");
+                                          // return DownloadProgress(
+                                          //     progress: widget.progress.value);
+                                          return Stack(
+                                            children: [
+                                              CircularProgressIndicator(
+                                                value: value /
+                                                    100, // Use the progress value (0.0 to 1.0)
+                                                strokeWidth: 2.0,
+                                                valueColor:
+                                                    const AlwaysStoppedAnimation<
+                                                        Color>(Colors.blue),
+                                                backgroundColor: Colors.white,
+                                              ),
+                                              Center(
+                                                  child: Text(
+                                                "${value.toStringAsFixed(0)}%",
+                                                style: TeacherAppFonts
+                                                    .interW400_8sp_textWhite
+                                                    .copyWith(
+                                                        color: Colors.blue),
+                                              ))
+                                            ],
+                                          );
+                                        },
+                                      ),
+                                      // const CircularProgressIndicator(
+                                      //   strokeWidth: 2,
+                                      // ),
+                                    ),
                                   ),
                                 )
                               : SizedBox(
@@ -422,6 +577,91 @@ class _FileWidget2State extends State<FileWidget2> {
         ),
       ),
     );
+  }
+
+  Future<void> dowloadMediaToDB({
+    required String messageId,
+    required String url,
+    required String type,
+  }) async {
+    String mediaTableName = "mediatable$type";
+
+    await Get.find<FeedDBController>().db.execute('''
+    CREATE TABLE IF NOT EXISTS $mediaTableName (
+     id INTEGER PRIMARY KEY AUTOINCREMENT,
+      filePath TEXT,
+      message_id TEXT,
+      file_name TEXT UNIQUE, 
+      file_url TEXT,
+      type TEXT
+     )
+    ''');
+    final fileName = url.split("/").last;
+    final path = await downloadFile(url, fileName);
+
+    Map<String, dynamic> values = {
+      'filePath': path,
+      'message_id': messageId,
+      'file_name': fileName,
+      'file_url': url,
+      'type': type
+    };
+
+    await Get.find<FeedDBController>().db.insert(
+          mediaTableName,
+          values,
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+  }
+
+  Future<String> downloadFile(String url, String fileName) async {
+    await requestStoragePermission(); // Ensure storage permission is granted
+
+    try {
+      // Define the download directory and create a new folder if it doesn't exist
+      // Directory downloadDirectory = Directory('/storage/emulated/0/Download');
+      Directory? downloadDirectory = await getApplicationDocumentsDirectory();
+      Directory schoolDiaryFolder =
+          Directory('${downloadDirectory.path}/School Diary');
+
+      // Create the SchoolDiary folder
+      if (!(await schoolDiaryFolder.exists())) {
+        await schoolDiaryFolder.create(recursive: true);
+      }
+
+      // Set the path where the file will be saved
+      String savePath = '${schoolDiaryFolder.path}/$fileName';
+
+      // Download the file from the URL
+      var response = await Dio().download(
+        url,
+        savePath,
+        onReceiveProgress: (count, total) {
+          double value = count / total * 100;
+          widget.progress.value = value;
+          // ChangeNotifier();
+
+          // print(
+          // "on receive progress ====================== $count  and $total = $value %");
+          print(
+              "on receive progress ====================== ${widget.progress.value}%");
+        },
+      );
+
+      // Check if the download was successful
+      if (response.statusCode == 200) {
+        print('File downloaded to: $savePath');
+        // Notify the media scanner to make the file visible in the gallery
+        // await _scanFile(savePath);
+      } else {
+        print('Failed to download file: ${response.statusCode}');
+      }
+
+      return savePath; // Return the path of the downloaded file
+    } catch (e) {
+      print('Failed to download file: $e');
+      throw e; // Rethrow the error for further handling
+    }
   }
 }
 

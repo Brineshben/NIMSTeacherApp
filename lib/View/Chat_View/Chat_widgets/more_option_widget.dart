@@ -58,10 +58,10 @@ class MessageMoreContainer extends StatelessWidget {
                               text: Get.find<FeedViewController>()
                                   .seletedMsgData!
                                   .message!));
-                          // ScaffoldMessenger.of(context)
-                          //     .showSnackBar(const SnackBar(
-                          //   content: Text('Copied to clipboard'),
-                          // ));
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text('Message copied'),
+                          ));
                           Navigator.pop(context);
                         },
                         text: "Copy",
@@ -294,10 +294,10 @@ class MessageMoreContainer2 extends StatelessWidget {
                               text: Get.find<ParentChattingController>()
                                   .seletedMsgData!
                                   .message!));
-                          // ScaffoldMessenger.of(context)
-                          //     .showSnackBar(const SnackBar(
-                          //   content: Text('Copied to clipboard'),
-                          // ));
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text('Message copied'),
+                          ));
                           Navigator.pop(context);
                         },
                         text: "Copy",

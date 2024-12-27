@@ -1,14 +1,18 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:audioplayers/audioplayers.dart' as audio;
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:teacherapp/Controller/db_controller/Feed_db_controller.dart';
 import 'package:teacherapp/Utils/Colors.dart';
 import 'package:teacherapp/Utils/audio.dart';
 import 'package:teacherapp/Utils/constant_function.dart';
 import 'package:teacherapp/Utils/font_util.dart';
+import 'package:sqflite/sqflite.dart';
 
 class AudioWidget extends StatefulWidget {
   final String content;
@@ -32,6 +36,8 @@ class _AudioWidgetState extends State<AudioWidget>
   late StreamSubscription<PlayerState> playerStateSubcriptionController;
   Duration? totalDuration;
   late audio.AudioPlayer audioS;
+
+  ValueNotifier<double> progress = ValueNotifier(0.0);
 
   String seek = "1";
   Duration? _audioDuration = Duration.zero;
@@ -180,9 +186,41 @@ class _AudioWidgetState extends State<AudioWidget>
                         ? SizedBox(
                             width: 25.w,
                             height: 25.w,
-                            child: const CircularProgressIndicator(
-                              strokeWidth: 2,
+                            child: ValueListenableBuilder(
+                              valueListenable: progress,
+                              builder: (context, value, child) {
+                                print(
+                                    "rebuilding ----------------- dowuload ${value}");
+                                // return DownloadProgress(
+                                //     progress: widget.progress.value);
+                                return Stack(
+                                  children: [
+                                    Center(
+                                      child: CircularProgressIndicator(
+                                        value: value /
+                                            100, // Use the progress value (0.0 to 1.0)
+                                        strokeWidth: 2.0,
+                                        valueColor:
+                                            const AlwaysStoppedAnimation<Color>(
+                                                Colors.blue),
+                                        backgroundColor: Colors.grey[200],
+                                      ),
+                                    ),
+                                    Center(
+                                      child: Text(
+                                        "${value.toStringAsFixed(0)}%",
+                                        style: TeacherAppFonts
+                                            .interW400_8sp_textWhite
+                                            .copyWith(color: Colors.blue),
+                                      ),
+                                    )
+                                  ],
+                                );
+                              },
                             ),
+                            //  const CircularProgressIndicator(
+                            //   strokeWidth: 2,
+                            // ),
                           )
                         : path != null &&
                                 waveData != null &&
@@ -260,8 +298,9 @@ class _AudioWidgetState extends State<AudioWidget>
                                           Get.find<FeedDBController>()
                                               .uiUpdate();
                                           print("start working ----------- 1");
-                                          await Get.find<FeedDBController>()
-                                              .dowloadMediaToDB(
+                                          // await Get.find<FeedDBController>()
+                                          // .
+                                          dowloadMediaToDB(
                                                   messageId: widget.messageId,
                                                   url: widget.content,
                                                   type: "audio")
@@ -483,6 +522,126 @@ class _AudioWidgetState extends State<AudioWidget>
       return '$hours:$minutes:$seconds';
     }
   }
+
+  Future<void> dowloadMediaToDB({
+    required String messageId,
+    required String url,
+    required String type,
+  }) async {
+    String mediaTableName = "mediatable$type";
+
+    await Get.find<FeedDBController>().db.execute('''
+    CREATE TABLE IF NOT EXISTS $mediaTableName (
+     id INTEGER PRIMARY KEY AUTOINCREMENT,
+      filePath TEXT,
+      message_id TEXT,
+      file_name TEXT UNIQUE,
+      file_url TEXT,
+      type TEXT
+     )
+    ''');
+    final fileName = url.split("/").last;
+    final path = await downloadFile(url, fileName);
+
+    Map<String, dynamic> values = {
+      'filePath': path,
+      'message_id': messageId,
+      'file_name': fileName,
+      'file_url': url,
+      'type': type
+    };
+
+    await Get.find<FeedDBController>().db.insert(
+          mediaTableName,
+          values,
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+  }
+
+  // Future<void> dowloadMediaToDB({
+  //   required String messageId,
+  //   required String url,
+  //   required String type,
+  // }) async {
+  //   String mediaTableName = "mediatable$type";
+
+  //   await Get.find<FeedDBController>().db.execute('''
+  //   CREATE TABLE IF NOT EXISTS $mediaTableName (
+  //    id INTEGER PRIMARY KEY AUTOINCREMENT,
+  //     filePath TEXT,
+  //     message_id TEXT,
+  //     file_name TEXT UNIQUE,
+  //     file_url TEXT,
+  //     type TEXT
+  //    )
+  //   ''');
+  //   final fileName = url.split("/").last;
+  //   final path = await downloadFile(url, fileName);
+
+  //   Map<String, dynamic> values = {
+  //     'filePath': path,
+  //     'message_id': messageId,
+  //     'file_name': fileName,
+  //     'file_url': url,
+  //     'type': type
+  //   };
+
+  //   await Get.find<FeedDBController>().db.insert(
+  //         mediaTableName,
+  //         values,
+  //         conflictAlgorithm: ConflictAlgorithm.replace,
+  //       );
+  // }
+
+  Future<String> downloadFile(String url, String fileName) async {
+    await requestStoragePermission(); // Ensure storage permission is granted
+
+    try {
+      // Define the download directory and create a new folder if it doesn't exist
+      // Directory downloadDirectory = Directory('/storage/emulated/0/Download');
+      Directory? downloadDirectory = await getApplicationDocumentsDirectory();
+      Directory schoolDiaryFolder =
+          Directory('${downloadDirectory.path}/School Diary');
+
+      // Create the SchoolDiary folder
+      if (!(await schoolDiaryFolder.exists())) {
+        await schoolDiaryFolder.create(recursive: true);
+      }
+
+      // Set the path where the file will be saved
+      String savePath = '${schoolDiaryFolder.path}/$fileName';
+
+      // Download the file from the URL
+      var response = await Dio().download(
+        url,
+        savePath,
+        onReceiveProgress: (count, total) {
+          double value = count / total * 100;
+          progress.value = value;
+          // ChangeNotifier();
+
+          // print(
+          // "on receive progress ====================== $count  and $total = $value %");
+          print(
+              "on receive progress ====================== ${progress.value}%");
+        },
+      );
+
+      // Check if the download was successful
+      if (response.statusCode == 200) {
+        print('File downloaded to: $savePath');
+        // Notify the media scanner to make the file visible in the gallery
+        // await _scanFile(savePath);
+      } else {
+        print('Failed to download file: ${response.statusCode}');
+      }
+
+      return savePath; // Return the path of the downloaded file
+    } catch (e) {
+      print('Failed to download file: $e');
+      throw e; // Rethrow the error for further handling
+    }
+  }
 }
 
 class AudioWidget2 extends StatefulWidget {
@@ -507,7 +666,7 @@ class _AudioWidget2State extends State<AudioWidget2>
   late StreamSubscription<PlayerState> playerStateSubcriptionController;
   Duration? totalDuration;
   late audio.AudioPlayer audioS;
-
+  ValueNotifier<double> progress = ValueNotifier(0.0);
   String seek = "1";
   Duration? _audioDuration = Duration.zero;
   bool _isPlaying = false;
@@ -655,9 +814,41 @@ class _AudioWidget2State extends State<AudioWidget2>
                         ? SizedBox(
                             width: 25.w,
                             height: 25.w,
-                            child: const CircularProgressIndicator(
-                              strokeWidth: 2,
+                            child: ValueListenableBuilder(
+                              valueListenable: progress,
+                              builder: (context, value, child) {
+                                print(
+                                    "rebuilding ----------------- dowuload ${value}");
+                                // return DownloadProgress(
+                                //     progress: widget.progress.value);
+                                return Stack(
+                                  children: [
+                                    Center(
+                                      child: CircularProgressIndicator(
+                                        value: value /
+                                            100, // Use the progress value (0.0 to 1.0)
+                                        strokeWidth: 2.0,
+                                        valueColor:
+                                            const AlwaysStoppedAnimation<Color>(
+                                                Colors.blue),
+                                        backgroundColor: Colors.grey[200],
+                                      ),
+                                    ),
+                                    Center(
+                                      child: Text(
+                                        "${value.toStringAsFixed(0)}%",
+                                        style: TeacherAppFonts
+                                            .interW400_8sp_textWhite
+                                            .copyWith(color: Colors.blue),
+                                      ),
+                                    )
+                                  ],
+                                );
+                              },
                             ),
+                            // const CircularProgressIndicator(
+                            //   strokeWidth: 2,
+                            // ),
                           )
                         : path != null &&
                                 waveData != null &&
@@ -685,48 +876,6 @@ class _AudioWidget2State extends State<AudioWidget2>
                                   checkInternet(
                                     context: context,
                                     function: () async {
-                                      // if (path == null) {
-                                      //   isLoading = true;
-                                      //   Get.find<DBController>().uiUpdate();
-                                      //   print("objectArun  2");
-                                      //   await Get.find<DBController>()
-                                      //       .dowloadMediaToDB(
-                                      //           messageId: widget.messageId,
-                                      //           url: widget.content,
-                                      //           type: "audio");
-                                      //   path = await Get.find<DBController>()
-                                      //       .getFilePathByFileName(
-                                      //           url: widget.content,
-                                      //           type: "audio");
-
-                                      //   waveData = await playerController
-                                      //       .extractWaveformData(
-                                      //           path: path!, noOfSamples: 20);
-
-                                      //   isLoading = false;
-
-                                      //   await playerController.preparePlayer(
-                                      //     path: path!,
-                                      //   );
-
-                                      //   _audioDuration = totalDuration =
-                                      //       Duration(
-                                      //           milliseconds:
-                                      //               await playerController
-                                      //                   .getDuration(
-                                      //                       DurationType.max));
-
-                                      //   await Controller
-                                      //       .dowloadAudioWaveDataToDB(
-                                      //           messageId: widget.messageId,
-                                      //           audioData: waveData!,
-                                      //           duration:
-                                      //               _audioDuration!.toString(),
-                                      //           type: "audio");
-
-                                      //   Get.find<DBController>().uiUpdate();
-                                      // }
-
                                       path = null;
 
                                       if (path == null) {
@@ -735,8 +884,9 @@ class _AudioWidget2State extends State<AudioWidget2>
                                           Get.find<FeedDBController>()
                                               .uiUpdate();
                                           print("start working ----------- 1");
-                                          await Get.find<FeedDBController>()
-                                              .dowloadMediaToDB(
+                                          // await Get.find<FeedDBController>()
+                                          //     .
+                                          dowloadMediaToDB(
                                                   messageId: widget.messageId,
                                                   url: widget.content,
                                                   type: "audio")
@@ -958,10 +1108,92 @@ class _AudioWidget2State extends State<AudioWidget2>
       return '$hours:$minutes:$seconds';
     }
   }
+
+  Future<void> dowloadMediaToDB({
+    required String messageId,
+    required String url,
+    required String type,
+  }) async {
+    String mediaTableName = "mediatable$type";
+
+    await Get.find<FeedDBController>().db.execute('''
+    CREATE TABLE IF NOT EXISTS $mediaTableName (
+     id INTEGER PRIMARY KEY AUTOINCREMENT,
+      filePath TEXT,
+      message_id TEXT,
+      file_name TEXT UNIQUE, 
+      file_url TEXT,
+      type TEXT
+     )
+    ''');
+    final fileName = url.split("/").last;
+    final path = await downloadFile(url, fileName);
+
+    Map<String, dynamic> values = {
+      'filePath': path,
+      'message_id': messageId,
+      'file_name': fileName,
+      'file_url': url,
+      'type': type
+    };
+
+    await Get.find<FeedDBController>().db.insert(
+          mediaTableName,
+          values,
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+  }
+
+  Future<String> downloadFile(String url, String fileName) async {
+    await requestStoragePermission(); // Ensure storage permission is granted
+
+    try {
+      // Define the download directory and create a new folder if it doesn't exist
+      // Directory downloadDirectory = Directory('/storage/emulated/0/Download');
+      Directory? downloadDirectory = await getApplicationDocumentsDirectory();
+      Directory schoolDiaryFolder =
+          Directory('${downloadDirectory.path}/School Diary');
+
+      // Create the SchoolDiary folder
+      if (!(await schoolDiaryFolder.exists())) {
+        await schoolDiaryFolder.create(recursive: true);
+      }
+
+      // Set the path where the file will be saved
+      String savePath = '${schoolDiaryFolder.path}/$fileName';
+
+      // Download the file from the URL
+      var response = await Dio().download(
+        url,
+        savePath,
+        onReceiveProgress: (count, total) {
+          double value = count / total * 100;
+          progress.value = value;
+          // ChangeNotifier();
+
+          // print(
+          // "on receive progress ====================== $count  and $total = $value %");
+          print(
+              "on receive progress ====================== ${progress.value}%");
+        },
+      );
+
+      // Check if the download was successful
+      if (response.statusCode == 200) {
+        print('File downloaded to: $savePath');
+        // Notify the media scanner to make the file visible in the gallery
+        // await _scanFile(savePath);
+      } else {
+        print('Failed to download file: ${response.statusCode}');
+      }
+
+      return savePath; // Return the path of the downloaded file
+    } catch (e) {
+      print('Failed to download file: $e');
+      throw e; // Rethrow the error for further handling
+    }
+  }
 }
-
-
-
 
 // import 'package:audioplayers/audioplayers.dart';
 // import 'package:flutter/material.dart';

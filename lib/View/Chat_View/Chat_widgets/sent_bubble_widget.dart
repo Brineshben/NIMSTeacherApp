@@ -10,6 +10,7 @@ import 'package:teacherapp/Controller/api_controllers/feedViewController.dart';
 import 'package:teacherapp/Controller/search_controller/search_controller.dart';
 import 'package:teacherapp/Services/common_services.dart';
 import 'package:teacherapp/Utils/Colors.dart';
+import 'package:teacherapp/View/Chat_View/Chat_widgets/audio_file_widget.dart';
 import 'package:teacherapp/View/Chat_View/Chat_widgets/replay_in_message_widget.dart';
 
 import '../../../Models/api_models/chat_feed_view_model.dart';
@@ -182,10 +183,16 @@ class SentMessageBubble extends StatelessWidget {
                                               )
                                             : const SizedBox(),
                                         audio != null
-                                            ? AudioWidget(
-                                                content: audio!,
-                                                messageId:
-                                                    messageData!.messageId ??
+                                            ? audio?.split('.').last == "wav"
+                                                ? AudioWidget(
+                                                    content: audio!,
+                                                    messageId: messageData!
+                                                            .messageId ??
+                                                        "")
+                                                : AudioFileWidget(
+                                                    content: audio!,
+                                                    messageId: messageData!
+                                                            .messageId ??
                                                         "")
                                             : const SizedBox(),
                                         message != null && fileName != null ||

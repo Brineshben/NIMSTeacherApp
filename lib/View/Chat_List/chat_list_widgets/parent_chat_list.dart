@@ -171,7 +171,32 @@ class ParentChatList extends StatelessWidget {
         GetX<ParentChatListController>(
           builder: (ParentChatListController controller) {
             List<Datum> chatParentList = controller.parentChatList.value;
-            if (chatParentList.isEmpty) {
+            if (controller.isLoading.value) {
+              return Expanded(
+                child: ListView.separated(
+                    padding: const EdgeInsets.only(bottom: 15),
+                    itemBuilder: (context, index) => const MessageListShimmer(),
+                    separatorBuilder: (context, index) => const Divider(
+                          color: Colorutils.dividerColor1,
+                          height: 0,
+                        ),
+                    itemCount: 10),
+              );
+            } else if (controller.dbLoader.value) {
+              return Expanded(
+                child: Container(
+                  color: Colors.white,
+                  child: const Center(
+                    child: Text(
+                      "Loading",
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            } else if (chatParentList.isEmpty) {
               return Expanded(
                 child: Container(
                   color: Colors.white,
@@ -184,17 +209,6 @@ class ParentChatList extends StatelessWidget {
                     ),
                   ),
                 ),
-              );
-            } else if (controller.isLoading.value) {
-              return Expanded(
-                child: ListView.separated(
-                    padding: const EdgeInsets.only(bottom: 15),
-                    itemBuilder: (context, index) => const MessageListShimmer(),
-                    separatorBuilder: (context, index) => const Divider(
-                          color: Colorutils.dividerColor1,
-                          height: 0,
-                        ),
-                    itemCount: 10),
               );
             } else {
               return Expanded(

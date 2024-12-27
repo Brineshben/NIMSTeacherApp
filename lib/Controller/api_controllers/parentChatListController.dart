@@ -15,6 +15,7 @@ class ParentChatListController extends GetxController {
   RxBool isLoading = false.obs;
   RxBool isNewChatLoading = false.obs;
   RxBool isLoaded = false.obs;
+  RxBool dbLoader = false.obs;
   RxBool isNewChatLoaded = false.obs;
   RxBool isError = false.obs;
   RxBool isNewChatError = false.obs;
@@ -59,6 +60,9 @@ class ParentChatListController extends GetxController {
     print("all parent list =---------------------- ${allParentChatList}");
     parentChatListCopy.value = allParentChatList;
     isLoading.value = false;
+    if (allParentChatList.isEmpty) {
+      dbLoader.value = true;
+    }
     checkInternet(
       context: context,
       function: () async {
@@ -95,8 +99,9 @@ class ParentChatListController extends GetxController {
           print("------parent chat list error 1---------");
           isLoaded.value = false;
         } finally {
+          dbLoader.value = false;
           await setClassList();
-          if(allClasses.isNotEmpty) {
+          if (allClasses.isNotEmpty) {
             await filterByClass(allClasses.value.first);
           }
           setChatList();
@@ -157,9 +162,9 @@ class ParentChatListController extends GetxController {
             // unreadCount.value = parentChatListApiModel.data?.unreadCount ?? 0;
             // allParentChatList.value = parentChatListApiModel.data?.data ?? [];
             // parentChatListCopy.value = parentChatListApiModel.data?.data ?? [];
-            if(allClasses.value.isEmpty) {
+            if (allClasses.value.isEmpty) {
               await setClassList();
-              if(allClasses.value.isNotEmpty) {
+              if (allClasses.value.isNotEmpty) {
                 await filterByClass(allClasses.value.first);
               }
             }
@@ -199,10 +204,12 @@ class ParentChatListController extends GetxController {
 
   Future<void> setClassList() async {
     allClasses.value = [];
-    List<ClassTeacherGroup> classGrpLst = Get.find<ChatClassGroupController>().classGroupList.value;
-    if(classGrpLst.isNotEmpty) {
+    List<ClassTeacherGroup> classGrpLst =
+        Get.find<ChatClassGroupController>().classGroupList.value;
+    if (classGrpLst.isNotEmpty) {
       for (var chatRoom in classGrpLst) {
-        allClasses.value.add(ParentFilterClass(stdClass: chatRoom.classTeacherClass, stdBatch: chatRoom.batch));
+        allClasses.value.add(ParentFilterClass(
+            stdClass: chatRoom.classTeacherClass, stdBatch: chatRoom.batch));
       }
       allClasses.value = allClasses.value.toSet().toList();
     } else {
@@ -215,20 +222,30 @@ class ParentChatListController extends GetxController {
     isNewChatLoaded.value = false;
     isNewChatError.value = false;
     parentList.value = [];
-    String schoolId = Get.find<UserAuthController>().userData.value.schoolId ?? '';
+    String schoolId =
+        Get.find<UserAuthController>().userData.value.schoolId ?? '';
     try {
-      Map<String, dynamic> respJson = await ApiServices.getParentList(classs: classBatch.stdClass ?? '', batch: classBatch.stdBatch ?? '', subId: 'class_group', schoolId: schoolId);
+      Map<String, dynamic> respJson = await ApiServices.getParentList(
+          classs: classBatch.stdClass ?? '',
+          batch: classBatch.stdBatch ?? '',
+          subId: 'class_group',
+          schoolId: schoolId);
       print("-----parent resp--------$respJson");
-      if(respJson['status']['code'].toString() == "200") {
+      if (respJson['status']['code'].toString() == "200") {
         ParentListApiModel jsonToDart = ParentListApiModel.fromJson(respJson);
         parentList.value = jsonToDart.data?.parentData ?? [];
         filteredParentList.value = parentList.value;
+        if (filteredParentList.isNotEmpty) {
+          filteredParentList
+              .sort((a, b) => a.studentName!.compareTo(b.studentName!));
+        }
         isNewChatLoaded.value = true;
       } else {
         isNewChatError.value = true;
-        isNewChatErrorMsg.value = respJson['message'] ?? "Something went wrong.";
+        isNewChatErrorMsg.value =
+            respJson['message'] ?? "Something went wrong.";
       }
-    } catch(e) {
+    } catch (e) {
       print("--------new chat list error-------------${e.toString()}");
       isNewChatError.value = true;
       isNewChatErrorMsg.value = "Something went wrong.";
@@ -248,8 +265,10 @@ class ParentChatListController extends GetxController {
 
   void filterParentList({required String text}) {
     filteredParentList.value = parentList.value
-        .where((parent) =>
-            parent.studentName.toString().toUpperCase().contains(text.toUpperCase()))
+        .where((parent) => parent.studentName
+            .toString()
+            .toUpperCase()
+            .contains(text.toUpperCase()))
         .toList();
   }
 }

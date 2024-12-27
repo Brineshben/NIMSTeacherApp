@@ -22,6 +22,7 @@ import 'package:teacherapp/Services/common_services.dart';
 import 'package:teacherapp/Utils/Colors.dart';
 import 'package:teacherapp/Utils/constant_function.dart';
 import 'package:teacherapp/Utils/font_util.dart';
+import 'package:teacherapp/View/Chat_View/Chat_widgets/audio_file_widget.dart';
 import 'package:teacherapp/View/Chat_View/Chat_widgets/chat_search.dart';
 import 'package:teacherapp/View/Chat_View/feed_view%20_chat_screen.dart';
 import 'package:text_scroll/text_scroll.dart';
@@ -848,45 +849,50 @@ class _ParentChatScreenState extends State<ParentChatScreen> {
                                     ),
                                     Expanded(
                                       child: Container(
-                                        height: 40.w,
+                                        // height: 40.w,
                                         decoration: BoxDecoration(
                                             color: Colors.white,
                                             borderRadius:
-                                                BorderRadius.circular(50.h),
+                                                BorderRadius.circular(25.h),
                                             border: Border.all(
                                               width: 0.5.w,
                                               color: Colorutils.bordercolor1,
                                             )),
-                                        child: Row(
-                                          children: [
-                                            Expanded(
-                                              child: TextField(
-                                                focusNode:
-                                                    controller.focusNode.value,
-                                                controller: messageCtr,
-                                                decoration: InputDecoration(
-                                                  prefix: SizedBox(
-                                                    width: 15.w,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(5.0),
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                child: TextField(
+                                                  focusNode: controller
+                                                      .focusNode.value,
+                                                  controller: messageCtr,
+                                                  minLines: 1,
+                                                  maxLines: 2,
+                                                  decoration: InputDecoration(
+                                                    prefix: SizedBox(
+                                                      width: 15.w,
+                                                    ),
+                                                    border: InputBorder.none,
+                                                    contentPadding:
+                                                        const EdgeInsets.all(0),
+                                                    isDense: true,
+                                                    hintText: "Message",
+                                                    hintStyle: TeacherAppFonts
+                                                        .interW400_16sp_letters1
+                                                        .copyWith(
+                                                            color: Colors.black
+                                                                .withOpacity(
+                                                                    0.2)),
                                                   ),
-                                                  border: InputBorder.none,
-                                                  contentPadding:
-                                                      const EdgeInsets.all(0),
-                                                  isDense: true,
-                                                  hintText: "Message",
-                                                  hintStyle: TeacherAppFonts
-                                                      .interW400_16sp_letters1
-                                                      .copyWith(
-                                                          color: Colors.black
-                                                              .withOpacity(
-                                                                  0.2)),
+                                                  onChanged: (value) {
+                                                    controller.ontype.value =
+                                                        value;
+                                                  },
                                                 ),
-                                                onChanged: (value) {
-                                                  controller.ontype.value =
-                                                      value;
-                                                },
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -1815,10 +1821,16 @@ class SentMessageBubble extends StatelessWidget {
                                                         "")
                                             : const SizedBox(),
                                         audio != null
-                                            ? AudioWidget(
-                                                content: audio!,
-                                                messageId:
-                                                    messageData!.messageId ??
+                                            ? audio?.split('.').last == "wav"
+                                                ? AudioWidget(
+                                                    content: audio!,
+                                                    messageId: messageData!
+                                                            .messageId ??
+                                                        "")
+                                                : AudioFileWidget(
+                                                    content: audio!,
+                                                    messageId: messageData!
+                                                            .messageId ??
                                                         "")
                                             : const SizedBox(),
                                         message != null && fileName != null ||
@@ -2488,10 +2500,16 @@ class ReceiveMessageBubble extends StatelessWidget {
                                                         "")
                                             : const SizedBox(),
                                         audio != null
-                                            ? AudioWidget2(
-                                                content: audio!,
-                                                messageId:
-                                                    messageData!.messageId ??
+                                            ? audio?.split('.').last == "wav"
+                                                ? AudioWidget2(
+                                                    content: audio!,
+                                                    messageId: messageData!
+                                                            .messageId ??
+                                                        "")
+                                                : AudioFileWidget2(
+                                                    content: audio!,
+                                                    messageId: messageData!
+                                                            .messageId ??
                                                         "")
                                             : const SizedBox(),
                                         message != null && fileName != null ||

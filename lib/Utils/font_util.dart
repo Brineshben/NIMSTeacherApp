@@ -170,6 +170,13 @@ class TeacherAppFonts {
     color: Colorutils.Whitecolor.withOpacity(0.6),
   );
 
+  static final TextStyle interW400_8sp_textWhite = TextStyle(
+    fontFamily: _interFont,
+    fontWeight: FontWeight.w400,
+    fontSize: 8.sp,
+    color: Colorutils.Whitecolor,
+  );
+
   static final TextStyle interW400_14sp_textWhite = TextStyle(
     fontFamily: _interFont,
     fontWeight: FontWeight.w400,

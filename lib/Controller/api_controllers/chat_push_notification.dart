@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:teacherapp/Utils/api_constants.dart';
 
@@ -27,8 +28,11 @@ class PushNotificationController {
       if (fileName != null) {
         if (fileName.split(".").last == "wav") {
           messagetype = "🎙 Voice message";
+        } else if (fileName.split(".").last == "mp3") {
+          messagetype = "🎙 Audio message";
         } else {
-          messagetype = "📎 Attachment message";
+          messagetype =
+              "${fileName.split(".").last.toUpperCase()} file Attached";
         }
       }
     } else {

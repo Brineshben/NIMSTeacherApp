@@ -17,6 +17,7 @@ import 'package:teacherapp/Services/snackBar.dart';
 import 'package:teacherapp/Utils/Colors.dart';
 import 'package:teacherapp/Utils/api_constants.dart';
 import 'package:teacherapp/Utils/font_util.dart';
+import 'package:teacherapp/View/Chat_View/Chat_widgets/audio_file_widget.dart';
 import 'package:teacherapp/View/Chat_View/Chat_widgets/chat_search.dart';
 import 'package:teacherapp/View/Chat_View/Chat_widgets/text_and_file_widget.dart';
 import '../../Controller/api_controllers/groupedViewController.dart';
@@ -323,7 +324,7 @@ class ChatList extends StatelessWidget {
                 cacheExtent: 10000,
                 floatingHeader: true,
                 shrinkWrap: true,
-                padding: EdgeInsets.only(top: 5.h, bottom: 5.h),
+                padding: EdgeInsets.only(top: 5.h, bottom: 20.h),
                 controller: controller.chatGroupedViewScrollController.value,
                 groupBy: (element) {
                   try {
@@ -563,10 +564,17 @@ class SentMessageBubble extends StatelessWidget {
                                                   messageData?.messageId ?? "")
                                           : const SizedBox(),
                                       audio != null
-                                          ? AudioWidget(
-                                              content: audio!,
-                                              messageId:
-                                                  messageData!.messageId ?? "")
+                                          ? audio?.split('.').last == "wav"
+                                              ? AudioWidget(
+                                                  content: audio!,
+                                                  messageId:
+                                                      messageData!.messageId ??
+                                                          "")
+                                              : AudioFileWidget(
+                                                  content: audio!,
+                                                  messageId:
+                                                      messageData!.messageId ??
+                                                          "")
                                           : const SizedBox(),
                                       message != null && fileName != null ||
                                               audio != null
@@ -937,10 +945,16 @@ class ReceiveMessageBubble extends StatelessWidget {
                                                           "")
                                               : const SizedBox(),
                                           audio != null
-                                              ? AudioWidget2(
-                                                  content: audio!,
-                                                  messageId:
-                                                      messageData!.messageId ??
+                                              ? audio?.split('.').last == "wav"
+                                                  ? AudioWidget2(
+                                                      content: audio!,
+                                                      messageId: messageData!
+                                                              .messageId ??
+                                                          "")
+                                                  : AudioFileWidget2(
+                                                      content: audio!,
+                                                      messageId: messageData!
+                                                              .messageId ??
                                                           "")
                                               : const SizedBox(),
                                           message != null && fileName != null ||

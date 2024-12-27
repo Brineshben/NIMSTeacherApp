@@ -116,6 +116,10 @@ class GroupChatList extends StatelessWidget {
                           height: 0,
                         ),
                     itemCount: 10);
+              } else if (controller.dbLoader.value == true) {
+                return const Center(
+                  child: Text("Loading"),
+                );
               }
               // else if (controller.isError.value) {
               //   return const Center(child: Text("Error Occurred"));
@@ -206,11 +210,11 @@ class ChatItems extends StatelessWidget {
     return InkWell(
       onTap: () async {
         // for create database table //
-       await Get.find<FeedDBController>().createMessageTable(
+        await Get.find<FeedDBController>().createMessageTable(
             subId: classTeacherGroup?.subjectId ?? "",
             studentclass: classTeacherGroup?.classTeacherClass ?? "",
             batch: classTeacherGroup?.batch ?? "");
-       await Get.find<FeedDBController>().createParentListTable(
+        await Get.find<FeedDBController>().createParentListTable(
             subId: classTeacherGroup?.subjectId ?? "",
             batch: classTeacherGroup?.batch ?? "",
             studentClass: classTeacherGroup?.classTeacherClass ?? "");
