@@ -2123,7 +2123,7 @@ class ReplayMessageWidget2 extends StatelessWidget {
     return GestureDetector(
       onTap: () async {
         if (!Get.find<ParentChattingController>().isShowDialogShow) {
-          Get.find<ParentChattingController>().chatMsgCount = 1000;
+          Get.find<ParentChattingController>().chatMsgCount = 100;
           ParentChattingReqModel chatFeedViewReqModel = ParentChattingReqModel(
             teacherId: userAuthController.userData.value.userId,
             schoolId: userAuthController.userData.value.schoolId,

@@ -7,7 +7,7 @@ class ApiConstants {
     return _instance;
   }
 
-  static String appVersion = "Version : 2.0.0";
+  static String appVersion = "Version : 2.0.1";
   static Map<String, String> headers = {
     'x-auth-token': 'tq355lY3MJyd8Uj2ySzm',
     'Content-Type': 'application/json'
@@ -24,8 +24,8 @@ class ApiConstants {
   //-----------------test url------------------
   // static String baseUrl = "https://192.168.29.221";
 
-  static String baseUrl = "https://teamsqa3000.educore.guru";
-  // static String baseUrl = "https://sqa3000.educore.guru"; // smoke
+  // static String baseUrl = "https://teamsqa3000.educore.guru";
+  static String baseUrl = "https://sqa3000.educore.guru"; // smoke
   static String downloadUrl = "https://teamsqa4000.educore.guru";
   static String docMeUrl = "https://sqa.docme.online/bm-school";
   static String bmClinic = "https://apiqa-bmclinic.docme.online";
