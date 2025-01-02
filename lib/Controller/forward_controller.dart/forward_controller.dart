@@ -26,6 +26,8 @@ class ForwardController extends GetxController {
   List<ForwardModelChats> forwardSingleList = [];
   List<ForwardModelChats> selectedForwardSingleList = [];
 
+  String? forwordMessageId;
+
   RxList<ForwardParentDataModel> forwardParentList = RxList([]);
 
   RxBool isallSelect = false.obs;
@@ -211,7 +213,7 @@ class ForwardController extends GetxController {
   }) {
     checkInternet(
         context: context,
-        function: () {
+        function: () async {
           selectedForwardSingleList.forEach(
             (element) async {
               final singleChatData = element.messageGroupdata;

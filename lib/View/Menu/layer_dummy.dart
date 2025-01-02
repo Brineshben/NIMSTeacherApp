@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -25,10 +24,12 @@ class ChatWithParentsDummyLayer extends StatefulWidget {
   const ChatWithParentsDummyLayer({super.key});
 
   @override
-  State<ChatWithParentsDummyLayer> createState() => _ChatWithParentsDummyLayerState();
+  State<ChatWithParentsDummyLayer> createState() =>
+      _ChatWithParentsDummyLayerState();
 }
 
-class _ChatWithParentsDummyLayerState extends State<ChatWithParentsDummyLayer> with SingleTickerProviderStateMixin {
+class _ChatWithParentsDummyLayerState extends State<ChatWithParentsDummyLayer>
+    with SingleTickerProviderStateMixin {
   TabController? _tabController;
 
   @override
@@ -69,7 +70,7 @@ class _ChatWithParentsDummyLayerState extends State<ChatWithParentsDummyLayer> w
                   ),
                   GetX<ChatClassGroupController>(
                     builder: (ChatClassGroupController controller) {
-                      if(controller.currentChatTab.value == 1) {
+                      if (controller.currentChatTab.value == 1) {
                         return Padding(
                           padding: const EdgeInsets.only(left: 6).w,
                           child: InkWell(
@@ -78,8 +79,7 @@ class _ChatWithParentsDummyLayerState extends State<ChatWithParentsDummyLayer> w
                               padding: const EdgeInsets.all(4.0).w,
                               decoration: BoxDecoration(
                                   color: Colors.white,
-                                  borderRadius: BorderRadius.circular(100).w
-                              ),
+                                  borderRadius: BorderRadius.circular(100).w),
                               child: Icon(
                                 Icons.add,
                                 color: Colorutils.letters1,
@@ -134,7 +134,7 @@ class _ChatWithParentsDummyLayerState extends State<ChatWithParentsDummyLayer> w
                         GetX<ChatClassGroupController>(
                           builder: (ChatClassGroupController controller) {
                             int count = controller.unreadCount.value;
-                            if(count != 0) {
+                            if (count != 0) {
                               return CircleAvatar(
                                 backgroundColor: Colors.white,
                                 radius: 10,
@@ -173,7 +173,7 @@ class _ChatWithParentsDummyLayerState extends State<ChatWithParentsDummyLayer> w
                         GetX<ParentChatListController>(
                           builder: (ParentChatListController controller) {
                             int count = controller.unreadCount.value;
-                            if(count != 0) {
+                            if (count != 0) {
                               return CircleAvatar(
                                 backgroundColor: Colors.white,
                                 radius: 10,
@@ -236,7 +236,7 @@ class GroupChatList extends StatelessWidget {
         // print("-------colorInt---------$colorInt");
         try {
           formattedDate = DateFormat('EEE hh:mm a').format(sentTime!);
-        } catch(e) {}
+        } catch (e) {}
         return ChatItem(
           // className: classTeacherGroups[index].subjectName ?? '--',
           time: formattedDate ?? '',
@@ -271,7 +271,8 @@ class ChatItem extends StatelessWidget {
   final ClassTeacherGroup? classTeacherGroup;
   final Color? avatarColor;
 
-  const ChatItem({super.key,
+  const ChatItem({
+    super.key,
     required this.time,
     required this.unreadMessages,
     required this.userId,
@@ -307,8 +308,7 @@ class ChatItem extends StatelessWidget {
                       Row(
                         children: [
                           Container(
-                            constraints: const BoxConstraints(
-                                maxWidth: 120),
+                            constraints: const BoxConstraints(maxWidth: 120),
                             child: Text(
                               // "English",
                               classTeacherGroup?.subjectName ?? '--',
@@ -321,19 +321,20 @@ class ChatItem extends StatelessWidget {
                       SizedBox(height: 2.h),
                       Row(
                         children: [
-                          if(userId != null && lastMessage != null)
-                            if(userId == lastMessage!.messageFromId)
+                          if (userId != null && lastMessage != null)
+                            if (userId == lastMessage!.messageFromId)
                               SizedBox(
                                 height: 21.h,
                                 width: 21.h,
                                 child: SvgPicture.asset(
                                   "assets/images/Checks.svg",
-                                  color: lastMessage!.read! ? Colors.green : Colors.grey,
+                                  color: lastMessage!.read!
+                                      ? Colors.green
+                                      : Colors.grey,
                                 ),
                               ),
-
-                          if(userId != null && lastMessage != null)
-                            if(userId == lastMessage!.messageFromId)
+                          if (userId != null && lastMessage != null)
+                            if (userId == lastMessage!.messageFromId)
                               SizedBox(width: 5.h),
                           LastSeenMsgGroupChat(lastMessage: lastMessage),
                         ],
@@ -353,8 +354,8 @@ class ChatItem extends StatelessWidget {
                 style: TeacherAppFonts.interW400_12sp_topicbackground,
               ),
               SizedBox(height: 10.h),
-              if(unreadMessages != null)
-                if(unreadMessages != 0)
+              if (unreadMessages != null)
+                if (unreadMessages != 0)
                   Container(
                     height: 23.h,
                     width: 23.h,
@@ -407,14 +408,17 @@ class ParentChatList extends StatelessWidget {
                         controller.setTab(0);
                       },
                       child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 14).w,
+                        padding: const EdgeInsets.symmetric(
+                                vertical: 5, horizontal: 14)
+                            .w,
                         decoration: BoxDecoration(
-                          color: currentIndex == 0 ? Colorutils.buttoncolor : Colorutils.unselectedTab,
+                          color: currentIndex == 0
+                              ? Colorutils.buttoncolor
+                              : Colorutils.unselectedTab,
                           borderRadius: BorderRadius.circular(15),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.grey.withOpacity(
-                                  0.1),
+                              color: Colors.grey.withOpacity(0.1),
                             ),
                           ],
                         ),
@@ -427,23 +431,24 @@ class ParentChatList extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(
-                        width: 5.w
-                    ),
+                    SizedBox(width: 5.w),
 
                     InkWell(
                       onTap: () {
                         controller.setTab(1);
                       },
                       child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 12).w,
+                        padding: const EdgeInsets.symmetric(
+                                vertical: 5, horizontal: 12)
+                            .w,
                         decoration: BoxDecoration(
-                          color: currentIndex == 1 ? Colorutils.buttoncolor : Colorutils.unselectedTab,
+                          color: currentIndex == 1
+                              ? Colorutils.buttoncolor
+                              : Colorutils.unselectedTab,
                           borderRadius: BorderRadius.circular(15),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.grey.withOpacity(
-                                  0.1),
+                              color: Colors.grey.withOpacity(0.1),
                             ),
                           ],
                         ),
@@ -485,34 +490,34 @@ class ParentChatList extends StatelessWidget {
             },
           ),
         ),
-    Expanded(
-    child: ListView.separated(
-    padding: EdgeInsets.all(0),
-    shrinkWrap: true,
-    itemCount: 5,
-    itemBuilder: (BuildContext context, int index) {
-    LastMessage? lastMsg = LastMessage();
-    DateTime? sentTime = lastMsg.sandAt;
-    String? formattedDate;
-    try {
-    formattedDate = DateFormat('EEE hh:mm a').format(sentTime!);
-    } catch(e) {}
-    return ChatItemParent(
-    time: formattedDate ?? '',
-    userId: "userId",
-    leadColor: Colorutils.chatLeadingColors[index % 5],
-    parentRoom: Datum(),
-    );
-    },
-    separatorBuilder: (BuildContext context, int index) {
-    return const Divider(
-    thickness: 0.3,
-    indent: 15,
-    endIndent: 15,
-    );
-    },
-    ),
-    )
+        Expanded(
+          child: ListView.separated(
+            padding: EdgeInsets.all(0),
+            shrinkWrap: true,
+            itemCount: 5,
+            itemBuilder: (BuildContext context, int index) {
+              LastMessage? lastMsg = LastMessage();
+              DateTime? sentTime = lastMsg.sandAt;
+              String? formattedDate;
+              try {
+                formattedDate = DateFormat('EEE hh:mm a').format(sentTime!);
+              } catch (e) {}
+              return ChatItemParent(
+                time: formattedDate ?? '',
+                userId: "userId",
+                leadColor: Colorutils.chatLeadingColors[index % 5],
+                parentRoom: Datum(),
+              );
+            },
+            separatorBuilder: (BuildContext context, int index) {
+              return const Divider(
+                thickness: 0.3,
+                indent: 15,
+                endIndent: 15,
+              );
+            },
+          ),
+        )
       ],
     );
   }
@@ -526,7 +531,8 @@ class ChatItemParent extends StatelessWidget {
   // final String Parentdetail;
   // final String classsdetail;
 
-  const ChatItemParent({super.key,
+  const ChatItemParent({
+    super.key,
     required this.time,
     required this.userId,
     required this.leadColor,
@@ -580,8 +586,7 @@ class ChatItemParent extends StatelessWidget {
                       Row(
                         children: [
                           Container(
-                            constraints: const BoxConstraints(
-                                maxWidth: 120),
+                            constraints: const BoxConstraints(maxWidth: 120),
                             child: Text(
                               // "English",
                               parentRoom.studentName ?? '--',
@@ -596,30 +601,35 @@ class ChatItemParent extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Text(
-                              parentRoom.relation != null ? "${parentRoom.relation} of ${parentRoom.parentName}" : "${parentRoom.parentName}",
+                              parentRoom.relation != null
+                                  ? "${parentRoom.relation} of ${parentRoom.parentName}"
+                                  : "${parentRoom.parentName}",
                               overflow: TextOverflow.ellipsis,
-                              style: TeacherAppFonts.poppinsW400_12sp_lightGreenForParent,
+                              style: TeacherAppFonts
+                                  .poppinsW400_12sp_lightGreenForParent,
                             ),
                           ),
                         ],
                       ),
-                      if(userId != null && parentRoom.lastMessage != null)
-                        if(userId == parentRoom.lastMessage!.messageFromId)
+                      if (userId != null && parentRoom.lastMessage != null)
+                        if (userId == parentRoom.lastMessage!.messageFromId)
                           SizedBox(width: 5.h),
                       Row(
                         children: [
-                          if(userId != null && parentRoom.lastMessage != null)
-                            if(userId == parentRoom.lastMessage!.messageFromId)
+                          if (userId != null && parentRoom.lastMessage != null)
+                            if (userId == parentRoom.lastMessage!.messageFromId)
                               SizedBox(
                                 height: 21.h,
                                 width: 21.h,
                                 child: SvgPicture.asset(
                                   "assets/images/Checks.svg",
-                                  color: parentRoom.lastMessage!.read! ? Colors.green : Colors.grey,
+                                  color: parentRoom.lastMessage!.read!
+                                      ? Colors.green
+                                      : Colors.grey,
                                 ),
                               ),
-                          if(userId != null && parentRoom.lastMessage != null)
-                            if(userId == parentRoom.lastMessage!.messageFromId)
+                          if (userId != null && parentRoom.lastMessage != null)
+                            if (userId == parentRoom.lastMessage!.messageFromId)
                               SizedBox(width: 5.h),
                           Expanded(
                             child: Builder(builder: (context) {
@@ -628,58 +638,58 @@ class ChatItemParent extends StatelessWidget {
                                   return Row(
                                     children: [
                                       Container(
-                                        width: 17,
-                                        height: 18,
-                                        decoration:
-                                        const BoxDecoration(
+                                        width: 15,
+                                        height: 17,
+                                        decoration: const BoxDecoration(
                                           image: DecorationImage(
                                             fit: BoxFit.fill,
                                             image: AssetImage(
                                                 "assets/images/new-document.png"),
                                           ),
                                         ),
-                                        child: Center(
-                                          child: SizedBox(
-                                            height: 8,
-                                            width: 12,
-                                            child: FittedBox(
-                                              child: Text(
-                                                parentRoom.lastMessage!.fileName!
-                                                    .split(".")
-                                                    .last,
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.w400,
-                                                  color: Colors.black,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
+                                        // child: Center(
+                                        //   child: SizedBox(
+                                        //     height: 8,
+                                        //     width: 12,
+                                        //     child: FittedBox(
+                                        //       child: Text(
+                                        //         parentRoom.lastMessage!.fileName!
+                                        //             .split(".")
+                                        //             .last,
+                                        //         style: const TextStyle(
+                                        //           fontWeight: FontWeight.w400,
+                                        //           color: Colors.black,
+                                        //         ),
+                                        //       ),
+                                        //     ),
+                                        //   ),
+                                        // ),
                                       ),
                                       SizedBox(width: 5.w),
                                       Expanded(
                                         child: Text(
-                                          parentRoom.lastMessage!
-                                              .fileName!,
-                                          style: TeacherAppFonts.interW400_14sp_textWhite.copyWith(
-                                            color: Color(0xff535353).withOpacity(0.8),
+                                          parentRoom.lastMessage!.fileName!,
+                                          style: TeacherAppFonts
+                                              .interW400_14sp_textWhite
+                                              .copyWith(
+                                            color: Color(0xff535353)
+                                                .withOpacity(0.8),
                                           ),
-                                          overflow: TextOverflow
-                                              .ellipsis,
+                                          overflow: TextOverflow.ellipsis,
                                         ),
                                       )
                                     ],
                                   );
-                                } else if (parentRoom.lastMessage!
-                                    .type ==
+                                } else if (parentRoom.lastMessage!.type ==
                                     "text") {
                                   return Text(
                                     // "Can you pls share the pdf adsdaddsf.",
                                     parentRoom.lastMessage?.message ?? "--",
-                                    overflow:
-                                    TextOverflow.ellipsis,
+                                    overflow: TextOverflow.ellipsis,
 
-                                    style: TeacherAppFonts.interW400_14sp_textWhite.copyWith(
+                                    style: TeacherAppFonts
+                                        .interW400_14sp_textWhite
+                                        .copyWith(
                                       color: Color(0xff535353).withOpacity(0.8),
                                     ),
                                   );
@@ -697,24 +707,29 @@ class ChatItemParent extends StatelessWidget {
                                       Expanded(
                                         child: Text(
                                           "Audio",
-                                          style: TeacherAppFonts.interW400_14sp_textWhite.copyWith(
-                                            color: Color(0xff535353).withOpacity(0.8),
+                                          style: TeacherAppFonts
+                                              .interW400_14sp_textWhite
+                                              .copyWith(
+                                            color: Color(0xff535353)
+                                                .withOpacity(0.8),
                                           ),
-                                          overflow: TextOverflow
-                                              .ellipsis,
+                                          overflow: TextOverflow.ellipsis,
                                         ),
                                       )
                                     ],
                                   );
                                 } else if (parentRoom.lastMessage!.type ==
-                                    "text_file" || parentRoom.lastMessage!.type == "text_audio") {
+                                        "text_file" ||
+                                    parentRoom.lastMessage!.type ==
+                                        "text_audio") {
                                   return Text(
                                     // "Can you pls share the pdf adsdaddsf.",
                                     parentRoom.lastMessage!.message ?? "--",
-                                    overflow:
-                                    TextOverflow.ellipsis,
+                                    overflow: TextOverflow.ellipsis,
 
-                                    style: TeacherAppFonts.interW400_14sp_textWhite.copyWith(
+                                    style: TeacherAppFonts
+                                        .interW400_14sp_textWhite
+                                        .copyWith(
                                       color: Color(0xff535353).withOpacity(0.8),
                                     ),
                                   );
@@ -736,7 +751,8 @@ class ChatItemParent extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 5).w,
+                padding:
+                    const EdgeInsets.symmetric(vertical: 1, horizontal: 5).w,
                 decoration: BoxDecoration(
                   color: Colorutils.Whitecolor,
                   borderRadius: BorderRadius.circular(20).r,
@@ -757,8 +773,8 @@ class ChatItemParent extends StatelessWidget {
                 style: TeacherAppFonts.interW400_12sp_topicbackground,
               ),
               SizedBox(height: 5.h),
-              if(parentRoom.unreadCount != null)
-                if(parentRoom.unreadCount != "0")
+              if (parentRoom.unreadCount != null)
+                if (parentRoom.unreadCount != "0")
                   Container(
                     height: 23.h,
                     width: 23.h,
@@ -830,4 +846,3 @@ class ChatItemParent extends StatelessWidget {
     // );
   }
 }
-

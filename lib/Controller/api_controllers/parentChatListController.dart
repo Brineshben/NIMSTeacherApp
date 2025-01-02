@@ -63,7 +63,8 @@ class ParentChatListController extends GetxController {
     if (allParentChatList.isEmpty) {
       dbLoader.value = true;
     }
-    checkInternet(
+    setChatList();
+    await checkInternet(
       context: context,
       function: () async {
         try {
@@ -107,6 +108,10 @@ class ParentChatListController extends GetxController {
           setChatList();
           resetStatus();
         }
+      },
+    ).then(
+      (value) {
+        dbLoader.value = false;
       },
     );
   }

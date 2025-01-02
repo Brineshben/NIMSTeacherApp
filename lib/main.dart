@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -16,8 +15,8 @@ import 'Services/shared_preferences.dart';
 import 'View/splash_screen.dart';
 import 'firebase_options.dart';
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,22 +27,18 @@ Future<void> main() async {
   FirebaseMessaging.onBackgroundMessage(_fcmBackgroundHandler);
 
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-
     statusBarColor: Colors.transparent, // transparent status bar
     statusBarIconBrightness: Brightness.light, // dark icons
     statusBarBrightness: Brightness.light, // iOS uses this property
   ));
-  SystemChrome.setPreferredOrientations(
-      [
-        DeviceOrientation.portraitUp,
-      ]
-  );
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
   // await Get.putAsync(() => FcmService().init());
   // Get.put(() => FcmService().handleBackground());
   final sharedPrefs = SharedPrefs();
   await sharedPrefs.initialize();
   runApp(const MyApp());
-
 }
 
 @pragma('vm:entry-point')
@@ -63,7 +58,8 @@ Future<void> _fcmBackgroundHandler(RemoteMessage message) async {
   );
 
   await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(defaultChannel);
 
   String channelId = playSound ? 'notification_id_alarm' : defaultChannelId;
@@ -98,8 +94,6 @@ Future<void> _fcmBackgroundHandler(RemoteMessage message) async {
     payload: json.encode(notification),
   );
 }
-
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

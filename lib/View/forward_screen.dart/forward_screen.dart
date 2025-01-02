@@ -822,9 +822,9 @@ class _ForwardScreenState extends State<ForwardScreen>
                                                                     children: [
                                                                       Container(
                                                                         width:
-                                                                            17,
+                                                                            15,
                                                                         height:
-                                                                            18,
+                                                                            17,
                                                                         decoration:
                                                                             const BoxDecoration(
                                                                           image:
@@ -835,26 +835,26 @@ class _ForwardScreenState extends State<ForwardScreen>
                                                                                 AssetImage("assets/images/new-document.png"),
                                                                           ),
                                                                         ),
-                                                                        child:
-                                                                            Center(
-                                                                          child:
-                                                                              SizedBox(
-                                                                            height:
-                                                                                8,
-                                                                            width:
-                                                                                12,
-                                                                            child:
-                                                                                FittedBox(
-                                                                              child: Text(
-                                                                                controller.forwardSingleList[index].messageGroupdata.lastMessage!.fileName!.split(".").last,
-                                                                                style: const TextStyle(
-                                                                                  fontWeight: FontWeight.w400,
-                                                                                  color: Colors.black,
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                        ),
+                                                                        // child:
+                                                                        //     Center(
+                                                                        //   child:
+                                                                        //       SizedBox(
+                                                                        //     height:
+                                                                        //         8,
+                                                                        //     width:
+                                                                        //         12,
+                                                                        //     child:
+                                                                        //         FittedBox(
+                                                                        //       child: Text(
+                                                                        //         controller.forwardSingleList[index].messageGroupdata.lastMessage!.fileName!.split(".").last,
+                                                                        //         style: const TextStyle(
+                                                                        //           fontWeight: FontWeight.w400,
+                                                                        //           color: Colors.black,
+                                                                        //         ),
+                                                                        //       ),
+                                                                        //     ),
+                                                                        //   ),
+                                                                        // ),
                                                                       ),
                                                                       SizedBox(
                                                                           width:

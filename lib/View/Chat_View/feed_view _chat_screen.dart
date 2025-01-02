@@ -95,6 +95,10 @@ class _FeedViewChatScreenState extends State<FeedViewChatScreen>
         // });
       }
     });
+    Get.find<FeedViewController>().isPeriodicFetching =
+        false; // for set default//
+
+    Get.find<FeedDBController>().isResentWorking == false;
     initialize();
     ChatFeedViewReqModel chatFeedViewReqModel = ChatFeedViewReqModel(
       teacherId: userAuthController.userData.value.userId,
@@ -155,7 +159,9 @@ class _FeedViewChatScreenState extends State<FeedViewChatScreen>
   @override
   void dispose() {
     Get.find<FeedViewController>().chatFeedViewScrollController.value.dispose();
-    chatUpdate!.cancel();
+    if (chatUpdate != null) {
+      chatUpdate!.cancel();
+    }
     super.dispose();
   }
 
@@ -680,8 +686,8 @@ class FeedViewTextField extends StatelessWidget {
                                       child: Row(
                                         children: [
                                           Container(
-                                            width: 35.w,
-                                            height: 40.w,
+                                            width: 25.w,
+                                            height: 30.w,
                                             decoration: const BoxDecoration(
                                               image: DecorationImage(
                                                 fit: BoxFit.fill,
@@ -689,18 +695,18 @@ class FeedViewTextField extends StatelessWidget {
                                                     "assets/images/new-document.png"),
                                               ),
                                             ),
-                                            child: Center(
-                                                child: Text(
-                                              controller.filePathList[index]
-                                                  .split(".")
-                                                  .last,
-                                              style: TeacherAppFonts
-                                                  .interW500_12sp_textWhite
-                                                  .copyWith(
-                                                fontSize: 10.sp,
-                                                color: Colors.black,
-                                              ),
-                                            )),
+                                            // child: Center(
+                                            //     child: Text(
+                                            //   controller.filePathList[index]
+                                            //       .split(".")
+                                            //       .last,
+                                            //   style: TeacherAppFonts
+                                            //       .interW500_12sp_textWhite
+                                            //       .copyWith(
+                                            //     fontSize: 10.sp,
+                                            //     color: Colors.black,
+                                            //   ),
+                                            // )),
                                           ),
                                           wSpace(5),
                                           Expanded(
@@ -1804,6 +1810,8 @@ class ChatList extends StatelessWidget {
       // } else
       if (controller.isLoading.value) {
         return const Center(child: CircularProgressIndicator());
+      } else if (controller.dbLoader.value == true) {
+        return const Center(child: Text("Loading..."));
       }
       // else if (controller.isError.value) {
       //   return const Center(child: Text("Error Occurred"));
@@ -2002,6 +2010,7 @@ class ChatList extends StatelessWidget {
 
 messageMoreShowDialog(BuildContext context, Widget widget, Offset position,
     Offset tapPosition, ChatRoomDataInheritedWidget? data) {
+  print("reaction ------------ ${data}");
   double safeAreaVerticalPadding = MediaQuery.of(context).padding.top +
       MediaQuery.of(context).padding.bottom;
 

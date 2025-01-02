@@ -830,12 +830,19 @@ class TeacherAppPopUps {
                     onPressed: () async {
                       await Get.find<FeedDBController>()
                           .deleteMessageDBLogout();
-                      ApiServices.fcmtokenlogout(
-                          emailId: Get.find<UserAuthController>()
-                                  .userData
-                                  .value
-                                  .username ??
-                              '');
+
+                      ////
+                      try {
+                        await ApiServices.fcmtokenlogout(
+                            emailId: Get.find<UserAuthController>()
+                                    .userData
+                                    .value
+                                    .username ??
+                                '');
+                      } catch (e) {
+                        print("firebase token delete error --------- $e");
+                      }
+                      ////
                       HandleControllers.deleteAllGetControllers();
 
                       await SharedPrefs().removeLoginData();

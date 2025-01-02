@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:teacherapp/Controller/api_controllers/feedViewController.dart';
+import 'package:teacherapp/Controller/forward_controller.dart/forward_controller.dart';
 import 'package:teacherapp/Controller/search_controller/search_controller.dart';
 import 'package:teacherapp/Models/api_models/chat_feed_view_model.dart';
 import 'package:teacherapp/Utils/Colors.dart';
@@ -142,6 +143,8 @@ class ReceiveMessageBubble extends StatelessWidget {
                               },
                               onLongPress: () {
                                 HapticFeedback.vibrate();
+                                final data =
+                                    ChatRoomDataInheritedWidget.of(context);
                                 Get.find<FeedViewController>().seletedMsgData =
                                     messageData;
                                 final renderObject =
@@ -154,9 +157,12 @@ class ReceiveMessageBubble extends StatelessWidget {
                                     false) {
                                   Get.find<FeedViewController>()
                                       .seletedMsgData = messageData;
+                                  Get.find<ForwardController>()
+                                          .forwordMessageId =
+                                      messageData?.messageId ?? "";
 
                                   messageMoreShowDialog(context, this, position,
-                                      _tapPosition, null);
+                                      _tapPosition, data);
                                   Get.find<FeedViewController>()
                                       .isShowDialogShow = true;
                                 }

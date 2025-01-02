@@ -118,7 +118,7 @@ class GroupChatList extends StatelessWidget {
                     itemCount: 10);
               } else if (controller.dbLoader.value == true) {
                 return const Center(
-                  child: Text("Loading"),
+                  child: Text("Loading..."),
                 );
               }
               // else if (controller.isError.value) {

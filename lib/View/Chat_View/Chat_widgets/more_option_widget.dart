@@ -184,12 +184,15 @@ class MessageMoreContainer extends StatelessWidget {
                             horizontal: 20.h, vertical: 10.h),
                         child: GestureDetector(
                           onTap: () {
-                            if (Get.find<ParentChattingController>()
+                            print(
+                                "delete ---------- button working ${Get.find<FeedViewController>().seletedMsgData}");
+                            if (Get.find<FeedViewController>()
                                     .seletedMsgData!
                                     .messageId
                                     ?.split("/")
                                     .first ==
                                 "unsent") {
+                              print("delete ---------- button unsent working");
                               Get.find<FeedDBController>()
                                   .deleteMessageLocally(
                                       batch: data?.msgData?.batch ?? "",
@@ -217,7 +220,8 @@ class MessageMoreContainer extends StatelessWidget {
                                 },
                               );
                             } else {
-                              print("working");
+                              print("delete ---------- button sent working");
+
                               Get.find<FeedViewController>().deleteMsg(
                                   context: context,
                                   teacherId: Get.find<UserAuthController>()
@@ -230,21 +234,24 @@ class MessageMoreContainer extends StatelessWidget {
                                           .messageId!));
                             }
                           },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Delete Chat",
-                                style: TeacherAppFonts.interW400_16sp_letters1
-                                    .copyWith(color: Colorutils.fontColor11),
-                              ),
-                              SizedBox(
-                                height: 26.h,
-                                width: 26.h,
-                                child:
-                                    SvgPicture.asset("assets/images/Trash.svg"),
-                              )
-                            ],
+                          child: Container(
+                            color: Colorutils.transparent,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Delete Chat",
+                                  style: TeacherAppFonts.interW400_16sp_letters1
+                                      .copyWith(color: Colorutils.fontColor11),
+                                ),
+                                SizedBox(
+                                  height: 26.h,
+                                  width: 26.h,
+                                  child: SvgPicture.asset(
+                                      "assets/images/Trash.svg"),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       )
@@ -471,21 +478,24 @@ class MessageMoreContainer2 extends StatelessWidget {
                                           .messageId!));
                             }
                           },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Delete Chat",
-                                style: TeacherAppFonts.interW400_16sp_letters1
-                                    .copyWith(color: Colorutils.fontColor11),
-                              ),
-                              SizedBox(
-                                height: 26.h,
-                                width: 26.h,
-                                child:
-                                    SvgPicture.asset("assets/images/Trash.svg"),
-                              )
-                            ],
+                          child: Container(
+                            color: Colorutils.transparent,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Delete Chat",
+                                  style: TeacherAppFonts.interW400_16sp_letters1
+                                      .copyWith(color: Colorutils.fontColor11),
+                                ),
+                                SizedBox(
+                                  height: 26.h,
+                                  width: 26.h,
+                                  child: SvgPicture.asset(
+                                      "assets/images/Trash.svg"),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       )
