@@ -279,13 +279,14 @@ class ReceiveMessageBubble extends StatelessWidget {
                                                         messageData!.replyData!,
                                                   )
                                                 : const SizedBox(),
-                                            fileName != null
+                                            fileName != null &&
+                                                    messageData?.type == "file"
                                                 ? FileWidget2(
                                                     fileType: fileName!
                                                         .split(".")
                                                         .last,
-                                                    fileName: fileName!,
-                                                    fileLink: fileLink!,
+                                                    fileName: fileName ?? "",
+                                                    fileLink: fileLink ?? "",
                                                     messageId: messageData
                                                             ?.messageId ??
                                                         "",
@@ -295,16 +296,18 @@ class ReceiveMessageBubble extends StatelessWidget {
                                                 ? audio?.split('.').last ==
                                                         "wav"
                                                     ? AudioWidget2(
-                                                        content: audio!,
+                                                        content: audio ?? "",
                                                         messageId: messageData!
                                                                 .messageId ??
                                                             "",
                                                       )
                                                     : AudioFileWidget2(
-                                                        content: audio!,
+                                                        content: audio ?? "",
                                                         messageId: messageData!
                                                                 .messageId ??
                                                             "",
+                                                        audioFileName:
+                                                            fileName ?? "",
                                                       )
                                                 : const SizedBox(),
                                             message != null &&

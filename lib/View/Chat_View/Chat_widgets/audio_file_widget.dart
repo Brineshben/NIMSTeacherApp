@@ -18,11 +18,13 @@ import 'package:teacherapp/Utils/font_util.dart';
 class AudioFileWidget extends StatefulWidget {
   final String content;
   final String messageId;
+  final String audioFileName;
   ValueNotifier<double> progress = ValueNotifier(0.0);
   AudioFileWidget({
     super.key,
     required this.content,
     required this.messageId,
+    required this.audioFileName,
   });
 
   @override
@@ -436,7 +438,7 @@ class _AudioFileWidgetState extends State<AudioFileWidget>
                   ],
                 ),
                 hSpace(5.h),
-                Text(widget.content.split('/').last,
+                Text(widget.audioFileName,
                     style:
                         TeacherAppFonts.interW400_12sp_topicbackground.copyWith(
                       color: Colorutils.black,
@@ -554,11 +556,13 @@ class _AudioFileWidgetState extends State<AudioFileWidget>
 class AudioFileWidget2 extends StatefulWidget {
   final String content;
   final String messageId;
+  final String audioFileName;
   ValueNotifier<double> progress = ValueNotifier(0.0);
   AudioFileWidget2({
     super.key,
     required this.content,
     required this.messageId,
+    required this.audioFileName,
   });
 
   @override
@@ -972,7 +976,7 @@ class _AudioFileWidget2State extends State<AudioFileWidget2>
                   ],
                 ),
                 hSpace(5.h),
-                Text(widget.content.split('/').last,
+                Text(widget.audioFileName,
                     style:
                         TeacherAppFonts.interW400_12sp_topicbackground.copyWith(
                       color: Colorutils.black,

@@ -1822,12 +1822,13 @@ class SentMessageBubble extends StatelessWidget {
                                                     messageData!.replyData!,
                                               )
                                             : const SizedBox(),
-                                        fileName != null
+                                        fileName != null &&
+                                                messageData?.type == "file"
                                             ? FileWidget1(
                                                 fileType:
                                                     fileName!.split(".").last,
-                                                fileName: fileName!,
-                                                fileLink: fileLink!,
+                                                fileName: fileName ?? "",
+                                                fileLink: fileLink ?? "",
                                                 messageId:
                                                     messageData?.messageId ??
                                                         "")
@@ -1835,15 +1836,18 @@ class SentMessageBubble extends StatelessWidget {
                                         audio != null
                                             ? audio?.split('.').last == "wav"
                                                 ? AudioWidget(
-                                                    content: audio!,
+                                                    content: audio ?? "",
                                                     messageId: messageData!
                                                             .messageId ??
                                                         "")
                                                 : AudioFileWidget(
-                                                    content: audio!,
+                                                    content: audio ?? "",
                                                     messageId: messageData!
                                                             .messageId ??
-                                                        "")
+                                                        "",
+                                                    audioFileName:
+                                                        fileName ?? "",
+                                                  )
                                             : const SizedBox(),
                                         message != null && fileName != null ||
                                                 audio != null
@@ -2135,7 +2139,7 @@ class ReplayMessageWidget2 extends StatelessWidget {
     return GestureDetector(
       onTap: () async {
         if (!Get.find<ParentChattingController>().isShowDialogShow) {
-          Get.find<ParentChattingController>().chatMsgCount = 1000;
+          Get.find<ParentChattingController>().chatMsgCount = 100;
           ParentChattingReqModel chatFeedViewReqModel = ParentChattingReqModel(
             teacherId: userAuthController.userData.value.userId,
             schoolId: userAuthController.userData.value.schoolId,
@@ -2503,12 +2507,13 @@ class ReceiveMessageBubble extends StatelessWidget {
                                                     messageData!.replyData!,
                                               )
                                             : const SizedBox(),
-                                        fileName != null
+                                        fileName != null &&
+                                                messageData?.type == "file"
                                             ? FileWidget2(
                                                 fileType:
                                                     fileName!.split(".").last,
-                                                fileName: fileName!,
-                                                fileLink: fileLink!,
+                                                fileName: fileName ?? "",
+                                                fileLink: fileLink ?? "",
                                                 messageId:
                                                     messageData?.messageId ??
                                                         "")
@@ -2516,15 +2521,18 @@ class ReceiveMessageBubble extends StatelessWidget {
                                         audio != null
                                             ? audio?.split('.').last == "wav"
                                                 ? AudioWidget2(
-                                                    content: audio!,
+                                                    content: audio ?? "",
                                                     messageId: messageData!
                                                             .messageId ??
                                                         "")
                                                 : AudioFileWidget2(
-                                                    content: audio!,
+                                                    content: audio ?? "",
                                                     messageId: messageData!
                                                             .messageId ??
-                                                        "")
+                                                        "",
+                                                    audioFileName:
+                                                        fileName ?? "",
+                                                  )
                                             : const SizedBox(),
                                         message != null && fileName != null ||
                                                 audio != null
