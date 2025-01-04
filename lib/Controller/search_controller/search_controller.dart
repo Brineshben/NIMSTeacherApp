@@ -299,7 +299,9 @@ class ChatSearchController extends GetxController {
   }) {
     // Regular expression to detect URLs
     const urlPattern =
-        r'((https?:\/\/)?(www\.)?[a-zA-Z0-9-]+\.(com|org|net|edu|gov|mil|int|info|biz|co|us|io|me)([\/\w\-.?&=%#]*)?)';
+        r'((https?:\/\/)?(?:www\.)?[^\s]+(?:\.[^\s]+)+(?:\/[^\s]*)?)';
+    // const urlPattern =
+    //     r'((https?:\/\/)?(www\.)?[a-zA-Z0-9-]+\.(com|org|net|edu|gov|mil|int|info|biz|co|us|io|me|in)([\/\w\-.?&=%#]*)?)';
     final regex = RegExp(urlPattern);
     final matches = regex.allMatches(text);
 

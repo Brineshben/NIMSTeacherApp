@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:teacherapp/Controller/api_controllers/feedViewController.dart';
+import 'package:teacherapp/Controller/forward_controller.dart/forward_controller.dart';
 import 'package:teacherapp/Controller/search_controller/search_controller.dart';
 import 'package:teacherapp/Services/common_services.dart';
 import 'package:teacherapp/Utils/Colors.dart';
@@ -112,6 +113,10 @@ class SentMessageBubble extends StatelessWidget {
                                   Get.find<FeedViewController>()
                                       .seletedMsgData = messageData;
 
+                                  Get.find<ForwardController>()
+                                          .forwordMessageId =
+                                      messageData?.messageId ?? "";
+
                                   messageMoreShowDialog(context, this, position,
                                       _tapPosition, data);
                                   Get.find<FeedViewController>()
@@ -171,12 +176,13 @@ class SentMessageBubble extends StatelessWidget {
                                                     messageData!.replyData!,
                                               )
                                             : const SizedBox(),
-                                        fileName != null
+                                        fileName != null &&
+                                                messageData?.type == "file"
                                             ? FileWidget1(
                                                 fileType:
                                                     fileName!.split(".").last,
-                                                fileName: fileName!,
-                                                fileLink: fileLink!,
+                                                fileName: fileName ?? "",
+                                                fileLink: fileLink ?? "",
                                                 messageId:
                                                     messageData?.messageId ??
                                                         "",
@@ -185,15 +191,18 @@ class SentMessageBubble extends StatelessWidget {
                                         audio != null
                                             ? audio?.split('.').last == "wav"
                                                 ? AudioWidget(
-                                                    content: audio!,
+                                                    content: audio ?? "",
                                                     messageId: messageData!
                                                             .messageId ??
                                                         "")
                                                 : AudioFileWidget(
-                                                    content: audio!,
+                                                    content: audio ?? "",
                                                     messageId: messageData!
                                                             .messageId ??
-                                                        "")
+                                                        "",
+                                                    audioFileName:
+                                                        fileName ?? "",
+                                                  )
                                             : const SizedBox(),
                                         message != null && fileName != null ||
                                                 audio != null

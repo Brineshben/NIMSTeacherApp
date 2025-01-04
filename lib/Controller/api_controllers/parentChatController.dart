@@ -5,11 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
+import 'package:teacherapp/Controller/api_controllers/chat_push_notification.dart';
 import 'package:teacherapp/Controller/api_controllers/userAuthController.dart';
 import 'package:teacherapp/Controller/db_controller/parent_db_controller.dart';
 import 'package:teacherapp/Models/api_models/sent_msg_by_teacher_model.dart';
 import 'package:teacherapp/Services/api_services.dart';
 import 'package:teacherapp/Services/common_services.dart';
+import 'package:teacherapp/Utils/Colors.dart';
 import 'package:teacherapp/Utils/constant_function.dart';
 import '../../Models/api_models/parent_chatting_model.dart';
 import '../../Services/check_connectivity.dart';
@@ -20,6 +22,8 @@ class ParentChattingController extends GetxController {
   RxBool isLoading = false.obs;
   RxBool isLoaded = false.obs;
   RxBool isError = false.obs;
+  RxBool dbLoader = false.obs;
+  bool isPeriodicFetching = false;
   RxList<ParentMsgData> chatMsgList = <ParentMsgData>[].obs;
   RxInt parentChatsUnreadCount = 0.obs;
   late Rx<AutoScrollController> parentChatScrollController;
@@ -71,6 +75,7 @@ class ParentChattingController extends GetxController {
         parentId: reqBody.parentId ?? "",
         studentclass: reqBody.classs ?? "",
         batch: reqBody.batch ?? "");
+
     final unsentList = await Get.find<ParentDbController>().getUnSentMessage(
         teacherId: Get.find<UserAuthController>().userData.value.userId!,
         subId: subId,
@@ -82,9 +87,12 @@ class ParentChattingController extends GetxController {
     if (chatMsgList.isNotEmpty) {
       chatMsgList.add(chatMsgList[chatMsgList.length - 1]);
     }
+    if (chatMsgList.isEmpty) {
+      dbLoader.value = true;
+    }
     print("lust chat ----------------------- ${chatMsgList}");
     isLoading.value = false;
-    checkInternet(
+    await checkInternet(
       context: context,
       function: () async {
         try {
@@ -123,13 +131,23 @@ class ParentChattingController extends GetxController {
           print('--------parent chatting error--------');
         } finally {
           isLoading.value = false;
+          dbLoader.value = false;
         }
       },
     );
+
+    isLoading.value = false;
+    dbLoader.value = false;
   }
 
   Future<void> fetchParentMsgListPeriodically(
       ParentChattingReqModel reqBody) async {
+    if (isPeriodicFetching) {
+      return; // Prevent overlapping calls
+    }
+
+    isPeriodicFetching = true;
+
     ParentChattingReqModel chattingReqModel = ParentChattingReqModel(
       teacherId: reqBody.teacherId,
       schoolId: reqBody.schoolId,
@@ -163,6 +181,8 @@ class ParentChattingController extends GetxController {
       }
     } catch (e) {
       print('--------parent chatting error--------');
+    } finally {
+      isPeriodicFetching = false;
     }
   }
 
@@ -516,6 +536,22 @@ class ParentChattingController extends GetxController {
       );
 
       if (resp['status']['code'] == 200) {
+        // await Get.find<PushNotificationController>().sendNotification(
+        //     teacherId: sentMsgData.messageFrom ?? "",
+        //     message: sentMsgData.message,
+        //     teacherName:
+        //         Get.find<UserAuthController>().userData.value.name ?? "",
+        //     teacherImage:
+        //         Get.find<UserAuthController>().userData.value.image ?? "",
+        //     messageFrom: sentMsgData.messageFrom ?? "",
+        //     studentClass: sentMsgData.classs ?? "",
+        //     batch: sentMsgData.batch ?? "",
+        //     subId: sentMsgData.subjectId ?? "",
+        //     subjectName: sentMsgData.subject ?? "",
+        //     fileName: sentMsgData.fileData?.name ?? "",
+        //     parentData: [
+        //       {"parent_id": sentMsgData.parents?.first ?? "", "student_id": ""}
+        //     ]);
         audioPath.value = null;
         filePath.value = null;
         showAudioRecordWidget.value =
@@ -523,6 +559,12 @@ class ParentChattingController extends GetxController {
         showAudioPlayingWidget.value =
             false; // for hiding the audio playing widget //
         isReplay.value = null;
+      } else {
+        snackBar(
+            context: context,
+            // message: "Something went wrong.",
+            message: resp['data']['message'],
+            color: Colors.red);
       }
       isSentLoading.value = false;
       print("------msg-------$resp");
@@ -656,7 +698,9 @@ class ParentChattingController extends GetxController {
   List<TextSpan> getMessageText(
       {required String text, required BuildContext context}) {
     const urlPattern =
-        r'((https?:\/\/)?(www\.)?[a-zA-Z0-9-]+\.(com|org|net|edu|gov|mil|int|info|biz|co|us|io|me)([\/\w\-.?&=%#]*)?)';
+        r'((https?:\/\/)?(?:www\.)?[^\s]+(?:\.[^\s]+)+(?:\/[^\s]*)?)';
+    // const urlPattern =
+    //     r'((https?:\/\/)?(www\.)?[a-zA-Z0-9-]+\.(com|org|net|edu|gov|mil|int|info|biz|co|us|io|me|in)([\/\w\-.?&=%#]*)?)';
     final regex = RegExp(urlPattern);
     final matches = regex.allMatches(text);
 
@@ -685,8 +729,8 @@ class ParentChattingController extends GetxController {
         TextSpan(
           text: url,
           style: const TextStyle(
-            color: Colors.blue,
-            // decoration: TextDecoration.underline,
+            color: Colorutils.letters1,
+            decoration: TextDecoration.underline,
           ),
           recognizer: TapGestureRecognizer()
             ..onTap = () async {

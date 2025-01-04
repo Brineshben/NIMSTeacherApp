@@ -24,6 +24,8 @@ class FeedViewController extends GetxController {
   RxBool isLoading = false.obs;
   RxBool isLoaded = false.obs;
   RxBool isError = false.obs;
+  RxBool dbLoader = false.obs;
+  bool isPeriodicFetching = false;
   // Rx<ChatFeedViewModel> chatFeedData = ChatFeedViewModel().obs;
   Rx<ParentListApiModel> parentListApiData = ParentListApiModel().obs;
   RxList<MsgData> chatMsgList = RxList([]);
@@ -150,27 +152,27 @@ class FeedViewController extends GetxController {
       limit: Get.find<FeedViewController>().chatMsgCount,
     );
 
-    // final messageList1 = await Get.find<FeedDBController>().getAllMessages(
-    //     batch: reqBody.batch ?? "",
-    //     studentclass: reqBody.classs ?? "",
-    //     subId: reqBody.subjectId ?? "");
+    final messageList1 = await Get.find<FeedDBController>().getAllMessages(
+        batch: reqBody.batch ?? "",
+        studentclass: reqBody.classs ?? "",
+        subId: reqBody.subjectId ?? "");
 
-    // final unsentList = [];
-    // //await Get.find<FeedDBController>()
-    // //     .getUnSentMessage(teacherId: teacherId, subId: subId);
+    final unsentList = await Get.find<FeedDBController>().getUnSentMessage(
+        studentclass: reqBody.classs ?? "",
+        batch: reqBody.batch ?? "",
+        subId: reqBody.subjectId ?? "");
 
-    // chatMsgList.value = [...unsentList.reversed, ...messageList1];
-    // if (chatMsgList.isNotEmpty) {
-    //   chatMsgList.add(chatMsgList[chatMsgList.length - 1]);
-    // }
-    // isLoading.value = false;
-    // await fetchParentListLocally(
-    //     classs: reqBody.classs ?? "",
-    //     batch: reqBody.batch ?? "",
-    //     subId: reqBody.subjectId ?? "",
-    //     schoolId: reqBody.schoolId ?? "");
+    chatMsgList.value = [...unsentList.reversed, ...messageList1];
+    if (chatMsgList.isNotEmpty) {
+      chatMsgList.add(chatMsgList[chatMsgList.length - 1]);
+    }
 
-    checkInternetWithReturnBool(
+    if (chatMsgList.isEmpty) {
+      dbLoader.value = true;
+    }
+    isLoading.value = false;
+
+    await checkInternetWithReturnBool(
       context: context,
       function: () async {
         try {
@@ -213,33 +215,45 @@ class FeedViewController extends GetxController {
           isError.value = true;
           print('--------feed view error--------');
         } finally {
+          dbLoader.value = false;
           isLoading.value = false;
           print("Finaly worked");
         }
       },
-    ).then(
-      (value) async {
-        final messageList1 = await Get.find<FeedDBController>().getAllMessages(
-            batch: reqBody.batch ?? "",
-            studentclass: reqBody.classs ?? "",
-            subId: reqBody.subjectId ?? "");
-
-        final unsentList = await Get.find<FeedDBController>().getUnSentMessage(
-            studentclass: reqBody.classs ?? "",
-            batch: reqBody.batch ?? "",
-            subId: reqBody.subjectId ?? "");
-
-        chatMsgList.value = [...unsentList.reversed, ...messageList1];
-        if (chatMsgList.isNotEmpty) {
-          chatMsgList.add(chatMsgList[chatMsgList.length - 1]);
-        }
-        isLoading.value = false;
-      },
     );
+    dbLoader.value = false;
+    isLoading.value = false;
+    // .then(
+    //   (value) async {
+    //     final messageList1 = await Get.find<FeedDBController>().getAllMessages(
+    //         batch: reqBody.batch ?? "",
+    //         studentclass: reqBody.classs ?? "",
+    //         subId: reqBody.subjectId ?? "");
+
+    //     final unsentList = await Get.find<FeedDBController>().getUnSentMessage(
+    //         studentclass: reqBody.classs ?? "",
+    //         batch: reqBody.batch ?? "",
+    //         subId: reqBody.subjectId ?? "");
+
+    //     chatMsgList.value = [...unsentList.reversed, ...messageList1];
+    //     if (chatMsgList.isNotEmpty) {
+    //       chatMsgList.add(chatMsgList[chatMsgList.length - 1]);
+    //     }
+
+    //     dbLoader.value = false;
+    //     isLoading.value = false;
+    //   },
+    // );
   }
 
   Future<void> fetchFeedViewMsgListPeriodically(
       ChatFeedViewReqModel reqBody) async {
+    if (isPeriodicFetching) {
+      return; // Prevent overlapping calls
+    }
+
+    isPeriodicFetching = true;
+
     ChatFeedViewModel? chatFeedData;
     ChatFeedViewReqModel chatFeedViewReqModel = ChatFeedViewReqModel(
       teacherId: reqBody.teacherId,
@@ -277,6 +291,7 @@ class FeedViewController extends GetxController {
     } catch (e) {
       print('--------feed view error--------');
     } finally {
+      isPeriodicFetching = false;
       // feedUnreadCount.value = chatFeedData?.data?.count ?? 0;
       // chatMsgList.value = chatFeedData?.data?.data ?? [];
 
@@ -599,6 +614,12 @@ class FeedViewController extends GetxController {
         showAudioPlayingWidget.value =
             false; // for hiding the audio playing widget //
         isReplay.value = null;
+      } else {
+        snackBar(
+            context: context,
+            // message: "Something went wrong.",
+            message: resp['data']['message'],
+            color: Colors.red);
       }
       isSentLoading.value = false;
       // for updating list after sent msg //
@@ -677,6 +698,7 @@ class FeedViewController extends GetxController {
     required BuildContext context,
   }) async {
     try {
+      print("delete -------------- msg id - $msgId , teacher id - $teacherId");
       var resp = await ApiServices.deleteSenderMsg(
           msgId: msgId!, teacherId: teacherId!);
       if (resp['status']['code'] == 200) {
@@ -1056,7 +1078,9 @@ class FeedViewController extends GetxController {
   List<TextSpan> getMessageText(
       {required String text, required BuildContext context}) {
     const urlPattern =
-        r'((https?:\/\/)?(www\.)?[a-zA-Z0-9-]+\.(com|org|net|edu|gov|mil|int|info|biz|co|us|io|me)([\/\w\-.?&=%#]*)?)';
+        r'((https?:\/\/)?(?:www\.)?[^\s]+(?:\.[^\s]+)+(?:\/[^\s]*)?)';
+    // const urlPattern =
+    //     r'((https?:\/\/)?(www\.)?[a-zA-Z0-9-]+\.(com|org|net|edu|gov|mil|int|info|biz|co|us|io|me|in)([\/\w\-.?&=%#]*)?)';
     final regex = RegExp(urlPattern);
     final matches = regex.allMatches(text);
 

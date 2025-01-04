@@ -5,6 +5,7 @@ import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:teacherapp/Controller/db_controller/group_db_controller.dart';
 import 'package:teacherapp/Services/api_services.dart';
 import 'package:teacherapp/Services/common_services.dart';
+import 'package:teacherapp/Utils/Colors.dart';
 import 'package:teacherapp/Utils/constant_function.dart';
 import '../../Models/api_models/chat_feed_view_model.dart';
 
@@ -12,6 +13,7 @@ class GroupedViewController extends GetxController {
   RxBool isLoading = false.obs;
   RxBool isLoaded = false.obs;
   RxBool isError = false.obs;
+  bool isPeriodicFetching = false;
   RxList<MsgData> chatMsgList = <MsgData>[].obs;
   late Rx<AutoScrollController> chatGroupedViewScrollController;
 
@@ -146,6 +148,13 @@ class GroupedViewController extends GetxController {
       ChatFeedViewReqModel reqBody) async {
     print("periodic working 1");
     // ChatFeedViewModel? chatFeedData;
+
+    if (isPeriodicFetching) {
+      return; // Prevent overlapping calls
+    }
+
+    isPeriodicFetching = true;
+
     reqBody.limit = chatMsgCount;
 
     try {
@@ -173,7 +182,9 @@ class GroupedViewController extends GetxController {
       }
     } catch (e) {
       print('--------grouped view error--------');
-    } finally {}
+    } finally {
+      isPeriodicFetching = false;
+    }
     // MsgData? lastMsg = chatFeedData?.data?.data?.first;
     // String? newLastMessageId =
     //     "${lastMsg?.messageId}${lastMsg?.messageFromId}${lastMsg?.sendAt}";
@@ -265,7 +276,9 @@ class GroupedViewController extends GetxController {
   List<TextSpan> getMessageText(
       {required String text, required BuildContext context}) {
     const urlPattern =
-        r'((https?:\/\/)?(www\.)?[a-zA-Z0-9-]+\.(com|org|net|edu|gov|mil|int|info|biz|co|us|io|me)([\/\w\-.?&=%#]*)?)';
+        r'((https?:\/\/)?(?:www\.)?[^\s]+(?:\.[^\s]+)+(?:\/[^\s]*)?)';
+    // const urlPattern =
+    //     r'((https?:\/\/)?(www\.)?[a-zA-Z0-9-]+\.(com|org|net|edu|gov|mil|int|info|biz|co|us|io|me|in)([\/\w\-.?&=%#]*)?)';
     final regex = RegExp(urlPattern);
     final matches = regex.allMatches(text);
 
@@ -294,8 +307,8 @@ class GroupedViewController extends GetxController {
         TextSpan(
           text: url,
           style: const TextStyle(
-            color: Colors.blue,
-            // decoration: TextDecoration.underline,
+            color: Colorutils.letters1,
+            decoration: TextDecoration.underline,
           ),
           recognizer: TapGestureRecognizer()
             ..onTap = () async {

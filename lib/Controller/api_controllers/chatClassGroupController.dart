@@ -89,6 +89,7 @@ class ChatClassGroupController extends GetxController {
         if (!value) {
           classGroupList.value =
               await Get.find<FeedDBController>().getRoomList();
+          dbLoader.value = false;
           isLoading.value = false;
         }
       },

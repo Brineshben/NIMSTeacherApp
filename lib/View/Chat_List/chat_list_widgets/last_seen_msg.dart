@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -19,70 +18,61 @@ class LastSeenMsgGroupChat extends StatelessWidget {
             return Row(
               children: [
                 Container(
-                  width: 17,
-                  height: 18,
-                  decoration:
-                  const BoxDecoration(
+                  width: 15,
+                  height: 17,
+                  decoration: const BoxDecoration(
                     image: DecorationImage(
                       fit: BoxFit.fill,
-                      image: AssetImage(
-                          "assets/images/new-document.png"),
+                      image: AssetImage("assets/images/new-document.png"),
                     ),
                   ),
-                  child: Center(
-                    child: SizedBox(
-                      height: 8,
-                      width: 12,
-                      child: FittedBox(
-                        child: Text(
-                          lastMessage!.fileName!
-                              .split(".")
-                              .last,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w400,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  // child: Center(
+                  //   child: SizedBox(
+                  //     height: 8,
+                  //     width: 12,
+                  //     child: FittedBox(
+                  //       child: Text(
+                  //         lastMessage!.fileName!
+                  //             .split(".")
+                  //             .last,
+                  //         style: const TextStyle(
+                  //           fontWeight: FontWeight.w400,
+                  //           color: Colors.black,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                 ),
                 SizedBox(width: 5.w),
                 Expanded(
                   child: Text(
-                    lastMessage!
-                        .fileName!,
+                    lastMessage!.fileName!,
                     style: TeacherAppFonts.interW400_14sp_textWhite.copyWith(
                       color: Color(0xff535353).withOpacity(0.8),
                     ),
-                    overflow: TextOverflow
-                        .ellipsis,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 )
               ],
             );
-          } else if (lastMessage!
-              .type ==
-              "text") {
+          } else if (lastMessage!.type == "text") {
             return Text(
               // "Can you pls share the pdf adsdaddsf.",
-              lastMessage?.message ?? "--",
-              overflow:
-              TextOverflow.ellipsis,
-
+              lastMessage?.message?.replaceAll('\n', ' ') ?? "--",
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
               style: TeacherAppFonts.interW400_14sp_textWhite.copyWith(
                 color: Color(0xff535353).withOpacity(0.8),
               ),
             );
-          } else if (lastMessage!.type ==
-              "audio") {
+          } else if (lastMessage!.type == "audio") {
             return Row(
               children: [
                 SizedBox(
                   width: 22,
                   height: 15.h,
-                  child: SvgPicture.asset(
-                      "assets/images/Record Audio.svg"),
+                  child: SvgPicture.asset("assets/images/Record Audio.svg"),
                 ),
                 SizedBox(width: 1.w),
                 Expanded(
@@ -91,19 +81,17 @@ class LastSeenMsgGroupChat extends StatelessWidget {
                     style: TeacherAppFonts.interW400_14sp_textWhite.copyWith(
                       color: Color(0xff535353).withOpacity(0.8),
                     ),
-                    overflow: TextOverflow
-                        .ellipsis,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 )
               ],
             );
-          } else if (lastMessage!.type ==
-              "text_file" || lastMessage!.type == "text_audio") {
+          } else if (lastMessage!.type == "text_file" ||
+              lastMessage!.type == "text_audio") {
             return Text(
               // "Can you pls share the pdf adsdaddsf.",
               lastMessage!.message ?? "--",
-              overflow:
-              TextOverflow.ellipsis,
+              overflow: TextOverflow.ellipsis,
 
               style: TeacherAppFonts.interW400_14sp_textWhite.copyWith(
                 color: Color(0xff535353).withOpacity(0.8),
@@ -130,70 +118,59 @@ class LastSeenMsgGroupedViewChat extends StatelessWidget {
             return Row(
               children: [
                 Container(
-                  width: 17,
-                  height: 18,
-                  decoration:
-                  const BoxDecoration(
+                  width: 15,
+                  height: 17,
+                  decoration: const BoxDecoration(
                     image: DecorationImage(
                       fit: BoxFit.fill,
-                      image: AssetImage(
-                          "assets/images/new-document.png"),
+                      image: AssetImage("assets/images/new-document.png"),
                     ),
                   ),
-                  child: Center(
-                    child: SizedBox(
-                      height: 8,
-                      width: 12,
-                      child: FittedBox(
-                        child: Text(
-                          lastMessage!.fileName!
-                              .split(".")
-                              .last,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w400,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  // child: Center(
+                  //   child: SizedBox(
+                  //     height: 8,
+                  //     width: 12,
+                  //     child: FittedBox(
+                  //       child: Text(
+                  //         lastMessage!.fileName!.split(".").last,
+                  //         style: const TextStyle(
+                  //           fontWeight: FontWeight.w400,
+                  //           color: Colors.black,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                 ),
                 SizedBox(width: 5.w),
                 Expanded(
                   child: Text(
-                    lastMessage!
-                        .fileName!,
+                    lastMessage!.fileName!,
                     style: TeacherAppFonts.interW400_14sp_textWhite.copyWith(
                       color: Color(0xff535353).withOpacity(0.8),
                     ),
-                    overflow: TextOverflow
-                        .ellipsis,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 )
               ],
             );
-          } else if (lastMessage!
-              .type ==
-              "text") {
+          } else if (lastMessage!.type == "text") {
             return Text(
               // "Can you pls share the pdf adsdaddsf.",
-              lastMessage?.message ?? "--",
-              overflow:
-              TextOverflow.ellipsis,
-
+              lastMessage?.message?.replaceAll('\n', ' ') ?? "--",
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
               style: TeacherAppFonts.interW400_14sp_textWhite.copyWith(
                 color: Color(0xff535353).withOpacity(0.8),
               ),
             );
-          } else if (lastMessage!.type ==
-              "audio") {
+          } else if (lastMessage!.type == "audio") {
             return Row(
               children: [
                 SizedBox(
                   width: 22,
                   height: 15.h,
-                  child: SvgPicture.asset(
-                      "assets/images/Record Audio.svg"),
+                  child: SvgPicture.asset("assets/images/Record Audio.svg"),
                 ),
                 SizedBox(width: 1.w),
                 Expanded(
@@ -202,19 +179,17 @@ class LastSeenMsgGroupedViewChat extends StatelessWidget {
                     style: TeacherAppFonts.interW400_14sp_textWhite.copyWith(
                       color: Color(0xff535353).withOpacity(0.8),
                     ),
-                    overflow: TextOverflow
-                        .ellipsis,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 )
               ],
             );
-          } else if (lastMessage!.type ==
-              "text_file" || lastMessage!.type == "text_audio") {
+          } else if (lastMessage!.type == "text_file" ||
+              lastMessage!.type == "text_audio") {
             return Text(
               // "Can you pls share the pdf adsdaddsf.",
               lastMessage!.message ?? "--",
-              overflow:
-              TextOverflow.ellipsis,
+              overflow: TextOverflow.ellipsis,
 
               style: TeacherAppFonts.interW400_14sp_textWhite.copyWith(
                 color: Color(0xff535353).withOpacity(0.8),

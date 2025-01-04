@@ -17,14 +17,15 @@ import 'package:teacherapp/Services/check_connectivity.dart';
 import 'package:teacherapp/Services/snackBar.dart';
 
 Future<void> checkInternet(
-    {required BuildContext context, required Function() function}) async {
+    {required BuildContext context,
+    required Future Function() function}) async {
   bool connected = await CheckConnectivity().check();
   bool isConnectionGood = await CheckConnectivity().goodConnection();
   print("internect connection is $connected");
   print("internect Good connection is $isConnectionGood");
   if (connected) {
     if (isConnectionGood) {
-      function();
+      await function();
     } else {
       snackBar(
           context: context,
@@ -40,14 +41,14 @@ Future<void> checkInternet(
 }
 
 Future<void> checkInternetWithOutSnacksbar(
-    {required Function() function}) async {
+    {required Future Function() function}) async {
   bool connected = await CheckConnectivity().check();
   bool isConnectionGood = await CheckConnectivity().goodConnection();
   print("internect connection is $connected");
   print("internect Good connection is $isConnectionGood");
   if (connected) {
     if (isConnectionGood) {
-      function();
+      await function();
     } else {
       print("Something went wrong.");
     }
@@ -57,14 +58,15 @@ Future<void> checkInternetWithOutSnacksbar(
 }
 
 Future<bool> checkInternetWithReturnBool(
-    {required BuildContext context, required Function() function}) async {
+    {required BuildContext context,
+    required Future Function() function}) async {
   bool connected = await CheckConnectivity().check();
   bool isConnectionGood = await CheckConnectivity().goodConnection();
   print("internect connection is $connected");
   print("internect Good connection is $isConnectionGood");
   if (connected) {
     if (isConnectionGood) {
-      function();
+      await function();
       return true;
     } else {
       snackBar(

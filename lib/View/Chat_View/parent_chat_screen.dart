@@ -15,6 +15,7 @@ import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:teacherapp/Controller/api_controllers/userAuthController.dart';
 import 'package:teacherapp/Controller/db_controller/parent_db_controller.dart';
+import 'package:teacherapp/Controller/forward_controller.dart/forward_controller.dart';
 import 'package:teacherapp/Controller/search_controller/search_controller.dart';
 // import 'package:teacherapp/Models/api_models/chat_feed_view_model.dart';
 import 'package:teacherapp/Models/api_models/sent_msg_by_teacher_model.dart';
@@ -74,6 +75,10 @@ class _ParentChatScreenState extends State<ParentChatScreen> {
       offset: 0,
       limit: 100,
     );
+    Get.find<ParentChattingController>().isPeriodicFetching =
+        false; // for set default//
+    Get.find<ParentDbController>().isResentWorking ==
+        false; // for set default//
     initialize();
     parentChattingController.isReplay.value = null;
     parentChattingController.parentChatScrollController.value.addListener(() {
@@ -107,7 +112,9 @@ class _ParentChatScreenState extends State<ParentChatScreen> {
   @override
   void dispose() {
     parentChattingController.parentChatScrollController.value.dispose();
-    chatUpdate!.cancel();
+    if (chatUpdate != null) {
+      chatUpdate!.cancel();
+    }
     super.dispose();
   }
 
@@ -430,8 +437,8 @@ class _ParentChatScreenState extends State<ParentChatScreen> {
                                                 child: Row(
                                                   children: [
                                                     Container(
-                                                      width: 35.w,
-                                                      height: 40.w,
+                                                      width: 25.w,
+                                                      height: 30.w,
                                                       decoration:
                                                           const BoxDecoration(
                                                         image: DecorationImage(
@@ -440,19 +447,19 @@ class _ParentChatScreenState extends State<ParentChatScreen> {
                                                               "assets/images/new-document.png"),
                                                         ),
                                                       ),
-                                                      child: Center(
-                                                          child: Text(
-                                                        controller
-                                                            .filePathList[index]
-                                                            .split(".")
-                                                            .last,
-                                                        style: TeacherAppFonts
-                                                            .interW500_12sp_textWhite
-                                                            .copyWith(
-                                                          fontSize: 10.sp,
-                                                          color: Colors.black,
-                                                        ),
-                                                      )),
+                                                      // child: Center(
+                                                      //     child: Text(
+                                                      //   controller
+                                                      //       .filePathList[index]
+                                                      //       .split(".")
+                                                      //       .last,
+                                                      //   style: TeacherAppFonts
+                                                      //       .interW500_12sp_textWhite
+                                                      //       .copyWith(
+                                                      //     fontSize: 10.sp,
+                                                      //     color: Colors.black,
+                                                      //   ),
+                                                      // )),
                                                     ),
                                                     wSpace(5),
                                                     Expanded(
@@ -513,7 +520,7 @@ class _ParentChatScreenState extends State<ParentChatScreen> {
                                       child: Row(
                                         children: [
                                           Container(
-                                            width: 35.w,
+                                            width: 25.w,
                                             height: 30.w,
                                             decoration: const BoxDecoration(
                                               image: DecorationImage(
@@ -522,19 +529,19 @@ class _ParentChatScreenState extends State<ParentChatScreen> {
                                                     "assets/images/new-document.png"),
                                               ),
                                             ),
-                                            child: Center(
-                                                child: Text(
-                                              parentChattingController
-                                                  .filePath.value!
-                                                  .split(".")
-                                                  .last,
-                                              style: TeacherAppFonts
-                                                  .interW500_12sp_textWhite
-                                                  .copyWith(
-                                                fontSize: 10.sp,
-                                                color: Colors.black,
-                                              ),
-                                            )),
+                                            // child: Center(
+                                            //     child: Text(
+                                            //   parentChattingController
+                                            //       .filePath.value!
+                                            //       .split(".")
+                                            //       .last,
+                                            //   style: TeacherAppFonts
+                                            //       .interW500_12sp_textWhite
+                                            //       .copyWith(
+                                            //     fontSize: 10.sp,
+                                            //     color: Colors.black,
+                                            //   ),
+                                            // )),
                                           ),
                                           SizedBox(width: 5.w),
                                           Expanded(
@@ -624,8 +631,8 @@ class _ParentChatScreenState extends State<ParentChatScreen> {
                                                           return Row(
                                                             children: [
                                                               Container(
-                                                                width: 17,
-                                                                height: 18,
+                                                                width: 15,
+                                                                height: 17,
                                                                 decoration:
                                                                     const BoxDecoration(
                                                                   image:
@@ -636,32 +643,32 @@ class _ParentChatScreenState extends State<ParentChatScreen> {
                                                                         "assets/images/new-document.png"),
                                                                   ),
                                                                 ),
-                                                                child: Center(
-                                                                  child:
-                                                                      SizedBox(
-                                                                    height: 8,
-                                                                    width: 12,
-                                                                    child:
-                                                                        FittedBox(
-                                                                      child:
-                                                                          Text(
-                                                                        parentChattingController
-                                                                            .replayMessage
-                                                                            .fileName!
-                                                                            .split(".")
-                                                                            .last,
-                                                                        style: TeacherAppFonts
-                                                                            .interW400_14sp_textWhite
-                                                                            .copyWith(
-                                                                          fontSize:
-                                                                              8.sp,
-                                                                          color:
-                                                                              Colors.black,
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                ),
+                                                                // child: Center(
+                                                                //   child:
+                                                                //       SizedBox(
+                                                                //     height: 8,
+                                                                //     width: 12,
+                                                                //     child:
+                                                                //         FittedBox(
+                                                                //       child:
+                                                                //           Text(
+                                                                //         parentChattingController
+                                                                //             .replayMessage
+                                                                //             .fileName!
+                                                                //             .split(".")
+                                                                //             .last,
+                                                                //         style: TeacherAppFonts
+                                                                //             .interW400_14sp_textWhite
+                                                                //             .copyWith(
+                                                                //           fontSize:
+                                                                //               8.sp,
+                                                                //           color:
+                                                                //               Colors.black,
+                                                                //         ),
+                                                                //       ),
+                                                                //     ),
+                                                                //   ),
+                                                                // ),
                                                               ),
                                                               SizedBox(
                                                                   width: 5.h),
@@ -1387,6 +1394,8 @@ class ChatList extends StatelessWidget {
         List<ParentMsgData> msgList = controller.chatMsgList.value;
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
+        } else if (controller.dbLoader.value == true) {
+          return const Center(child: Text("Loading..."));
         } else if (controller.isError.value) {
           return const Center(child: Text("Error Occurred"));
         } else if (controller.chatMsgList.isEmpty) {
@@ -1756,6 +1765,9 @@ class SentMessageBubble extends StatelessWidget {
                                     false) {
                                   Get.find<ParentChattingController>()
                                       .seletedMsgData = messageData;
+                                  Get.find<ForwardController>()
+                                          .forwordMessageId =
+                                      messageData?.messageId ?? "";
 
                                   messageMoreShowDialog(context, this, position,
                                       _tapPosition, data);
@@ -1810,12 +1822,13 @@ class SentMessageBubble extends StatelessWidget {
                                                     messageData!.replyData!,
                                               )
                                             : const SizedBox(),
-                                        fileName != null
+                                        fileName != null &&
+                                                messageData?.type == "file"
                                             ? FileWidget1(
                                                 fileType:
                                                     fileName!.split(".").last,
-                                                fileName: fileName!,
-                                                fileLink: fileLink!,
+                                                fileName: fileName ?? "",
+                                                fileLink: fileLink ?? "",
                                                 messageId:
                                                     messageData?.messageId ??
                                                         "")
@@ -1823,15 +1836,18 @@ class SentMessageBubble extends StatelessWidget {
                                         audio != null
                                             ? audio?.split('.').last == "wav"
                                                 ? AudioWidget(
-                                                    content: audio!,
+                                                    content: audio ?? "",
                                                     messageId: messageData!
                                                             .messageId ??
                                                         "")
                                                 : AudioFileWidget(
-                                                    content: audio!,
+                                                    content: audio ?? "",
                                                     messageId: messageData!
                                                             .messageId ??
-                                                        "")
+                                                        "",
+                                                    audioFileName:
+                                                        fileName ?? "",
+                                                  )
                                             : const SizedBox(),
                                         message != null && fileName != null ||
                                                 audio != null
@@ -2395,6 +2411,8 @@ class ReceiveMessageBubble extends StatelessWidget {
                                 false) {
                               Get.find<ParentChattingController>()
                                   .seletedMsgData = messageData;
+                              Get.find<ForwardController>().forwordMessageId =
+                                  messageData?.messageId ?? "";
                               messageMoreShowDialog(
                                   context, this, position, _tapPosition, null);
                               Get.find<ParentChattingController>()
@@ -2489,12 +2507,13 @@ class ReceiveMessageBubble extends StatelessWidget {
                                                     messageData!.replyData!,
                                               )
                                             : const SizedBox(),
-                                        fileName != null
+                                        fileName != null &&
+                                                messageData?.type == "file"
                                             ? FileWidget2(
                                                 fileType:
                                                     fileName!.split(".").last,
-                                                fileName: fileName!,
-                                                fileLink: fileLink!,
+                                                fileName: fileName ?? "",
+                                                fileLink: fileLink ?? "",
                                                 messageId:
                                                     messageData?.messageId ??
                                                         "")
@@ -2502,15 +2521,18 @@ class ReceiveMessageBubble extends StatelessWidget {
                                         audio != null
                                             ? audio?.split('.').last == "wav"
                                                 ? AudioWidget2(
-                                                    content: audio!,
+                                                    content: audio ?? "",
                                                     messageId: messageData!
                                                             .messageId ??
                                                         "")
                                                 : AudioFileWidget2(
-                                                    content: audio!,
+                                                    content: audio ?? "",
                                                     messageId: messageData!
                                                             .messageId ??
-                                                        "")
+                                                        "",
+                                                    audioFileName:
+                                                        fileName ?? "",
+                                                  )
                                             : const SizedBox(),
                                         message != null && fileName != null ||
                                                 audio != null

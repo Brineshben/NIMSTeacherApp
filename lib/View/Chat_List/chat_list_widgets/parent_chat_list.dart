@@ -196,7 +196,7 @@ class ParentChatList extends StatelessWidget {
                   ),
                 ),
               );
-            } else if (chatParentList.isEmpty) {
+            } else if (controller.parentChatList.isEmpty) {
               return Expanded(
                 child: Container(
                   color: Colors.white,
@@ -216,13 +216,14 @@ class ParentChatList extends StatelessWidget {
                   onRefresh: () async {
                     // context.loaderOverlay.show();
 
-                    checkInternet(
-                      context: context,
-                      function: () async {
-                        await Get.find<ParentChatListController>()
-                            .fetchParentChatList(context: context);
-                      },
-                    );
+                    // checkInternet(
+                    //   context: context,
+                    //   function: () async {
+
+                    //   },
+                    // );
+                    await Get.find<ParentChatListController>()
+                        .fetchParentChatList(context: context);
                   },
                   child: ListView.separated(
                     padding: const EdgeInsets.all(0),
@@ -404,8 +405,8 @@ class ChatItem extends StatelessWidget {
                                       return Row(
                                         children: [
                                           Container(
-                                            width: 17,
-                                            height: 18,
+                                            width: 15,
+                                            height: 17,
                                             decoration: const BoxDecoration(
                                               image: DecorationImage(
                                                 fit: BoxFit.fill,
@@ -413,25 +414,25 @@ class ChatItem extends StatelessWidget {
                                                     "assets/images/new-document.png"),
                                               ),
                                             ),
-                                            child: Center(
-                                              child: SizedBox(
-                                                height: 8,
-                                                width: 12,
-                                                child: FittedBox(
-                                                  child: Text(
-                                                    parentRoom
-                                                        .lastMessage!.fileName!
-                                                        .split(".")
-                                                        .last,
-                                                    style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      color: Colors.black,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
+                                            // child: Center(
+                                            //   child: SizedBox(
+                                            //     height: 8,
+                                            //     width: 12,
+                                            //     child: FittedBox(
+                                            //       child: Text(
+                                            //         parentRoom
+                                            //             .lastMessage!.fileName!
+                                            //             .split(".")
+                                            //             .last,
+                                            //         style: const TextStyle(
+                                            //           fontWeight:
+                                            //               FontWeight.w400,
+                                            //           color: Colors.black,
+                                            //         ),
+                                            //       ),
+                                            //     ),
+                                            //   ),
+                                            // ),
                                           ),
                                           SizedBox(width: 5.w),
                                           Expanded(
@@ -452,9 +453,11 @@ class ChatItem extends StatelessWidget {
                                         "text") {
                                       return Text(
                                         // "Can you pls share the pdf adsdaddsf.",
-                                        parentRoom.lastMessage?.message ?? "--",
+                                        parentRoom.lastMessage?.message
+                                                ?.replaceAll('\n', ' ') ??
+                                            "--",
                                         overflow: TextOverflow.ellipsis,
-
+                                        maxLines: 1,
                                         style: TeacherAppFonts
                                             .interW400_14sp_textWhite
                                             .copyWith(

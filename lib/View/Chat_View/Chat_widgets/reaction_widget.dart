@@ -154,6 +154,7 @@ class SingleReactionIcon extends StatelessWidget {
     );
     return GestureDetector(
       onTap: () {
+        print("reaction ------------ ${data}");
         Get.find<ReactionController>().postReaction(
             context: context,
             reaction: emoji,

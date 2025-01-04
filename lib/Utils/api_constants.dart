@@ -62,13 +62,15 @@ class ApiConstants {
   static String forgotPassword = "/v1/forgot_password";
   static String lessonSubmit = "/v2/lesson_observation/submit_evaluation";
   static String learningWalkSubmit = "/v2/learning_walk/submit_evaluation";
-  static String observationResult = "/v0/learning-observation/get/userSubmissions";
+  static String observationResult =
+      "/v0/learning-observation/get/userSubmissions";
   static String fcmSentApi = "/v0/educare/add/login_tracker";
   static String notificationclinic = "/v1/teacherApp/clinic/update";
   static String messagePushNotifiaction = "/v0/notifications_teacher_parrent";
   static String submitLearningWalkRemarks = "/v0/learning-walk/addTeacherCmnt";
   static String obsResultList = "/v0/learning-observation/submissionView/";
-  static String submitLessonObservationRemarks = "/v0/lesson-observation/addTeacherCmnt";
+  static String submitLessonObservationRemarks =
+      "/v0/lesson-observation/addTeacherCmnt";
   static String leaveRequestApproval = "/v0/update/leave";
   static String hierarchyList = "/v0/markentry/page/list/approvers";
   static String reportsApiEnd = "/api/App";
@@ -79,7 +81,7 @@ class ApiConstants {
   static String hosStudentsListClinic = "/v2/get_hod_visit";
   static String hosDataUpdateClinic = "/v2/update_hod_visit";
   static String hosAllStudentListClinic = "/v2/get_all_hod_visit";
-  static String logoutFcm = "v1/user_logout";
+  static String logoutFcm = "/v1/user_logout";
   static String classsLW = "/v0/get/lw/classes";
   static String teacherLW = "/v0/get/teachers";
   static String batchLW = "/v0/get/batches";

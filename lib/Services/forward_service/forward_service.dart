@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:teacherapp/Controller/api_controllers/feedViewController.dart';
 import 'package:teacherapp/Controller/api_controllers/parentChatController.dart';
+import 'package:teacherapp/Controller/forward_controller.dart/forward_controller.dart';
 import 'package:teacherapp/Models/api_models/sent_msg_by_teacher_model.dart';
 import 'package:teacherapp/Utils/api_constants.dart';
 
@@ -25,8 +26,8 @@ class ForwardService {
       "parents": teacherMsg.parents,
       "file_data": {"name": null, "org_name": null, "extension": null},
       "is_forward": true,
-      "is_forward_id":
-          Get.find<ParentChattingController>().seletedMsgData!.messageId
+      "is_forward_id": Get.find<ForwardController>().forwordMessageId
+      // Get.find<ParentChattingController>().seletedMsgData!.messageId
     };
 
     try {
@@ -68,7 +69,8 @@ class ForwardService {
       "parents": teacherMsg.parents,
       "file_data": {"name": null, "org_name": null, "extension": null},
       "is_forward": true,
-      "is_forward_id": Get.find<FeedViewController>().seletedMsgData!.messageId
+      "is_forward_id": Get.find<ForwardController>().forwordMessageId
+      // Get.find<FeedViewController>().seletedMsgData!.messageId
     };
 
     try {

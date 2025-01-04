@@ -738,23 +738,7 @@ class FeedDBController extends GetxController {
                         //     Get.find<MessageController>().audioPath.value ??
                         //         Get.find<MessageController>().filePath.value,
                         message: msg['message']);
-
-                    // await Get.find<FeedViewController>().fetchFeedViewMsgListPeriodically(
-                    //     context: context,
-                    //     studentClass: studentClass,
-                    //     batch: batch,
-                    //     subId: subId,
-                    //     parentId: Get.find<StudentController>().parentId,
-                    //     teacherId: teacherId,
-                    //     studentId: Get.find<StudentController>()
-                    //         .studentList[Get.find<StudentController>()
-                    //             .currentStudentIndex
-                    //             .value]
-                    //         .userId!);
                   } else {
-                    // List<String> parentList =
-                    //     jsonEncode(msg['parent_id']) as List<String>? ?? [];
-
                     print(
                         "parent list ----------------- ${jsonDecode(msg['parent_id'])}");
 
