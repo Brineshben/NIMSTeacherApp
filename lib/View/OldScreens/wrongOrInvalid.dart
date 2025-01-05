@@ -78,6 +78,7 @@ class _WrongOrInvalidState extends State<WrongOrInvalid> {
       "commited_date": getCurrentDate().toString(),
       "status": newValue.toString(),
       "employee_code": widget.employeeCode,
+      "employee_email": userAuthController.userData.value.username,
       "followup_fee_amount": widget.fees
     });
     print(bdy);

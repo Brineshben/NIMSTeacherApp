@@ -61,6 +61,7 @@ class _misbehavState extends State<misbehav> {
       "status": dropdownValue.toString(),
       "commited_date": getCurrentDate().toString(),
       "employee_code": widget.employeeCode,
+      "employee_email": userAuthController.userData.value.username,
       "followup_fee_amount": widget.fees
     };
     print(bdy);

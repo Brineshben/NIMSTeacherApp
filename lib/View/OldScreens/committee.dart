@@ -73,6 +73,7 @@ class _CommittedPageState extends State<CommittedPage> {
       "commited_date": "${selectedDate.toLocal()}".split(' ')[0],
       "status": "1",
       "employee_code": widget.employeeCode,
+      "employee_email": userAuthController.userData.value.username,
       "followup_fee_amount": widget.fees
     });
     print(bdy);

@@ -54,6 +54,7 @@ class _CallNotAnsweredState extends State<CallNotAnswered> {
       "feedback": remarkController.text,
       "status": "4",
       "employee_code": widget.employeeCode,
+      "employee_email": userAuthController.userData.value.username,
       "followup_fee_amount": widget.fees
     });
     print(bdy);

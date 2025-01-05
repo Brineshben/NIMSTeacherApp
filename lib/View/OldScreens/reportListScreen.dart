@@ -42,6 +42,7 @@ class _ReportListViewState extends State<ReportListView> {
   var newTeacherData;
   var classB = [];
   var employeeUnderHOS = [];
+  var employeeEmailUnderHOS = [];
   final bool _isListening = false;
   final String _textSpeech = "Search Here";
 
@@ -81,20 +82,30 @@ class _ReportListViewState extends State<ReportListView> {
     final bdy = {
       "action": "getFeedbackTotalSummaryData",
       "token": userAuthController.schoolToken.value,
-      "employee_code": userAuthController.userData.value.employeeNo
+      "employee_code": json.encode(employeeUnderHOS.isEmpty ? [userAuthController.userData.value.employeeNo] : employeeUnderHOS),
+      "employee_email": json.encode(employeeEmailUnderHOS.isEmpty ? [userAuthController.userData.value.username] : employeeEmailUnderHOS),
     };
 
     log("the >>>>>>>>>>>>>>>>>>>>> $bdy");
 
-    final response = await http.post(Uri.parse(ApiConstants.docMeUrl + ApiConstants.reportsApiEnd),
-        headers: headers, body: json.encode(bdy));
+    var request = http.Request('POST', Uri.parse(ApiConstants.docMeUrl + ApiConstants.reportsApiEnd));
+
+    request.body = (json.encode(bdy));
+
+    request.headers.addAll(headers);
+    log('responserbodybodyesponse${request.body}');
+    http.StreamedResponse response = await request.send();
+
+    var respString = await response.stream.bytesToString();
+
+    // final response = await http.post(Uri.parse(ApiConstants.docMeUrl + ApiConstants.reportsApiEnd),
+    //     headers: headers, body: json.encode(bdy));
 
     //final responseJson = json.decode(response.body);
-    print('responserbodybodyesponse${response.body}');
     print(response.statusCode);
     if (response.statusCode == 200) {
       setState(() {
-        teacherList = json.decode(response.body);
+        teacherList = json.decode(respString);
         if(teacherList?["data"] != null && teacherList?["data"] != true && teacherList?["data"] != false) {
           newTeacherList = teacherList?["data"] ?? [];
         }
@@ -122,320 +133,337 @@ class _ReportListViewState extends State<ReportListView> {
       'x-auth-token': 'tq355lY3MJyd8Uj2ySzm',
       'Content-Type': 'application/json'
     };
-    var request = http.Request(
-        'POST', Uri.parse("${ApiConstants.baseUrl}${ApiConstants.workLoad}"));
-    // request.body = json.encode(
-    //     {"user_id": userAuthController.selectedHos.value?.userId ?? '--'});
-    request.body = json.encode(
-        {"user_id": userAuthController.userData.value.userId ?? '--'});
-    request.headers.addAll(headers);
+    try {
+      var request = http.Request(
+          'POST', Uri.parse("${ApiConstants.baseUrl}${ApiConstants.workLoad}"));
+      // request.body = json.encode(
+      //     {"user_id": userAuthController.selectedHos.value?.userId ?? '--'});
+      request.body = json.encode(
+          {"user_id": userAuthController.userData.value.userId ?? '--'});
+      request.headers.addAll(headers);
 
-    http.StreamedResponse response = await request.send();
-    print(response.statusCode);
-    print('----rrreeeqqq${request.body}');
-    if (response.statusCode == 200) {
-      var responseData = await response.stream.bytesToString();
-      setState(() {
-        isSpinner = false;
-      });
-      loginCredential = json.decode(responseData);
-      SharedPreferences preference = await SharedPreferences.getInstance();
-      preference.setString('loginCredential', json.encode(loginCredential));
-      log("api resss-----$loginCredential");
-      print('--------------c----------');
-      print('array--${loginCredential!["data"]["data"][0]["all_roles_array"]}');
+      http.StreamedResponse response = await request.send();
+      print(response.statusCode);
+      print('----rrreeeqqq${request.body}');
+      if (response.statusCode == 200) {
+        var responseData = await response.stream.bytesToString();
+        setState(() {
+          isSpinner = false;
+        });
+        loginCredential = json.decode(responseData);
+        SharedPreferences preference = await SharedPreferences.getInstance();
+        preference.setString('loginCredential', json.encode(loginCredential));
+        log("api resss-----$loginCredential");
+        print('--------------c----------');
+        print('array--${loginCredential?["data"]["data"][0]["all_roles_array"]}');
 
-      print('---------------end of----role ids-----------------');
-      // print(loginCredential!["data"]["data"][0]["faculty_data"]
-      // ["teacherComponent"]["is_class_teacher"]);
+        print('---------------end of----role ids-----------------');
+        // print(loginCredential!["data"]["data"][0]["faculty_data"]
+        // ["teacherComponent"]["is_class_teacher"]);
 
-      img = loginCredential!["data"]["data"][0]["image"];
+        img = loginCredential?["data"]["data"][0]["image"];
 
-      print(">>>>>>>$img<<<<<<<");
-      Map<String, dynamic> facultyData =
-          loginCredential!["data"]["data"][0]["faculty_data"];
-      if (facultyData.containsKey("teacherComponent") ||
-          facultyData.containsKey("supervisorComponent") ||
-          facultyData.containsKey("hosComponent") ||
-          facultyData.containsKey("hodComponent")) {
-        if (facultyData.containsKey("teacherComponent")) {
-          if (loginCredential!["data"]["data"][0]["faculty_data"]
-                      ["teacherComponent"]["is_class_teacher"] ==
-                  true ||
-              loginCredential!["data"]["data"][0]["faculty_data"]
-                      ["teacherComponent"]["is_class_teacher"] ==
-                  false) {
-            print("-----------------------------------teacher");
+        print(">>>>>>>$img<<<<<<<");
+        Map<String, dynamic> facultyData =
+        loginCredential!["data"]["data"][0]["faculty_data"];
+        if (facultyData.containsKey("teacherComponent") ||
+            facultyData.containsKey("supervisorComponent") ||
+            facultyData.containsKey("hosComponent") ||
+            facultyData.containsKey("hodComponent")) {
+          if (facultyData.containsKey("teacherComponent")) {
+            if (loginCredential!["data"]["data"][0]["faculty_data"]
+            ["teacherComponent"]["is_class_teacher"] ==
+                true ||
+                loginCredential!["data"]["data"][0]["faculty_data"]
+                ["teacherComponent"]["is_class_teacher"] ==
+                    false) {
+              print("-----------------------------------teacher");
 
-            for (var index = 0;
-                index <
-                    loginCredential!["data"]["data"][0]["faculty_data"]
-                            ["teacherComponent"]["own_list"]
-                        .length;
-                index++) {
-              var classBatch = loginCredential!["data"]["data"][0]
-                      ["faculty_data"]["teacherComponent"]["own_list"][index]
-                  ["academic"];
+              for (var index = 0;
+              index <
+                  loginCredential!["data"]["data"][0]["faculty_data"]
+                  ["teacherComponent"]["own_list"]
+                      .length;
+              index++) {
+                var classBatch = loginCredential!["data"]["data"][0]
+                ["faculty_data"]["teacherComponent"]["own_list"][index]
+                ["academic"];
 
-              var sessionId = loginCredential!["data"]["data"][0]
-                      ["faculty_data"]["teacherComponent"]["own_list"][index]
-                  ["session"]["_id"];
+                var sessionId = loginCredential!["data"]["data"][0]
+                ["faculty_data"]["teacherComponent"]["own_list"][index]
+                ["session"]["_id"];
 
-              var curriculumId = loginCredential!["data"]["data"][0]
-                      ["faculty_data"]["teacherComponent"]["own_list"][index]
-                  ["curriculum"]["_id"];
+                var curriculumId = loginCredential!["data"]["data"][0]
+                ["faculty_data"]["teacherComponent"]["own_list"][index]
+                ["curriculum"]["_id"];
 
-              var batchID = loginCredential!["data"]["data"][0]["faculty_data"]
-                  ["teacherComponent"]["own_list"][index]["batch"]["_id"];
+                var batchID = loginCredential!["data"]["data"][0]["faculty_data"]
+                ["teacherComponent"]["own_list"][index]["batch"]["_id"];
 
-              var classID = loginCredential!["data"]["data"][0]["faculty_data"]
-                  ["teacherComponent"]["own_list"][index]["class"]["_id"];
+                var classID = loginCredential!["data"]["data"][0]["faculty_data"]
+                ["teacherComponent"]["own_list"][index]["class"]["_id"];
 
-              duplicateTeacherData.add({
-                "class": "${classBatch.split("/")[2]} ${classBatch.split("/")[3]}",
-                "session_id": sessionId,
-                "curriculumId": curriculumId,
-                "batch_id": batchID,
-                "class_id": classID,
-                "is_Class_teacher": loginCredential!["data"]["data"][0]
-                        ["faculty_data"]["teacherComponent"]["own_list"][index]
-                    ["is_class_teacher"]
-              });
-              print(
-                  '${loginCredential!["data"]["data"][0]["faculty_data"]["teacherComponent"]["own_list"][0]["subjects"]}');
-              for (var ind = 0;
-                  ind <
-                      loginCredential!["data"]["data"][0]["faculty_data"]
-                                  ["teacherComponent"]["own_list"][index]
-                              ["subjects"]
-                          .length;
-                  ind++) {
-                var subjects = loginCredential!["data"]["data"][0]
-                        ["faculty_data"]["teacherComponent"]["own_list"][index]
-                    ["subjects"][ind]["name"];
-
-                teacherData.add({
+                duplicateTeacherData.add({
                   "class": "${classBatch.split("/")[2]} ${classBatch.split("/")[3]}",
-                  "subjects": subjects,
                   "session_id": sessionId,
                   "curriculumId": curriculumId,
                   "batch_id": batchID,
                   "class_id": classID,
                   "is_Class_teacher": loginCredential!["data"]["data"][0]
-                          ["faculty_data"]["teacherComponent"]["own_list"]
-                      [index]["is_class_teacher"]
+                  ["faculty_data"]["teacherComponent"]["own_list"][index]
+                  ["is_class_teacher"]
                 });
-              }
-            }
-
-            var removeDuplicates = duplicateTeacherData.toSet().toList();
-            var newClassTeacherCLass = removeDuplicates
-                .where((element) => element.containsValue(true))
-                .toSet()
-                .toList();
-
-            newTeacherData = newClassTeacherCLass;
-            log("tdhdhdhdhdhdbhdhd ${newTeacherData.length}");
-
-            log(">>>>>>>>hoslistingteacherData>>>>>>>>$teacherData");
-            // print(" the length of class_group $employeeUnderHOS");
-
-            print(classB);
-
-            print(loginCredential);
-
-            setState(() {
-              isSpinner = false;
-            });
-          }
-        }
-        if (facultyData.containsKey("supervisorComponent")) {
-          if (loginCredential!["data"]["data"][0]["faculty_data"]
-                  ["supervisorComponent"]["is_hos"] ==
-              true) {
-            for (var ind = 0;
+                print(
+                    '${loginCredential!["data"]["data"][0]["faculty_data"]["teacherComponent"]["own_list"][0]["subjects"]}');
+                for (var ind = 0;
                 ind <
                     loginCredential!["data"]["data"][0]["faculty_data"]
-                            ["supervisorComponent"]["own_list_groups"]
+                    ["teacherComponent"]["own_list"][index]
+                    ["subjects"]
                         .length;
                 ind++) {
-              for (var index = 0;
-                  index <
-                      loginCredential!["data"]["data"][0]["faculty_data"]
-                                  ["supervisorComponent"]["own_list_groups"]
-                              [ind]["class_group"]
-                          .length;
-                  index++) {
-                if (loginCredential!["data"]["data"][0]["faculty_data"]
-                            ["supervisorComponent"]["own_list_groups"][ind]
-                        ["class_group"][index]
-                    .containsKey("class_teacher")) {
-                  var employeeUnderHod = loginCredential!["data"]["data"][0]
-                              ["faculty_data"]["supervisorComponent"]
-                          ["own_list_groups"][ind]["class_group"][index]
-                      ["class_teacher"]["employee_no"];
-                  employeeUnderHOS.add(employeeUnderHod);
+                  var subjects = loginCredential!["data"]["data"][0]
+                  ["faculty_data"]["teacherComponent"]["own_list"][index]
+                  ["subjects"][ind]["name"];
+
+                  teacherData.add({
+                    "class": "${classBatch.split("/")[2]} ${classBatch.split("/")[3]}",
+                    "subjects": subjects,
+                    "session_id": sessionId,
+                    "curriculumId": curriculumId,
+                    "batch_id": batchID,
+                    "class_id": classID,
+                    "is_Class_teacher": loginCredential!["data"]["data"][0]
+                    ["faculty_data"]["teacherComponent"]["own_list"]
+                    [index]["is_class_teacher"]
+                  });
                 }
               }
+
+              var removeDuplicates = duplicateTeacherData.toSet().toList();
+              var newClassTeacherCLass = removeDuplicates
+                  .where((element) => element.containsValue(true))
+                  .toSet()
+                  .toList();
+
+              newTeacherData = newClassTeacherCLass;
+              log("tdhdhdhdhdhdbhdhd ${newTeacherData.length}");
+
+              log(">>>>>>>>hoslistingteacherData>>>>>>>>$teacherData");
+              // print(" the length of class_group $employeeUnderHOS");
+
+              print(classB);
+
+              print(loginCredential);
+
+              setState(() {
+                isSpinner = false;
+              });
             }
-            for (var index = 0;
+          }
+          if (facultyData.containsKey("supervisorComponent")) {
+            if (loginCredential!["data"]["data"][0]["faculty_data"]
+            ["supervisorComponent"]["is_hos"] ==
+                true) {
+              for (var ind = 0;
+              ind <
+                  loginCredential!["data"]["data"][0]["faculty_data"]
+                  ["supervisorComponent"]["own_list_groups"]
+                      .length;
+              ind++) {
+                for (var index = 0;
                 index <
                     loginCredential!["data"]["data"][0]["faculty_data"]
-                            ["supervisorComponent"]["own_list_groups"]
+                    ["supervisorComponent"]["own_list_groups"]
+                    [ind]["class_group"]
                         .length;
                 index++) {
-              for (var ind = 0;
-                  ind <
-                      loginCredential!["data"]["data"][0]["faculty_data"]
-                                  ["supervisorComponent"]["own_list_groups"]
-                              [index]["class_group"]
-                          .length;
-                  ind++) {
-                var classBatch = loginCredential!["data"]["data"][0]
-                        ["faculty_data"]["supervisorComponent"]
-                    ["own_list_groups"][index]["class_group"][ind]["academic"];
-                classB.add("${classBatch.split("/")[2]} ${classBatch.split("/")[3]}");
+                  if (loginCredential!["data"]["data"][0]["faculty_data"]
+                  ["supervisorComponent"]["own_list_groups"][ind]
+                  ["class_group"][index]
+                      .containsKey("class_teacher")) {
+                    var employeeUnderHod = loginCredential!["data"]["data"][0]
+                    ["faculty_data"]["supervisorComponent"]
+                    ["own_list_groups"][ind]["class_group"][index]
+                    ["class_teacher"]["employee_no"];
+                    var employeeEmailUnderHod = loginCredential!["data"]["data"][0]
+                    ["faculty_data"]["supervisorComponent"]
+                    ["own_list_groups"][ind]["class_group"][index]
+                    ["class_teacher"]["username"];
+                    employeeUnderHOS.add(employeeUnderHod);
+                    employeeEmailUnderHOS.add(employeeEmailUnderHod);
+                  }
+                }
               }
-            }
-
-            print('employeeUnderHOS__---__$employeeUnderHOS');
-
-            print("???????????????????????????????????????????????????$classB");
-
-            print(loginCredential);
-
-            setState(() {
-              isSpinner = false;
-            });
-          }
-        }
-        if (facultyData.containsKey("hosComponent")) {
-          print("hos Component");
-          if (loginCredential!["data"]["data"][0]["faculty_data"]
-                  ["hosComponent"]["is_hos"] ==
-              true) {
-            for (var ind = 0;
+              for (var index = 0;
+              index <
+                  loginCredential!["data"]["data"][0]["faculty_data"]
+                  ["supervisorComponent"]["own_list_groups"]
+                      .length;
+              index++) {
+                for (var ind = 0;
                 ind <
                     loginCredential!["data"]["data"][0]["faculty_data"]
-                            ["hosComponent"]["own_list_groups"]
+                    ["supervisorComponent"]["own_list_groups"]
+                    [index]["class_group"]
                         .length;
                 ind++) {
-              for (var index = 0;
-                  index <
-                      loginCredential!["data"]["data"][0]["faculty_data"]
-                                  ["hosComponent"]["own_list_groups"][ind]
-                              ["class_group"]
-                          .length;
-                  index++) {
-                if (loginCredential!["data"]["data"][0]["faculty_data"]
-                            ["hosComponent"]["own_list_groups"][ind]
-                        ["class_group"][index]
-                    .containsKey("class_teacher")) {
-                  var employeeUnderHod = loginCredential!["data"]["data"][0]
-                              ["faculty_data"]["hosComponent"]
-                          ["own_list_groups"][ind]["class_group"][index]
-                      ["class_teacher"]["employee_no"];
-
-                  print('----empid--$employeeUnderHod');
-                  employeeUnderHOS.add(employeeUnderHod);
+                  var classBatch = loginCredential!["data"]["data"][0]
+                  ["faculty_data"]["supervisorComponent"]
+                  ["own_list_groups"][index]["class_group"][ind]["academic"];
+                  classB.add("${classBatch.split("/")[2]} ${classBatch.split("/")[3]}");
                 }
               }
+
+              print('employeeUnderHOS__---__$employeeUnderHOS');
+
+              print("???????????????????????????????????????????????????$classB");
+
+              print(loginCredential);
+
+              setState(() {
+                isSpinner = false;
+              });
             }
-            for (var index = 0;
+          }
+          if (facultyData.containsKey("hosComponent")) {
+            print("hos Component");
+            if (loginCredential!["data"]["data"][0]["faculty_data"]
+            ["hosComponent"]["is_hos"] ==
+                true) {
+              for (var ind = 0;
+              ind <
+                  loginCredential!["data"]["data"][0]["faculty_data"]
+                  ["hosComponent"]["own_list_groups"]
+                      .length;
+              ind++) {
+                for (var index = 0;
                 index <
                     loginCredential!["data"]["data"][0]["faculty_data"]
-                            ["hosComponent"]["own_list_groups"]
+                    ["hosComponent"]["own_list_groups"][ind]
+                    ["class_group"]
                         .length;
                 index++) {
-              for (var ind = 0;
-                  ind <
-                      loginCredential!["data"]["data"][0]["faculty_data"]
-                                  ["hosComponent"]["own_list_groups"][index]
-                              ["class_group"]
-                          .length;
-                  ind++) {
-                var classBatch = loginCredential!["data"]["data"][0]
-                        ["faculty_data"]["hosComponent"]["own_list_groups"]
-                    [index]["class_group"][ind]["academic"];
-                classB.add("${classBatch.split("/")[2]} ${classBatch.split("/")[3]}");
+                  if (loginCredential!["data"]["data"][0]["faculty_data"]
+                  ["hosComponent"]["own_list_groups"][ind]
+                  ["class_group"][index]
+                      .containsKey("class_teacher")) {
+                    var employeeUnderHod = loginCredential!["data"]["data"][0]
+                    ["faculty_data"]["hosComponent"]
+                    ["own_list_groups"][ind]["class_group"][index]
+                    ["class_teacher"]["employee_no"];
+                    var employeeEmailUnderHod = loginCredential!["data"]["data"][0]
+                    ["faculty_data"]["hosComponent"]
+                    ["own_list_groups"][ind]["class_group"][index]
+                    ["class_teacher"]["username"];
+
+                    print('----empid--$employeeUnderHod');
+                    employeeUnderHOS.add(employeeUnderHod);
+                    employeeEmailUnderHOS.add(employeeEmailUnderHod);
+                  }
+                }
               }
-            }
-
-            log("print HOS EMP$employeeUnderHOS");
-
-            print(classB);
-
-            print(loginCredential);
-
-            setState(() {
-              isSpinner = false;
-            });
-          }
-        }
-
-        if (facultyData.containsKey("hodComponent")) {
-          if (loginCredential!["data"]["data"][0]["faculty_data"]
-                  ["hodComponent"]["is_hod"] ==
-              true) {
-            for (var ind = 0;
+              for (var index = 0;
+              index <
+                  loginCredential!["data"]["data"][0]["faculty_data"]
+                  ["hosComponent"]["own_list_groups"]
+                      .length;
+              index++) {
+                for (var ind = 0;
                 ind <
                     loginCredential!["data"]["data"][0]["faculty_data"]
-                            ["hodComponent"]["own_list_groups"]
+                    ["hosComponent"]["own_list_groups"][index]
+                    ["class_group"]
                         .length;
                 ind++) {
-              for (var index = 0;
-                  index <
-                      loginCredential!["data"]["data"][0]["faculty_data"]
-                                  ["hodComponent"]["own_list_groups"][ind]
-                              ["class_group"]
-                          .length;
-                  index++) {
-                if (loginCredential!["data"]["data"][0]["faculty_data"]
-                            ["hodComponent"]["own_list_groups"][ind]
-                        ["class_group"][index]
-                    .containsKey("class_teacher")) {
-                  var employeeUnderHod = loginCredential!["data"]["data"][0]
-                              ["faculty_data"]["hodComponent"]
-                          ["own_list_groups"][ind]["class_group"][index]
-                      ["class_teacher"]["employee_no"];
-                  employeeUnderHOS.add(employeeUnderHod);
+                  var classBatch = loginCredential!["data"]["data"][0]
+                  ["faculty_data"]["hosComponent"]["own_list_groups"]
+                  [index]["class_group"][ind]["academic"];
+                  classB.add("${classBatch.split("/")[2]} ${classBatch.split("/")[3]}");
                 }
               }
+
+              log("print HOS EMP$employeeUnderHOS");
+
+              print(classB);
+
+              print(loginCredential);
+
+              setState(() {
+                isSpinner = false;
+              });
             }
-            for (var index = 0;
+          }
+
+          if (facultyData.containsKey("hodComponent")) {
+            if (loginCredential!["data"]["data"][0]["faculty_data"]
+            ["hodComponent"]["is_hod"] ==
+                true) {
+              for (var ind = 0;
+              ind <
+                  loginCredential!["data"]["data"][0]["faculty_data"]
+                  ["hodComponent"]["own_list_groups"]
+                      .length;
+              ind++) {
+                for (var index = 0;
                 index <
                     loginCredential!["data"]["data"][0]["faculty_data"]
-                            ["hodComponent"]["own_list_groups"]
+                    ["hodComponent"]["own_list_groups"][ind]
+                    ["class_group"]
                         .length;
                 index++) {
-              for (var ind = 0;
-                  ind <
-                      loginCredential!["data"]["data"][0]["faculty_data"]
-                                  ["hodComponent"]["own_list_groups"][index]
-                              ["class_group"]
-                          .length;
-                  ind++) {
-                var classBatch = loginCredential!["data"]["data"][0]
-                        ["faculty_data"]["hodComponent"]["own_list_groups"]
-                    [index]["class_group"][ind]["academic"];
-                classB.add("${classBatch.split("/")[2]} ${classBatch.split("/")[3]}");
+                  if (loginCredential!["data"]["data"][0]["faculty_data"]
+                  ["hodComponent"]["own_list_groups"][ind]
+                  ["class_group"][index]
+                      .containsKey("class_teacher")) {
+                    var employeeUnderHod = loginCredential!["data"]["data"][0]
+                    ["faculty_data"]["hodComponent"]
+                    ["own_list_groups"][ind]["class_group"][index]
+                    ["class_teacher"]["employee_no"];
+                    var employeeEmailUnderHod = loginCredential!["data"]["data"][0]
+                    ["faculty_data"]["hodComponent"]
+                    ["own_list_groups"][ind]["class_group"][index]
+                    ["class_teacher"]["username"];
+                    employeeUnderHOS.add(employeeUnderHod);
+                    employeeEmailUnderHOS.add(employeeEmailUnderHod);
+                  }
+                }
               }
+              for (var index = 0;
+              index <
+                  loginCredential!["data"]["data"][0]["faculty_data"]
+                  ["hodComponent"]["own_list_groups"]
+                      .length;
+              index++) {
+                for (var ind = 0;
+                ind <
+                    loginCredential!["data"]["data"][0]["faculty_data"]
+                    ["hodComponent"]["own_list_groups"][index]
+                    ["class_group"]
+                        .length;
+                ind++) {
+                  var classBatch = loginCredential!["data"]["data"][0]
+                  ["faculty_data"]["hodComponent"]["own_list_groups"]
+                  [index]["class_group"][ind]["academic"];
+                  classB.add("${classBatch.split("/")[2]} ${classBatch.split("/")[3]}");
+                }
+              }
+
+              print('..c...$employeeUnderHOS');
+
+              print('.....classB$classB');
+
+              print('.....$loginCredential');
+
+              setState(() {
+                isSpinner = false;
+              });
             }
-
-            print('..c...$employeeUnderHOS');
-
-            print('.....classB$classB');
-
-            print('.....$loginCredential');
-
-            setState(() {
-              isSpinner = false;
-            });
           }
         }
+        //addToLocalDb();
       }
-      //addToLocalDb();
-    }
+    } catch(e) {}
   }
 
   Map<String, dynamic>? committedCalls;
