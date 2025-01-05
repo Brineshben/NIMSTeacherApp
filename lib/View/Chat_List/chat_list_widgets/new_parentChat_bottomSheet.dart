@@ -165,6 +165,7 @@ class _NewParentChatState extends State<NewParentChat> {
                         children: [
                           SizedBox(
                             height: 75,
+                            width: ScreenUtil().screenWidth - 18.w,
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Row(
@@ -173,7 +174,7 @@ class _NewParentChatState extends State<NewParentChat> {
                                   List<Color> colors = [
                                     Colorutils.letters1,
                                     Colorutils.svguicolour2,
-                                    Colorutils.Subjectcolor4
+                                    Colorutils.lightBlue
                                   ];
 
                                   Color color = colors[index % colors.length];
@@ -203,7 +204,7 @@ class _NewParentChatState extends State<NewParentChat> {
                                               ? [
                                                   BoxShadow(
                                                       color: Colors.grey
-                                                          .withOpacity(0.5),
+                                                          .withOpacity(0.6),
                                                       blurRadius: 5)
                                                 ]
                                               : null,

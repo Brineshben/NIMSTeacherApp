@@ -1,6 +1,8 @@
 import 'dart:developer';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:teacherapp/Controller/api_controllers/parentChatController.dart';
@@ -9,6 +11,7 @@ import 'package:teacherapp/Controller/api_controllers/userAuthController.dart';
 import 'package:teacherapp/Models/api_models/parent_chat_list_api_model.dart';
 import 'package:teacherapp/Models/api_models/parent_chatting_model.dart';
 import 'package:teacherapp/Models/api_models/sent_msg_by_teacher_model.dart';
+import 'package:teacherapp/Services/snackBar.dart';
 import 'package:teacherapp/Utils/Colors.dart';
 import 'package:teacherapp/Utils/constant_function.dart';
 
@@ -666,9 +669,10 @@ class ParentDbController extends GetxController {
       isResentWorking = true;
       await checkInternetWithOutSnacksbar(
         function: () async {
-          await db.rawDelete('DELETE FROM $messageTableName');
-          for (var msg in unsentList) {
-            try {
+          context.loaderOverlay.show();
+          try {
+            await db.rawDelete('DELETE FROM $messageTableName');
+            for (var msg in unsentList) {
               await checkInternetWithOutSnacksbar(
                 function: () async {
                   final replayId = msg['reply_id'].toString().contains("unsent")
@@ -730,8 +734,15 @@ class ParentDbController extends GetxController {
                   }
                 },
               );
-            } catch (e) {}
+            }
+          } catch (e) {
+            print("Resent Working ---------- error ");
+            snackBar(
+                context: context,
+                message: "Something went wrong.",
+                color: Colors.red);
           }
+          context.loaderOverlay.show();
         },
       ).then(
         (value) {

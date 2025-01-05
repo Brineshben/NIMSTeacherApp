@@ -1158,7 +1158,6 @@ class ReplayMessageWidget3 extends StatelessWidget {
     final data = AllChatRoomDataInheritedWidget.of(context);
     return GestureDetector(
       onTap: () async {
-        Get.find<GroupedViewController>().chatMsgCount = 1000;
         ChatFeedViewReqModel chatFeedViewReqModel = ChatFeedViewReqModel(
           teacherId: userAuthController.userData.value.userId,
           schoolId: userAuthController.userData.value.schoolId,

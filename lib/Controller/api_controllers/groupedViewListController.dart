@@ -10,6 +10,7 @@ import '../../Services/api_services.dart';
 class GroupedViewListController extends GetxController {
   RxBool isLoading = false.obs;
   RxBool isLoaded = false.obs;
+  RxBool dbLoader = false.obs;
   RxBool isError = false.obs;
   RxList<RoomData> roomList = <RoomData>[].obs;
   RxList<RoomData> searchroomList = <RoomData>[].obs;
@@ -40,10 +41,17 @@ class GroupedViewListController extends GetxController {
   }
 
   Future<void> fetchGroupedViewList(BuildContext context) async {
-    resetData();
     isLoading.value = true;
     isLoaded.value = false;
     isError.value = false;
+    resetData();
+
+    roomList.value = await Get.find<GroupDbController>().getRoomList();
+    if (roomList.isEmpty) {
+      dbLoader.value = true;
+    }
+
+    isLoading.value = false;
 
     checkInternetWithReturnBool(
       context: context,
@@ -77,20 +85,24 @@ class GroupedViewListController extends GetxController {
           isLoaded.value = false;
           isError.value = true;
         } finally {
+          dbLoader.value = false;
+          isLoading.value = false;
           resetStatus();
         }
       },
     ).then(
       (value) async {
-        if (!value) {
-          print("group with out net -------------------- ");
-          roomList.value = await Get.find<GroupDbController>().getRoomList();
+        // if (!value) {
+        //   print("group with out net -------------------- ");
+        //   roomList.value = await Get.find<GroupDbController>().getRoomList();
 
-          print(
-              "group with out ------------------------ ${roomList[1].lastMessage?.read}");
+        //   print(
+        //       "group with out ------------------------ ${roomList[1].lastMessage?.read}");
 
-          isLoading.value = false;
-        }
+        //   isLoading.value = false;
+        // }
+        dbLoader.value = false;
+        isLoading.value = false;
       },
     );
   }

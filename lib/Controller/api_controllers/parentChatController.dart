@@ -3,6 +3,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:teacherapp/Controller/api_controllers/chat_push_notification.dart';
@@ -91,7 +92,7 @@ class ParentChattingController extends GetxController {
       dbLoader.value = true;
     }
     print("lust chat ----------------------- ${chatMsgList}");
-    isLoading.value = false;
+    // isLoading.value = false;
     await checkInternet(
       context: context,
       function: () async {
@@ -170,14 +171,24 @@ class ParentChattingController extends GetxController {
             parentId: reqBody.parentId ?? "",
             studentclass: reqBody.classs ?? "",
             batch: reqBody.batch ?? "");
-        chatMsgList.value = await Get.find<ParentDbController>().getAllMessages(
-            parentId: reqBody.parentId ?? "",
-            studentclass: reqBody.classs ?? "",
-            batch: reqBody.batch ?? "");
+        // chatMsgList.value = await Get.find<ParentDbController>().getAllMessages(
+        //     parentId: reqBody.parentId ?? "",
+        //     studentclass: reqBody.classs ?? "",
+        //     batch: reqBody.batch ?? "");
 
-        if (chatMsgList.isNotEmpty) {
-          chatMsgList.add(chatMsgList[chatMsgList.length - 1]);
+        // if (chatMsgList.isNotEmpty) {
+        //   chatMsgList.add(chatMsgList[chatMsgList.length - 1]);
+        // }
+        final newMessageList = await Get.find<ParentDbController>()
+            .getAllMessages(
+                parentId: reqBody.parentId ?? "",
+                studentclass: reqBody.classs ?? "",
+                batch: reqBody.batch ?? "");
+
+        if (newMessageList.isNotEmpty) {
+          newMessageList.add(newMessageList[newMessageList.length - 1]);
         }
+        chatMsgList.assignAll(newMessageList);
       }
     } catch (e) {
       print('--------parent chatting error--------');
@@ -672,14 +683,29 @@ class ParentChattingController extends GetxController {
     focusNode.value.requestFocus();
   }
 
-  Future<int?> findMessageIndex({
-    required ParentChattingReqModel reqBody,
-    required int? msgId,
-  }) async {
+  Future<int?> findMessageIndex(
+      {required ParentChattingReqModel reqBody,
+      required int? msgId,
+      required BuildContext context}) async {
     print(reqBody.limit);
-    // chatMsgCount = 1000;
-    await fetchParentMsgListPeriodically(reqBody);
-    print(chatMsgList.length);
+
+    for (int i = 0; i < chatMsgList.length; i++) {
+      ParentMsgData element = chatMsgList[i];
+
+      if (element.messageId == msgId.toString()) {
+        print("message number = i = $i");
+        return i;
+      }
+    }
+
+    if (chatMsgList.length < 100) {
+      context.loaderOverlay.show();
+      chatMsgCount = 100;
+      await fetchParentMsgListPeriodically(reqBody);
+      context.loaderOverlay.hide();
+      print(chatMsgList.length);
+    }
+
     for (int i = 0; i < chatMsgList.length; i++) {
       ParentMsgData element = chatMsgList[i];
 
