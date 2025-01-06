@@ -146,7 +146,8 @@ class _ParentChatScreenState extends State<ParentChatScreen> {
               batch: widget.msgData?.batch ?? "",
               teacherId: Get.find<UserAuthController>().userData.value.userId!,
               subId: widget.msgData?.subjectId ?? "",
-              context: context);
+              context: context,
+              studentId: widget.msgData?.studentId ?? "");
         }
         await parentChattingController
             .fetchParentMsgListPeriodically(chattingReqModel);
@@ -998,43 +999,43 @@ class _ParentChatScreenState extends State<ParentChatScreen> {
                                                         for (final file
                                                             in controller
                                                                 .filePathList) {
-                                                          await parentChattingController
-                                                              .sendAttach(
-                                                            classs: widget
-                                                                    .msgData
-                                                                    ?.datumClass ??
-                                                                '--',
-                                                            batch: widget
-                                                                    .msgData
-                                                                    ?.batch ??
-                                                                '--',
-                                                            subId: widget
-                                                                    .msgData
-                                                                    ?.subjectId ??
-                                                                '--',
-                                                            sub: widget.msgData
-                                                                    ?.subjectName ??
-                                                                '--',
-                                                            teacherId:
-                                                                userAuthController
-                                                                        .userData
-                                                                        .value
-                                                                        .userId ??
-                                                                    '--',
-                                                            context: context,
-                                                            filePath: file,
-                                                            message: messageCtr
-                                                                    .text
-                                                                    .isNotEmpty
-                                                                ? messageCtr
-                                                                    .text
-                                                                : null,
-                                                            parent: [
-                                                              widget.msgData
-                                                                      ?.parentId ??
-                                                                  ''
-                                                            ],
-                                                          );
+                                                          await parentChattingController.sendAttach(
+                                                              classs: widget
+                                                                      .msgData
+                                                                      ?.datumClass ??
+                                                                  '--',
+                                                              batch: widget
+                                                                      .msgData
+                                                                      ?.batch ??
+                                                                  '--',
+                                                              subId: widget
+                                                                      .msgData
+                                                                      ?.subjectId ??
+                                                                  '--',
+                                                              sub: widget
+                                                                      .msgData
+                                                                      ?.subjectName ??
+                                                                  '--',
+                                                              teacherId: userAuthController
+                                                                      .userData
+                                                                      .value
+                                                                      .userId ??
+                                                                  '--',
+                                                              context: context,
+                                                              filePath: file,
+                                                              message: messageCtr
+                                                                      .text
+                                                                      .isNotEmpty
+                                                                  ? messageCtr
+                                                                      .text
+                                                                  : null,
+                                                              parent: [
+                                                                widget.msgData
+                                                                        ?.parentId ??
+                                                                    ''
+                                                              ],
+                                                              studentId:
+                                                                  widget.msgData?.studentId ?? '');
 
                                                           messageCtr.clear();
                                                         }
@@ -1054,46 +1055,50 @@ class _ParentChatScreenState extends State<ParentChatScreen> {
                                                                 null) {
                                                           await parentChattingController
                                                               .sendAttach(
-                                                            classs: widget
-                                                                    .msgData
-                                                                    ?.datumClass ??
-                                                                '--',
-                                                            batch: widget
-                                                                    .msgData
-                                                                    ?.batch ??
-                                                                '--',
-                                                            subId: widget
-                                                                    .msgData
-                                                                    ?.subjectId ??
-                                                                '--',
-                                                            sub: widget.msgData
-                                                                    ?.subjectName ??
-                                                                '--',
-                                                            teacherId:
-                                                                userAuthController
-                                                                        .userData
-                                                                        .value
-                                                                        .userId ??
-                                                                    '--',
-                                                            context: context,
-                                                            filePath: parentChattingController
-                                                                    .audioPath
-                                                                    .value ??
-                                                                parentChattingController
-                                                                    .filePath
-                                                                    .value,
-                                                            message: messageCtr
-                                                                    .text
-                                                                    .isNotEmpty
-                                                                ? messageCtr
-                                                                    .text
-                                                                : null,
-                                                            parent: [
-                                                              widget.msgData
-                                                                      ?.parentId ??
-                                                                  ''
-                                                            ],
-                                                          );
+                                                                  classs: widget
+                                                                          .msgData
+                                                                          ?.datumClass ??
+                                                                      '--',
+                                                                  batch: widget
+                                                                          .msgData
+                                                                          ?.batch ??
+                                                                      '--',
+                                                                  subId: widget
+                                                                          .msgData
+                                                                          ?.subjectId ??
+                                                                      '--',
+                                                                  sub: widget
+                                                                          .msgData
+                                                                          ?.subjectName ??
+                                                                      '--',
+                                                                  teacherId: userAuthController
+                                                                          .userData
+                                                                          .value
+                                                                          .userId ??
+                                                                      '--',
+                                                                  context:
+                                                                      context,
+                                                                  filePath: parentChattingController
+                                                                          .audioPath
+                                                                          .value ??
+                                                                      parentChattingController
+                                                                          .filePath
+                                                                          .value,
+                                                                  message: messageCtr
+                                                                          .text
+                                                                          .isNotEmpty
+                                                                      ? messageCtr
+                                                                          .text
+                                                                      : null,
+                                                                  parent: [
+                                                                    widget.msgData
+                                                                            ?.parentId ??
+                                                                        '',
+                                                                  ],
+                                                                  studentId: widget
+                                                                          .msgData
+                                                                          ?.studentId ??
+                                                                      '');
                                                         } else {
                                                           if (messageCtr.text
                                                               .isNotEmpty) {
@@ -1144,12 +1149,15 @@ class _ParentChatScreenState extends State<ParentChatScreen> {
                                                                     ''
                                                               ],
                                                             );
-                                                            await parentChattingController
-                                                                .sendAttachMsg(
-                                                              sentMsgData:
-                                                                  sentMsgData,
-                                                              context: context,
-                                                            );
+                                                            await parentChattingController.sendAttachMsg(
+                                                                sentMsgData:
+                                                                    sentMsgData,
+                                                                context:
+                                                                    context,
+                                                                stuentId: widget
+                                                                        .msgData
+                                                                        ?.studentId ??
+                                                                    "");
                                                           }
                                                         }
                                                       }
@@ -1768,6 +1776,10 @@ class SentMessageBubble extends StatelessWidget {
                                   Get.find<ForwardController>()
                                           .forwordMessageId =
                                       messageData?.messageId ?? "";
+
+                                  Get.find<ForwardController>()
+                                          .forwordMessageFileName =
+                                      messageData?.fileName ?? "";
 
                                   messageMoreShowDialog(context, this, position,
                                       _tapPosition, data);
@@ -2415,6 +2427,9 @@ class ReceiveMessageBubble extends StatelessWidget {
                                   .seletedMsgData = messageData;
                               Get.find<ForwardController>().forwordMessageId =
                                   messageData?.messageId ?? "";
+                              Get.find<ForwardController>()
+                                      .forwordMessageFileName =
+                                  messageData?.fileName ?? "";
                               messageMoreShowDialog(
                                   context, this, position, _tapPosition, null);
                               Get.find<ParentChattingController>()

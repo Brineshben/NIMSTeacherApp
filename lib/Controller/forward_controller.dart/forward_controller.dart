@@ -27,6 +27,7 @@ class ForwardController extends GetxController {
   List<ForwardModelChats> selectedForwardSingleList = [];
 
   String? forwordMessageId;
+  String? forwordMessageFileName;
 
   RxList<ForwardParentDataModel> forwardParentList = RxList([]);
 
@@ -177,8 +178,7 @@ class ForwardController extends GetxController {
                       Get.find<UserAuthController>().userData.value.userId ??
                           "",
                   message:
-                      Get.find<FeedViewController>().seletedMsgData?.message ??
-                          "",
+                      Get.find<FeedViewController>().seletedMsgData?.message,
                   teacherName:
                       Get.find<UserAuthController>().userData.value.name ?? "",
                   teacherImage:
@@ -191,7 +191,7 @@ class ForwardController extends GetxController {
                   subId: singleChatData.subjectId ?? "",
                   subjectName: singleChatData.subjectName ?? "",
                   fileName:
-                      Get.find<FeedViewController>().seletedMsgData?.fileName ??
+                      Get.find<ForwardController>().forwordMessageFileName ??
                           "",
                   parentData: Get.find<FeedViewController>()
                       .setFinalParentListForNotification());
@@ -231,39 +231,39 @@ class ForwardController extends GetxController {
               final status =
                   await ForwardService.sentMsgSingle(teacherMsg: data).then(
                 (value) {
-                  // Get.find<PushNotificationController>().sendNotification(
-                  //     teacherId: Get.find<UserAuthController>()
-                  //             .userData
-                  //             .value
-                  //             .userId ??
-                  //         "",
-                  //     message: Get.find<FeedViewController>()
-                  //             .seletedMsgData
-                  //             ?.message ??
-                  //         "",
-                  //     teacherName:
-                  //         Get.find<UserAuthController>().userData.value.name ??
-                  //             "",
-                  //     teacherImage:
-                  //         Get.find<UserAuthController>().userData.value.image ??
-                  //             "",
-                  //     messageFrom: Get.find<UserAuthController>()
-                  //             .userData
-                  //             .value
-                  //             .userId ??
-                  //         "",
-                  //     studentClass: singleChatData.datumClass ?? "",
-                  //     batch: singleChatData.batch ?? "",
-                  //     subId: singleChatData.subjectId ?? "",
-                  //     subjectName: singleChatData.subjectName ?? "",
-                  //     fileName:
-                  //         Get.find<FeedViewController>().filePath.value ?? "",
-                  //     parentData: [
-                  //       {
-                  //         "parent_id": singleChatData.parentId ?? "",
-                  //         "student_id": ""
-                  //       }
-                  //     ]);
+                  Get.find<PushNotificationController>().sendNotification(
+                      teacherId: Get.find<UserAuthController>()
+                              .userData
+                              .value
+                              .userId ??
+                          "",
+                      message: Get.find<FeedViewController>()
+                          .seletedMsgData
+                          ?.message,
+                      teacherName:
+                          Get.find<UserAuthController>().userData.value.name ??
+                              "",
+                      teacherImage:
+                          Get.find<UserAuthController>().userData.value.image ??
+                              "",
+                      messageFrom: Get.find<UserAuthController>()
+                              .userData
+                              .value
+                              .userId ??
+                          "",
+                      studentClass: singleChatData.datumClass ?? "",
+                      batch: singleChatData.batch ?? "",
+                      subId: singleChatData.subjectId ?? "",
+                      subjectName: singleChatData.subjectName ?? "",
+                      fileName: Get.find<ForwardController>()
+                              .forwordMessageFileName ??
+                          "",
+                      parentData: [
+                        {
+                          "parent_id": singleChatData.parentId ?? "",
+                          "student_id": singleChatData.studentId ?? ""
+                        }
+                      ]);
                 },
               );
               print(

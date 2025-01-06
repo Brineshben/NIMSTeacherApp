@@ -7,7 +7,7 @@ class ParentChatListApiModel {
   final Status? status;
   final Data? data;
 
-  factory ParentChatListApiModel.fromJson(Map<String, dynamic> json){
+  factory ParentChatListApiModel.fromJson(Map<String, dynamic> json) {
     return ParentChatListApiModel(
       status: json["status"] == null ? null : Status.fromJson(json["status"]),
       data: json["data"] == null ? null : Data.fromJson(json["data"]),
@@ -15,10 +15,9 @@ class ParentChatListApiModel {
   }
 
   Map<String, dynamic> toJson() => {
-    "status": status?.toJson(),
-    "data": data?.toJson(),
-  };
-
+        "status": status?.toJson(),
+        "data": data?.toJson(),
+      };
 }
 
 class Data {
@@ -32,35 +31,37 @@ class Data {
   final int? unreadCount;
   final List<Datum>? data;
 
-  factory Data.fromJson(Map<String, dynamic> json){
+  factory Data.fromJson(Map<String, dynamic> json) {
     return Data(
       message: json["message"],
       unreadCount: json["unread_count"],
-      data: json["data"] == null ? [] : List<Datum>.from(json["data"]!.map((x) => Datum.fromJson(x))),
+      data: json["data"] == null
+          ? []
+          : List<Datum>.from(json["data"]!.map((x) => Datum.fromJson(x))),
     );
   }
 
   Map<String, dynamic> toJson() => {
-    "message": message,
-    "unread_count": unreadCount,
-    "data": data?.map((x) => x.toJson()).toList(),
-  };
-
+        "message": message,
+        "unread_count": unreadCount,
+        "data": data?.map((x) => x.toJson()).toList(),
+      };
 }
 
 class Datum {
-  Datum({
-    this.datumClass,
-    this.batch,
-    this.subjectId,
-    this.subjectName,
-    this.parentId,
-    this.parentName,
-    this.studentName,
-    this.relation,
-    this.unreadCount,
-    this.lastMessage,
-  });
+  Datum(
+      {this.datumClass,
+      this.batch,
+      this.subjectId,
+      this.subjectName,
+      this.parentId,
+      this.parentName,
+      this.studentId,
+      this.studentName,
+      this.relation,
+      this.unreadCount,
+      this.lastMessage,
+      this.image});
 
   final String? datumClass;
   final String? batch;
@@ -69,11 +70,13 @@ class Datum {
   final String? parentId;
   final String? parentName;
   final String? studentName;
+  final String? studentId;
   final String? relation;
   final String? unreadCount;
-   LastMessage? lastMessage;
+  final String? image;
+  LastMessage? lastMessage;
 
-  factory Datum.fromJson(Map<String, dynamic> json){
+  factory Datum.fromJson(Map<String, dynamic> json) {
     return Datum(
       datumClass: json["class"],
       batch: json["batch"],
@@ -81,26 +84,31 @@ class Datum {
       subjectName: json["subject_name"],
       parentId: json["parent_id"],
       parentName: json["parent_name"],
+      studentId: json["student_id"],
       studentName: json["student_name"],
       relation: json["relation"],
       unreadCount: json["unread_count"],
-      lastMessage: json["last_message"] == null ? null : LastMessage.fromJson(json["last_message"]),
+      image: json["image"],
+      lastMessage: json["last_message"] == null
+          ? null
+          : LastMessage.fromJson(json["last_message"]),
     );
   }
 
   Map<String, dynamic> toJson() => {
-    "class": datumClass,
-    "batch": batch,
-    "subject_id": subjectId,
-    "subject_name": subjectName,
-    "parent_id": parentId,
-    "parent_name": parentName,
-    "student_name": studentName,
-    "relation": relation,
-    "unread_count": unreadCount,
-    "last_message": lastMessage?.toJson(),
-  };
-
+        "class": datumClass,
+        "batch": batch,
+        "subject_id": subjectId,
+        "subject_name": subjectName,
+        "parent_id": parentId,
+        "parent_name": parentName,
+        "student_id": studentId,
+        "student_name": studentName,
+        "relation": relation,
+        "unread_count": unreadCount,
+        "image": image,
+        "last_message": lastMessage?.toJson(),
+      };
 }
 
 class LastMessage {
@@ -124,7 +132,7 @@ class LastMessage {
   final bool? read;
   final DateTime? sandAt;
 
-  factory LastMessage.fromJson(Map<String, dynamic> json){
+  factory LastMessage.fromJson(Map<String, dynamic> json) {
     return LastMessage(
       type: json["type"],
       message: json["message"],
@@ -138,16 +146,15 @@ class LastMessage {
   }
 
   Map<String, dynamic> toJson() => {
-    "type": type,
-    "message": message,
-    "message_file": messageFile,
-    "file_name": fileName,
-    "message_audio": messageAudio,
-    "message_from_id": messageFromId,
-    "read": read,
-    "sand_at": sandAt?.toIso8601String(),
-  };
-
+        "type": type,
+        "message": message,
+        "message_file": messageFile,
+        "file_name": fileName,
+        "message_audio": messageAudio,
+        "message_from_id": messageFromId,
+        "read": read,
+        "sand_at": sandAt?.toIso8601String(),
+      };
 }
 
 class Status {
@@ -159,7 +166,7 @@ class Status {
   final int? code;
   final String? message;
 
-  factory Status.fromJson(Map<String, dynamic> json){
+  factory Status.fromJson(Map<String, dynamic> json) {
     return Status(
       code: json["code"],
       message: json["message"],
@@ -167,10 +174,9 @@ class Status {
   }
 
   Map<String, dynamic> toJson() => {
-    "code": code,
-    "message": message,
-  };
-
+        "code": code,
+        "message": message,
+      };
 }
 
 class ParentFilterClass {

@@ -613,22 +613,24 @@ class FeedViewController extends GetxController {
       );
 
       if (resp['status']['code'] == 200) {
-        if (sentMsgData.replyId == null) {
-          Get.find<PushNotificationController>().sendNotification(
-              teacherId: sentMsgData.messageFrom ?? "",
-              message: sentMsgData.message,
-              teacherName:
-                  Get.find<UserAuthController>().userData.value.name ?? "",
-              teacherImage:
-                  Get.find<UserAuthController>().userData.value.image ?? "",
-              messageFrom: sentMsgData.messageFrom ?? "",
-              studentClass: sentMsgData.classs ?? "",
-              batch: sentMsgData.batch ?? "",
-              subId: sentMsgData.subjectId ?? "",
-              subjectName: sentMsgData.subject ?? "",
-              fileName: sentMsgData.fileData?.name ?? "",
-              parentData: setFinalParentListForNotification());
-        }
+        print(
+            "snet Parent list ---------------------- ${setFinalParentListForNotification()}");
+        // if (sentMsgData.replyId == null) {
+        await Get.find<PushNotificationController>().sendNotification(
+          teacherId: sentMsgData.messageFrom ?? "",
+          message: sentMsgData.message,
+          teacherName: Get.find<UserAuthController>().userData.value.name ?? "",
+          teacherImage:
+              Get.find<UserAuthController>().userData.value.image ?? "",
+          messageFrom: sentMsgData.messageFrom ?? "",
+          studentClass: sentMsgData.classs ?? "",
+          batch: sentMsgData.batch ?? "",
+          subId: sentMsgData.subjectId ?? "",
+          subjectName: sentMsgData.subject ?? "",
+          fileName: sentMsgData.fileData?.name ?? "",
+          parentData: setFinalParentListForNotification(),
+        );
+        // }
 
         audioPath.value = null;
         filePath.value = null;
