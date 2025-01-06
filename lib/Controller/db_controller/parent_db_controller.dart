@@ -45,7 +45,9 @@ class ParentDbController extends GetxController {
           parentId TEXT,
           parentName TEXT,
           relation TEXT,
+          studentId TEXT,
           studentName TEXT,
+          image Text,
           unread_count TEXT
         )
         ''');
@@ -79,7 +81,9 @@ class ParentDbController extends GetxController {
       'parentId': roomList.parentId,
       'parentName': roomList.parentName,
       'relation': roomList.relation,
+      'studentId': roomList.studentId,
       'studentName': roomList.studentName,
+      "image": roomList.image,
       'unread_count': roomList.unreadCount,
     });
 
@@ -121,8 +125,10 @@ class ParentDbController extends GetxController {
         parentId: room['parentId'],
         parentName: room['parentName'],
         relation: room['relation'],
+        studentId: room['studentId'],
         studentName: room['studentName'],
         unreadCount: room['unread_count'],
+        image: room['image'],
         lastMessage: null, // This will be set to a LastMessage instance
       );
 
@@ -302,6 +308,10 @@ class ParentDbController extends GetxController {
     String messageTableName = "message$portion";
     String repliesTableName = "replies$portion";
     String incomingreactsTableName = "incoming_reacts$portion";
+
+    await createMessageTable(
+        parentId: parentId, studentclass: studentclass, batch: batch);
+
     // Query all messages from the 'messages' table
     List<Map<String, dynamic>> messageResults =
         await db.query(messageTableName);
@@ -654,6 +664,7 @@ class ParentDbController extends GetxController {
 
   resentUnsentMessage({
     required String teacherId,
+    required String studentId,
     required String parentId,
     required String subId,
     required BuildContext context,
@@ -696,7 +707,8 @@ class ParentDbController extends GetxController {
                         // filePath:
                         //     Get.find<MessageController>().audioPath.value ??
                         //         Get.find<MessageController>().filePath.value,
-                        message: msg['message']);
+                        message: msg['message'],
+                        studentId: studentId);
                     // await Get.find<MessageController>().periodicGetMsgList(
                     //     context: context,
                     //     studentClass: studentClass,
@@ -722,8 +734,10 @@ class ParentDbController extends GetxController {
                       messageFrom: teacherId,
                       replyId: replayId,
                     );
-                    await Get.find<ParentChattingController>()
-                        .sendAttachMsg(sentMsgData: sentData, context: context);
+                    await Get.find<ParentChattingController>().sendAttachMsg(
+                        sentMsgData: sentData,
+                        context: context,
+                        stuentId: studentId);
                     print("refrshh ---------------------2 work");
                     await Get.find<ParentChattingController>()
                         .fetchParentMsgListPeriodically(ParentChattingReqModel(

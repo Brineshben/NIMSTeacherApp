@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:teacherapp/Utils/api_constants.dart';
 
-class PushNotificationController {
+class PushNotificationController extends GetxController {
   sendNotification(
       {required String teacherId,
       required String? message,
@@ -22,6 +22,8 @@ class PushNotificationController {
         "Push Notification url --------------------------------------------$url");
     print(
         "Push Notification file --------------------------------------------${message}");
+    print(
+        "Push Notification file --------------------------------------------${fileName}");
 
     String messagetype = "";
     if (message == null) {
@@ -60,15 +62,15 @@ class PushNotificationController {
       }
     };
 
-    [
-      {
-        "parent_id": "5d038f25729891326d027fa9",
-        "student_id": "642e5a421c17d41497346833"
-      }
-    ];
+    // [
+    //   {
+    //     "parent_id": "5d038f25729891326d027fa9",
+    //     "student_id": "642e5a421c17d41497346833"
+    //   }
+    // ];
 
     print(
-        "Push Notification body --------------------------------------------${body}");
+        "Push Notification body --------------------------------------------${jsonEncode(body)}");
 
     final respose = await http.post(Uri.parse(url),
         body: jsonEncode(body), headers: header);

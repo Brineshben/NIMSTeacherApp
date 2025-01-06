@@ -534,10 +534,10 @@ class ParentChattingController extends GetxController {
     return false;
   }
 
-  Future<dynamic> sendAttachMsg({
-    required BuildContext context,
-    required SentMsgByTeacherModel sentMsgData,
-  }) async {
+  Future<dynamic> sendAttachMsg(
+      {required BuildContext context,
+      required SentMsgByTeacherModel sentMsgData,
+      required String stuentId}) async {
     print(
         "Arun Msg Sent working ------------------------------${sentMsgData.toJson()}");
 
@@ -547,22 +547,25 @@ class ParentChattingController extends GetxController {
       );
 
       if (resp['status']['code'] == 200) {
-        // await Get.find<PushNotificationController>().sendNotification(
-        //     teacherId: sentMsgData.messageFrom ?? "",
-        //     message: sentMsgData.message,
-        //     teacherName:
-        //         Get.find<UserAuthController>().userData.value.name ?? "",
-        //     teacherImage:
-        //         Get.find<UserAuthController>().userData.value.image ?? "",
-        //     messageFrom: sentMsgData.messageFrom ?? "",
-        //     studentClass: sentMsgData.classs ?? "",
-        //     batch: sentMsgData.batch ?? "",
-        //     subId: sentMsgData.subjectId ?? "",
-        //     subjectName: sentMsgData.subject ?? "",
-        //     fileName: sentMsgData.fileData?.name ?? "",
-        //     parentData: [
-        //       {"parent_id": sentMsgData.parents?.first ?? "", "student_id": ""}
-        //     ]);
+        await Get.find<PushNotificationController>().sendNotification(
+            teacherId: sentMsgData.messageFrom ?? "",
+            message: sentMsgData.message,
+            teacherName:
+                Get.find<UserAuthController>().userData.value.name ?? "",
+            teacherImage:
+                Get.find<UserAuthController>().userData.value.image ?? "",
+            messageFrom: sentMsgData.messageFrom ?? "",
+            studentClass: sentMsgData.classs ?? "",
+            batch: sentMsgData.batch ?? "",
+            subId: sentMsgData.subjectId ?? "",
+            subjectName: sentMsgData.subject ?? "",
+            fileName: sentMsgData.fileData?.name ?? "",
+            parentData: [
+              {
+                "parent_id": sentMsgData.parents?.first ?? "",
+                "student_id": stuentId
+              }
+            ]);
         audioPath.value = null;
         filePath.value = null;
         showAudioRecordWidget.value =
@@ -597,6 +600,7 @@ class ParentChattingController extends GetxController {
       required String sub,
       required String teacherId,
       required List<String>? parent,
+      required String studentId,
       filePath,
       String? message}) async {
     try {
@@ -622,9 +626,9 @@ class ParentChattingController extends GetxController {
           ),
         );
         await sendAttachMsg(
-          context: context,
-          sentMsgData: sentMsgByTeacherModel,
-        );
+            context: context,
+            sentMsgData: sentMsgByTeacherModel,
+            stuentId: studentId);
       }
       isSentLoading.value = false;
     } catch (e) {

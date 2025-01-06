@@ -328,6 +328,10 @@ class FeedDBController extends GetxController {
     String repliesTableName = "replies$portion";
     String incomingreactsTableName = "incoming_reacts$portion";
     String studentDataTableName = "student_data$portion";
+
+    await createMessageTable(
+        subId: subId, studentclass: studentclass, batch: batch);
+
     // Query all messages from the 'messages' table
     List<Map<String, dynamic>> messageResults =
         await db.query(messageTableName);
