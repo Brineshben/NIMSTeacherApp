@@ -41,34 +41,36 @@ class FcmService extends GetxService {
     bool playSound = notification['sound'] != null && notification['sound'].isNotEmpty; // Play sound only if it is "alarm"
     String channelId = 'notification_id_${notification['sound'] ?? 'default'}';
 
-    flutterLocalNotificationsPlugin.show(
-      notification.hashCode,
-      notification['title'],
-      notification['message'],
-      NotificationDetails(
-        android: AndroidNotificationDetails(
-          channelId,
-          channel.name,
-          color: Colors.yellow,
-          importance: Importance.max,
-          audioAttributesUsage: AudioAttributesUsage.alarm,
-          playSound: playSound, // Use the boolean value to set this
-          sound: playSound ? RawResourceAndroidNotificationSound(notification['sound']) : null,
-          icon: '@mipmap/ic_launcher',
-          enableVibration: true,
-          fullScreenIntent: true,
-          styleInformation: BigTextStyleInformation(
-            notification['message'] ?? '',
-            htmlFormatBigText: true,
-            contentTitle: notification['title'] ?? '',
-            htmlFormatContentTitle: true,
-            // summaryText: "Swipe down to see more",
-            htmlFormatSummaryText: true,
+    if(notification['title'] != null) {
+      flutterLocalNotificationsPlugin.show(
+        notification.hashCode,
+        notification['title'],
+        notification['message'],
+        NotificationDetails(
+          android: AndroidNotificationDetails(
+            channelId,
+            channel.name,
+            color: Colors.yellow,
+            importance: Importance.max,
+            audioAttributesUsage: AudioAttributesUsage.alarm,
+            playSound: playSound, // Use the boolean value to set this
+            sound: playSound ? RawResourceAndroidNotificationSound(notification['sound']) : null,
+            icon: '@mipmap/ic_launcher',
+            enableVibration: true,
+            fullScreenIntent: true,
+            styleInformation: BigTextStyleInformation(
+              notification['message'] ?? '',
+              htmlFormatBigText: true,
+              contentTitle: notification['title'] ?? '',
+              htmlFormatContentTitle: true,
+              // summaryText: "Swipe down to see more",
+              htmlFormatSummaryText: true,
+            ),
           ),
         ),
-      ),
-      payload: json.encode(notification),
-    );
+        payload: json.encode(notification),
+      );
+    }
   }
 
 

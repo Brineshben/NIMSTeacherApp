@@ -66,33 +66,35 @@ Future<void> _fcmBackgroundHandler(RemoteMessage message) async {
 
   // Prepare the notification
   Map<String, dynamic> notification = message.data;
-  flutterLocalNotificationsPlugin.show(
-    notification.hashCode,
-    notification['title'],
-    notification['message'],
-    NotificationDetails(
-      android: AndroidNotificationDetails(
-        channelId,
-        'NotificationName', // Use a meaningful name here
-        channelDescription: '',
-        importance: Importance.max,
-        audioAttributesUsage: AudioAttributesUsage.alarm,
-        playSound: playSound,
-        sound: playSound ? RawResourceAndroidNotificationSound(sound) : null,
-        icon: '@mipmap/ic_launcher',
-        fullScreenIntent: true,
-        styleInformation: BigTextStyleInformation(
-          notification['message'] ?? '',
-          htmlFormatBigText: true,
-          contentTitle: notification['title'] ?? '',
-          htmlFormatContentTitle: true,
-          // summaryText: "Swipe down to see more",
-          htmlFormatSummaryText: true,
+  if(notification['title'] != null) {
+    flutterLocalNotificationsPlugin.show(
+        notification.hashCode,
+      notification['title'],
+      notification['message'],
+      NotificationDetails(
+        android: AndroidNotificationDetails(
+          channelId,
+          'NotificationName', // Use a meaningful name here
+          channelDescription: '',
+          importance: Importance.max,
+          audioAttributesUsage: AudioAttributesUsage.alarm,
+          playSound: playSound,
+          sound: playSound ? RawResourceAndroidNotificationSound(sound) : null,
+          icon: '@mipmap/ic_launcher',
+          fullScreenIntent: true,
+          styleInformation: BigTextStyleInformation(
+            notification['message'] ?? '',
+            htmlFormatBigText: true,
+            contentTitle: notification['title'] ?? '',
+            htmlFormatContentTitle: true,
+            // summaryText: "Swipe down to see more",
+            htmlFormatSummaryText: true,
+          ),
         ),
       ),
-    ),
-    payload: json.encode(notification),
-  );
+      payload: json.encode(notification),
+    );
+  }
 }
 
 class MyApp extends StatelessWidget {
