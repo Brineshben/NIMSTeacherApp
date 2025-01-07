@@ -602,7 +602,12 @@ class FeedViewController extends GetxController {
       if (replayMessage.roleName == "parents") {
         sentMsgData.parents = [replayMessage.messageFromId ?? ""];
       } else {
-        sentMsgData.parents = [];
+        if (Get.find<UserAuthController>().userData.value.userId ==
+            replayMessage.messageFromId) {
+          // sent to default selected parent //
+        } else {
+          sentMsgData.parents = [];
+        }
       }
     }
     //---------------//

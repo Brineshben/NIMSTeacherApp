@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -21,6 +22,7 @@ import 'package:teacherapp/Controller/search_controller/search_controller.dart';
 import 'package:teacherapp/Models/api_models/sent_msg_by_teacher_model.dart';
 import 'package:teacherapp/Services/common_services.dart';
 import 'package:teacherapp/Utils/Colors.dart';
+import 'package:teacherapp/Utils/api_constants.dart';
 import 'package:teacherapp/Utils/constant_function.dart';
 import 'package:teacherapp/Utils/font_util.dart';
 import 'package:teacherapp/View/Chat_View/Chat_widgets/audio_file_widget.dart';
@@ -196,21 +198,47 @@ class _ParentChatScreenState extends State<ParentChatScreen> {
                   )
                 : Row(
                     children: [
-                      Container(
-                        width: 44.w,
-                        height: 44.w,
-                        padding: const EdgeInsets.all(10).w,
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                        ),
-                        child: FittedBox(
-                          child: Text(
-                            "${widget.msgData?.datumClass}${widget.msgData?.batch}",
-                            style: TeacherAppFonts.interW600_16sp_black,
-                          ),
-                        ),
-                      ),
+                      widget.msgData?.image == null
+                          ? Container(
+                              width: 44.w,
+                              height: 44.w,
+                              padding: const EdgeInsets.all(10).w,
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                              ),
+                              child: FittedBox(
+                                child: Text(
+                                  "${widget.msgData?.datumClass}${widget.msgData?.batch}",
+                                  style: TeacherAppFonts.interW600_16sp_black,
+                                ),
+                              ),
+                            )
+                          : Container(
+                              height: 44.w,
+                              width: 44.w,
+                              decoration: const BoxDecoration(
+                                  color: Color.fromARGB(255, 207, 207, 207),
+                                  // border: Border.all(color: Colors.white, width: 2.w),
+                                  shape: BoxShape.circle),
+                              // backgroundImage:
+                              //     AssetImage('assets/images/profile2.png'),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(100).r,
+                                child: CachedNetworkImage(
+                                  imageUrl: "${widget.msgData?.image}",
+                                  placeholder: (context, url) => Icon(
+                                    Icons.person,
+                                    color: Colors.grey,
+                                    size: 40.w,
+                                  ),
+                                  errorWidget: (context, url, error) => Icon(
+                                    Icons.person,
+                                    color: Colors.grey,
+                                    size: 40.w,
+                                  ),
+                                ),
+                              )),
                       SizedBox(width: 10.w),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

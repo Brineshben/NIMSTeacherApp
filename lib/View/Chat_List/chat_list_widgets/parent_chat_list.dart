@@ -332,17 +332,16 @@ class ChatItem extends StatelessWidget {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(100).r,
                         child: CachedNetworkImage(
-                          imageUrl:
-                              "${ApiConstants.downloadUrl}${parentRoom.image}",
-                          placeholder: (context, url) => const Icon(
+                          imageUrl: "${parentRoom.image}",
+                          placeholder: (context, url) => Icon(
                             Icons.person,
                             color: Colors.grey,
-                            size: 40,
+                            size: 40.w,
                           ),
-                          errorWidget: (context, url, error) => const Icon(
+                          errorWidget: (context, url, error) => Icon(
                             Icons.person,
                             color: Colors.grey,
-                            size: 40,
+                            size: 40.w,
                           ),
                         ),
                       )),
