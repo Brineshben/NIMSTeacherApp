@@ -369,7 +369,7 @@ class _LessonObservationApplyState extends State<LessonObservationApply> {
                                         child: TextFormField(
                                           maxLength: 1000,
                                           validator: (val) => val!.isEmpty
-                                              ? 'Please EnterEven better if.'
+                                              ? 'Please Enter Even better if.'
                                               : null,
                                           controller: _evenBetterIfController,
                                           focusNode: keyboardController.evenBetterIfFocusNode.value,
