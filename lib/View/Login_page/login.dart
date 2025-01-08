@@ -410,6 +410,71 @@ class _LoginPageState extends State<LoginPage> {
                                   context.loaderOverlay.show();
                                   await signIn().then(
                                       (_) => context.loaderOverlay.hide());
+                                  if (userAuthController.isLoaded.value) {
+                                    UserRole? userRole =
+                                        userAuthController.userRole.value;
+                                    if (userRole != null) {
+                                      if (userRole == UserRole.leader) {
+                                        List<String>? rolIds =
+                                            userAuthController.userData
+                                                .value.roleIds ??
+                                                [];
+                                        Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                const DrawerScreen()));
+                                        // if((rolIds.contains("rolepri12") || rolIds.contains("role12123")) && !rolIds.contains("role121234")) {
+                                        //   Navigator.push(
+                                        //       context,
+                                        //       MaterialPageRoute(
+                                        //           builder: (context) =>
+                                        //           const HosListing()));
+                                        // } else {
+                                        //   userAuthController
+                                        //       .setSelectedHosData(
+                                        //     hosName: userAuthController
+                                        //         .userData.value.name ??
+                                        //         '--',
+                                        //     hosId: userAuthController
+                                        //         .userData
+                                        //         .value
+                                        //         .userId ??
+                                        //         '--',
+                                        //     isHos: true,
+                                        //   );
+                                        //   Navigator.pushReplacement(
+                                        //       context,
+                                        //       MaterialPageRoute(
+                                        //           builder: (context) =>
+                                        //           const DrawerScreen()));
+                                        // }
+                                      }
+                                      if (userRole ==
+                                          UserRole.bothTeacherAndLeader) {
+                                        Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                const ChoicePage()));
+                                      }
+                                      if (userRole == UserRole.teacher) {
+                                        Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                const DrawerScreen()));
+                                      }
+                                    } else {
+                                      TeacherAppPopUps.submitFailed(
+                                        title: "Failed",
+                                        message: "You are not an authorized user.",
+                                        actionName: "Close",
+                                        iconData: Icons.error_outline,
+                                        iconColor: Colorutils.svguicolour2,
+                                      );
+                                    }
+                                  }
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
