@@ -2314,7 +2314,11 @@ class _StudentListViewState extends State<StudentListView> {
                                                             .replaceAll(
                                                             ',', '')) ?? 0) < 1) ? Text("No Pending Fees") : Text(
                                                       "No Pending Fees",)
-                                                        : Row(
+                                                        : ((double.tryParse(
+                                                        newResult[index]["fee_amount"]
+                                                            .toString()
+                                                            .replaceAll(
+                                                            ',', '')) ?? 0) < 1) ? Text("No Pending Fees") : Row(
                                                       mainAxisAlignment: MainAxisAlignment
                                                           .spaceBetween,
                                                       children: [
