@@ -1174,8 +1174,10 @@ class FeedViewController extends GetxController {
   }
 
   sortSelectedParent() {
-    selectedParentDataList.sort(
-        (a, b) => a.studentName.toString().compareTo(b.studentName.toString()));
+    selectedParentDataList.sort((a, b) => a.studentName
+        .toString()
+        .toLowerCase()
+        .compareTo(b.studentName.toString().toLowerCase()));
     selectedParentDataList.sort(
         (a, b) => b.isSelected.toString().compareTo(a.isSelected.toString()));
     update();

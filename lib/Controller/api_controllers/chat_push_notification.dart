@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -46,6 +47,24 @@ class PushNotificationController extends GetxController {
       'Content-Type': 'application/json',
       'API-Key': '525-777-777'
     };
+
+    // Map<String, Object> body = {
+    //   "app": "schooldairy",
+    //   "title": "Message from $teacherName",
+    //   "message": messagetype,
+    //   "message_to": parentData,
+    //   "payload": {
+    //     "class": studentClass,
+    //     "batch": batch,
+    //     "subject_Id": subId,
+    //     "subject": subjectName,
+    //     "teacher_id": teacherId,
+    //     "teacher_name": teacherName,
+    //     "teacher_image": teacherImage
+    //   }
+    // };
+    log("parent id ----------------- ${jsonEncode(parentData)}");
+
     Map<String, Object> body = {
       "app": "schooldairy",
       "title": "Message from $teacherName",
@@ -62,6 +81,8 @@ class PushNotificationController extends GetxController {
       }
     };
 
+    log("parent id ---------------body-- ${jsonEncode(body)}");
+
     // [
     //   {
     //     "parent_id": "5d038f25729891326d027fa9",
@@ -72,12 +93,17 @@ class PushNotificationController extends GetxController {
     print(
         "Push Notification body --------------------------------------------${jsonEncode(body)}");
 
-    final respose = await http.post(Uri.parse(url),
-        body: jsonEncode(body), headers: header);
+    try {
+      final respose = await http.post(Uri.parse(url),
+          body: jsonEncode(body), headers: header);
 
-    if (respose.statusCode == 200) {
+      if (respose.statusCode == 200) {
+        print(
+            "Push Notification sent success--------------------------------------------");
+      }
+    } catch (e) {
       print(
-          "Push Notification sent success--------------------------------------------");
+          "Push Notification Error--------------------------------------------$e");
     }
   }
 }
