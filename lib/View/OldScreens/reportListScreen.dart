@@ -129,13 +129,14 @@ class _ReportListViewState extends State<ReportListView> {
     // if (result == ConnectivityResult.none) {
     //   _checkInternet(context);
     // } else {
+    String url = "${ApiConstants.baseUrl}${ApiConstants.workLoad}";
     var headers = {
       'x-auth-token': 'tq355lY3MJyd8Uj2ySzm',
       'Content-Type': 'application/json'
     };
     try {
       var request = http.Request(
-          'POST', Uri.parse("${ApiConstants.baseUrl}${ApiConstants.workLoad}"));
+          'POST', Uri.parse(url));
       // request.body = json.encode(
       //     {"user_id": userAuthController.selectedHos.value?.userId ?? '--'});
       request.body = json.encode(
@@ -144,6 +145,7 @@ class _ReportListViewState extends State<ReportListView> {
 
       http.StreamedResponse response = await request.send();
       print(response.statusCode);
+      print('------url------$url');
       print('----rrreeeqqq${request.body}');
       if (response.statusCode == 200) {
         var responseData = await response.stream.bytesToString();
@@ -463,7 +465,9 @@ class _ReportListViewState extends State<ReportListView> {
         }
         //addToLocalDb();
       }
-    } catch(e) {}
+    } catch(e) {
+      print("-----teacher list error------");
+    }
   }
 
   Map<String, dynamic>? committedCalls;

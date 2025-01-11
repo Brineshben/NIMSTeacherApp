@@ -72,9 +72,15 @@ class GroupedViewChat extends StatelessWidget {
                       height: 0,
                     ),
                 itemCount: 10);
-          } else if (controller.isError.value) {
-            return const Center(child: Text("Error Occurred"));
-          } else if (controller.roomList.isEmpty) {
+          } else if (controller.dbLoader.value == true) {
+            return const Center(
+              child: Text("Loading..."),
+            );
+          }
+          // else if (controller.isError.value) {
+          //   return const Center(child: Text("Error Occurred"));
+          // }
+          else if (controller.roomList.isEmpty) {
             return const Center(child: Text("No chat"));
           } else {
             return RefreshIndicator(

@@ -46,6 +46,7 @@ class HandleControllers {
   static createGetControllers() {
     Get.put(UserAuthController());
     Get.put(PageIndexController());
+    Get.put(NotificationController());
     Get.put(KeyboardController());
     Get.put(TextFieldController());
     Get.put(TimeTableController());
@@ -53,7 +54,7 @@ class HandleControllers {
     Get.put(LessonLearningController());
     Get.put(ParentChatListController());
     Get.put(FeedViewController());
-    Get.put(NotificationController());
+    // Get.put(NotificationController());
     Get.put(MarkAsReadController());
     Get.put(GroupedViewListController());
     Get.put(GroupedViewController());
@@ -130,6 +131,7 @@ class HandleControllers {
     Get.delete<Notificationcliniccontroller>();
     Get.delete<HomeController>();
     Get.delete<FeedDBController>();
+    Get.delete<ParentDbController>();
     Get.delete<GroupDbController>();
     Get.delete<PushNotificationController>();
     Get.delete<LearningWalkController>();

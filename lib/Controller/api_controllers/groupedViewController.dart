@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:teacherapp/Controller/db_controller/group_db_controller.dart';
 import 'package:teacherapp/Services/api_services.dart';
@@ -42,7 +43,15 @@ class GroupedViewController extends GetxController {
       ChatFeedViewReqModel reqBody, BuildContext context) async {
     isLoading.value = true;
     isError.value = false;
-    checkInternetWithReturnBool(
+    chatMsgList.value = await Get.find<GroupDbController>().getAllMessages(
+        subId: reqBody.subjectId ?? "",
+        studentclass: reqBody.classs ?? "",
+        batch: reqBody.batch ?? "");
+    if (chatMsgList.isNotEmpty) {
+      chatMsgList.add(chatMsgList[chatMsgList.length - 1]);
+    }
+    // isLoading.value = false;
+    await checkInternetWithReturnBool(
       context: context,
       function: () async {
         try {
@@ -89,22 +98,24 @@ class GroupedViewController extends GetxController {
           // update();
         }
       },
-    ).then(
-      (value) async {
-        if (!value) {
-          chatMsgList.value = await Get.find<GroupDbController>()
-              .getAllMessages(
-                  subId: reqBody.subjectId ?? "",
-                  studentclass: reqBody.classs ?? "",
-                  batch: reqBody.batch ?? "");
-          if (chatMsgList.isNotEmpty) {
-            chatMsgList.add(chatMsgList[chatMsgList.length - 1]);
-            print("Chat list -- worked----------------- ${chatMsgList.length}");
-          }
-          isLoading.value = false;
-        }
-      },
     );
+    isLoading.value = false;
+    // .then(
+    //   (value) async {
+    //     if (!value) {
+    //       chatMsgList.value = await Get.find<GroupDbController>()
+    //           .getAllMessages(
+    //               subId: reqBody.subjectId ?? "",
+    //               studentclass: reqBody.classs ?? "",
+    //               batch: reqBody.batch ?? "");
+    //       if (chatMsgList.isNotEmpty) {
+    //         chatMsgList.add(chatMsgList[chatMsgList.length - 1]);
+    //         print("Chat list -- worked----------------- ${chatMsgList.length}");
+    //       }
+    //       isLoading.value = false;
+    //     }
+    //   },
+    // );
   }
 
   // Future<void> fetchFeedViewMsgList(ChatFeedViewReqModel reqBody) async {
@@ -168,15 +179,31 @@ class GroupedViewController extends GetxController {
             subId: reqBody.subjectId ?? "",
             studentclass: reqBody.classs ?? "",
             batch: reqBody.batch ?? "");
-        chatMsgList.value = await Get.find<GroupDbController>().getAllMessages(
-            subId: reqBody.subjectId ?? "",
-            studentclass: reqBody.classs ?? "",
-            batch: reqBody.batch ?? "");
-        print("message number = chat list lenth = ${chatMsgList.length}");
-        if (chatMsgList.isNotEmpty) {
-          chatMsgList.add(chatMsgList[chatMsgList.length - 1]);
-          print("Chat list -- worked----------------- ${chatMsgList.length}");
+        // chatMsgList.value = await Get.find<GroupDbController>().getAllMessages(
+        //     subId: reqBody.subjectId ?? "",
+        //     studentclass: reqBody.classs ?? "",
+        //     batch: reqBody.batch ?? "");
+
+        // if (chatMsgList.isNotEmpty) {
+        //   chatMsgList.add(chatMsgList[chatMsgList.length - 1]);
+        //   print("Chat list -- worked----------------- ${chatMsgList.length}");
+        // }
+
+        final newMessageList = await Get.find<GroupDbController>()
+            .getAllMessages(
+                subId: reqBody.subjectId ?? "",
+                studentclass: reqBody.classs ?? "",
+                batch: reqBody.batch ?? "");
+
+        if (newMessageList.isNotEmpty) {
+          newMessageList.add(newMessageList[newMessageList.length - 1]);
+          print(
+              "Chat list -- worked----------------- ${newMessageList.length}");
         }
+
+        chatMsgList.assignAll(newMessageList);
+
+        print("message number = chat list lenth = ${chatMsgList.length}");
 
         update();
       }
@@ -215,9 +242,24 @@ class GroupedViewController extends GetxController {
       required int? msgId,
       required BuildContext context}) async {
     print(reqBody.limit);
-    // chatMsgCount = 1000;
-    await fetchFeedViewMsgList(reqBody, context);
-    print(chatMsgList.length);
+
+    for (int i = 0; i < chatMsgList.length; i++) {
+      MsgData element = chatMsgList[i];
+      print("message number = i = ${element.messageId}");
+      if (element.messageId == msgId.toString()) {
+        print("message number = i = $i");
+
+        return i;
+      }
+    }
+
+    if (chatMsgList.length < 100) {
+      context.loaderOverlay.show();
+      chatMsgCount = 100;
+      await fetchFeedViewMsgListPeriodically(reqBody);
+      context.loaderOverlay.hide();
+    }
+
     print("message number = lenth = ${chatMsgList.length}");
     for (int i = 0; i < chatMsgList.length; i++) {
       MsgData element = chatMsgList[i];

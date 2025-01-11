@@ -3,7 +3,9 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sqflite/sqflite.dart';
@@ -14,6 +16,7 @@ import 'package:teacherapp/Models/api_models/chat_feed_view_model.dart';
 import 'package:teacherapp/Models/api_models/chat_group_api_model.dart';
 import 'package:teacherapp/Models/api_models/parent_list_api_model.dart';
 import 'package:teacherapp/Models/api_models/sent_msg_by_teacher_model.dart';
+import 'package:teacherapp/Services/snackBar.dart';
 import 'package:teacherapp/Utils/Colors.dart';
 import 'package:teacherapp/Utils/constant_function.dart';
 
@@ -325,6 +328,10 @@ class FeedDBController extends GetxController {
     String repliesTableName = "replies$portion";
     String incomingreactsTableName = "incoming_reacts$portion";
     String studentDataTableName = "student_data$portion";
+
+    await createMessageTable(
+        subId: subId, studentclass: studentclass, batch: batch);
+
     // Query all messages from the 'messages' table
     List<Map<String, dynamic>> messageResults =
         await db.query(messageTableName);
@@ -708,9 +715,10 @@ class FeedDBController extends GetxController {
     if (unsentList.isNotEmpty) {
       checkInternetWithOutSnacksbar(
         function: () async {
-          await db.rawDelete('DELETE FROM $messageTableName');
-          for (var msg in unsentList) {
-            try {
+          context.loaderOverlay.show();
+          try {
+            await db.rawDelete('DELETE FROM $messageTableName');
+            for (var msg in unsentList) {
               await checkInternetWithOutSnacksbar(
                 function: () async {
                   print("unsentList ------------- ${unsentList.length}");
@@ -773,10 +781,15 @@ class FeedDBController extends GetxController {
                   }
                 },
               );
-            } catch (e) {
-              print("error message ------------------ $e");
             }
+          } catch (e) {
+            print("Resent Working ---------- error ");
+            snackBar(
+                context: context,
+                message: "Something went wrong.",
+                color: Colors.red);
           }
+          context.loaderOverlay.hide();
         },
       );
     } else {

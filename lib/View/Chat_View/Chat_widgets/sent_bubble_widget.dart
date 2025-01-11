@@ -116,6 +116,9 @@ class SentMessageBubble extends StatelessWidget {
                                   Get.find<ForwardController>()
                                           .forwordMessageId =
                                       messageData?.messageId ?? "";
+                                  Get.find<ForwardController>()
+                                          .forwordMessageFileName =
+                                      messageData?.fileName ?? "";
 
                                   messageMoreShowDialog(context, this, position,
                                       _tapPosition, data);

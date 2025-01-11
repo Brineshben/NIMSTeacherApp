@@ -4,6 +4,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
+import 'package:loader_overlay/loader_overlay.dart';
+import 'package:path/path.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:teacherapp/Controller/api_controllers/chat_push_notification.dart';
@@ -170,7 +172,7 @@ class FeedViewController extends GetxController {
     if (chatMsgList.isEmpty) {
       dbLoader.value = true;
     }
-    isLoading.value = false;
+    // isLoading.value = false;
 
     await checkInternetWithReturnBool(
       context: context,
@@ -277,16 +279,25 @@ class FeedViewController extends GetxController {
             subId: reqBody.subjectId ?? "",
             studentclass: reqBody.classs ?? "",
             batch: reqBody.batch ?? "");
-        chatMsgList.value = await Get.find<FeedDBController>().getAllMessages(
-            subId: reqBody.subjectId ?? "",
-            studentclass: reqBody.classs ?? "",
-            batch: reqBody.batch ?? "");
+        // chatMsgList.value = await Get.find<FeedDBController>().getAllMessages(
+        //     subId: reqBody.subjectId ?? "",
+        //     studentclass: reqBody.classs ?? "",
+        //     batch: reqBody.batch ?? "");
 
-        print("chat list lenght ---------------------- ${chatMsgList.length}");
+        // if (chatMsgList.isNotEmpty) {
+        //   chatMsgList.add(chatMsgList[chatMsgList.length - 1]);
+        // }
+        final newMessageList = await Get.find<FeedDBController>()
+            .getAllMessages(
+                subId: reqBody.subjectId ?? "",
+                studentclass: reqBody.classs ?? "",
+                batch: reqBody.batch ?? "");
 
-        if (chatMsgList.isNotEmpty) {
-          chatMsgList.add(chatMsgList[chatMsgList.length - 1]);
+        if (newMessageList.isNotEmpty) {
+          newMessageList.add(newMessageList[newMessageList.length - 1]);
         }
+        chatMsgList.assignAll(newMessageList);
+        print("chat list lenght ---------------------- ${chatMsgList.length}");
       }
     } catch (e) {
       print('--------feed view error--------');
@@ -587,6 +598,20 @@ class FeedViewController extends GetxController {
     required SentMsgByTeacherModel sentMsgData,
   }) async {
     print("Arun Msg Sent working ------------------------------");
+    // for removing the parent list for replay msg and only sent the particular parent and teacher //
+    if (sentMsgData.replyId != null) {
+      if (replayMessage.roleName == "parents") {
+        sentMsgData.parents = [replayMessage.messageFromId ?? ""];
+      } else {
+        if (Get.find<UserAuthController>().userData.value.userId ==
+            replayMessage.messageFromId) {
+          // sent to default selected parent //
+        } else {
+          sentMsgData.parents = [];
+        }
+      }
+    }
+    //---------------//
 
     try {
       Map<String, dynamic> resp = await ApiServices.sentMsgByTeacher(
@@ -594,20 +619,25 @@ class FeedViewController extends GetxController {
       );
 
       if (resp['status']['code'] == 200) {
-        Get.find<PushNotificationController>().sendNotification(
-            teacherId: sentMsgData.messageFrom ?? "",
-            message: sentMsgData.message,
-            teacherName:
-                Get.find<UserAuthController>().userData.value.name ?? "",
-            teacherImage:
-                Get.find<UserAuthController>().userData.value.image ?? "",
-            messageFrom: sentMsgData.messageFrom ?? "",
-            studentClass: sentMsgData.classs ?? "",
-            batch: sentMsgData.batch ?? "",
-            subId: sentMsgData.subjectId ?? "",
-            subjectName: sentMsgData.subject ?? "",
-            fileName: sentMsgData.fileData?.name ?? "",
-            parentData: setFinalParentListForNotification());
+        print(
+            "snet Parent list ---------------------- ${setFinalParentListForNotification()}");
+        // if (sentMsgData.replyId == null) {
+        await Get.find<PushNotificationController>().sendNotification(
+          teacherId: sentMsgData.messageFrom ?? "",
+          message: sentMsgData.message,
+          teacherName: Get.find<UserAuthController>().userData.value.name ?? "",
+          teacherImage:
+              Get.find<UserAuthController>().userData.value.image ?? "",
+          messageFrom: sentMsgData.messageFrom ?? "",
+          studentClass: sentMsgData.classs ?? "",
+          batch: sentMsgData.batch ?? "",
+          subId: sentMsgData.subjectId ?? "",
+          subjectName: sentMsgData.subject ?? "",
+          fileName: sentMsgData.fileData?.name ?? "",
+          parentData: setFinalParentListForNotification(),
+        );
+        // }
+
         audioPath.value = null;
         filePath.value = null;
         showAudioRecordWidget.value =
@@ -644,6 +674,69 @@ class FeedViewController extends GetxController {
       isSentLoading.value = false;
     }
   }
+
+  // Future<dynamic> sendAttachMsg({
+  //   required BuildContext context,
+  //   required SentMsgByTeacherModel sentMsgData,
+  // }) async {
+  //   print("Arun Msg Sent working ------------------------------");
+
+  //   try {
+  //     Map<String, dynamic> resp = await ApiServices.sentMsgByTeacher(
+  //       teacherMsg: sentMsgData,
+  //     );
+
+  //     if (resp['status']['code'] == 200) {
+  //       Get.find<PushNotificationController>().sendNotification(
+  //           teacherId: sentMsgData.messageFrom ?? "",
+  //           message: sentMsgData.message,
+  //           teacherName:
+  //               Get.find<UserAuthController>().userData.value.name ?? "",
+  //           teacherImage:
+  //               Get.find<UserAuthController>().userData.value.image ?? "",
+  //           messageFrom: sentMsgData.messageFrom ?? "",
+  //           studentClass: sentMsgData.classs ?? "",
+  //           batch: sentMsgData.batch ?? "",
+  //           subId: sentMsgData.subjectId ?? "",
+  //           subjectName: sentMsgData.subject ?? "",
+  //           fileName: sentMsgData.fileData?.name ?? "",
+  //           parentData: setFinalParentListForNotification());
+  //       audioPath.value = null;
+  //       filePath.value = null;
+  //       showAudioRecordWidget.value =
+  //           false; // for hiding the audio recording widget //
+  //       showAudioPlayingWidget.value =
+  //           false; // for hiding the audio playing widget //
+  //       isReplay.value = null;
+  //     } else {
+  //       snackBar(
+  //           context: context,
+  //           // message: "Something went wrong.",
+  //           message: resp['data']['message'],
+  //           color: Colors.red);
+  //     }
+  //     isSentLoading.value = false;
+  //     // for updating list after sent msg //
+  //     await fetchFeedViewMsgListPeriodically(ChatFeedViewReqModel(
+  //         classs: sentMsgData.classs ?? "",
+  //         batch: sentMsgData.batch ?? "",
+  //         teacherId: sentMsgData.messageFrom ?? "",
+  //         subjectId: sentMsgData.subjectId ?? "",
+  //         schoolId:
+  //             Get.find<UserAuthController>().userData.value.schoolId ?? "",
+  //         offset: 0,
+  //         limit: Get.find<FeedViewController>().chatMsgCount));
+
+  //     print("------msg-------$resp");
+  //   } catch (e) {
+  //     print("sendAttachMsg Error :-------------- $e");
+  //     snackBar(
+  //         context: context,
+  //         message: "Something went wrong.",
+  //         color: Colors.red);
+  //     isSentLoading.value = false;
+  //   }
+  // }
 
   Future<dynamic> sendAttach(
       {required BuildContext context,
@@ -1005,14 +1098,27 @@ class FeedViewController extends GetxController {
   //   return selectedParentDataList.contains(parent);
   // }
 
-  Future<int?> findMessageIndex({
-    required ChatFeedViewReqModel reqBody,
-    required int? msgId,
-  }) async {
+  Future<int?> findMessageIndex(
+      {required ChatFeedViewReqModel reqBody,
+      required int? msgId,
+      required BuildContext context}) async {
     print(reqBody.limit);
-    // chatMsgCount = 1000;
-    await fetchFeedViewMsgListPeriodically(reqBody);
-    print(chatMsgList.length);
+    for (int i = 0; i < chatMsgList.length; i++) {
+      MsgData element = chatMsgList[i];
+
+      if (element.messageId == msgId.toString()) {
+        print("message number = i = $i");
+        return i;
+      }
+    }
+    if (chatMsgList.length < 100) {
+      context.loaderOverlay.show();
+      chatMsgCount = 100;
+      await fetchFeedViewMsgListPeriodically(reqBody);
+      context.loaderOverlay.hide();
+      print(chatMsgList.length);
+    }
+
     for (int i = 0; i < chatMsgList.length; i++) {
       MsgData element = chatMsgList[i];
 

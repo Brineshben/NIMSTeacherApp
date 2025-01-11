@@ -23,7 +23,7 @@ class ReplayMessageWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () async {
         if (!Get.find<FeedViewController>().isShowDialogShow) {
-          Get.find<FeedViewController>().chatMsgCount = 100;
+          // Get.find<FeedViewController>().chatMsgCount = 100;
           ChatFeedViewReqModel chatFeedViewReqModel = ChatFeedViewReqModel(
             teacherId: userAuthController.userData.value.userId,
             schoolId: userAuthController.userData.value.schoolId,
@@ -34,7 +34,9 @@ class ReplayMessageWidget extends StatelessWidget {
             limit: Get.find<FeedViewController>().chatMsgCount,
           );
           int? index = await Get.find<FeedViewController>().findMessageIndex(
-              reqBody: chatFeedViewReqModel, msgId: replyData.messageId);
+              reqBody: chatFeedViewReqModel,
+              msgId: replyData.messageId,
+              context: context);
 
           if (index != null) {
             await Get.find<FeedViewController>()
