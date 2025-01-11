@@ -20,7 +20,12 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp(
+    name: "teacher_app",
+      options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  // await Get.putAsync(() => FcmService().init());
 
   await Get.putAsync(() => FcmService().init());
 
@@ -39,6 +44,18 @@ Future<void> main() async {
   final sharedPrefs = SharedPrefs();
   await sharedPrefs.initialize();
   runApp(const MyApp());
+}
+
+void showLocalNotification(String title, String body) async {
+  const AndroidNotificationDetails androidPlatformChannelSpecifics =
+  AndroidNotificationDetails('channel_id', 'channel_name',
+      importance: Importance.max, priority: Priority.high);
+  const NotificationDetails platformChannelSpecifics =
+  NotificationDetails(android: androidPlatformChannelSpecifics);
+
+  await flutterLocalNotificationsPlugin.show(
+    0, title, body, platformChannelSpecifics,
+  );
 }
 
 @pragma('vm:entry-point')
@@ -89,6 +106,12 @@ Future<void> _fcmBackgroundHandler(RemoteMessage message) async {
           // summaryText: "Swipe down to see more",
           htmlFormatSummaryText: true,
         ),
+      ),
+      iOS: DarwinNotificationDetails(
+        presentAlert: true, // Show an alert when the notification is received
+        presentSound: playSound, // Play sound if enabled
+        sound: playSound ? 'alarm.aiff' : null, // Use .aiff sound file
+        presentBadge: true, // Update badge count
       ),
     ),
     payload: json.encode(notification),

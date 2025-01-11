@@ -600,7 +600,7 @@ class _StudentListViewState extends State<StudentListView> {
                             Expanded(
                               child: Padding(
                                 padding: const EdgeInsets.only(
-                                    left: 10, right: 10, top: 20, bottom: 20),
+                                    left: 10, right: 8, top: 20, bottom: 20),
                                 child: SingleChildScrollView(
                                   scrollDirection: Axis.horizontal,
                                   child: Container(
@@ -608,15 +608,16 @@ class _StudentListViewState extends State<StudentListView> {
                                     child: widget.subjectName == null
                                         ? Text(
                                       widget.ClassAndBatch.toString(),
+                                      maxLines: 1,
                                       style: TextStyle(
-                                          fontSize: 15,
+                                          fontSize: 16,
                                           fontWeight: FontWeight.w600),
                                     )
                                         : Text(
                                       "${widget.ClassAndBatch?.replaceAll(
                                           " ", "")}  ${widget.subjectName}",
                                       style: TextStyle(
-                                          fontSize: 15,
+                                          fontSize: 16,
                                           fontWeight: FontWeight.w600),
                                     ),
                                   ),

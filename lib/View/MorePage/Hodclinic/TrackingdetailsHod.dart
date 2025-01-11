@@ -996,7 +996,7 @@ class _Container2State extends State<Container2> {
                 ),
                 const SizedBox(height: 5.0),
                 Padding(
-                  padding: const EdgeInsets.only(left: 40, right: 40),
+                  padding: const EdgeInsets.only(left: 30, right: 30),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -1137,7 +1137,7 @@ class _Container2State extends State<Container2> {
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.w500,
-                                    fontSize: 16.w),
+                                    fontSize: 15.w),
                               ),
                             ),
                             icon: const CircleAvatar(
@@ -1385,7 +1385,7 @@ class _Container3State extends State<Container3> {
                 ),
                 const SizedBox(height: 5.0),
                 Padding(
-                  padding: const EdgeInsets.only(left: 40, right: 40),
+                  padding: const EdgeInsets.only(left: 30, right: 30),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

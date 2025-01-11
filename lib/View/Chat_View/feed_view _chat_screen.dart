@@ -1158,10 +1158,10 @@ class FeedViewTextField extends StatelessWidget {
                               : controller.audioPath.value == null
                                   ? InkWell(
                                       onTap: () async {
-                                        bool permission =
-                                            await Get.find<FeedViewController>()
-                                                .permissionCheck(context);
-                                        if (permission) {
+                                        // bool permission =
+                                        //     await Get.find<FeedViewController>()
+                                        //         .permissionCheck(context);
+                                        // if (permission) {
                                           Navigator.of(context).push(
                                             MaterialPageRoute(
                                               builder: (context) {
@@ -1170,7 +1170,7 @@ class FeedViewTextField extends StatelessWidget {
                                               },
                                             ),
                                           );
-                                        }
+                                        // }
                                       },
                                       child: SizedBox(
                                         height: 25.w,
@@ -1196,19 +1196,19 @@ class FeedViewTextField extends StatelessWidget {
                                   },
                                   onLongPress: () async {
                                     HapticFeedback.vibrate();
-                                    await Permission.microphone.request();
+                                    // await Permission.microphone.request();
 
-                                    if (await Permission
-                                        .microphone.status.isGranted) {
+                                    // if (await Permission
+                                    //     .microphone.status.isGranted) {
                                       feedViewController
                                           .showAudioRecordWidget.value = true;
-                                    } else {
-                                      ShowWarnDialog().showWarn(
-                                          context: context,
-                                          message:
-                                              "Enable microphone permission.",
-                                          iconData: Icons.mic_none);
-                                    }
+                                    // } else {
+                                    //   ShowWarnDialog().showWarn(
+                                    //       context: context,
+                                    //       message:
+                                    //           "Enable microphone permission.",
+                                    //       iconData: Icons.mic_none);
+                                    // }
                                   },
                                   child: SizedBox(
                                     height: 25.w,

@@ -464,7 +464,7 @@ class _NonTeacherStudentListState extends State<NonTeacherStudentList> {
                   notificationcount: true),
 
               Container(
-                margin: EdgeInsets.only(left: 10.w, top: 128.h, right: 10.w),
+                margin: EdgeInsets.only(left: 10.w, top: 140.h, right: 10.w),
                 height: MediaQuery.of(context).size.height,
                 decoration: BoxDecoration(
                     color: Colors.white,
@@ -479,7 +479,8 @@ class _NonTeacherStudentListState extends State<NonTeacherStudentList> {
                      
                         Expanded(
                           child: Padding(
-                            padding: const EdgeInsets.only(left: 20, right: 10, top: 20, bottom: 20),
+                            padding: const EdgeInsets.only(
+                                left: 10, right: 8, top: 20, bottom: 20),
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Container(
@@ -488,8 +489,9 @@ class _NonTeacherStudentListState extends State<NonTeacherStudentList> {
                                   "${widget.className.toString()}"
                                   " "
                                   "${widget.subjectName.toString()}",
+                                  maxLines: 1,
                                   style: const TextStyle(
-                                      fontSize: 16, fontWeight: FontWeight.w600),
+                                      fontSize: 15, fontWeight: FontWeight.w600),
                                 ),
                               ),
                             ),
@@ -614,7 +616,7 @@ class _NonTeacherStudentListState extends State<NonTeacherStudentList> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Container(
-                                    height: 20,
+                                    height: 18,
                                     margin: const EdgeInsets.all(8),
                                     child: Text(
                                       "Note: Attendance has already been taken.",

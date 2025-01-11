@@ -400,7 +400,7 @@ class _trackingDetails2State extends State<trackingDetails2> {
                                 const SizedBox(height: 5.0),
                                 Padding(
                                   padding:
-                                      const EdgeInsets.only(left: 40, right: 30),
+                                  const EdgeInsets.only(left: 30, right: 30),
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -934,7 +934,7 @@ class _trackingDetails2State extends State<trackingDetails2> {
                                           const SizedBox(height: 5.0),
                                           Padding(
                                             padding: const EdgeInsets.only(
-                                                left: 40, right: 30),
+                                                left: 30, right: 30),
                                             child: Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.spaceBetween,

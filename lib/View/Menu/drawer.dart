@@ -39,8 +39,11 @@ class _DrawerScreenState extends State<DrawerScreen> {
     FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
 
     flutterLocalNotificationsPlugin.initialize(
-      const InitializationSettings(
+      InitializationSettings(
         android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+        iOS: DarwinInitializationSettings(
+          onDidReceiveLocalNotification: onDidReceiveLocalNotification,
+        ),
       ),
       onDidReceiveNotificationResponse: (NotificationResponse response) {
         if (response.payload != null) {
@@ -94,6 +97,30 @@ class _DrawerScreenState extends State<DrawerScreen> {
       );
     }
   }
+
+  // Handle foreground notifications on iOS
+// Handle foreground notifications on iOS
+  Future<void> onDidReceiveLocalNotification(int id, String? title, String? body, String? payload) async {
+    if (payload != null) {
+      // Convert the payload into a RemoteMessage
+      RemoteMessage message = RemoteMessage(
+        data: json.decode(payload),  // Parse the payload as a map
+      );
+
+      // Now create a NotificationResponse with the data from the message
+      NotificationResponse response = NotificationResponse(
+        id: id,
+        payload: payload,  // Use the payload directly or pass data from the message
+        notificationResponseType: NotificationResponseType.selectedNotification,
+      );
+
+      // Handle the notification with the created response
+      _handleMessage(message);
+    }
+
+    print("Received notification while in the foreground: $title, $body");
+  }
+
 
   @override
   void initState() {

@@ -59,7 +59,7 @@ class _ObsResultState extends State<ObsResult> {
                     ),
                     child: const UserDetails(
                       shoBackgroundColor: false,
-                      isWelcome: true,
+                      isWelcome: false,
                       bellicon: true,
                       notificationcount: true,
                     ),

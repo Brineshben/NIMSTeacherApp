@@ -533,6 +533,7 @@ class FeedViewController extends GetxController {
   Future<bool> permissionCheck(context) async {
     PermissionStatus cameraPermissionStatus = await Permission.camera.status;
     // PermissionStatus micPermissionStatus = await Permission.microphone.status;
+    print("----cameraPermissionStatus----$cameraPermissionStatus");
 
     if (cameraPermissionStatus.isGranted) {
       return true;

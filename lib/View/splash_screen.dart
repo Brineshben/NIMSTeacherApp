@@ -40,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
         if (userRole == UserRole.leader) {
           List<String>? rolIds =
               userAuthController.userData.value.roleIds ?? [];
-          Navigator.push(context,
+          Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => const DrawerScreen()));
           // if ((rolIds.contains("rolepri12") || rolIds.contains("role12123")) &&
           //     !rolIds.contains("role121234")) {

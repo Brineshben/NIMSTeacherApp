@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:path_provider/path_provider.dart' as directory;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:record/record.dart';
 import 'package:crypto/crypto.dart';
@@ -43,9 +43,13 @@ class _ChatAudioRecordingWidgetState extends State<ChatAudioRecordingWidget> {
   }
 
   Future initRecorder() async {
-    await Permission.microphone.request();
-    await record();
-    setState(() {});
+    // await Permission.microphone.request();
+    if(await recorder.hasPermission()){
+      await record();
+      setState(() {});
+    }else{
+      // await recorder.
+    }
   }
 
   String generateRandomFilename() {
@@ -57,7 +61,7 @@ class _ChatAudioRecordingWidgetState extends State<ChatAudioRecordingWidget> {
 
   Future record() async {
     // final provider = Provider.of<ChatProvider>(context, listen: false);
-    final appDir = await getExternalStorageDirectory();
+    final appDir = await directory.getApplicationDocumentsDirectory();
     final randomFilename = generateRandomFilename();
     await recorder.start(
         const RecordConfig(encoder: AudioEncoder.wav, bitRate: 64000),

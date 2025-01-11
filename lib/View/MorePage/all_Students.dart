@@ -340,7 +340,7 @@ class _AllStudentsState extends State<AllStudents> {
                 children: [
                   Text(
                     "SCAN QR CODE",
-                    style: TextStyle(color: Colors.white,fontSize: 13),
+                    style: TextStyle(color: Colors.white,fontSize: 12),
                   ),
                   SizedBox(
                     width: 5,

@@ -66,6 +66,12 @@ class FcmService extends GetxService {
             htmlFormatSummaryText: true,
           ),
         ),
+        iOS: DarwinNotificationDetails(
+          presentAlert: true, // Show an alert when the notification is received
+          presentSound: playSound, // Play sound if enabled
+          sound: playSound ? 'alarm.aiff' : null, // Use .aiff sound file
+          presentBadge: true, // Update badge count
+        ),
       ),
       payload: json.encode(notification),
     );
@@ -93,6 +99,8 @@ class FcmService extends GetxService {
     requestPermission();
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print("------gbfgb--------${message.data}");
+      print("Message received: ${message.data}");
+      print("Notification: ${message.notification?.title}, ${message.notification?.body}");
       Map<String, dynamic>? notification = message.data;
       displayNotification(notification);
       // AndroidNotification? android = message.notification?.android;
@@ -112,6 +120,16 @@ class FcmService extends GetxService {
         .resolvePlatformSpecificImplementation<
         AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
+
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>()
+        ?.requestPermissions(
+      critical: true,
+      provisional: false,
+      alert: true,
+      badge: true,
+      sound: true,
+    );
     //
     handleForeground();
     //Token
@@ -147,6 +165,8 @@ class FcmService extends GetxService {
           .resolvePlatformSpecificImplementation<
           IOSFlutterLocalNotificationsPlugin>()
           ?.requestPermissions(
+          critical: true,
+          provisional: false,
           alert: true, badge: true, sound: true);
       if (result == true) {
         print("Permission granted");

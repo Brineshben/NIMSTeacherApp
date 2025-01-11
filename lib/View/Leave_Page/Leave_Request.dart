@@ -82,7 +82,7 @@ class _LeaveRequestState extends State<LeaveRequest>
                     ),
                     child: const UserDetails(
                       shoBackgroundColor: false,
-                      isWelcome: true,
+                      isWelcome: false,
                       bellicon: true,
                       notificationcount: true,
                     ),

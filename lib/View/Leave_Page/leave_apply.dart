@@ -305,7 +305,7 @@ class _ObsResultState extends State<LeaveApply> {
                                       height: 5.h,
                                     ),
                                     Padding(
-                                      padding: EdgeInsets.only(left: 10.w),
+                                      padding: EdgeInsets.only(left: 2.w,right: 2.w),
                                       child: Padding(
                                         padding: const EdgeInsets.all(2.0),
                                         child: Row(

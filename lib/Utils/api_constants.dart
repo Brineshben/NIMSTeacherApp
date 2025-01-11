@@ -7,7 +7,7 @@ class ApiConstants {
     return _instance;
   }
 
-  static String appVersion = "Version : 2.0.1";
+  static String appVersion = "Version : 3.0.0";
   static Map<String, String> headers = {
     'x-auth-token': 'tq355lY3MJyd8Uj2ySzm',
     'Content-Type': 'application/json'
@@ -15,21 +15,21 @@ class ApiConstants {
 
   //-----------------live url------------------
 
-  // static String baseUrl = "https://nims3000.educore.guru";
-  // static String downloadUrl = "https://nims4000.educore.guru";
-  // static String docMeUrl = "https://bmark.nimsuae.com";
-  // static String bmClinic = "https://api-bmclinic.nimsuae.com";
-  // static String chat = "https://chat.bmark.in/api";
+  static String baseUrl = "https://nims3000.educore.guru";
+  static String downloadUrl = "https://nims4000.educore.guru";
+  static String docMeUrl = "https://bmark.nimsuae.com";
+  static String bmClinic = "https://api-bmclinic.nimsuae.com";
+  static String chat = "https://chat.benchmark.school/api";
 
   //-----------------test url------------------
   // static String baseUrl = "https://192.168.29.221";
 
-  // static String baseUrl = "https://teamsqa3000.educore.guru";
-  static String baseUrl = "https://sqa3000.educore.guru"; // smoke
-  static String downloadUrl = "https://teamsqa4000.educore.guru";
-  static String docMeUrl = "https://sqa.docme.online/bm-school";
-  static String bmClinic = "https://apiqa-bmclinic.docme.online";
-  static String chat = "https://chat.bmark.in/api";
+  // // static String baseUrl = "https://teamsqa3000.educore.guru";
+  // static String baseUrl = "https://sqa3000.educore.guru"; // smoke
+  // static String downloadUrl = "https://teamsqa4000.educore.guru";
+  // static String docMeUrl = "https://sqa.docme.online/bm-school";
+  // static String bmClinic = "https://apiqa-bmclinic.docme.online";
+  // static String chat = "https://chat.bmark.in/api";
 
   //----------------commons--------------------
 

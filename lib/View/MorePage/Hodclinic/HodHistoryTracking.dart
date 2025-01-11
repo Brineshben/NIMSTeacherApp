@@ -635,7 +635,7 @@ class _Container1State extends State<Container1> {
                 ),
                 const SizedBox(height: 5.0),
                 Padding(
-                  padding: const EdgeInsets.only(left: 40, right: 40),
+                  padding: const EdgeInsets.only(left: 30, right: 30),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -801,7 +801,7 @@ class Container2 extends StatelessWidget {
                 ),
                 const SizedBox(height: 5.0),
                 Padding(
-                  padding: const EdgeInsets.only(left: 40, right: 30),
+                  padding: const EdgeInsets.only(left: 30, right: 30),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -1026,7 +1026,7 @@ class _Container3State extends State<Container3> {
                 ),
                 const SizedBox(height: 5.0),
                 Padding(
-                  padding: const EdgeInsets.only(left: 40, right: 40),
+                  padding: const EdgeInsets.only(left: 30, right: 30),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -1375,7 +1375,7 @@ class Container4 extends StatelessWidget {
                 ),
                 const SizedBox(height: 5.0),
                 Padding(
-                  padding: const EdgeInsets.only(left: 40, right: 30),
+                  padding: const EdgeInsets.only(left: 30, right: 30),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

@@ -26,12 +26,12 @@ class UserDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: EdgeInsets.only(left: 8.w, right: 8.w, bottom: 3.h),
+        padding: EdgeInsets.only(left: 8.w, right: 8.w, bottom: 8.h),
         child: GetX<UserAuthController>(
           builder: (UserAuthController controller) {
             return SafeArea(
               child: Container(
-                height: 90.h,
+                height: isWelcome? 90.h:60.h,
                 decoration: BoxDecoration(
                   color: shoBackgroundColor
                       ? Colorutils.userdetailcolor

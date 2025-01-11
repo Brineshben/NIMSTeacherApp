@@ -378,6 +378,14 @@ class UserAuthController extends GetxController {
       FirebaseMessaging messaging = FirebaseMessaging.instance;
       fcmToken = await messaging.getToken();
       messaging.requestPermission(
+        carPlay: false,
+        criticalAlert: false,
+        provisional: false,
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+      messaging.setForegroundNotificationPresentationOptions(
         alert: true,
         badge: true,
         sound: true,

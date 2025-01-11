@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:teacherapp/Controller/ui_controllers/page_controller.dart';
 import '../../Utils/constants.dart';
 import '../Home_Page/Home_Widgets/bottom_navigationbar.dart';
+import 'package:upgrader/upgrader.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -26,19 +27,21 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: systemUiOverlayStyleDark,
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: GetX<PageIndexController>(
-            builder: (PageIndexController controller) {
-              return controller.menuItemsPerRole[controller.pageIndex.value].page;
-              // return getScreen(
-              //     pageIndex: controller.pageIndex.value,
-              // );
-            },
+    return UpgradeAlert(
+      child: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: systemUiOverlayStyleDark,
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          body: GetX<PageIndexController>(
+              builder: (PageIndexController controller) {
+                return controller.menuItemsPerRole[controller.pageIndex.value].page;
+                // return getScreen(
+                //     pageIndex: controller.pageIndex.value,
+                // );
+              },
+          ),
+          bottomNavigationBar: const CustomBottomNavigationBar(),
         ),
-        bottomNavigationBar: const CustomBottomNavigationBar(),
       ),
     );
   }

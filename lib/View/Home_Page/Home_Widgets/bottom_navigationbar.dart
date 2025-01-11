@@ -14,7 +14,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 80.h,
+      height: 100.h,
       child: Theme(
         data: Theme.of(context).copyWith(splashFactory: NoSplash.splashFactory),
         child: GetX<PageIndexController>(

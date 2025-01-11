@@ -11,6 +11,8 @@ import 'Home_Widgets/subject_list.dart';
 import 'Home_Widgets/time_table.dart';
 import 'Home_Widgets/topics.dart';
 import 'Home_Widgets/user_details.dart';
+import '../../Utils/constants.dart';
+import 'package:flutter/services.dart';
 
 class Teacher extends StatefulWidget {
   const Teacher({super.key});
@@ -50,49 +52,52 @@ class _TeacherState extends State<Teacher> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 4, right: 4),
-      child: SafeArea(
-        child: SingleChildScrollView(
-          physics: const NeverScrollableScrollPhysics(),
-          child: Column(
-            children: [
-              hSpace(25.h),
-              const UserDetails(
-                shoBackgroundColor: true,
-                isWelcome: true,
-                bellicon: true,
-                notificationcount: true,
-              ),
-              GetX<TimeTableController>(
-                builder: (TimeTableController controller) {
-                  return SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.8,
-                    child: ListView(
-                      padding: const EdgeInsets.only(bottom: 50).w,
-                      children: [
-                        if (controller.classTeacherSubjects.isNotEmpty ||
-                            controller.teacherSubjects.isNotEmpty)
-                          const MyClass(),
-                        ClassList(
-                          classTeacherSubjects:
-                              controller.classTeacherSubjects.value,
-                        ),
-                        SubjectList(
-                            teacherSubjects: controller.teacherSubjects.value),
-                        if(controller.teacherTimeTableToday.value.isNotEmpty)
-                          AllTimeTable(
-                              todaySubjects:
-                              controller.teacherTimeTableToday.value),
-                        Topic(
-                            todaySubjects:
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: systemUiOverlayStyleLight,
+      child: Padding(
+        padding: const EdgeInsets.only(left: 4, right: 4),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            physics: const NeverScrollableScrollPhysics(),
+            child: Column(
+              children: [
+                hSpace(25.h),
+                const UserDetails(
+                  shoBackgroundColor: true,
+                  isWelcome: true,
+                  bellicon: true,
+                  notificationcount: true,
+                ),
+                GetX<TimeTableController>(
+                  builder: (TimeTableController controller) {
+                    return SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.8,
+                      child: ListView(
+                        padding: const EdgeInsets.only(bottom: 75).w,
+                        children: [
+                          if (controller.classTeacherSubjects.isNotEmpty ||
+                              controller.teacherSubjects.isNotEmpty)
+                            const MyClass(),
+                          ClassList(
+                            classTeacherSubjects:
+                                controller.classTeacherSubjects.value,
+                          ),
+                          SubjectList(
+                              teacherSubjects: controller.teacherSubjects.value),
+                          if(controller.teacherTimeTableToday.value.isNotEmpty)
+                            AllTimeTable(
+                                todaySubjects:
                                 controller.teacherTimeTableToday.value),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ],
+                          Topic(
+                              todaySubjects:
+                                  controller.teacherTimeTableToday.value),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -97,7 +97,7 @@ class ClassList extends StatelessWidget {
                     ),
                   ),
                   Positioned(
-                    right: 0,
+                    right: 10,
                     top: 0,
                     child: ClipRRect(
                       borderRadius: const BorderRadius.only(topRight: Radius.circular(25)).r,

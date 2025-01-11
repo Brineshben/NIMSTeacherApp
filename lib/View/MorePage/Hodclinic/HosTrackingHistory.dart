@@ -986,7 +986,7 @@ class _HostrackinghistoryState extends State<Hostrackinghistory> {
                                             const SizedBox(height: 5.0),
                                             Padding(
                                               padding: const EdgeInsets.only(
-                                                  left: 40, right: 30),
+                                                  left: 30, right: 30),
                                               child: Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment

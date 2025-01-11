@@ -130,7 +130,7 @@ class ObsResultListTile extends StatelessWidget {
                                       obsData?.observerName ?? '--',
                                       // 'Observer',
                                       style: TextStyle(
-                                        fontSize: 15.h,
+                                        fontSize: 14.h,
                                       ),
                                     ),
                                   ),
@@ -158,7 +158,7 @@ class ObsResultListTile extends StatelessWidget {
                                   ':',
                                   // 'Observer',
                                   style: TextStyle(
-                                    fontSize: 15.h,
+                                    fontSize: 14.h,
                                   ),
                                 ),
                               ),

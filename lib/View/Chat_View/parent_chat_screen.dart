@@ -911,11 +911,11 @@ class _ParentChatScreenState extends State<ParentChatScreen> {
                                         : controller.audioPath.value == null
                                             ? InkWell(
                                                 onTap: () async {
-                                                  bool permission =
-                                                      await parentChattingController
-                                                          .permissionCheck(
-                                                              context);
-                                                  if (permission) {
+                                                  // bool permission =
+                                                  //     await parentChattingController
+                                                  //         .permissionCheck(
+                                                  //             context);
+                                                  // if (permission) {
                                                     Navigator.of(context).push(
                                                       MaterialPageRoute(
                                                         builder: (context) {
@@ -925,7 +925,7 @@ class _ParentChatScreenState extends State<ParentChatScreen> {
                                                         },
                                                       ),
                                                     );
-                                                  }
+                                                  // }
                                                 },
                                                 child: SizedBox(
                                                   height: 25.w,
@@ -954,21 +954,21 @@ class _ParentChatScreenState extends State<ParentChatScreen> {
                                             },
                                             onLongPress: () async {
                                               HapticFeedback.vibrate();
-                                              await Permission.microphone
-                                                  .request();
-
-                                              if (await Permission.microphone
-                                                  .status.isGranted) {
+                                              // await Permission.microphone
+                                              //     .request();
+                                              //
+                                              // if (await Permission.microphone
+                                              //     .status.isGranted) {
                                                 parentChattingController
                                                     .showAudioRecordWidget
                                                     .value = true;
-                                              } else {
-                                                ShowWarnDialog().showWarn(
-                                                    context: context,
-                                                    message:
-                                                        "Enable microphone permission.",
-                                                    iconData: Icons.mic_none);
-                                              }
+                                              // } else {
+                                              //   ShowWarnDialog().showWarn(
+                                              //       context: context,
+                                              //       message:
+                                              //           "Enable microphone permission.",
+                                              //       iconData: Icons.mic_none);
+                                              // }
                                             },
                                             child: SizedBox(
                                               height: 25.w,
