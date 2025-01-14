@@ -325,7 +325,7 @@ class ChatItem extends StatelessWidget {
                       Row(
                         children: [
                           Container(
-                            constraints: const BoxConstraints(maxWidth: 120),
+                            constraints: BoxConstraints(maxWidth: 250.w),
                             child: Text(
                               // "English",
                               // "className",
@@ -339,7 +339,8 @@ class ChatItem extends StatelessWidget {
                       SizedBox(height: 2.h),
                       Row(
                         children: [
-                          Expanded(
+                          Container(
+                            constraints: BoxConstraints(maxWidth: 250.w),
                             child: Text(
                               // "studentName",
                               studentName,
@@ -360,19 +361,26 @@ class ChatItem extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(
-                // "02/04/24",
-                convertDateFormat(date),
-                style: TeacherAppFonts.interW400_14sp_textWhite.copyWith(
-                  color: Colorutils.letters1,
+              Container(
+                constraints: BoxConstraints(maxWidth: 80.w),
+                child: Text(
+                  // "02/04/24dss",
+                  overflow: TextOverflow.ellipsis,
+                  convertDateFormat(date),
+                  style: TeacherAppFonts.interW400_14sp_textWhite.copyWith(
+                    color: Colorutils.letters1,
+                  ),
                 ),
               ),
               SizedBox(height: 5.h),
-              Text(
-                // "7:32PM",
-                convertTimeFormat(date),
-                style: TeacherAppFonts.interW500_14sp_letters1.copyWith(
-                  color: Colors.black,
+              Container(
+                constraints: BoxConstraints(maxWidth: 80.w),
+                child: Text(
+                  // "7:32PM",
+                  convertTimeFormat(date),
+                  style: TeacherAppFonts.interW500_14sp_letters1.copyWith(
+                    color: Colors.black,
+                  ),
                 ),
               ),
             ],

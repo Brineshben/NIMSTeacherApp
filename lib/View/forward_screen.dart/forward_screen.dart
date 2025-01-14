@@ -889,15 +889,18 @@ class _ForwardScreenState extends State<ForwardScreen>
                                                                   return Text(
                                                                     // "Can you pls share the pdf adsdaddsf.",
                                                                     controller
-                                                                            .forwardSingleList[index]
+                                                                            .forwardSingleList[
+                                                                                index]
                                                                             .messageGroupdata
                                                                             .lastMessage
-                                                                            ?.message ??
+                                                                            ?.message
+                                                                            ?.replaceAll('\n',
+                                                                                ' ') ??
                                                                         "--",
                                                                     overflow:
                                                                         TextOverflow
                                                                             .ellipsis,
-
+                                                                    maxLines: 1,
                                                                     style: TeacherAppFonts
                                                                         .interW400_14sp_textWhite
                                                                         .copyWith(
