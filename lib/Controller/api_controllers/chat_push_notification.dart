@@ -90,8 +90,7 @@ class PushNotificationController extends GetxController {
     //   }
     // ];
 
-    print(
-        "Push Notification body --------------------------------------------${jsonEncode(body)}");
+    log("Push Notification body --------------------------------------------${jsonEncode(body)}");
 
     try {
       final respose = await http.post(Uri.parse(url),
