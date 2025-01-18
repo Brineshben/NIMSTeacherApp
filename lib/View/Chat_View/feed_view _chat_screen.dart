@@ -158,7 +158,7 @@ class _FeedViewChatScreenState extends State<FeedViewChatScreen>
 
   @override
   void dispose() {
-    Get.find<FeedViewController>().chatFeedViewScrollController.value.dispose();
+    // Get.find<FeedViewController>().chatFeedViewScrollController.value.dispose();
     if (chatUpdate != null) {
       chatUpdate!.cancel();
     }
@@ -938,7 +938,7 @@ class FeedViewTextField extends StatelessWidget {
                                                       "",
                                                   overflow:
                                                       TextOverflow.ellipsis,
-
+                                                  maxLines: 3,
                                                   style: TeacherAppFonts
                                                       .interW400_14sp_textWhite
                                                       .copyWith(
