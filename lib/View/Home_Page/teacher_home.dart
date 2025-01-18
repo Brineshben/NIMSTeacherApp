@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:teacherapp/Controller/api_controllers/timeTableController.dart';
 import 'package:teacherapp/Services/common_services.dart';
+import 'package:teacherapp/Utils/Colors.dart';
 import 'package:teacherapp/View/Home_Page/Home_Widgets/my_class.dart';
 import '../../Controller/api_controllers/popUpContoller.dart';
 import 'Home_Widgets/class_list.dart';
@@ -68,26 +69,35 @@ class _TeacherState extends State<Teacher> {
                 builder: (TimeTableController controller) {
                   return SizedBox(
                     height: MediaQuery.of(context).size.height * 0.8,
-                    child: ListView(
-                      padding: const EdgeInsets.only(bottom: 50).w,
-                      children: [
-                        if (controller.classTeacherSubjects.isNotEmpty ||
-                            controller.teacherSubjects.isNotEmpty)
-                          const MyClass(),
-                        ClassList(
-                          classTeacherSubjects:
-                              controller.classTeacherSubjects.value,
-                        ),
-                        SubjectList(
-                            teacherSubjects: controller.teacherSubjects.value),
-                        if(controller.teacherTimeTableToday.value.isNotEmpty)
-                          AllTimeTable(
-                              todaySubjects:
-                              controller.teacherTimeTableToday.value),
-                        Topic(
-                            todaySubjects:
+                    child: RefreshIndicator(
+
+                      color: Colorutils.userdetailcolor,
+                      onRefresh: () async{
+                        initialize();
+    Get.find<Popupcontoller>().fetchAllStudentDateList();
+
+                      },
+                      child: ListView(
+                        padding: const EdgeInsets.only(bottom: 50).w,
+                        children: [
+                          if (controller.classTeacherSubjects.isNotEmpty ||
+                              controller.teacherSubjects.isNotEmpty)
+                            const MyClass(),
+                          ClassList(
+                            classTeacherSubjects:
+                                controller.classTeacherSubjects.value,
+                          ),
+                          SubjectList(
+                              teacherSubjects: controller.teacherSubjects.value),
+                          if(controller.teacherTimeTableToday.value.isNotEmpty)
+                            AllTimeTable(
+                                todaySubjects:
                                 controller.teacherTimeTableToday.value),
-                      ],
+                          Topic(
+                              todaySubjects:
+                                  controller.teacherTimeTableToday.value),
+                        ],
+                      ),
                     ),
                   );
                 },

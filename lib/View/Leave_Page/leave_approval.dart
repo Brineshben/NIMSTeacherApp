@@ -48,6 +48,7 @@ class _LeaveApprovalState extends State<LeaveApproval> with SingleTickerProvider
     context.loaderOverlay.hide();
   }
 
+
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
@@ -172,19 +173,39 @@ class _LeaveApprovalState extends State<LeaveApproval> with SingleTickerProvider
                               children: [
                                 Container(
                                     color: Colors.white,
-                                    child: const SingleChildScrollView(
-                                        child: PendingLeave())
+                                    child: RefreshIndicator(
+                                      onRefresh: () async{
+                                        initialize();
+      leaveApprovalController.setCurrentLeaveTab(index: _tabController1.index);
+                                
+      
+                                      },
+                                      child: const SingleChildScrollView(
+                                          child: PendingLeave()),
+                                    )
                                 ),
 
                                 Container(
                                     color: Colors.white,
-                                    child: const SingleChildScrollView(child: ApproveRejected())
+                                    child: RefreshIndicator(
+                                      onRefresh: () async{                
+                               initialize();
+      leaveApprovalController.setCurrentLeaveTab(index: _tabController1.index);
+       
+                                      },
+                                      child: const SingleChildScrollView(child: ApproveRejected()))
                                 ),
                                 Container(
                                     color: Colors.white,
-                                    child: const SingleChildScrollView(
-                                      physics: NeverScrollableScrollPhysics(),
-                                        child: allleave())
+                                    child: RefreshIndicator(
+                                      onRefresh: () async{
+      initialize();
+      leaveApprovalController.setCurrentLeaveTab(index: _tabController1.index);
+                                      },
+                                      child: const SingleChildScrollView(
+                                        
+                                          child: allleave()),
+                                    )
                                 ),
                               ],
                             ),

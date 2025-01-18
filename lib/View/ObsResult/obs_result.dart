@@ -71,48 +71,53 @@ class _ObsResultState extends State<ObsResult> {
                       left: 10.w, top: 120.h, right: 10.w),
                   height: ScreenUtil().screenHeight,
                   decoration: themeCardDecoration2,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(left: 20.w, top: 20.w),
-                          child: Row(
-                            children: [
-                              Text(
-                                'Observation Result',
-                                style: TextStyle(
-                                    fontSize: 20.h,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                            ],
+                  child: RefreshIndicator(
+                    onRefresh: () async{
+                      initialize();
+                    },
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(left: 20.w, top: 20.w),
+                            child: Row(
+                              children: [
+                                Text(
+                                  'Observation Result',
+                                  style: TextStyle(
+                                      fontSize: 20.h,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        GetX<ObsResultController>(
-                          builder: (ObsResultController controller) {
-                            List<ObsResultData> obsList =
-                                controller.obsResultList.value;
-                            // (controller.isLoading.value) {
-                            //   return const Center(child: CircularProgressIndicator(color: Colors.teal));
-                            // } else if
-                            if (!controller.isLoading.value &&
-                                obsList.isEmpty) {
-                              return Center(child: Image.asset("assets/images/nodata.gif"));
-                            } else if (!controller.isLoading.value &&
-                                obsList.isNotEmpty) {
-                              return Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  for (int i = 0; i < obsList.length; i++)
-                                    ObsResultListTile(obsData: obsList[i]),
-                                ],
-                              );
-                            } else {
-                              return Container();
-                            }
-                          },
-                        ),
-                      ],
+                          GetX<ObsResultController>(
+                            builder: (ObsResultController controller) {
+                              List<ObsResultData> obsList =
+                                  controller.obsResultList.value;
+                              // (controller.isLoading.value) {
+                              //   return const Center(child: CircularProgressIndicator(color: Colors.teal));
+                              // } else if
+                              if (!controller.isLoading.value &&
+                                  obsList.isEmpty) {
+                                return Center(child: Image.asset("assets/images/nodata.gif"));
+                              } else if (!controller.isLoading.value &&
+                                  obsList.isNotEmpty) {
+                                return Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    for (int i = 0; i < obsList.length; i++)
+                                      ObsResultListTile(obsData: obsList[i]),
+                                  ],
+                                );
+                              } else {
+                                return Container();
+                              }
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

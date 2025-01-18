@@ -309,184 +309,189 @@ class _LeaveRequestState extends State<LeaveRequest>
                                       .toUpperCase()
                                       .compareTo(b.name!.trim().toUpperCase()),
                                 );
-
+                    
                                 if (studentList.isNotEmpty) {
                                   return SizedBox(
                                     height: ScreenUtil().screenHeight * 0.7,
-                                    child: SingleChildScrollView(
-                                      padding: EdgeInsets.only(
-                                              bottom: View.of(context)
-                                                          .viewInsets
-                                                          .bottom ==
-                                                      0
-                                                  ? 200
-                                                  : 400)
-                                          .h,
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          for (int i = 0;
-                                              i < studentList.length;
-                                              i++)
-                                            InkWell(
-                                              onTap: () {
-                                                Navigator.of(context).push(
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        LeaveApply(
-                                                      studentsData:
-                                                          studentList[i],
-                                                      claas: controller
-                                                          .claass.value,
-                                                      batch: controller
-                                                          .batch.value,
+                                    child: RefreshIndicator(
+                                      onRefresh: () async{
+                                  
+                                      },
+                                      child: SingleChildScrollView(
+                                        padding: EdgeInsets.only(
+                                                bottom: View.of(context)
+                                                            .viewInsets
+                                                            .bottom ==
+                                                        0
+                                                    ? 200
+                                                    : 400)
+                                            .h,
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            for (int i = 0;
+                                                i < studentList.length;
+                                                i++)
+                                              InkWell(
+                                                onTap: () {
+                                                  Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          LeaveApply(
+                                                        studentsData:
+                                                            studentList[i],
+                                                        claas: controller
+                                                            .claass.value,
+                                                        batch: controller
+                                                            .batch.value,
+                                                      ),
                                                     ),
-                                                  ),
-                                                );
-                                              },
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 10,
-                                                    left: 15,
-                                                    right: 15,
-                                                    bottom: 5),
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
-                                                      color: Colorutils
-                                                          .chatcolor
-                                                          .withOpacity(0.05),
-                                                      border: Border.all(
-                                                          color: Colorutils
-                                                              .chatcolor)),
-                                                  child: Padding(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        horizontal: 8,
-                                                        vertical: 8),
-                                                    child: Row(
-                                                      children: [
-                                                        Container(
-                                                          width: 50.w,
-                                                          height: 50.h,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            shape:
-                                                                BoxShape.circle,
-                                                            border: Border.all(
-                                                                color: Colorutils
-                                                                    .chatcolor),
-                                                          ),
-                                                          child: ClipRRect(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                        .circular(
-                                                                            100)
-                                                                    .r,
-                                                            child:
-                                                                CachedNetworkImage(
-                                                              imageUrl:
-                                                                  "${ApiConstants.downloadUrl}${studentList[i].profileImage}",
-                                                              placeholder:
-                                                                  (context,
-                                                                          url) =>
-                                                                      Center(
-                                                                child: Text(
-                                                                  studentList[i]
-                                                                          .name
-                                                                          ?.substring(
-                                                                              0,
-                                                                              1) ??
-                                                                      '',
-                                                                  style: const TextStyle(
-                                                                      color: Color(
-                                                                          0xFFB1BFFF),
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      fontSize:
-                                                                          20),
+                                                  );
+                                                },
+                                                child: Padding(
+                                                  padding: const EdgeInsets.only(
+                                                      top: 10,
+                                                      left: 15,
+                                                      right: 15,
+                                                      bottom: 5),
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                                10),
+                                                        color: Colorutils
+                                                            .chatcolor
+                                                            .withOpacity(0.05),
+                                                        border: Border.all(
+                                                            color: Colorutils
+                                                                .chatcolor)),
+                                                    child: Padding(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 8,
+                                                          vertical: 8),
+                                                      child: Row(
+                                                        children: [
+                                                          Container(
+                                                            width: 50.w,
+                                                            height: 50.h,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              shape:
+                                                                  BoxShape.circle,
+                                                              border: Border.all(
+                                                                  color: Colorutils
+                                                                      .chatcolor),
+                                                            ),
+                                                            child: ClipRRect(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                          .circular(
+                                                                              100)
+                                                                      .r,
+                                                              child:
+                                                                  CachedNetworkImage(
+                                                                imageUrl:
+                                                                    "${ApiConstants.downloadUrl}${studentList[i].profileImage}",
+                                                                placeholder:
+                                                                    (context,
+                                                                            url) =>
+                                                                        Center(
+                                                                  child: Text(
+                                                                    studentList[i]
+                                                                            .name
+                                                                            ?.substring(
+                                                                                0,
+                                                                                1) ??
+                                                                        '',
+                                                                    style: const TextStyle(
+                                                                        color: Color(
+                                                                            0xFFB1BFFF),
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
+                                                                        fontSize:
+                                                                            20),
+                                                                  ),
                                                                 ),
-                                                              ),
-                                                              errorWidget:
-                                                                  (context, url,
-                                                                          error) =>
-                                                                      Center(
-                                                                child: Text(
-                                                                  studentList[i]
-                                                                          .name
-                                                                          ?.substring(
-                                                                              0,
-                                                                              1) ??
-                                                                      '',
-                                                                  style: const TextStyle(
-                                                                      color: Color(
-                                                                          0xFFB1BFFF),
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      fontSize:
-                                                                          20),
+                                                                errorWidget:
+                                                                    (context, url,
+                                                                            error) =>
+                                                                        Center(
+                                                                  child: Text(
+                                                                    studentList[i]
+                                                                            .name
+                                                                            ?.substring(
+                                                                                0,
+                                                                                1) ??
+                                                                        '',
+                                                                    style: const TextStyle(
+                                                                        color: Color(
+                                                                            0xFFB1BFFF),
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
+                                                                        fontSize:
+                                                                            20),
+                                                                  ),
                                                                 ),
                                                               ),
                                                             ),
                                                           ),
-                                                        ),
-                                                        SizedBox(
-                                                          width: 10.w,
-                                                        ),
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .only(
-                                                                  left: 5),
-                                                          child: Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              SizedBox(
-                                                                width: 250.w,
-                                                                child: Text(
-                                                                  studentList[i]
-                                                                          .name
-                                                                          ?.toUpperCase() ??
-                                                                      '--',
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis,
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          16.sp,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w600),
-                                                                ),
-                                                              ),
-                                                              SizedBox(
-                                                                width: 250.w,
-                                                                child: Text(
-                                                                  "Adm. No. : ${studentList[i].admissionNumber ?? '--'}",
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          16.sp,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w400),
-                                                                ),
-                                                              ),
-                                                            ],
+                                                          SizedBox(
+                                                            width: 10.w,
                                                           ),
-                                                        )
-                                                      ],
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .only(
+                                                                    left: 5),
+                                                            child: Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                SizedBox(
+                                                                  width: 250.w,
+                                                                  child: Text(
+                                                                    studentList[i]
+                                                                            .name
+                                                                            ?.toUpperCase() ??
+                                                                        '--',
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            16.sp,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .w600),
+                                                                  ),
+                                                                ),
+                                                                SizedBox(
+                                                                  width: 250.w,
+                                                                  child: Text(
+                                                                    "Adm. No. : ${studentList[i].admissionNumber ?? '--'}",
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            16.sp,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .w400),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   );
