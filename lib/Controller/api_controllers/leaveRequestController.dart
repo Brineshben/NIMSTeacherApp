@@ -42,6 +42,7 @@ class LeaveRequestController extends GetxController {
         classList.value = leaveRequestListApiModel.data?.details ?? [];
 
         if(classList.value.isNotEmpty) {
+                     classList.sort((a, b) =>"${a.className!}${a.batchName!}".compareTo("${b.className!}${b.batchName!}"));
           studentList.value = classList.value.first.students ?? [];
           classData.value = classList.value.first;
           filteredStudentList.value = studentList.value;

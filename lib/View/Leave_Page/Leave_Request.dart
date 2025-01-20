@@ -31,7 +31,8 @@ class _LeaveRequestState extends State<LeaveRequest>
 
   @override
   void initState() {
-    initialize();
+     initialize();
+
     _searchController.addListener(() {
       setState(() {});
     });
@@ -179,7 +180,7 @@ class _LeaveRequestState extends State<LeaveRequest>
                                                           onTap: () {
                                                             setState(() {
                                                               print(
-                                                                  "object----------------------------------");
+                                                                  "object--------------------------------- $index");
                                                               _currentIndex =
                                                                   index;
                                                               controller.setStudentList(
@@ -315,7 +316,13 @@ class _LeaveRequestState extends State<LeaveRequest>
                                     height: ScreenUtil().screenHeight * 0.7,
                                     child: RefreshIndicator(
                                       onRefresh: () async{
-                                  
+                                        initialize();
+                                         
+                                        setState(() {
+                                          if(leaveRequestController.filteredStudentList.isNotEmpty){
+                                            _currentIndex= 0;
+                                          }
+                                        });
                                       },
                                       child: SingleChildScrollView(
                                         padding: EdgeInsets.only(
