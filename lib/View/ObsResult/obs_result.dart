@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:loader_overlay/loader_overlay.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:teacherapp/Utils/Colors.dart';
 import 'package:teacherapp/View/ObsResult/obs_result_widgets/obs_result_listTile.dart';
 import '../../Controller/api_controllers/obsResultController.dart';
 import '../../Models/api_models/obs_result_api_model.dart';
@@ -29,10 +31,10 @@ class _ObsResultState extends State<ObsResult> {
   }
 
   Future<void> initialize() async {
-    context.loaderOverlay.show();
+  
     await obsResultController.fetchObsResultList();
     if (!mounted) return;
-    context.loaderOverlay.hide();
+ 
   }
 
   @override
@@ -72,10 +74,12 @@ class _ObsResultState extends State<ObsResult> {
                   height: ScreenUtil().screenHeight,
                   decoration: themeCardDecoration2,
                   child: RefreshIndicator(
+                   color: Colorutils.userdetailcolor,
                     onRefresh: () async{
                       initialize();
                     },
                     child: SingleChildScrollView(
+                 physics:  const AlwaysScrollableScrollPhysics(),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -99,7 +103,19 @@ class _ObsResultState extends State<ObsResult> {
                               // (controller.isLoading.value) {
                               //   return const Center(child: CircularProgressIndicator(color: Colors.teal));
                               // } else if
-                              if (!controller.isLoading.value &&
+                             if(!controller.isLoaded.value) {
+                              return  SizedBox(
+                                height: 900.h,
+                                child: ListView.builder(
+                                  itemCount: 10,
+                                  
+                                  
+                                  itemBuilder: (context,index) {
+                                    return const ObservationShimmer();
+                                  }
+                                ),
+                              );
+                             }else if (!controller.isLoading.value &&
                                   obsList.isEmpty) {
                                 return Center(child: Image.asset("assets/images/nodata.gif"));
                               } else if (!controller.isLoading.value &&
@@ -125,5 +141,30 @@ class _ObsResultState extends State<ObsResult> {
             ),
           )),
     );
+  }
+
+}
+
+
+class ObservationShimmer extends StatelessWidget {
+  const ObservationShimmer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+     return Shimmer.fromColors(baseColor: Colorutils.chatcolor.withOpacity(0.5), highlightColor: Colorutils.chatcolor
+     !, child:  SizedBox(
+      height: 200.h,
+       child: Padding(
+         padding:EdgeInsets.only(top: 10.h, left: 15.w, right: 15.w, bottom: 5.h),
+         child: Container(
+           height:  160.h,
+           
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color:  Colorutils.chatcolor
+            ),
+         ),
+       ),
+     ));
   }
 }
