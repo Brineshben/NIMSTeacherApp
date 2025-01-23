@@ -75,7 +75,7 @@ class _SwapeToWidgetState extends State<SwapeToWidget> {
               child: Stack(
                 children: [
                   Transform.translate(
-                    offset: const Offset(-50, 0),
+                    offset: Offset(value > 65 ? -50 - (value - 65) : -50, 0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [widget.iconWidget],

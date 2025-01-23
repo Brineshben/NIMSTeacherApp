@@ -734,7 +734,7 @@ class _ParentChatScreenState extends State<ParentChatScreen> {
                                                             overflow:
                                                                 TextOverflow
                                                                     .ellipsis,
-
+                                                            maxLines: 3,
                                                             style: TeacherAppFonts
                                                                 .interW400_14sp_textWhite
                                                                 .copyWith(

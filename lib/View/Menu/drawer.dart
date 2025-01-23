@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -30,7 +29,8 @@ class _DrawerScreenState extends State<DrawerScreen> {
   final ZoomDrawerController _drawerController = ZoomDrawerController();
 
   Future<void> setupInteractedMessage() async {
-    RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+    RemoteMessage? initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
 
     if (initialMessage != null) {
       _handleMessage(initialMessage);
@@ -57,15 +57,16 @@ class _DrawerScreenState extends State<DrawerScreen> {
     if (message.data['category'] == 'student_tracking') {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => const DrawerScreen()),
-              (route) => false);
-      if(Get.find<PageIndexController>().navLength.value == 4) {
+          (route) => false);
+      if (Get.find<PageIndexController>().navLength.value == 4) {
         Get.find<HomeController>().currentIndex.value = 3;
         Get.find<PageIndexController>().changePage(currentPage: 3);
-      } else if(Get.find<PageIndexController>().navLength.value == 5) {
+      } else if (Get.find<PageIndexController>().navLength.value == 5) {
         Get.find<HomeController>().currentIndex.value = 4;
         Get.find<PageIndexController>().changePage(currentPage: 4);
       }
-    } else if(message.data['category'] == 'chat') {
+    } else if (message.data['category'] == 'chat') {
+      print("push Notification data ----------------------- ${message.data}");
       Get.delete<FeedViewController>();
       Get.put(FeedViewController());
       Get.delete<ChatClassGroupController>();
@@ -75,7 +76,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
 
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => const DrawerScreen()),
-              (route) => false);
+          (route) => false);
       Get.find<HomeController>().currentIndex.value = 2;
       Get.find<PageIndexController>().changePage(currentPage: 2);
 

@@ -66,9 +66,9 @@ Future<void> _fcmBackgroundHandler(RemoteMessage message) async {
 
   // Prepare the notification
   Map<String, dynamic> notification = message.data;
-  if(notification['title'] != null) {
+  if (notification['title'] != null) {
     flutterLocalNotificationsPlugin.show(
-        notification.hashCode,
+      notification.hashCode,
       notification['title'],
       notification['message'],
       NotificationDetails(
