@@ -455,7 +455,7 @@ class _LessonObservationApplyState extends State<LessonObservationApply> {
                                               if(point.point == null) {
                                                 radioNotSelected = true;
                                                 TeacherAppPopUps.submitFailed(
-                                                  title: "Error",
+                                                  title: "Warning",
                                                   message: "Please Enter all Fields",
                                                   actionName: "Close",
                                                   iconData: Icons.info,
@@ -479,7 +479,7 @@ class _LessonObservationApplyState extends State<LessonObservationApply> {
                                           }
                                           else{
                                             TeacherAppPopUps.submitFailed(
-                                              title: "Error",
+                                              title: "Warning",
                                               message: "Please Enter all Mandatory Fields",
                                               actionName: "Close",
                                               iconData: Icons.info,

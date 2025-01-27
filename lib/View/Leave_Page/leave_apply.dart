@@ -581,7 +581,7 @@ class _ObsResultState extends State<LeaveApply> {
 
                 );} else {submitFailed(
                   // title: resp['status']['message'],
-                  title: "Error",
+                  title: "Message",
                   message: resp['data']['message'],
                   actionName: "Close",
                   iconData: Icons.error_outline,

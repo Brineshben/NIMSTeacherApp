@@ -435,8 +435,6 @@ class _LessonWalkApplyState extends State<LessonWalkApply> {
                                       ),
                                       SizedBox(height: 50.h),
                                       GestureDetector(
-
-
                                         onTap: () async {
                                           bool radioNotSelected = false;
                                           if(_formKey.currentState!.validate()) {
@@ -444,7 +442,7 @@ class _LessonWalkApplyState extends State<LessonWalkApply> {
                                               if(point.point == null) {
                                                 radioNotSelected = true;
                                                 TeacherAppPopUps.submitFailed(
-                                                  title: "Error",
+                                                  title: "Warning",
                                                   message: "Please Enter all Fields",
                                                   actionName: "Close",
                                                   iconData: Icons.info,
@@ -468,7 +466,7 @@ class _LessonWalkApplyState extends State<LessonWalkApply> {
                                           }
                                           else{
                                             TeacherAppPopUps.submitFailed(
-                                              title: "Error",
+                                              title: "Warning",
                                               message: "Please Enter all Mandatory Fields",
                                               actionName: "Close",
                                               iconData: Icons.info,

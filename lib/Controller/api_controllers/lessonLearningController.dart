@@ -143,7 +143,7 @@ class LessonLearningController extends GetxController {
             await LessonLearningDatabase.instance.delete(data.id!);
           } else {
             TeacherAppPopUps.submitFailed(
-              title: "Error",
+              title: "Message",
               message: "Failed to sync data.",
               actionName: "Close",
               iconData: Icons.error_outline,
@@ -153,7 +153,7 @@ class LessonLearningController extends GetxController {
           }
         } on SocketException {
           TeacherAppPopUps.submitFailed(
-            title: "Error",
+            title: "Message",
             message: "Internet connection is not stable",
             actionName: "Close",
             iconData: Icons.done,
@@ -162,7 +162,7 @@ class LessonLearningController extends GetxController {
           break;
         } catch (e) {
           TeacherAppPopUps.submitFailed(
-            title: "Error",
+            title: "Message",
             message: "Something went wrong",
             actionName: "Close",
             iconData: Icons.done,
@@ -202,7 +202,7 @@ class LessonLearningController extends GetxController {
             await LearningWalkDB.instance.deleteLearningWalk(data.id!);
           } else {
             TeacherAppPopUps.submitFailed(
-              title: "Error",
+              title: "Message",
               message: "Failed to sync data.",
               actionName: "Close",
               iconData: Icons.error_outline,
@@ -212,7 +212,7 @@ class LessonLearningController extends GetxController {
           }
         } on SocketException {
           TeacherAppPopUps.submitFailed(
-            title: "Error",
+            title: "Message",
             message: "Internet connection is not stable",
             actionName: "Close",
             iconData: Icons.done,
@@ -221,7 +221,7 @@ class LessonLearningController extends GetxController {
           break;
         } catch (e) {
           TeacherAppPopUps.submitFailed(
-            title: "Error",
+            title: "Message",
             message: "Something went wrong",
             actionName: "Close",
             iconData: Icons.done,
