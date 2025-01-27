@@ -94,7 +94,7 @@ class FcmService extends GetxService {
     //Foreground Handler
     requestPermission();
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print("------gbfgb--------${message.data}");
+      print("------gbfgb--------${message.toMap()}");
       Map<String, dynamic>? notification = message.data;
       displayNotification(notification);
       // AndroidNotification? android = message.notification?.android;

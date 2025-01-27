@@ -171,7 +171,8 @@ class _ReportListViewState extends State<ReportListView> {
         if (facultyData.containsKey("teacherComponent") ||
             facultyData.containsKey("supervisorComponent") ||
             facultyData.containsKey("hosComponent") ||
-            facultyData.containsKey("hodComponent")) {
+            facultyData.containsKey("hodComponent") ||
+            facultyData.containsKey("principalComponent")) {
           if (facultyData.containsKey("teacherComponent")) {
             if (loginCredential!["data"]["data"][0]["faculty_data"]
             ["teacherComponent"]["is_class_teacher"] ==
@@ -447,6 +448,37 @@ class _ReportListViewState extends State<ReportListView> {
                   var classBatch = loginCredential!["data"]["data"][0]
                   ["faculty_data"]["hodComponent"]["own_list_groups"]
                   [index]["class_group"][ind]["academic"];
+                  classB.add("${classBatch.split("/")[2]} ${classBatch.split("/")[3]}");
+                }
+              }
+
+              print('..c...$employeeUnderHOS');
+
+              print('.....classB$classB');
+
+              print('.....$loginCredential');
+
+              setState(() {
+                isSpinner = false;
+              });
+            }
+          }
+
+          if (facultyData.containsKey("principalComponent")) {
+            if (loginCredential!["data"]["data"][0]["faculty_data"]["principalComponent"]["is_hos"] == true) {
+              for (var ind = 0; ind < loginCredential!["data"]["data"][0]["faculty_data"]["principalComponent"]["own_list_groups"].length; ind++) {
+                for (var index = 0; index < loginCredential!["data"]["data"][0]["faculty_data"]["principalComponent"]["own_list_groups"][ind]["class_group"].length; index++) {
+                  if (loginCredential!["data"]["data"][0]["faculty_data"]["principalComponent"]["own_list_groups"][ind]["class_group"][index].containsKey("class_teacher")) {
+                    var employeeUnderHod = loginCredential!["data"]["data"][0]["faculty_data"]["principalComponent"]["own_list_groups"][ind]["class_group"][index]["class_teacher"]["employee_no"];
+                    var employeeEmailUnderHod = loginCredential!["data"]["data"][0]["faculty_data"]["principalComponent"]["own_list_groups"][ind]["class_group"][index]["class_teacher"]["username"];
+                    employeeUnderHOS.add(employeeUnderHod);
+                    employeeEmailUnderHOS.add(employeeEmailUnderHod);
+                  }
+                }
+              }
+              for (var index = 0; index < loginCredential!["data"]["data"][0]["faculty_data"]["principalComponent"]["own_list_groups"].length; index++) {
+                for (var ind = 0; ind < loginCredential!["data"]["data"][0]["faculty_data"]["principalComponent"]["own_list_groups"][index]["class_group"].length; ind++) {
+                  var classBatch = loginCredential!["data"]["data"][0]["faculty_data"]["principalComponent"]["own_list_groups"][index]["class_group"][ind]["academic"];
                   classB.add("${classBatch.split("/")[2]} ${classBatch.split("/")[3]}");
                 }
               }
