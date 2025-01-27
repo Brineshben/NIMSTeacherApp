@@ -800,66 +800,79 @@ class _ReportListViewState extends State<ReportListView> {
                                 filled: true),
                           ),
                         ),
-                        RefreshIndicator(
-                          onRefresh: () async{
-                        initialize();
-                          },
-                          child: SingleChildScrollView(
-                            physics:  AlwaysScrollableScrollPhysics(), 
-                            child: Expanded(
-                            
-                                child: teacherList== null
-                                    ? Center(
+                        Expanded(
+                        
+                            child: teacherList== null
+                                ? RefreshIndicator(
+                                  onRefresh: ()  async{
+                                    await initialize();
+                                  },
+                                  child: SingleChildScrollView(
+                                    physics:const  AlwaysScrollableScrollPhysics(),
+                                    child: Center(
                                     child: Image.asset(
-                                        "assets/images/nodata.gif"))
-                                    : teacherList!["data_status"] == 0
+                                        "assets/images/nodata.gif")),
+                                  ),
+                                )
+                                : teacherList!["data_status"] == 0
+                                    ? RefreshIndicator(
+                                      onRefresh: () async{
+                                        await initialize();
+                                      },
+                                      child: SingleChildScrollView(
+                                         physics: const AlwaysScrollableScrollPhysics(),
+                                        child: Center(
+                                            child: Image.asset(
+                                                "assets/images/nodata.gif")),
+                                      ),
+                                    )
+                                    : teacherList!["message"] ==
+                                            "employee_code Required"
                                         ? Center(
                                             child: Image.asset(
                                                 "assets/images/nodata.gif"))
-                                        : teacherList!["message"] ==
-                                                "employee_code Required"
-                                            ? Center(
-                                                child: Image.asset(
-                                                    "assets/images/nodata.gif"))
-                                            : ListView.builder(
-                                                // key: Key(
-                                                //     'builder ${selected.toString()}'),
-                                                itemCount: _searchController
-                                                        .text.isNotEmpty
-                                                    ? newReport.length
-                                                    : teacherList!["data"].length,
-                                                itemBuilder: (BuildContext context,
-                                                    int index) {
-                                                  return _getProfileOfStudents(
-                                                      "assets/images/nancy.png",
-                                                      _searchController.text.isNotEmpty
-                                                          ? toBeginningOfSentenceCase(
-                                                                  newReport[index]["employee_name"]
-                                                                      .toString()
-                                                                      .toLowerCase())
-                                                              .toString()
-                                                          : toBeginningOfSentenceCase(
-                                                                  teacherList!["data"][index]["employee_name"]
-                                                                      .toString()
-                                                                      .toLowerCase())
-                                                              .toString(),
-                                                      _searchController.text.isNotEmpty
-                                                          ? newReport[index]
-                                                                  ["total_count"]
-                                                              .toString()
-                                                          : teacherList!["data"][index]
-                                                                  ["total_count"]
-                                                              .toString(),
-                                                      _searchController.text.isNotEmpty
-                                                          ? newReport[index]
-                                                                  ["employee_code"]
-                                                              .toString()
-                                                          : teacherList!["data"][index]["employee_code"].toString(),
-                                                      index);
-                                                },
-                                              )),
-                          ),
-                        ),
+                                        : RefreshIndicator(
+                                          onRefresh: () async{
+                                            await  initialize();
+                                          },
+                                          child: ListView.builder(
+                                              // key: Key(
+                                              //     'builder ${selected.toString()}'),
+                                              itemCount: _searchController
+                                                      .text.isNotEmpty
+                                                  ? newReport.length
+                                                  : teacherList!["data"].length,
+                                              itemBuilder: (BuildContext context,
+                                                  int index) {
+                                                return _getProfileOfStudents(
+                                                    "assets/images/nancy.png",
+                                                    _searchController.text.isNotEmpty
+                                                        ? toBeginningOfSentenceCase(
+                                                                newReport[index]["employee_name"]
+                                                                    .toString()
+                                                                    .toLowerCase())
+                                                            .toString()
+                                                        : toBeginningOfSentenceCase(
+                                                                teacherList!["data"][index]["employee_name"]
+                                                                    .toString()
+                                                                    .toLowerCase())
+                                                            .toString(),
+                                                    _searchController.text.isNotEmpty
+                                                        ? newReport[index]
+                                                                ["total_count"]
+                                                            .toString()
+                                                        : teacherList!["data"][index]
+                                                                ["total_count"]
+                                                            .toString(),
+                                                    _searchController.text.isNotEmpty
+                                                        ? newReport[index]
+                                                                ["employee_code"]
+                                                            .toString()
+                                                        : teacherList!["data"][index]["employee_code"].toString(),
+                                                    index);
+                                              },
+                                            ),
+                                        )),
                         SizedBox(
                           height: 140.h,
                         )

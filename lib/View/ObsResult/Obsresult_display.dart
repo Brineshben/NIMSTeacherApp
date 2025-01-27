@@ -327,7 +327,7 @@ class _ObsResultdisplayState extends State<ObsResultdisplay> {
 
                   child: RefreshIndicator(
                     onRefresh: () async{
-                        getObservationResultdata();
+                       await  getObservationResultdata();
                     },
                     
                     child: SingleChildScrollView(

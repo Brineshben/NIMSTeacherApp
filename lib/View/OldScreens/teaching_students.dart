@@ -753,8 +753,17 @@ class _StudentListViewState extends State<StudentListView> {
                           ),
                         )
                             : newResult.isEmpty
-                            ? Center(child: Container(height: 300,
-                            child: Image.asset("assets/images/nodata.gif")))
+                            ? RefreshIndicator(
+                              onRefresh: () async{
+                                            getlateattendance();
+    getStudentAttendanceList();
+                              },
+                              child: SingleChildScrollView(
+                                physics: AlwaysScrollableScrollPhysics(),
+                                child: Center(child: Container(height: 300,
+                                child: Image.asset("assets/images/nodata.gif"))),
+                              ),
+                            )
                             : Expanded(
                             child: RefreshIndicator(
                               onRefresh: () async{
