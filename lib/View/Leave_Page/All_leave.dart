@@ -75,7 +75,7 @@ class _allleaveState extends State<allleave> {
           height: 600.h,
           child: GetX<LeaveApprovalController>(
             builder: (LeaveApprovalController controller) {
-              List<AllLeaves> leaveList = controller.filteredAllLeaves.value;
+              List<AllLeaves> leaveList = controller.filteredAllLeaves.value.reversed.toList();
               if(leaveList.isNotEmpty) {
                 return ListView.builder(
                   padding: EdgeInsets.only(bottom: 80.h, top: 0, right: 0, left: 0),

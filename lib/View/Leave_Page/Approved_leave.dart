@@ -77,7 +77,7 @@ class _PendingLeaveState extends State<PendingLeave> {
           height: 600.h,
           child: GetX<LeaveApprovalController>(
             builder: (LeaveApprovalController controller) {
-              List<Pendings> leaveList = controller.filteredPendingLeaves.value;
+              List<Pendings> leaveList = controller.filteredPendingLeaves.value.reversed.toList();
               UserRole? userRole = Get.find<UserAuthController>().userRole.value;
               if(leaveList.isNotEmpty){
               return ListView.builder(

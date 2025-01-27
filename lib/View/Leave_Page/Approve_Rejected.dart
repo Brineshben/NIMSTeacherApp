@@ -62,9 +62,11 @@ class ApproveRejected extends StatelessWidget {
           height: 600.h,
           child: GetX<LeaveApprovalController>
             (builder: (LeaveApprovalController controller) {
-            List<ApprovedOrRejected> leaveList = controller.filteredApprovedOrRejectedLeaves.value;
+            List<ApprovedOrRejected> leaveList = controller.filteredApprovedOrRejectedLeaves.value.reversed.toList();
             if(leaveList.isNotEmpty) {
+              
               return ListView.builder(
+                
                 padding: EdgeInsets.only(bottom: 80.h, top: 0, right: 0, left: 0),
                 itemCount: leaveList.length,
                 itemBuilder: (context, i) {
