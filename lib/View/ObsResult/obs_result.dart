@@ -76,7 +76,7 @@ class _ObsResultState extends State<ObsResult> {
                   child: RefreshIndicator(
                    color: Colorutils.userdetailcolor,
                     onRefresh: () async{
-                      initialize();
+                     await initialize();
                     },
                     child: SingleChildScrollView(
                  physics:  const AlwaysScrollableScrollPhysics(),

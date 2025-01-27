@@ -316,7 +316,7 @@ class _LeaveRequestState extends State<LeaveRequest>
                                     height: ScreenUtil().screenHeight * 0.7,
                                     child: RefreshIndicator(
                                       onRefresh: () async{
-                                        initialize();
+                                        await initialize();
                                          
                                         setState(() {
                                           if(leaveRequestController.filteredStudentList.isNotEmpty){
@@ -503,13 +503,21 @@ class _LeaveRequestState extends State<LeaveRequest>
                                     ),
                                   );
                                 } else {
-                                  return SizedBox(
-                                    height: ScreenUtil().screenHeight * 0.7,
-                                    child: SizedBox(
-                                      height: 250.h,
-                                      child: Center(
-                                        child: Image.asset(
-                                            "assets/images/nodata.gif"),
+                                  return RefreshIndicator(
+                                    onRefresh: ()  async{
+                                     await initialize();
+                                    },
+                                    child: SingleChildScrollView(
+                                      physics: AlwaysScrollableScrollPhysics(),
+                                      child: SizedBox(
+                                        height: ScreenUtil().screenHeight * 0.7,
+                                        child: SizedBox(
+                                          height: 250.h,
+                                          child: Center(
+                                            child: Image.asset(
+                                                "assets/images/nodata.gif"),
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   );

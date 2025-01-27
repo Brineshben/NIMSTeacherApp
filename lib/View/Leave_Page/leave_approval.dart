@@ -175,7 +175,7 @@ class _LeaveApprovalState extends State<LeaveApproval> with SingleTickerProvider
                                     color: Colors.white,
                                     child: RefreshIndicator(
                                       onRefresh: () async{
-                                        initialize();
+                                       await initialize();
       leaveApprovalController.setCurrentLeaveTab(index: _tabController1.index);
                                 
       
@@ -189,7 +189,7 @@ class _LeaveApprovalState extends State<LeaveApproval> with SingleTickerProvider
                                     color: Colors.white,
                                     child: RefreshIndicator(
                                       onRefresh: () async{                
-                               initialize();
+                              await  initialize();
       leaveApprovalController.setCurrentLeaveTab(index: _tabController1.index);
        
                                       },
@@ -199,7 +199,7 @@ class _LeaveApprovalState extends State<LeaveApproval> with SingleTickerProvider
                                     color: Colors.white,
                                     child: RefreshIndicator(
                                       onRefresh: () async{
-      initialize();
+     await  initialize();
       leaveApprovalController.setCurrentLeaveTab(index: _tabController1.index);
                                       },
                                       child: const SingleChildScrollView(
