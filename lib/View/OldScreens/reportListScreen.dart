@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,6 +12,7 @@ import 'package:http/http.dart' as http;
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart' show toBeginningOfSentenceCase;
+import 'package:shimmer/shimmer.dart';
 import 'package:teacherapp/View/OldScreens/studentListForHos.dart';
 
 import '../../Controller/api_controllers/userAuthController.dart';
@@ -52,6 +54,8 @@ class _ReportListViewState extends State<ReportListView> {
   var loginname;
   Map<String, dynamic>? notificationResult;
   int Count = 0;
+  bool loading  = false;
+  bool loaded = false;
 
   @override
   void initState() {
@@ -73,6 +77,7 @@ class _ReportListViewState extends State<ReportListView> {
   Future getTeacherList() async {
 
     context.loaderOverlay.show();
+      loaded  = false;
   try{
     Map<String, String> headers = {
       'API-Key': '525-777-777',
@@ -120,6 +125,7 @@ class _ReportListViewState extends State<ReportListView> {
   } catch (e) {
 
   }
+     loaded = true;
     context.loaderOverlay.hide();
 
   }
@@ -802,7 +808,8 @@ class _ReportListViewState extends State<ReportListView> {
                         ),
                         Expanded(
                         
-                            child: teacherList== null
+                            child: !loaded? 
+                                      ReportsShimmer():teacherList== null
                                 ? RefreshIndicator(
                                   onRefresh: ()  async{
                                     await initialize();
@@ -1197,4 +1204,53 @@ class _ReportListViewState extends State<ReportListView> {
 //   timer!.cancel();
 //   super.dispose();
 // }
+}
+
+class ReportsShimmer extends StatelessWidget {
+  const ReportsShimmer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return  SizedBox(
+      height: 500.h,
+     child: ListView.separated(
+      separatorBuilder: (context, index) => SizedBox(height: 10.h,),
+        itemCount: 10,
+        itemBuilder: (context, indext){
+         return Shimmer.fromColors(
+          baseColor: Colors.grey[200]!, highlightColor: Colors.grey[300]!,
+           child:  ListTile(
+           leading: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+               borderRadius: BorderRadius.circular(30)
+            ),
+      
+              width: 65.w,
+              height: 65.h,
+            ),
+            title: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10)
+              ),
+              width: 2.w,height:15.h,),
+            subtitle: Container( decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10)
+              ), width: 2.w,height: 5.h,),
+            trailing: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+               borderRadius: BorderRadius.circular(30)
+            ),
+      
+              width: 25.w,
+              height: 25.h,
+            ),
+           ),
+         );
+       })
+    );
+  }
 }
