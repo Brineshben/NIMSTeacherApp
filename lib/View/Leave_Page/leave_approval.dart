@@ -173,39 +173,16 @@ class _LeaveApprovalState extends State<LeaveApproval> with SingleTickerProvider
                               children: [
                                 Container(
                                     color: Colors.white,
-                                    child: RefreshIndicator(
-                                      onRefresh: () async{
-                                       await initialize();
-      leaveApprovalController.setCurrentLeaveTab(index: _tabController1.index);
-                                
-      
-                                      },
-                                      child: const SingleChildScrollView(
-                                          child: PendingLeave()),
-                                    )
+                                    child: PendingLeave()
                                 ),
 
                                 Container(
                                     color: Colors.white,
-                                    child: RefreshIndicator(
-                                      onRefresh: () async{                
-                              await  initialize();
-      leaveApprovalController.setCurrentLeaveTab(index: _tabController1.index);
-       
-                                      },
-                                      child: const SingleChildScrollView(child: ApproveRejected()))
+                                    child: ApproveRejected()
                                 ),
                                 Container(
                                     color: Colors.white,
-                                    child: RefreshIndicator(
-                                      onRefresh: () async{
-     await  initialize();
-      leaveApprovalController.setCurrentLeaveTab(index: _tabController1.index);
-                                      },
-                                      child: const SingleChildScrollView(
-                                        
-                                          child: allleave()),
-                                    )
+                                    child: allleave()
                                 ),
                               ],
                             ),

@@ -129,6 +129,7 @@ class ObsResultListTile extends StatelessWidget {
                                     child: Text(
                                       obsData?.observerName ?? '--',
                                       // 'Observer',
+                                      maxLines: 2,
                                       style: TextStyle(
                                         fontSize: 15.h,
                                       ),

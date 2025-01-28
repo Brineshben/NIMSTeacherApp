@@ -23,7 +23,7 @@ class ObsResult extends StatefulWidget {
 
 class _ObsResultState extends State<ObsResult> {
   ObsResultController obsResultController = Get.find<ObsResultController>();
-
+   TextEditingController _obsSearchConroller =  TextEditingController();
   @override
   void initState() {
     initialize();
@@ -78,33 +78,78 @@ class _ObsResultState extends State<ObsResult> {
                     onRefresh: () async{
                      await initialize();
                     },
-                    child: SingleChildScrollView(
-                 physics:  const AlwaysScrollableScrollPhysics(),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(left: 20.w, top: 20.w),
-                            child: Row(
-                              children: [
-                                Text(
-                                  'Observation Result',
-                                  style: TextStyle(
-                                      fontSize: 20.h,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                              ],
-                            ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(left: 20.w, top: 20.w),
+                          child: Row(
+                            children: [
+                              Text(
+                                'Observation Result',
+                                style: TextStyle(
+                                    fontSize: 20.h,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            ],
                           ),
-                          GetX<ObsResultController>(
-                            builder: (ObsResultController controller) {
-                              List<ObsResultData> obsList =
-                                  controller.obsResultList.value;
-                              // (controller.isLoading.value) {
-                              //   return const Center(child: CircularProgressIndicator(color: Colors.teal));
-                              // } else if
-                             if(!controller.isLoaded.value) {
-                              return  SizedBox(
+                        ),
+
+                        Padding(
+                          padding: EdgeInsets.only(left: 20.w, top: 20.w,right: 20.w),
+                          child: TextFormField(
+                                  controller: _obsSearchConroller,
+                                  onChanged: (value) {
+                    
+                                  obsResultController.filterList(text: value);
+                                  },
+                                  cursorColor: Colors.grey,
+                                  keyboardType: TextInputType.text,
+                                  decoration: InputDecoration(
+                                      hintStyle:
+                                          const TextStyle(color: Colors.grey,),
+                                      hintText: "Search by Observation Name or Date",
+                                      prefixIcon: const Icon(
+                                        Icons.search,
+                                        color: Colorutils.userdetailcolor,
+                                      ),
+                                      contentPadding: const EdgeInsets.symmetric(
+                                          vertical: 10.0, horizontal: 20.0),
+                                      border: const OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(2.0),
+                                        ),
+                                      ),
+                                      enabledBorder: const OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colorutils.chatcolor,
+                                            width: 1.0),
+                                        borderRadius:
+                                            BorderRadius.all(Radius.circular(15)),
+                                      ),
+                                      focusedBorder: const OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colorutils.chatcolor,
+                                            width: 1.0),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(15.0)),
+                                      ),
+                                      fillColor:
+                                          Colorutils.chatcolor.withOpacity(0.15),
+                                      filled: true),
+                                ),
+                        ),
+
+                        GetX<ObsResultController>(
+                          builder: (ObsResultController controller) {
+                            List<ObsResultData> obsList =
+                                controller.obsResultList.value;
+                            // (controller.isLoading.value) {
+                            //   return const Center(child: CircularProgressIndicator(color: Colors.teal));
+                            // } else if
+                           if(!controller.isLoaded.value) {
+                            return  Expanded(
+                              child: SizedBox(
                                 height: 900.h,
                                 child: ListView.builder(
                                   itemCount: 10,
@@ -114,26 +159,50 @@ class _ObsResultState extends State<ObsResult> {
                                     return const ObservationShimmer();
                                   }
                                 ),
+                              ),
+                            );
+                           }else if (!controller.isLoaded.value&&
+                                obsList.isEmpty) {
+                              return Expanded(
+                                child: SizedBox(
+                                  height: 900.h,
+                                  child: ListView.builder(
+                                    itemCount: 1,
+                                      itemBuilder: (context, index) => Center(child: Image.asset("assets/images/nodata.gif")),
+                                    ),
+                                ),
                               );
-                             }else if (!controller.isLoading.value &&
-                                  obsList.isEmpty) {
-                                return Center(child: Image.asset("assets/images/nodata.gif"));
-                              } else if (!controller.isLoading.value &&
-                                  obsList.isNotEmpty) {
-                                return Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    for (int i = 0; i < obsList.length; i++)
-                                      ObsResultListTile(obsData: obsList[i]),
-                                  ],
-                                );
-                              } else {
-                                return Container();
-                              }
-                            },
-                          ),
-                        ],
-                      ),
+                            } else if (!controller.isLoading.value &&
+                                obsList.isNotEmpty) {
+                              // return Column(
+                                                            
+                              //   children: [
+                              //     for (int i = 0; i < obsList.length; i++)
+                              //       ObsResultListTile(obsData: obsList[i]),
+                              //   ],
+                              // );
+                              return Expanded(
+                                child: SizedBox(
+                                 height: 900.h,
+                                  child: ListView.separated(
+                                    separatorBuilder: (context, index) => SizedBox(),
+                                    
+                                     itemCount: obsList.length,
+                                    itemBuilder: (context,index){
+                                 
+                                     return ObsResultListTile(obsData: obsList[index]);
+                                      
+                                  }),
+                                ),
+                              );
+                            } else if(obsResultController.obsResultList.isEmpty) {
+                              return Center(child: Image.asset("assets/images/nodata.gif"));
+                            }else{
+                                    return Container();
+                            }
+                          },
+                        ),
+                      ],
                     ),
                   ),
                 ),
