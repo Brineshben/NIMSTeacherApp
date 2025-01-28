@@ -1213,44 +1213,47 @@ class ReportsShimmer extends StatelessWidget {
   Widget build(BuildContext context) {
     return  SizedBox(
       height: 500.h,
-     child: ListView.separated(
-      separatorBuilder: (context, index) => SizedBox(height: 10.h,),
-        itemCount: 10,
-        itemBuilder: (context, indext){
-         return Shimmer.fromColors(
-          baseColor: Colors.grey[200]!, highlightColor: Colors.grey[300]!,
-           child:  ListTile(
-           leading: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-               borderRadius: BorderRadius.circular(30)
-            ),
-      
-              width: 65.w,
-              height: 65.h,
-            ),
-            title: Container(
+     child: Padding(
+       padding:  EdgeInsets.only(bottom: 70.h),
+       child: ListView.separated(
+        separatorBuilder: (context, index) => SizedBox(height: 10.h,),
+          itemCount: 10,
+          itemBuilder: (context, indext){
+           return Shimmer.fromColors(
+            baseColor: Colors.grey[200]!, highlightColor: Colors.grey[300]!,
+             child:  ListTile(
+             leading: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(10)
+                 borderRadius: BorderRadius.circular(30)
               ),
-              width: 2.w,height:15.h,),
-            subtitle: Container( decoration: BoxDecoration(
+        
+                width: 65.w,
+                height: 65.h,
+              ),
+              title: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10)
+                ),
+                width: 2.w,height:15.h,),
+              subtitle: Container( decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10)
+                ), width: 2.w,height: 5.h,),
+              trailing: Container(
+              decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(10)
-              ), width: 2.w,height: 5.h,),
-            trailing: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-               borderRadius: BorderRadius.circular(30)
-            ),
-      
-              width: 25.w,
-              height: 25.h,
-            ),
-           ),
-         );
-       })
+                 borderRadius: BorderRadius.circular(30)
+              ),
+        
+                width: 25.w,
+                height: 25.h,
+              ),
+             ),
+           );
+         }),
+     )
     );
   }
 }
