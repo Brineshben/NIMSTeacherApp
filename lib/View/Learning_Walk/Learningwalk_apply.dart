@@ -590,6 +590,7 @@ class _LessonWalkApplyState extends State<LessonWalkApply> {
         className: lessonObservationController.selectedClass.value?.className ?? '',
         subjectName: lessonObservationController.selectedSubject.value?.subjectName ?? '',
         subjectId: lessonObservationController.selectedSubject.value?.subjectId ?? '',
+        submittedDate: "",
         rollIds: userAuthController.userData.value.allRolesArray ?? [],
         areasForImprovement: [_whatWentWellController.text],
         strengths: [_summaryController.text],

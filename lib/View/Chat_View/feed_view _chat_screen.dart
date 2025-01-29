@@ -1145,7 +1145,7 @@ class FeedViewTextField extends StatelessWidget {
                                           );
                                         },
                                       ),
-                                    )
+                                    ),
                                   ],
                                 ),
                               ),
