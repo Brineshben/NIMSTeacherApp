@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:loader_overlay/loader_overlay.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:teacherapp/Controller/api_controllers/leaveRequestController.dart';
 import 'package:teacherapp/Utils/api_constants.dart';
 import 'package:teacherapp/View/Leave_Page/leave_apply.dart';
@@ -41,10 +42,10 @@ class _LeaveRequestState extends State<LeaveRequest>
   }
 
   Future<void> initialize() async {
-    context.loaderOverlay.show();
+    // context.loaderOverlay.show();
     await leaveRequestController.fetchLeaveReqList();
     if (!mounted) return;
-    context.loaderOverlay.hide();
+    // context.loaderOverlay.hide();
   }
 
   @override
@@ -311,7 +312,9 @@ class _LeaveRequestState extends State<LeaveRequest>
                                       .compareTo(b.name!.trim().toUpperCase()),
                                 );
                     
-                                if (studentList.isNotEmpty) {
+                               if(!leaveRequestController.isLoaded.value){
+                                return LeaveApplyShimmer();
+                               }else if (studentList.isNotEmpty) {
                                   return SizedBox(
                                     height: ScreenUtil().screenHeight * 0.7,
                                     child: RefreshIndicator(
@@ -546,4 +549,62 @@ String capitalizeFirstLetterOfEachWord(String input) {
     print("$removeSpace...........removeSpace..............");
     return removeSpace[0].toUpperCase() + removeSpace.substring(1);
   }).join(' ');
+}
+
+
+class LeaveApplyShimmer extends StatelessWidget {
+  const LeaveApplyShimmer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+    height: ScreenUtil().screenHeight * 0.7,
+         child: ListView.separated(
+          separatorBuilder: (context, index) {
+            return SizedBox(height: 4.h,);
+          },
+       padding: const EdgeInsets.only(
+                                                      top: 10,
+                                                      left: 15,
+                                                      right: 15,
+                                                      bottom: 5),
+          itemCount: 10,
+          itemBuilder: (context,indext){
+          return Container(
+           decoration:  BoxDecoration(
+             borderRadius:
+                                                            BorderRadius.circular(
+                                                                10),
+            color: Colors.grey[50]
+           ),
+            child: Shimmer.fromColors(
+              baseColor:  Colors.grey[200]!,
+              highlightColor: Colors.grey[300]!,
+              child: ListTile(
+                leading: Container(
+                   height:  45.h,
+                   width: 45.w,
+                  decoration:  BoxDecoration(
+                    color:  Colors.blue,
+                     borderRadius: BorderRadius.circular(30.r)
+                    
+                  ),
+                ),
+                trailing: Text(''),
+                  title: Container(height: 10.h,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color:  Colors.blue),
+                  ),
+                  subtitle:   Container(height: 8.h,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color:  Colors.blue),
+                  ),
+              ),
+            ),
+          );
+         }), 
+      );
+  }
 }

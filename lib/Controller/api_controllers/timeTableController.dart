@@ -47,6 +47,7 @@ class TimeTableController extends GetxController {
           }
         }
       }
+        isLoaded.value = true;
     } catch (e) {
       print("------time table error---------");
       isLoaded.value = false;
@@ -101,6 +102,7 @@ class TimeTableController extends GetxController {
       if(classTeacherSubjects.value.isEmpty) {
         Get.find<PageIndexController>().setMenuItems(userRole: UserRole.teacher, isClassTeacher: false);
       }
+       isLoaded.value = true;
     } catch (e) {
       print("------work load error---------");
       isLoaded.value = false;

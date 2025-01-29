@@ -6,6 +6,7 @@ import 'package:loader_overlay/loader_overlay.dart';
 import 'package:teacherapp/Controller/api_controllers/leaveApprovalController.dart';
 import 'package:teacherapp/Utils/Colors.dart';
 import 'package:teacherapp/Utils/api_constants.dart';
+import 'package:teacherapp/View/Leave_Page/Approved_leave.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../Models/api_models/leave_approval_api_model.dart';
@@ -24,11 +25,11 @@ class _ApproveRejectedState extends State<ApproveRejected> {
   Widget build(BuildContext context) {
 
     Future<void> initialize() async {
-    context.loaderOverlay.show();
+    // context.loaderOverlay.show();
     // leaveApprovalController.resetStatus();
     await leaveApprovalController.fetchLeaveReqList();
     if(!mounted) return;
-    context.loaderOverlay.hide();
+    // context.loaderOverlay.hide();
   }
 
     return Column(
@@ -81,7 +82,9 @@ class _ApproveRejectedState extends State<ApproveRejected> {
             child: GetX<LeaveApprovalController>
               (builder: (LeaveApprovalController controller) {
               List<ApprovedOrRejected> leaveList = controller.filteredApprovedOrRejectedLeaves.value.reversed.toList();
-              if(leaveList.isNotEmpty) {
+             if(!leaveApprovalController.isLoaded.value){
+              return LeaveApprovelShimmer();
+             }else if(leaveList.isNotEmpty) {
                 
                 return RefreshIndicator(
                   onRefresh: () async{

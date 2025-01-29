@@ -152,6 +152,7 @@ class _ObsResultState extends State<ObsResult> {
                               child: SizedBox(
                                 height: 900.h,
                                 child: ListView.builder(
+                       
                                   itemCount: 10,
                                   
                                   
@@ -220,8 +221,7 @@ class ObservationShimmer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-     return Shimmer.fromColors(baseColor: Colorutils.chatcolor.withOpacity(0.5), highlightColor: Colorutils.chatcolor
-     !, child:  SizedBox(
+     return SizedBox(
       height: 200.h,
        child: Padding(
          padding:EdgeInsets.only(top: 10.h, left: 15.w, right: 15.w, bottom: 5.h),
@@ -230,10 +230,113 @@ class ObservationShimmer extends StatelessWidget {
            
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
-              color:  Colorutils.chatcolor
+              color:  Colors.grey[50]!
+            ),
+            child: Shimmer.fromColors(baseColor: Colors.grey[200]!,
+            highlightColor: Colors.grey[300]!,
+              child: Column(
+                children: [
+                  SizedBox(height: 20.h,),
+                Container(
+                         height: 13.h,
+                         width: 120.w,
+                    
+                         decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(7),
+                          color: Colors.lightBlue
+                         ),
+                         ),
+                  SizedBox(height: 20.h,),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 10.w,
+                      ),
+                      Container(
+                        height: 45.h,
+                        width: 45.w,
+                    
+                        decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.circular(45.r),
+              
+                        ),
+                      ),
+                      SizedBox(width: 10.w,),
+                     
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                         Container(
+                         height: 13.h,
+                         width: 80.w,
+                    
+                         decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(7),
+                          color: Colors.lightBlue
+                         ),
+                         ),
+                         SizedBox(height: 10.h,),
+                             Row(
+                               children: [
+                                Container(
+                         height: 13.h,
+                         width: 80.w,
+                    
+                         decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(7),
+                          color: Colors.lightBlue
+                         ),
+                         ),
+                         
+                                 SizedBox(width: 20.w,),
+                                Container(
+                         height: 13.h,
+                         width: 80.w,
+                    
+                         decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(7),
+                          color: Colors.lightBlue
+                         ),
+                         ),
+                         
+                               ],
+                             ),
+                             SizedBox(height: 10.h,),
+                          Row(
+                            children: [
+                            Container(
+                         height: 13.h,
+                         width: 80.w,
+                    
+                         decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(7),
+                          color: Colors.lightBlue
+                         ),
+                         ),
+                        SizedBox(height: 10.h,),
+                                 SizedBox(width: 20.w,),
+                             Container(
+                         height: 13.h,
+                         width: 80.w,
+                    
+                         decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(7),
+                          color: Colors.lightBlue
+                         ),
+                         ),
+                            ],
+                          ),
+                        
+                        ],
+                      )
+                    ],
+                  )
+                ],
+              ),
             ),
          ),
        ),
-     ));
+     );
   }
 }

@@ -41,11 +41,11 @@ class _LeaveApprovalState extends State<LeaveApproval> with SingleTickerProvider
   }
 
   Future<void> initialize() async {
-    context.loaderOverlay.show();
+    // context.loaderOverlay.show();
     // leaveApprovalController.resetStatus();
     await leaveApprovalController.fetchLeaveReqList();
     if(!mounted) return;
-    context.loaderOverlay.hide();
+    // context.loaderOverlay.hide();
   }
 
 

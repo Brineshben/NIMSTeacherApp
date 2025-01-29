@@ -9,6 +9,7 @@ import 'package:loader_overlay/loader_overlay.dart';
 import 'package:teacherapp/Controller/api_controllers/userAuthController.dart';
 import 'package:teacherapp/Services/common_services.dart';
 import 'package:teacherapp/Utils/Colors.dart';
+import 'package:teacherapp/View/Leave_Page/Approved_leave.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
 import '../../Controller/api_controllers/leaveApprovalController.dart';
@@ -29,11 +30,11 @@ class _allleaveState extends State<allleave> {
   @override
   Widget build(BuildContext context) {
       Future<void> initialize() async {
-    context.loaderOverlay.show();
+    // context.loaderOverlay.show();
     // leaveApprovalController.resetStatus();
     await leaveApprovalController.fetchLeaveReqList();
     if(!mounted) return;
-    context.loaderOverlay.hide();
+    // context.loaderOverlay.hide();
   }
     return Column(
       children: [
@@ -84,7 +85,9 @@ class _allleaveState extends State<allleave> {
             child: GetX<LeaveApprovalController>(
               builder: (LeaveApprovalController controller) {
                 List<AllLeaves> leaveList = controller.filteredAllLeaves.value.reversed.toList();
-                if(leaveList.isNotEmpty) {
+                if(!leaveApprovalController.isLoaded.value){
+                  return LeaveApprovelShimmer();
+                }else if(leaveList.isNotEmpty) {
                   return RefreshIndicator(
                     onRefresh: () async{
                                 initialize();

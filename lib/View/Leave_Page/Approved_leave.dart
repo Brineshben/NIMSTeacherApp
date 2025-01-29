@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:loader_overlay/loader_overlay.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:teacherapp/Utils/Colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
@@ -26,15 +27,24 @@ class _PendingLeaveState extends State<PendingLeave> {
   final TextEditingController _reasontextController = TextEditingController();
   final FocusNode _reasonFocusNode = FocusNode();
     LeaveApprovalController leaveApprovalController = Get.find<LeaveApprovalController>();
-  @override
-  Widget build(BuildContext context) {
+    bool  isLoaded = false;
+
+
+
       Future<void> initialize() async {
-    context.loaderOverlay.show();
+    // context.loaderOverlay.show();
+    isLoaded =false;
     // leaveApprovalController.resetStatus();
     await leaveApprovalController.fetchLeaveReqList();
+    
     if(!mounted) return;
-    context.loaderOverlay.hide();
+    // context.loaderOverlay.hide();
+    isLoaded = true;
+    
   }
+  @override
+  Widget build(BuildContext context) {
+  
     return Column(
       children: [
         Container(
@@ -87,7 +97,10 @@ class _PendingLeaveState extends State<PendingLeave> {
               builder: (LeaveApprovalController controller) {
                 List<Pendings> leaveList = controller.filteredPendingLeaves.value.reversed.toList();
                 UserRole? userRole = Get.find<UserAuthController>().userRole.value;
-                if(leaveList.isNotEmpty){
+                if(!leaveApprovalController.isLoaded.value){
+                  return LeaveApprovelShimmer();
+                }
+                else if(leaveList.isNotEmpty){
                 return RefreshIndicator(
                   onRefresh: () async{
                               initialize();
@@ -977,5 +990,128 @@ class _PendingLeaveState extends State<PendingLeave> {
     // setState(() {
     //   isSpinner = false;
     // });
+  }
+}
+
+class LeaveApprovelShimmer extends StatelessWidget {
+  const LeaveApprovelShimmer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return  ListView.builder(
+padding: EdgeInsets.only(bottom: 80.h, top: 0, right: 0, left: 0),
+      
+      itemCount: 10,
+      itemBuilder: (context, index) {
+      return Container(
+      height: 200.h,
+      margin: const EdgeInsets.fromLTRB(10, 2, 10, 5),
+      padding: const EdgeInsets.fromLTRB(5, 20, 5, 10),
+      
+      decoration: BoxDecoration(
+         color:  Colors.grey[50],
+         borderRadius: BorderRadius.circular(10.r),
+      ),
+      child: Shimmer.fromColors(
+        baseColor: Colors.grey[200]!,
+        highlightColor: Colors.grey[300]!,
+        child: Row(
+          children: [
+            SizedBox(width: 4.w,),
+            Column(
+            
+              children: [
+                SizedBox(height: 30.h,),
+                Container(
+                  height: 45.h,
+                  width: 45.w,
+                 decoration:  BoxDecoration(
+                  color:  Colors.grey,
+                  borderRadius: BorderRadius.circular(40)
+                 ),
+                ),
+        
+              ],
+            ),
+             SizedBox(width: 10.w,),
+            Column(
+               crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                 Container(
+                  width: 125.w,
+                  height: 16.h,
+                   decoration: BoxDecoration(
+                     color:  Colors.white,
+                     borderRadius: BorderRadius.circular(12.r)
+                   ),
+                 ),
+                 SizedBox(height: 10.h,),
+               Container(
+                  width: 125.w,
+                  height: 15.h,
+                   decoration: BoxDecoration(
+                     color:  Colors.white,
+                     borderRadius: BorderRadius.circular(12.r)
+                   ),
+                 ),
+                  SizedBox(height: 10.h,),
+                Container(
+                  width: 125.w,
+                  height: 15.h,
+                   decoration: BoxDecoration(
+                     color:  Colors.white,
+                     borderRadius: BorderRadius.circular(12.r)
+                   ),
+                 ),
+                  SizedBox(height: 10.h,),
+             
+               Container(
+                  width: 125.w,
+                  height: 15.h,
+                   decoration: BoxDecoration(
+                     color:  Colors.white,
+                     borderRadius: BorderRadius.circular(12.r)
+                   ),
+                 ),
+                  SizedBox(height: 10.h,),
+              
+               Container(
+                  width: 125.w,
+                  height: 15.h,
+                   decoration: BoxDecoration(
+                     color:  Colors.white,
+                     borderRadius: BorderRadius.circular(12.r)
+                   ),
+                 ),
+              SizedBox(height: 15.h,),
+              Row(
+                children: [
+                Container(
+                  width: 125.w,
+                  height: 15.h,
+                   decoration: BoxDecoration(
+                     color:  Colors.white,
+                     borderRadius: BorderRadius.circular(12.r)
+                   ),
+                 ),
+                  SizedBox(width: 60.w,),
+                 Container(
+                  width: 70.w,
+                  height: 36.h,
+                   decoration: BoxDecoration(
+                     color:  Colors.white,
+                     borderRadius: BorderRadius.circular(12.r)
+                   ),
+                 ),
+                ],
+              )
+        
+              ],
+            )
+          ],
+        ),
+      ),
+      );
+    },);
   }
 }
