@@ -51,6 +51,7 @@ class LeaveRequestController extends GetxController {
           batch.value = classList.value.first.batchName ?? '--';
 
         }
+        isLoaded = true.obs;
       }
     } catch (e) {
       isLoaded.value = false;
