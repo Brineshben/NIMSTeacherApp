@@ -83,8 +83,7 @@ class _TeacherState extends State<Teacher> {
                       color: Colorutils.userdetailcolor,
                       onRefresh: () async{
                         initialize();
-        Get.find<Popupcontoller>().fetchAllStudentDateList();
-
+                        Get.find<Popupcontoller>().fetchAllStudentDateList();
                       },
                       child: ListView(
                         padding: const EdgeInsets.only(bottom: 50).w,
