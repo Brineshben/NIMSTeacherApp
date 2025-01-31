@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:shimmer/shimmer.dart';
 
 import '../../Controller/api_controllers/userAuthController.dart';
 import '../../Utils/Colors.dart';
@@ -72,6 +73,7 @@ class _ObsResultdisplayState extends State<ObsResultdisplay> {
   var TeacherComment;
   var count;
   int Count = 0;
+   bool isloaded = false;
   Map<String, dynamic>? notificationResult;
 
   Timer? timer;
@@ -83,6 +85,7 @@ class _ObsResultdisplayState extends State<ObsResultdisplay> {
 
   Future getObservationResultdata() async {
     print('callingdetdata');
+    isloaded = false;
     setState(() {
       isSpinner = true;
     });
@@ -141,6 +144,7 @@ class _ObsResultdisplayState extends State<ObsResultdisplay> {
         TeacherComment =
             ObservationResult!['data']['details']['teacherComment'];
         _teachertextController = TextEditingController(text: TeacherComment);
+        isloaded = true;
         print('....Strength$Strength');
         print('....total_percentage$total_percentage');
         print('....total_grade$total_grade');
@@ -324,26 +328,27 @@ class _ObsResultdisplayState extends State<ObsResultdisplay> {
                     ],
                   ),
 
-
+        
                   child: RefreshIndicator(
                     onRefresh: () async{
                        await  getObservationResultdata();
                     },
-                    
-                    child: SingleChildScrollView(
-                    
+        child: SingleChildScrollView(
+                          
                       child: Form(
                         key: _formKey,
-                        child: Column(
+                        child:  !isloaded?ObservationPageShimmer(): Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                        
+                            
                             Padding(
                               padding: const EdgeInsets.only(left: 10,top: 10,bottom: 30),
                               child:SingleChildScrollView(
+                                 
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                       
                                     SizedBox(
                                       height: 10.h,
                                     ),
@@ -1152,7 +1157,7 @@ class _ObsResultdisplayState extends State<ObsResultdisplay> {
                                 style:
                                 TextStyle(fontSize: 15.sp, color: Colors.black,fontWeight: FontWeight.bold),
                               ),
-                              Container(
+                               Container(
                                 // width: 350.w,
                                 child: Text(
                                   '$Observation',
@@ -1225,5 +1230,179 @@ class _ObsResultdisplayState extends State<ObsResultdisplay> {
     }else{
       return '${percent.toString()}%';
     }
+  }
+}
+
+
+class ObservationPageShimmer extends StatelessWidget {
+  const ObservationPageShimmer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return  SingleChildScrollView(
+      physics:  const NeverScrollableScrollPhysics(),
+      child: Shimmer.fromColors(
+        baseColor: Colors.grey[200]!,
+        highlightColor: Colors.grey[300]!,
+        child: SizedBox(
+          height: 900.h,
+          child: Padding(
+            padding:  EdgeInsets.only(top: 25.h,right: 12.h,left: 12.h ),
+            child:  Column(
+               crossAxisAlignment:  CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 150.w,
+                  height: 22.h,
+                  decoration:  BoxDecoration(
+                 borderRadius: BorderRadius.circular(12),
+                 color:  Colors.yellowAccent
+                  ),
+                ),  SizedBox(
+                  height: 25.h,
+                ),
+                 Row(
+                   children: [
+                     Container(
+                      width: 100.w,
+                      height: 15.h,
+                      decoration:  BoxDecoration(
+                     borderRadius: BorderRadius.circular(12),
+                     color:  Colors.yellowAccent
+                      ),
+                                   ),
+                                   const SizedBox(width: 20,),
+                              Container(
+                      width: 100.w,
+                      height: 15.h,
+                      decoration:  BoxDecoration(
+                     borderRadius: BorderRadius.circular(12),
+                     color:  Colors.yellowAccent
+                      ),
+                                   ),                              
+                   ],
+                 ), 
+                 SizedBox(
+                  height: 18.h,
+                ),
+                  Row(
+                   children: [
+                     Container(
+                      width: 100.w,
+                      height: 15.h,
+                      decoration:  BoxDecoration(
+                     borderRadius: BorderRadius.circular(12),
+                     color:  Colors.yellowAccent
+                      ),
+                                   ),
+                                   const SizedBox(width: 20,),
+                              Container(
+                      width: 100.w,
+                      height: 15.h,
+                      decoration:  BoxDecoration(
+                     borderRadius: BorderRadius.circular(12),
+                     color:  Colors.yellowAccent
+                      ),
+                                   ),                              
+                   ],
+                 ), 
+                  SizedBox(
+                  height: 18.h,
+                ),
+                  Row(
+                   children: [
+                     Container(
+                      width: 100.w,
+                      height: 15.h,
+                      decoration:  BoxDecoration(
+                     borderRadius: BorderRadius.circular(12),
+                     color:  Colors.yellowAccent
+                      ),
+                                   ),
+                                   const SizedBox(width: 20,),
+                              Container(
+                      width: 100.w,
+                      height: 15.h,
+                      decoration:  BoxDecoration(
+                     borderRadius: BorderRadius.circular(12),
+                     color:  Colors.yellowAccent
+                      ),
+                                   ),                              
+                   ],
+                 ), 
+                  SizedBox(
+                  height: 18.h,
+                ),
+                  Row(
+                   children: [
+                     Container(
+                      width: 100.w,
+                      height: 15.h,
+                      decoration:  BoxDecoration(
+                     borderRadius: BorderRadius.circular(12),
+                     color:  Colors.yellowAccent
+                      ),
+                                   ),
+                                   const SizedBox(width: 20,),
+                              Container(
+                      width: 100.w,
+                      height: 15.h,
+                      decoration:  BoxDecoration(
+                     borderRadius: BorderRadius.circular(12),
+                     color:  Colors.yellowAccent
+                      ),
+                                   ),                              
+                   ],
+                 ),  SizedBox(height:  40.h,),
+               Container(
+                height:  120.h,
+                 width:  440.w,
+                decoration:  BoxDecoration(
+                  color:   Colors.blue,
+                  borderRadius: BorderRadius.circular(12)
+                ),
+               ),
+               SizedBox( height:  10.h,),
+                  Container(
+                height:  120.h,
+                 width:  440.w,
+                decoration:  BoxDecoration(
+                  color:   Colors.blue,
+                  borderRadius: BorderRadius.circular(12)
+                ),
+               ),
+                SizedBox( height:  10.h,),
+                  Container(
+                height:  120.h,
+                 width:  440.w,
+                decoration:  BoxDecoration(
+                  color:   Colors.blue,
+                  borderRadius: BorderRadius.circular(12)
+                ),
+               ),
+                SizedBox( height:  10.h,),
+                  Container(
+                height:  120.h,
+                 width:  440.w,
+                decoration:  BoxDecoration(
+                  color:   Colors.blue,
+                  borderRadius: BorderRadius.circular(12)
+                ),
+               ),
+                SizedBox( height:  10.h,),
+                  Container(
+                height:  120.h,
+                 width:  440.w,
+                decoration:  BoxDecoration(
+                  color:   Colors.blue,
+                  borderRadius: BorderRadius.circular(12)
+                ),
+               ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

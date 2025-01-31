@@ -1045,7 +1045,7 @@ padding: EdgeInsets.only(bottom: 80.h, top: 0, right: 0, left: 0),
                      borderRadius: BorderRadius.circular(12.r)
                    ),
                  ),
-                 SizedBox(height: 10.h,),
+                 SizedBox(height: 5.h,),
                Container(
                   width: 125.w,
                   height: 15.h,
@@ -1054,7 +1054,7 @@ padding: EdgeInsets.only(bottom: 80.h, top: 0, right: 0, left: 0),
                      borderRadius: BorderRadius.circular(12.r)
                    ),
                  ),
-                  SizedBox(height: 10.h,),
+                  SizedBox(height: 5.h,),
                 Container(
                   width: 125.w,
                   height: 15.h,
@@ -1063,7 +1063,7 @@ padding: EdgeInsets.only(bottom: 80.h, top: 0, right: 0, left: 0),
                      borderRadius: BorderRadius.circular(12.r)
                    ),
                  ),
-                  SizedBox(height: 10.h,),
+                  SizedBox(height: 5.h,),
              
                Container(
                   width: 125.w,
@@ -1073,7 +1073,7 @@ padding: EdgeInsets.only(bottom: 80.h, top: 0, right: 0, left: 0),
                      borderRadius: BorderRadius.circular(12.r)
                    ),
                  ),
-                  SizedBox(height: 10.h,),
+                  SizedBox(height: 5.h,),
               
                Container(
                   width: 125.w,
