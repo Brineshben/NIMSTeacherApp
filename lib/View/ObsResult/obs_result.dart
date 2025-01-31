@@ -186,7 +186,7 @@ class _ObsResultState extends State<ObsResult> {
                                 child: SizedBox(
                                  height: 900.h,
                                   child: ListView.separated(
-                                    separatorBuilder: (context, index) => SizedBox(),
+                                    separatorBuilder: (context, index) => const SizedBox(),
                                     
                                      itemCount: obsList.length,
                                     itemBuilder: (context,index){

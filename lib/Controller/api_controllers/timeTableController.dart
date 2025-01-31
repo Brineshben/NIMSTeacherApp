@@ -47,6 +47,7 @@ class TimeTableController extends GetxController {
           }
         }
       }
+      print('its called   perfetchly ');
         isLoaded.value = true;
     } catch (e) {
       print("------time table error---------");
