@@ -313,7 +313,7 @@ class _LeaveRequestState extends State<LeaveRequest>
                                 );
                     
                                if(!leaveRequestController.isLoaded.value){
-                                return LeaveApplyShimmer();
+                                return const LeaveApplyShimmer();
                                }else if (studentList.isNotEmpty) {
                                   return SizedBox(
                                     height: ScreenUtil().screenHeight * 0.7,
@@ -511,7 +511,7 @@ class _LeaveRequestState extends State<LeaveRequest>
                                      await initialize();
                                     },
                                     child: SingleChildScrollView(
-                                      physics: AlwaysScrollableScrollPhysics(),
+                                      physics: const AlwaysScrollableScrollPhysics(),
                                       child: SizedBox(
                                         height: ScreenUtil().screenHeight * 0.7,
                                         child: SizedBox(
@@ -590,7 +590,7 @@ class LeaveApplyShimmer extends StatelessWidget {
                     
                   ),
                 ),
-                trailing: Text(''),
+                trailing: const Text(''),
                   title: Container(height: 10.h,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
