@@ -160,7 +160,7 @@ height:ScreenUtil().screenHeight ,
                                     .trim()
                                     .isEmpty) {
                                   TeacherAppPopUps.submitFailed(
-                                    title: "Error",
+                                    title: "Warning",
                                     message: "Please Enter your Username",
                                     actionName: "Close",
                                     iconData: Icons.info_outline,

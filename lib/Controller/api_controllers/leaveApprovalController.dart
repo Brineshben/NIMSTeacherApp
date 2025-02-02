@@ -67,6 +67,7 @@ class LeaveApprovalController extends GetxController {
     }
   }
 
+
   void filterLeaveList({required String text}) {
     if(currentTab.value == 0) {
       filteredPendingLeaves.value = pendingLeaves.value.where((leave) {

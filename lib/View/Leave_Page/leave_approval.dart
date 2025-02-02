@@ -41,12 +41,13 @@ class _LeaveApprovalState extends State<LeaveApproval> with SingleTickerProvider
   }
 
   Future<void> initialize() async {
-    context.loaderOverlay.show();
+    // context.loaderOverlay.show();
     // leaveApprovalController.resetStatus();
     await leaveApprovalController.fetchLeaveReqList();
     if(!mounted) return;
-    context.loaderOverlay.hide();
+    // context.loaderOverlay.hide();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -172,19 +173,16 @@ class _LeaveApprovalState extends State<LeaveApproval> with SingleTickerProvider
                               children: [
                                 Container(
                                     color: Colors.white,
-                                    child: const SingleChildScrollView(
-                                        child: PendingLeave())
+                                    child: PendingLeave()
                                 ),
 
                                 Container(
                                     color: Colors.white,
-                                    child: const SingleChildScrollView(child: ApproveRejected())
+                                    child: ApproveRejected()
                                 ),
                                 Container(
                                     color: Colors.white,
-                                    child: const SingleChildScrollView(
-                                      physics: NeverScrollableScrollPhysics(),
-                                        child: allleave())
+                                    child: allleave()
                                 ),
                               ],
                             ),

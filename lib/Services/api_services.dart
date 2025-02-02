@@ -594,11 +594,12 @@ class ApiServices {
       request.headers.addAll(ApiConstants.headers);
       http.StreamedResponse response = await request.send();
       var respString = await response.stream.bytesToString();
-      if (response.statusCode == 200) {
-        return json.decode(respString);
-      } else {
-        throw Exception(response.statusCode);
-      }
+      return json.decode(respString);
+      // if (response.statusCode == 200) {
+      //   return json.decode(respString);
+      // } else {
+      //   throw Exception(response.statusCode);
+      // }
     } catch (e) {
       throw Exception("Service Error");
     }

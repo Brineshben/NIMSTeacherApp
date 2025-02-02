@@ -1100,6 +1100,7 @@ class FeedViewTextField extends StatelessWidget {
                                         controller: messageCtr,
                                         minLines: 1,
                                         maxLines: 2,
+                                        // keyboardType: TextInputType.visiblePassword,
                                         decoration: InputDecoration(
                                           prefix: SizedBox(
                                             width: 15.w,
@@ -1144,7 +1145,7 @@ class FeedViewTextField extends StatelessWidget {
                                           );
                                         },
                                       ),
-                                    )
+                                    ),
                                   ],
                                 ),
                               ),

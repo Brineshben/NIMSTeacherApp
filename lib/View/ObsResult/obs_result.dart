@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:loader_overlay/loader_overlay.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:teacherapp/Utils/Colors.dart';
 import 'package:teacherapp/View/ObsResult/obs_result_widgets/obs_result_listTile.dart';
 import '../../Controller/api_controllers/obsResultController.dart';
 import '../../Models/api_models/obs_result_api_model.dart';
@@ -21,7 +23,7 @@ class ObsResult extends StatefulWidget {
 
 class _ObsResultState extends State<ObsResult> {
   ObsResultController obsResultController = Get.find<ObsResultController>();
-
+   TextEditingController _obsSearchConroller =  TextEditingController();
   @override
   void initState() {
     initialize();
@@ -29,10 +31,10 @@ class _ObsResultState extends State<ObsResult> {
   }
 
   Future<void> initialize() async {
-    context.loaderOverlay.show();
+  
     await obsResultController.fetchObsResultList();
     if (!mounted) return;
-    context.loaderOverlay.hide();
+ 
   }
 
   @override
@@ -71,7 +73,11 @@ class _ObsResultState extends State<ObsResult> {
                       left: 10.w, top: 120.h, right: 10.w),
                   height: ScreenUtil().screenHeight,
                   decoration: themeCardDecoration2,
-                  child: SingleChildScrollView(
+                  child: RefreshIndicator(
+                   color: Colorutils.userdetailcolor,
+                    onRefresh: () async{
+                     await initialize();
+                    },
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -88,6 +94,52 @@ class _ObsResultState extends State<ObsResult> {
                             ],
                           ),
                         ),
+
+                        Padding(
+                          padding: EdgeInsets.only(left: 20.w, top: 20.w,right: 20.w),
+                          child: TextFormField(
+                                  controller: _obsSearchConroller,
+                                  onChanged: (value) {
+                    
+                                  obsResultController.filterList(text: value);
+                                  },
+                                  cursorColor: Colors.grey,
+                                  keyboardType: TextInputType.text,
+                                  decoration: InputDecoration(
+                                      hintStyle:
+                                          const TextStyle(color: Colors.grey,),
+                                      hintText: "Search by Observation Name or Date",
+                                      prefixIcon: const Icon(
+                                        Icons.search,
+                                        color: Colorutils.userdetailcolor,
+                                      ),
+                                      contentPadding: const EdgeInsets.symmetric(
+                                          vertical: 10.0, horizontal: 20.0),
+                                      border: const OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(2.0),
+                                        ),
+                                      ),
+                                      enabledBorder: const OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colorutils.chatcolor,
+                                            width: 1.0),
+                                        borderRadius:
+                                            BorderRadius.all(Radius.circular(15)),
+                                      ),
+                                      focusedBorder: const OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colorutils.chatcolor,
+                                            width: 1.0),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(15.0)),
+                                      ),
+                                      fillColor:
+                                          Colorutils.chatcolor.withOpacity(0.15),
+                                      filled: true),
+                                ),
+                        ),
+
                         GetX<ObsResultController>(
                           builder: (ObsResultController controller) {
                             List<ObsResultData> obsList =
@@ -95,20 +147,59 @@ class _ObsResultState extends State<ObsResult> {
                             // (controller.isLoading.value) {
                             //   return const Center(child: CircularProgressIndicator(color: Colors.teal));
                             // } else if
-                            if (!controller.isLoading.value &&
+                           if(!controller.isLoaded.value) {
+                            return  Expanded(
+                              child: SizedBox(
+                                height: 900.h,
+                                child: ListView.builder(
+                       
+                                  itemCount: 10,
+                                  
+                                  
+                                  itemBuilder: (context,index) {
+                                    return const ObservationShimmer();
+                                  }
+                                ),
+                              ),
+                            );
+                           }else if (!controller.isLoaded.value&&
                                 obsList.isEmpty) {
-                              return Center(child: Image.asset("assets/images/nodata.gif"));
+                              return Expanded(
+                                child: SizedBox(
+                                  height: 900.h,
+                                  child: ListView.builder(
+                                    itemCount: 1,
+                                      itemBuilder: (context, index) => Center(child: Image.asset("assets/images/nodata.gif")),
+                                    ),
+                                ),
+                              );
                             } else if (!controller.isLoading.value &&
                                 obsList.isNotEmpty) {
-                              return Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  for (int i = 0; i < obsList.length; i++)
-                                    ObsResultListTile(obsData: obsList[i]),
-                                ],
+                              // return Column(
+                                                            
+                              //   children: [
+                              //     for (int i = 0; i < obsList.length; i++)
+                              //       ObsResultListTile(obsData: obsList[i]),
+                              //   ],
+                              // );
+                              return Expanded(
+                                child: SizedBox(
+                                 height: 900.h,
+                                  child: ListView.separated(
+                                    separatorBuilder: (context, index) => SizedBox(),
+                                    
+                                     itemCount: obsList.length,
+                                    itemBuilder: (context,index){
+                                 
+                                     return ObsResultListTile(obsData: obsList[index]);
+                                      
+                                  }),
+                                ),
                               );
-                            } else {
-                              return Container();
+                            } else if(obsResultController.obsResultList.isEmpty) {
+                              return Center(child: Image.asset("assets/images/nodata.gif"));
+                            }else{
+                                    return Container();
                             }
                           },
                         ),
@@ -120,5 +211,132 @@ class _ObsResultState extends State<ObsResult> {
             ),
           )),
     );
+  }
+
+}
+
+
+class ObservationShimmer extends StatelessWidget {
+  const ObservationShimmer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+     return SizedBox(
+      height: 200.h,
+       child: Padding(
+         padding:EdgeInsets.only(top: 10.h, left: 15.w, right: 15.w, bottom: 5.h),
+         child: Container(
+           height:  160.h,
+           
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color:  Colors.grey[50]!
+            ),
+            child: Shimmer.fromColors(baseColor: Colors.grey[200]!,
+            highlightColor: Colors.grey[300]!,
+              child: Column(
+                children: [
+                  SizedBox(height: 20.h,),
+                Container(
+                         height: 13.h,
+                         width: 120.w,
+                    
+                         decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(7),
+                          color: Colors.lightBlue
+                         ),
+                         ),
+                  SizedBox(height: 20.h,),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 10.w,
+                      ),
+                      Container(
+                        height: 45.h,
+                        width: 45.w,
+                    
+                        decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.circular(45.r),
+              
+                        ),
+                      ),
+                      SizedBox(width: 10.w,),
+                     
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                         Container(
+                         height: 13.h,
+                         width: 80.w,
+                    
+                         decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(7),
+                          color: Colors.lightBlue
+                         ),
+                         ),
+                         SizedBox(height: 10.h,),
+                             Row(
+                               children: [
+                                Container(
+                         height: 13.h,
+                         width: 80.w,
+                    
+                         decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(7),
+                          color: Colors.lightBlue
+                         ),
+                         ),
+                         
+                                 SizedBox(width: 20.w,),
+                                Container(
+                         height: 13.h,
+                         width: 80.w,
+                    
+                         decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(7),
+                          color: Colors.lightBlue
+                         ),
+                         ),
+                         
+                               ],
+                             ),
+                             SizedBox(height: 10.h,),
+                          Row(
+                            children: [
+                            Container(
+                         height: 13.h,
+                         width: 80.w,
+                    
+                         decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(7),
+                          color: Colors.lightBlue
+                         ),
+                         ),
+                        SizedBox(height: 10.h,),
+                                 SizedBox(width: 20.w,),
+                             Container(
+                         height: 13.h,
+                         width: 80.w,
+                    
+                         decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(7),
+                          color: Colors.lightBlue
+                         ),
+                         ),
+                            ],
+                          ),
+                        
+                        ],
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
+         ),
+       ),
+     );
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,6 +12,7 @@ import 'package:http/http.dart' as http;
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart' show toBeginningOfSentenceCase;
+import 'package:shimmer/shimmer.dart';
 import 'package:teacherapp/View/OldScreens/studentListForHos.dart';
 
 import '../../Controller/api_controllers/userAuthController.dart';
@@ -52,6 +54,8 @@ class _ReportListViewState extends State<ReportListView> {
   var loginname;
   Map<String, dynamic>? notificationResult;
   int Count = 0;
+  bool loading  = false;
+  bool loaded = false;
 
   @override
   void initState() {
@@ -73,6 +77,7 @@ class _ReportListViewState extends State<ReportListView> {
   Future getTeacherList() async {
 
     context.loaderOverlay.show();
+      loaded  = false;
   try{
     Map<String, String> headers = {
       'API-Key': '525-777-777',
@@ -120,6 +125,7 @@ class _ReportListViewState extends State<ReportListView> {
   } catch (e) {
 
   }
+     loaded = true;
     context.loaderOverlay.hide();
 
   }
@@ -171,7 +177,8 @@ class _ReportListViewState extends State<ReportListView> {
         if (facultyData.containsKey("teacherComponent") ||
             facultyData.containsKey("supervisorComponent") ||
             facultyData.containsKey("hosComponent") ||
-            facultyData.containsKey("hodComponent")) {
+            facultyData.containsKey("hodComponent") ||
+            facultyData.containsKey("principalComponent")) {
           if (facultyData.containsKey("teacherComponent")) {
             if (loginCredential!["data"]["data"][0]["faculty_data"]
             ["teacherComponent"]["is_class_teacher"] ==
@@ -447,6 +454,37 @@ class _ReportListViewState extends State<ReportListView> {
                   var classBatch = loginCredential!["data"]["data"][0]
                   ["faculty_data"]["hodComponent"]["own_list_groups"]
                   [index]["class_group"][ind]["academic"];
+                  classB.add("${classBatch.split("/")[2]} ${classBatch.split("/")[3]}");
+                }
+              }
+
+              print('..c...$employeeUnderHOS');
+
+              print('.....classB$classB');
+
+              print('.....$loginCredential');
+
+              setState(() {
+                isSpinner = false;
+              });
+            }
+          }
+
+          if (facultyData.containsKey("principalComponent")) {
+            if (loginCredential!["data"]["data"][0]["faculty_data"]["principalComponent"]["is_hos"] == true) {
+              for (var ind = 0; ind < loginCredential!["data"]["data"][0]["faculty_data"]["principalComponent"]["own_list_groups"].length; ind++) {
+                for (var index = 0; index < loginCredential!["data"]["data"][0]["faculty_data"]["principalComponent"]["own_list_groups"][ind]["class_group"].length; index++) {
+                  if (loginCredential!["data"]["data"][0]["faculty_data"]["principalComponent"]["own_list_groups"][ind]["class_group"][index].containsKey("class_teacher")) {
+                    var employeeUnderHod = loginCredential!["data"]["data"][0]["faculty_data"]["principalComponent"]["own_list_groups"][ind]["class_group"][index]["class_teacher"]["employee_no"];
+                    var employeeEmailUnderHod = loginCredential!["data"]["data"][0]["faculty_data"]["principalComponent"]["own_list_groups"][ind]["class_group"][index]["class_teacher"]["username"];
+                    employeeUnderHOS.add(employeeUnderHod);
+                    employeeEmailUnderHOS.add(employeeEmailUnderHod);
+                  }
+                }
+              }
+              for (var index = 0; index < loginCredential!["data"]["data"][0]["faculty_data"]["principalComponent"]["own_list_groups"].length; index++) {
+                for (var ind = 0; ind < loginCredential!["data"]["data"][0]["faculty_data"]["principalComponent"]["own_list_groups"][index]["class_group"].length; ind++) {
+                  var classBatch = loginCredential!["data"]["data"][0]["faculty_data"]["principalComponent"]["own_list_groups"][index]["class_group"][ind]["academic"];
                   classB.add("${classBatch.split("/")[2]} ${classBatch.split("/")[3]}");
                 }
               }
@@ -769,57 +807,79 @@ class _ReportListViewState extends State<ReportListView> {
                           ),
                         ),
                         Expanded(
-
-                            child: teacherList== null
-                                ? Center(
-                                child: Image.asset(
-                                    "assets/images/nodata.gif"))
+                        
+                            child: !loaded? 
+                                      ReportsShimmer():teacherList== null
+                                ? RefreshIndicator(
+                                  onRefresh: ()  async{
+                                    await initialize();
+                                  },
+                                  child: SingleChildScrollView(
+                                    physics:const  AlwaysScrollableScrollPhysics(),
+                                    child: Center(
+                                    child: Image.asset(
+                                        "assets/images/nodata.gif")),
+                                  ),
+                                )
                                 : teacherList!["data_status"] == 0
-                                    ? Center(
-                                        child: Image.asset(
-                                            "assets/images/nodata.gif"))
+                                    ? RefreshIndicator(
+                                      onRefresh: () async{
+                                        await initialize();
+                                      },
+                                      child: SingleChildScrollView(
+                                         physics: const AlwaysScrollableScrollPhysics(),
+                                        child: Center(
+                                            child: Image.asset(
+                                                "assets/images/nodata.gif")),
+                                      ),
+                                    )
                                     : teacherList!["message"] ==
                                             "employee_code Required"
                                         ? Center(
                                             child: Image.asset(
                                                 "assets/images/nodata.gif"))
-                                        : ListView.builder(
-                                            // key: Key(
-                                            //     'builder ${selected.toString()}'),
-                                            itemCount: _searchController
-                                                    .text.isNotEmpty
-                                                ? newReport.length
-                                                : teacherList!["data"].length,
-                                            itemBuilder: (BuildContext context,
-                                                int index) {
-                                              return _getProfileOfStudents(
-                                                  "assets/images/nancy.png",
-                                                  _searchController.text.isNotEmpty
-                                                      ? toBeginningOfSentenceCase(
-                                                              newReport[index]["employee_name"]
-                                                                  .toString()
-                                                                  .toLowerCase())
-                                                          .toString()
-                                                      : toBeginningOfSentenceCase(
-                                                              teacherList!["data"][index]["employee_name"]
-                                                                  .toString()
-                                                                  .toLowerCase())
-                                                          .toString(),
-                                                  _searchController.text.isNotEmpty
-                                                      ? newReport[index]
-                                                              ["total_count"]
-                                                          .toString()
-                                                      : teacherList!["data"][index]
-                                                              ["total_count"]
-                                                          .toString(),
-                                                  _searchController.text.isNotEmpty
-                                                      ? newReport[index]
-                                                              ["employee_code"]
-                                                          .toString()
-                                                      : teacherList!["data"][index]["employee_code"].toString(),
-                                                  index);
-                                            },
-                                          )),
+                                        : RefreshIndicator(
+                                          onRefresh: () async{
+                                            await  initialize();
+                                          },
+                                          child: ListView.builder(
+                                              // key: Key(
+                                              //     'builder ${selected.toString()}'),
+                                              itemCount: _searchController
+                                                      .text.isNotEmpty
+                                                  ? newReport.length
+                                                  : teacherList!["data"].length,
+                                              itemBuilder: (BuildContext context,
+                                                  int index) {
+                                                return _getProfileOfStudents(
+                                                    "assets/images/nancy.png",
+                                                    _searchController.text.isNotEmpty
+                                                        ? toBeginningOfSentenceCase(
+                                                                newReport[index]["employee_name"]
+                                                                    .toString()
+                                                                    .toLowerCase())
+                                                            .toString()
+                                                        : toBeginningOfSentenceCase(
+                                                                teacherList!["data"][index]["employee_name"]
+                                                                    .toString()
+                                                                    .toLowerCase())
+                                                            .toString(),
+                                                    _searchController.text.isNotEmpty
+                                                        ? newReport[index]
+                                                                ["total_count"]
+                                                            .toString()
+                                                        : teacherList!["data"][index]
+                                                                ["total_count"]
+                                                            .toString(),
+                                                    _searchController.text.isNotEmpty
+                                                        ? newReport[index]
+                                                                ["employee_code"]
+                                                            .toString()
+                                                        : teacherList!["data"][index]["employee_code"].toString(),
+                                                    index);
+                                              },
+                                            ),
+                                        )),
                         SizedBox(
                           height: 140.h,
                         )
@@ -1144,4 +1204,56 @@ class _ReportListViewState extends State<ReportListView> {
 //   timer!.cancel();
 //   super.dispose();
 // }
+}
+
+class ReportsShimmer extends StatelessWidget {
+  const ReportsShimmer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return  SizedBox(
+      height: 500.h,
+     child: Padding(
+       padding:  EdgeInsets.only(bottom: 70.h),
+       child: ListView.separated(
+        separatorBuilder: (context, index) => SizedBox(height: 10.h,),
+          itemCount: 10,
+          itemBuilder: (context, indext){
+           return Shimmer.fromColors(
+            baseColor: Colors.grey[200]!, highlightColor: Colors.grey[300]!,
+             child:  ListTile(
+             leading: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                 borderRadius: BorderRadius.circular(30)
+              ),
+        
+                width: 65.w,
+                height: 65.h,
+              ),
+              title: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10)
+                ),
+                width: 2.w,height:15.h,),
+              subtitle: Container( decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10)
+                ), width: 2.w,height: 5.h,),
+              trailing: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                 borderRadius: BorderRadius.circular(30)
+              ),
+        
+                width: 25.w,
+                height: 25.h,
+              ),
+             ),
+           );
+         }),
+     )
+    );
+  }
 }

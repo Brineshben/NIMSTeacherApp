@@ -12,7 +12,7 @@ class LessonLearningFields {
     classId,
     classBatchName, batchId, topic, academicYear, batchName, className,
     subjectName,
-    subjectId, rollIds, areasForImprovement, strengths, remedialMeasures,
+    subjectId, submittedDate, rollIds, areasForImprovement, strengths, remedialMeasures,
     upperHierarchy,
     sessionId, curriculumId, isJoin, remarksData, indicators, name, remark,
     point, dbKey, alias
@@ -35,6 +35,7 @@ class LessonLearningFields {
   static const String className = 'class_name';
   static const String subjectName = 'subject_name';
   static const String subjectId = 'subject_id';
+  static const String submittedDate = 'submitted_date';
   static const String rollIds = 'roll_ids';
   static const String areasForImprovement = 'areas_for_improvement';
   static const String strengths = 'strengths';
@@ -107,6 +108,7 @@ class LessonLearning {
   final String className;
   final String subjectName;
   final String subjectId;
+  final String submittedDate;
   final List<AllRolesArray> rollIds;
   final List<String> areasForImprovement;
   final List<String> strengths;
@@ -132,6 +134,7 @@ class LessonLearning {
     required this.className,
     required this.subjectName,
     required this.subjectId,
+    required this.submittedDate,
     required this.rollIds,
     required this.areasForImprovement,
     required this.strengths,
@@ -158,6 +161,7 @@ class LessonLearning {
     String? className,
     String? subjectName,
     String? subjectId,
+    String? submittedDate,
     List<AllRolesArray>? rollIds,
     List<String>? areasForImprovement,
     List<String>? strengths,
@@ -183,6 +187,7 @@ class LessonLearning {
         className: className ?? this.className,
         subjectName: subjectName ?? this.subjectName,
         subjectId: subjectId ?? this.subjectId,
+        submittedDate: submittedDate ?? this.submittedDate,
         rollIds: rollIds ?? this.rollIds,
         areasForImprovement: areasForImprovement ?? this.areasForImprovement,
         strengths: strengths ?? this.strengths,
@@ -210,6 +215,7 @@ class LessonLearning {
       className: json[LessonLearningFields.className],
       subjectName: json[LessonLearningFields.subjectName],
       subjectId: json[LessonLearningFields.subjectId],
+      submittedDate: json[LessonLearningFields.submittedDate],
       rollIds: (json[LessonLearningFields.rollIds] as List)
           .map((i) => AllRolesArray.fromJson(i))
           .toList(),
@@ -243,6 +249,7 @@ class LessonLearning {
       LessonLearningFields.className: className,
       LessonLearningFields.subjectName: subjectName,
       LessonLearningFields.subjectId: subjectId,
+      LessonLearningFields.submittedDate: submittedDate,
       LessonLearningFields.rollIds: rollIds.map((i) => i.toJson()).toList(),
       LessonLearningFields.areasForImprovement: areasForImprovement,
       LessonLearningFields.strengths: strengths,
@@ -272,6 +279,7 @@ class LessonLearning {
       LessonLearningFields.className: className,
       LessonLearningFields.subjectName: subjectName,
       LessonLearningFields.subjectId: subjectId,
+      LessonLearningFields.submittedDate: submittedDate,
       LessonLearningFields.rollIds: rollIds.map((i) => i.toJson()).toList(),
       LessonLearningFields.areasForImprovement: areasForImprovement,
       LessonLearningFields.strengths: strengths,

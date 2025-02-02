@@ -753,2337 +753,2352 @@ class _StudentListViewState extends State<StudentListView> {
                           ),
                         )
                             : newResult.isEmpty
-                            ? Center(child: Container(height: 300,
-                            child: Image.asset("assets/images/nodata.gif")))
+                            ? RefreshIndicator(
+                              onRefresh: () async{
+                                            getlateattendance();
+    getStudentAttendanceList();
+                              },
+                              child: SingleChildScrollView(
+                                physics: AlwaysScrollableScrollPhysics(),
+                                child: Center(child: Container(height: 300,
+                                child: Image.asset("assets/images/nodata.gif"))),
+                              ),
+                            )
                             : Expanded(
-                            child: ListView.builder(
-                              padding: EdgeInsets.only(top: 2, bottom: 150),
-                              // Sort in ascending order
-                              itemCount:
-                              _searchController.text
-                                  .toString()
-                                  .isNotEmpty
-                                  ? newResult.length
-                                  : afterAttendanceTaken == null
-                                  ? ourStudentList.length
-                                  : afterAttendanceTaken.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return SwipeTo(
-                                  rightSwipeWidget: Padding(
-                                    padding: const EdgeInsets.only(
-                                        bottom: 12, left: 8),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: Colorutils.userdetailcolor
-                                            .withOpacity(0.5),
-                                        // Container color
-                                        borderRadius: BorderRadius.circular(15),
-                                        // Border radius
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colorutils.chatcolor
-                                                .withOpacity(0.1),
-
-                                            spreadRadius: 1,
-                                            blurRadius: 1,
-                                            offset: Offset(
-                                                0, 2), // Shadow position
-                                          ),
-                                        ],
-                                      ), // Container color
-
-                                      padding: EdgeInsets.all(30),
-                                      child: Icon(
-                                        Icons.call,
-                                        color: Colors.white,
+                            child: RefreshIndicator(
+                              onRefresh: () async{
+                  getlateattendance();
+    getStudentAttendanceList();
+                              },
+                              child: ListView.builder(
+                                padding: EdgeInsets.only(top: 2, bottom: 150),
+                                // Sort in ascending order
+                                itemCount:
+                                _searchController.text
+                                    .toString()
+                                    .isNotEmpty
+                                    ? newResult.length
+                                    : afterAttendanceTaken == null
+                                    ? ourStudentList.length
+                                    : afterAttendanceTaken.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return SwipeTo(
+                                    rightSwipeWidget: Padding(
+                                      padding: const EdgeInsets.only(
+                                          bottom: 12, left: 8),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Colorutils.userdetailcolor
+                                              .withOpacity(0.5),
+                                          // Container color
+                                          borderRadius: BorderRadius.circular(15),
+                                          // Border radius
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colorutils.chatcolor
+                                                  .withOpacity(0.1),
+                              
+                                              spreadRadius: 1,
+                                              blurRadius: 1,
+                                              offset: Offset(
+                                                  0, 2), // Shadow position
+                                            ),
+                                          ],
+                                        ), // Container color
+                              
+                                        padding: EdgeInsets.all(30),
+                                        child: Icon(
+                                          Icons.call,
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     ),
-                                  ),
-
-                                  onRightSwipe: (_) {
-                                    if (_searchController.text
-                                        .toString()
-                                        .isEmpty) {
-                                      if (afterAttendanceTaken == null) {
-                                        if (ourStudentList[index].containsKey(
-                                            "mother_details") &&
-                                            ourStudentList[index]["mother_details"]
-                                                .isNotEmpty &&
-                                            ourStudentList[index]["mother_details"]
-                                                .containsKey("mother_name") &&
-                                            ourStudentList[index]["mother_details"]
-                                                .containsKey("mother_mobile")) {
-                                          Dialogbox(
-                                            context,
-                                            _searchController.text.isNotEmpty
-
-
-                                                ? capitalizeFirstLetterOfEachWord(
-                                                newResult[index]["username"]
-                                                    .toString()
-                                                    .toLowerCase())
-                                                .toString()
-                                                : afterAttendanceTaken ==
-                                                null ||
-                                                afterAttendanceTaken.isEmpty
-                                                ? capitalizeFirstLetterOfEachWord(
-                                                ourStudentList[index]
-                                                ["username"]
-                                                    .toString()
-                                                    .toLowerCase())
-                                                .toString()
-                                                : capitalizeFirstLetterOfEachWord(
-                                                afterAttendanceTaken[
-                                                index]["username"]
-                                                    .toString()
-                                                    .toLowerCase())
-                                                .toString(),
-                                            afterAttendanceTaken != null
-                                                ? (_searchController.text
-                                                .isNotEmpty
-                                                ? ApiConstants.downloadUrl +
-                                                newResult[index]["feeDetails"]["image"]
-                                                    .replaceAll('"', '')
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["image"].replaceAll(
-                                                '"', '') ==
-                                                null
-                                                ? "https://raw.githubusercontent.com/abdulmanafpfassal/image/master/profile.jpg"
-                                                : ApiConstants.downloadUrl +
-                                                afterAttendanceTaken[index]
-                                                ["feeDetails"]["image"]
-                                                    .replaceAll('"', ''))
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? ApiConstants.downloadUrl +
-                                                newResult[index]["image"]
-                                                    .replaceAll('"', '')
-                                                : ourStudentList[index]["image"]
-                                                .replaceAll('"', '') ==
-                                                null
-                                                ? "https://raw.githubusercontent.com/abdulmanafpfassal/image/master/profile.jpg"
-                                                : ApiConstants.downloadUrl +
-                                                ourStudentList[index]
-                                                ["image"].replaceAll('"', ''),
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["fee_amount"]
-                                                : ourStudentList[index]
-                                            ["fee_amount"] ?? " "
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]
-                                            ["fee_amount"] ==
-                                                null
-                                                ? " "
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["fee_amount"]
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["fee_amount"],
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["fee_arrear"]
-                                                : ourStudentList[index]["fee_arrear"]
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["fee_arrear"]
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["fee_arrear"],
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["parent_name"]
-                                                : ourStudentList[index]["parent_name"]
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["parent_name"]
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["parent_name"],
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["parent_phone"]
-                                                : ourStudentList[index]
-                                            ["parent_phone"]
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["parent_phone"]
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["parent_phone"],
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["admission_number"]
-                                                : ourStudentList[index]
-                                            ["admission_number"]
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["admission_number"]
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]
-                                            ["admission_number"],
-                                            studentFeebackList,
-                                            widget.name.toString(),
-                                            widget.LoginedUserEmployeeCode
-                                                .toString(),
-                                            widget.images.toString(),
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["mother_details"]["mother_name"] ??
-                                                '--'
-                                                : ourStudentList[index]["mother_details"]
-                                            ["mother_name"]
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["mother_details"]["mother_name"] ??
-                                                '--'
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["mother_details"]["mother_name"] ??
-                                                '--',
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["mother_details"]["mother_mobile"] ??
-                                                '--'
-                                                : ourStudentList[index]["mother_details"]
-                                            ["mother_mobile"] ?? '--'
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["mother_details"]["mother_mobile"] ??
-                                                '--'
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]
-                                            ["mother_details"]
-                                            ["mother_mobile"] ?? '--',
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index].containsKey(
-                                                "mother_details")
-                                                : ourStudentList[index]
-                                                .containsKey("mother_details")
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]
-                                                .containsKey("mother_details")
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"].containsKey(
-                                                "mother_details"),
-                                          );
+                              
+                                    onRightSwipe: (_) {
+                                      if (_searchController.text
+                                          .toString()
+                                          .isEmpty) {
+                                        if (afterAttendanceTaken == null) {
+                                          if (ourStudentList[index].containsKey(
+                                              "mother_details") &&
+                                              ourStudentList[index]["mother_details"]
+                                                  .isNotEmpty &&
+                                              ourStudentList[index]["mother_details"]
+                                                  .containsKey("mother_name") &&
+                                              ourStudentList[index]["mother_details"]
+                                                  .containsKey("mother_mobile")) {
+                                            Dialogbox(
+                                              context,
+                                              _searchController.text.isNotEmpty
+                              
+                              
+                                                  ? capitalizeFirstLetterOfEachWord(
+                                                  newResult[index]["username"]
+                                                      .toString()
+                                                      .toLowerCase())
+                                                  .toString()
+                                                  : afterAttendanceTaken ==
+                                                  null ||
+                                                  afterAttendanceTaken.isEmpty
+                                                  ? capitalizeFirstLetterOfEachWord(
+                                                  ourStudentList[index]
+                                                  ["username"]
+                                                      .toString()
+                                                      .toLowerCase())
+                                                  .toString()
+                                                  : capitalizeFirstLetterOfEachWord(
+                                                  afterAttendanceTaken[
+                                                  index]["username"]
+                                                      .toString()
+                                                      .toLowerCase())
+                                                  .toString(),
+                                              afterAttendanceTaken != null
+                                                  ? (_searchController.text
+                                                  .isNotEmpty
+                                                  ? ApiConstants.downloadUrl +
+                                                  newResult[index]["feeDetails"]["image"]
+                                                      .replaceAll('"', '')
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["image"].replaceAll(
+                                                  '"', '') ==
+                                                  null
+                                                  ? "https://raw.githubusercontent.com/abdulmanafpfassal/image/master/profile.jpg"
+                                                  : ApiConstants.downloadUrl +
+                                                  afterAttendanceTaken[index]
+                                                  ["feeDetails"]["image"]
+                                                      .replaceAll('"', ''))
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? ApiConstants.downloadUrl +
+                                                  newResult[index]["image"]
+                                                      .replaceAll('"', '')
+                                                  : ourStudentList[index]["image"]
+                                                  .replaceAll('"', '') ==
+                                                  null
+                                                  ? "https://raw.githubusercontent.com/abdulmanafpfassal/image/master/profile.jpg"
+                                                  : ApiConstants.downloadUrl +
+                                                  ourStudentList[index]
+                                                  ["image"].replaceAll('"', ''),
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["fee_amount"]
+                                                  : ourStudentList[index]
+                                              ["fee_amount"] ?? " "
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]
+                                              ["fee_amount"] ==
+                                                  null
+                                                  ? " "
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["fee_amount"]
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["fee_amount"],
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["fee_arrear"]
+                                                  : ourStudentList[index]["fee_arrear"]
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["fee_arrear"]
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["fee_arrear"],
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["parent_name"]
+                                                  : ourStudentList[index]["parent_name"]
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["parent_name"]
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["parent_name"],
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["parent_phone"]
+                                                  : ourStudentList[index]
+                                              ["parent_phone"]
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["parent_phone"]
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["parent_phone"],
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["admission_number"]
+                                                  : ourStudentList[index]
+                                              ["admission_number"]
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["admission_number"]
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]
+                                              ["admission_number"],
+                                              studentFeebackList,
+                                              widget.name.toString(),
+                                              widget.LoginedUserEmployeeCode
+                                                  .toString(),
+                                              widget.images.toString(),
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["mother_details"]["mother_name"] ??
+                                                  '--'
+                                                  : ourStudentList[index]["mother_details"]
+                                              ["mother_name"]
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["mother_details"]["mother_name"] ??
+                                                  '--'
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["mother_details"]["mother_name"] ??
+                                                  '--',
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["mother_details"]["mother_mobile"] ??
+                                                  '--'
+                                                  : ourStudentList[index]["mother_details"]
+                                              ["mother_mobile"] ?? '--'
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["mother_details"]["mother_mobile"] ??
+                                                  '--'
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]
+                                              ["mother_details"]
+                                              ["mother_mobile"] ?? '--',
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index].containsKey(
+                                                  "mother_details")
+                                                  : ourStudentList[index]
+                                                  .containsKey("mother_details")
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]
+                                                  .containsKey("mother_details")
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"].containsKey(
+                                                  "mother_details"),
+                                            );
+                                          } else {
+                                            DialogboxWithoutMotherDetails(
+                                              context,
+                                              _searchController.text.isNotEmpty
+                                                  ? capitalizeFirstLetterOfEachWord(
+                                                  newResult[index]["username"]
+                                                      .toString()
+                                                      .toLowerCase())
+                                                  .toString()
+                                                  : afterAttendanceTaken ==
+                                                  null ||
+                                                  afterAttendanceTaken.isEmpty
+                                                  ? capitalizeFirstLetterOfEachWord(
+                                                  ourStudentList[index]
+                                                  ["username"]
+                                                      .toString()
+                                                      .toLowerCase())
+                                                  .toString()
+                                                  : capitalizeFirstLetterOfEachWord(
+                                                  afterAttendanceTaken[
+                                                  index]["username"]
+                                                      .toString()
+                                                      .toLowerCase())
+                                                  .toString(),
+                                              afterAttendanceTaken != null
+                                                  ? (_searchController.text
+                                                  .isNotEmpty
+                                                  ? ApiConstants.downloadUrl +
+                                                  newResult[index]["feeDetails"]["image"]
+                                                      .replaceAll('"', '')
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["image"].replaceAll(
+                                                  '"', '') ==
+                                                  null
+                                                  ? "https://raw.githubusercontent.com/abdulmanafpfassal/image/master/profile.jpg"
+                                                  : ApiConstants.downloadUrl +
+                                                  afterAttendanceTaken[index]
+                                                  ["feeDetails"]["image"]
+                                                      .replaceAll('"', ''))
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? ApiConstants.downloadUrl +
+                                                  newResult[index]["image"]
+                                                      .replaceAll('"', '')
+                                                  : ourStudentList[index]["image"]
+                                                  .replaceAll('"', '') ==
+                                                  null
+                                                  ? "https://raw.githubusercontent.com/abdulmanafpfassal/image/master/profile.jpg"
+                                                  : ApiConstants.downloadUrl +
+                                                  ourStudentList[index]
+                                                  ["image"].replaceAll('"', ''),
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["fee_amount"]
+                                                  : ourStudentList[index]
+                                              ["fee_amount"] ?? " "
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]
+                                              ["fee_amount"] ==
+                                                  null
+                                                  ? " "
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["fee_amount"]
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["fee_amount"],
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["fee_arrear"]
+                                                  : ourStudentList[index]["fee_arrear"]
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["fee_arrear"]
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["fee_arrear"],
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["parent_name"]
+                                                  : ourStudentList[index]["parent_name"]
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["parent_name"]
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["parent_name"],
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["parent_phone"]
+                                                  : ourStudentList[index]
+                                              ["parent_phone"]
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["parent_phone"]
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["parent_phone"],
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["admission_number"]
+                                                  : ourStudentList[index]
+                                              ["admission_number"]
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["admission_number"]
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]
+                                              ["admission_number"],
+                                              studentFeebackList,
+                                              widget.name.toString(),
+                                              widget.LoginedUserEmployeeCode
+                                                  .toString(),
+                                              widget.images.toString(),
+                                            );
+                                          }
                                         } else {
-                                          DialogboxWithoutMotherDetails(
-                                            context,
-                                            _searchController.text.isNotEmpty
-                                                ? capitalizeFirstLetterOfEachWord(
-                                                newResult[index]["username"]
-                                                    .toString()
-                                                    .toLowerCase())
-                                                .toString()
-                                                : afterAttendanceTaken ==
-                                                null ||
-                                                afterAttendanceTaken.isEmpty
-                                                ? capitalizeFirstLetterOfEachWord(
-                                                ourStudentList[index]
-                                                ["username"]
-                                                    .toString()
-                                                    .toLowerCase())
-                                                .toString()
-                                                : capitalizeFirstLetterOfEachWord(
-                                                afterAttendanceTaken[
-                                                index]["username"]
-                                                    .toString()
-                                                    .toLowerCase())
-                                                .toString(),
-                                            afterAttendanceTaken != null
-                                                ? (_searchController.text
-                                                .isNotEmpty
-                                                ? ApiConstants.downloadUrl +
-                                                newResult[index]["feeDetails"]["image"]
-                                                    .replaceAll('"', '')
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["image"].replaceAll(
-                                                '"', '') ==
-                                                null
-                                                ? "https://raw.githubusercontent.com/abdulmanafpfassal/image/master/profile.jpg"
-                                                : ApiConstants.downloadUrl +
-                                                afterAttendanceTaken[index]
-                                                ["feeDetails"]["image"]
-                                                    .replaceAll('"', ''))
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? ApiConstants.downloadUrl +
-                                                newResult[index]["image"]
-                                                    .replaceAll('"', '')
-                                                : ourStudentList[index]["image"]
-                                                .replaceAll('"', '') ==
-                                                null
-                                                ? "https://raw.githubusercontent.com/abdulmanafpfassal/image/master/profile.jpg"
-                                                : ApiConstants.downloadUrl +
-                                                ourStudentList[index]
-                                                ["image"].replaceAll('"', ''),
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["fee_amount"]
-                                                : ourStudentList[index]
-                                            ["fee_amount"] ?? " "
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]
-                                            ["fee_amount"] ==
-                                                null
-                                                ? " "
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["fee_amount"]
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["fee_amount"],
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["fee_arrear"]
-                                                : ourStudentList[index]["fee_arrear"]
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["fee_arrear"]
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["fee_arrear"],
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["parent_name"]
-                                                : ourStudentList[index]["parent_name"]
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["parent_name"]
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["parent_name"],
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["parent_phone"]
-                                                : ourStudentList[index]
-                                            ["parent_phone"]
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["parent_phone"]
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["parent_phone"],
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["admission_number"]
-                                                : ourStudentList[index]
-                                            ["admission_number"]
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["admission_number"]
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]
-                                            ["admission_number"],
-                                            studentFeebackList,
-                                            widget.name.toString(),
-                                            widget.LoginedUserEmployeeCode
-                                                .toString(),
-                                            widget.images.toString(),
-                                          );
+                                          if (afterAttendanceTaken[index]
+                                          ["feeDetails"].containsKey(
+                                              "mother_details") &&
+                                              afterAttendanceTaken[index]
+                                              ["feeDetails"]
+                                              ["mother_details"].isNotEmpty &&
+                                              afterAttendanceTaken[index]
+                                              ["feeDetails"]
+                                              ["mother_details"]["mother_name"]
+                                                  .toString()
+                                                  .isNotEmpty &&
+                                              afterAttendanceTaken[index]
+                                              ["feeDetails"]
+                                              ["mother_details"]["mother_mobile"]
+                                                  .toString()
+                                                  .isNotEmpty) {
+                                            Dialogbox(
+                                              context,
+                                              _searchController.text.isNotEmpty
+                                                  ? capitalizeFirstLetterOfEachWord(
+                                                  newResult[index]["username"]
+                                                      .toString()
+                                                      .toLowerCase())
+                                                  .toString()
+                                                  : afterAttendanceTaken ==
+                                                  null ||
+                                                  afterAttendanceTaken.isEmpty
+                                                  ? capitalizeFirstLetterOfEachWord(
+                                                  ourStudentList[index]
+                                                  ["username"]
+                                                      .toString()
+                                                      .toLowerCase())
+                                                  .toString()
+                                                  : capitalizeFirstLetterOfEachWord(
+                                                  afterAttendanceTaken[
+                                                  index]["username"]
+                                                      .toString()
+                                                      .toLowerCase())
+                                                  .toString(),
+                                              afterAttendanceTaken != null
+                                                  ? (_searchController.text
+                                                  .isNotEmpty
+                                                  ? ApiConstants.downloadUrl +
+                                                  newResult[index]["feeDetails"]["image"]
+                                                      .replaceAll('"', '')
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["image"].replaceAll(
+                                                  '"', '') ==
+                                                  null
+                                                  ? "https://raw.githubusercontent.com/abdulmanafpfassal/image/master/profile.jpg"
+                                                  : ApiConstants.downloadUrl +
+                                                  afterAttendanceTaken[index]
+                                                  ["feeDetails"]["image"]
+                                                      .replaceAll('"', ''))
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? ApiConstants.downloadUrl +
+                                                  newResult[index]["image"]
+                                                      .replaceAll('"', '')
+                                                  : ourStudentList[index]["image"]
+                                                  .replaceAll('"', '') ==
+                                                  null
+                                                  ? "https://raw.githubusercontent.com/abdulmanafpfassal/image/master/profile.jpg"
+                                                  : ApiConstants.downloadUrl +
+                                                  ourStudentList[index]
+                                                  ["image"].replaceAll('"', ''),
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["fee_amount"]
+                                                  : ourStudentList[index]
+                                              ["fee_amount"] ?? " "
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]
+                                              ["fee_amount"] ==
+                                                  null
+                                                  ? " "
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["fee_amount"]
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["fee_amount"],
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["fee_arrear"]
+                                                  : ourStudentList[index]["fee_arrear"]
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["fee_arrear"]
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["fee_arrear"],
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["parent_name"]
+                                                  : ourStudentList[index]["parent_name"]
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["parent_name"]
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["parent_name"],
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["parent_phone"]
+                                                  : ourStudentList[index]
+                                              ["parent_phone"]
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["parent_phone"]
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["parent_phone"],
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["admission_number"]
+                                                  : ourStudentList[index]
+                                              ["admission_number"]
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["admission_number"]
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]
+                                              ["admission_number"],
+                                              studentFeebackList,
+                                              widget.name.toString(),
+                                              widget.LoginedUserEmployeeCode
+                                                  .toString(),
+                                              widget.images.toString(),
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["mother_details"]["mother_name"] ??
+                                                  '--'
+                                                  : ourStudentList[index]["mother_details"]
+                                              ["mother_name"] ?? '--'
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["mother_details"]["mother_name"] ??
+                                                  '--'
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["mother_details"]["mother_name"] ??
+                                                  '--',
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["mother_details"]["mother_mobile"] ??
+                                                  '--'
+                                                  : ourStudentList[index]["mother_details"]
+                                              ["mother_mobile"] ?? '--'
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["mother_details"]["mother_mobile"] ??
+                                                  '--'
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]
+                                              ["mother_details"]
+                                              ["mother_mobile"] ?? '--',
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index].containsKey(
+                                                  "mother_details")
+                                                  : ourStudentList[index]
+                                                  .containsKey("mother_details")
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]
+                                                  .containsKey("mother_details")
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"].containsKey(
+                                                  "mother_details"),
+                                            );
+                                          } else {
+                                            DialogboxWithoutMotherDetails(
+                                              context,
+                                              _searchController.text.isNotEmpty
+                                                  ? capitalizeFirstLetterOfEachWord(
+                                                  newResult[index]["username"]
+                                                      .toString()
+                                                      .toLowerCase())
+                                                  .toString()
+                                                  : afterAttendanceTaken ==
+                                                  null ||
+                                                  afterAttendanceTaken.isEmpty
+                                                  ? capitalizeFirstLetterOfEachWord(
+                                                  ourStudentList[index]
+                                                  ["username"]
+                                                      .toString()
+                                                      .toLowerCase())
+                                                  .toString()
+                                                  : capitalizeFirstLetterOfEachWord(
+                                                  afterAttendanceTaken[
+                                                  index]["username"]
+                                                      .toString()
+                                                      .toLowerCase())
+                                                  .toString(),
+                                              afterAttendanceTaken != null
+                                                  ? (_searchController.text
+                                                  .isNotEmpty
+                                                  ? ApiConstants.downloadUrl +
+                                                  newResult[index]["feeDetails"]["image"]
+                                                      .replaceAll('"', '')
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["image"].replaceAll(
+                                                  '"', '') ==
+                                                  null
+                                                  ? "https://raw.githubusercontent.com/abdulmanafpfassal/image/master/profile.jpg"
+                                                  : ApiConstants.downloadUrl +
+                                                  afterAttendanceTaken[index]
+                                                  ["feeDetails"]["image"]
+                                                      .replaceAll('"', ''))
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? ApiConstants.downloadUrl +
+                                                  newResult[index]["image"]
+                                                      .replaceAll('"', '')
+                                                  : ourStudentList[index]["image"]
+                                                  .replaceAll('"', '') ==
+                                                  null
+                                                  ? "https://raw.githubusercontent.com/abdulmanafpfassal/image/master/profile.jpg"
+                                                  : ApiConstants.downloadUrl +
+                                                  ourStudentList[index]
+                                                  ["image"].replaceAll('"', ''),
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["fee_amount"]
+                                                  : ourStudentList[index]
+                                              ["fee_amount"] ==
+                                                  null
+                                                  ? " "
+                                                  : ourStudentList[index]
+                                              ["fee_amount"]
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]
+                                              ["fee_amount"] ==
+                                                  null
+                                                  ? " "
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["fee_amount"]
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["fee_amount"],
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["fee_arrear"]
+                                                  : ourStudentList[index]["fee_arrear"]
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["fee_arrear"]
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["fee_arrear"],
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["parent_name"]
+                                                  : ourStudentList[index]["parent_name"]
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["parent_name"]
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["parent_name"],
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["parent_phone"]
+                                                  : ourStudentList[index]
+                                              ["parent_phone"]
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["parent_phone"]
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["parent_phone"],
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["admission_number"]
+                                                  : ourStudentList[index]
+                                              ["admission_number"]
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["admission_number"]
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]
+                                              ["admission_number"],
+                                              studentFeebackList,
+                                              widget.name.toString(),
+                                              widget.LoginedUserEmployeeCode
+                                                  .toString(),
+                                              widget.images.toString(),
+                                            );
+                                          }
                                         }
                                       } else {
-                                        if (afterAttendanceTaken[index]
-                                        ["feeDetails"].containsKey(
-                                            "mother_details") &&
-                                            afterAttendanceTaken[index]
-                                            ["feeDetails"]
-                                            ["mother_details"].isNotEmpty &&
-                                            afterAttendanceTaken[index]
-                                            ["feeDetails"]
-                                            ["mother_details"]["mother_name"]
-                                                .toString()
-                                                .isNotEmpty &&
-                                            afterAttendanceTaken[index]
-                                            ["feeDetails"]
-                                            ["mother_details"]["mother_mobile"]
-                                                .toString()
-                                                .isNotEmpty) {
-                                          Dialogbox(
-                                            context,
-                                            _searchController.text.isNotEmpty
-                                                ? capitalizeFirstLetterOfEachWord(
-                                                newResult[index]["username"]
-                                                    .toString()
-                                                    .toLowerCase())
-                                                .toString()
-                                                : afterAttendanceTaken ==
-                                                null ||
-                                                afterAttendanceTaken.isEmpty
-                                                ? capitalizeFirstLetterOfEachWord(
-                                                ourStudentList[index]
-                                                ["username"]
-                                                    .toString()
-                                                    .toLowerCase())
-                                                .toString()
-                                                : capitalizeFirstLetterOfEachWord(
-                                                afterAttendanceTaken[
-                                                index]["username"]
-                                                    .toString()
-                                                    .toLowerCase())
-                                                .toString(),
-                                            afterAttendanceTaken != null
-                                                ? (_searchController.text
-                                                .isNotEmpty
-                                                ? ApiConstants.downloadUrl +
-                                                newResult[index]["feeDetails"]["image"]
-                                                    .replaceAll('"', '')
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["image"].replaceAll(
-                                                '"', '') ==
-                                                null
-                                                ? "https://raw.githubusercontent.com/abdulmanafpfassal/image/master/profile.jpg"
-                                                : ApiConstants.downloadUrl +
-                                                afterAttendanceTaken[index]
-                                                ["feeDetails"]["image"]
-                                                    .replaceAll('"', ''))
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? ApiConstants.downloadUrl +
-                                                newResult[index]["image"]
-                                                    .replaceAll('"', '')
-                                                : ourStudentList[index]["image"]
-                                                .replaceAll('"', '') ==
-                                                null
-                                                ? "https://raw.githubusercontent.com/abdulmanafpfassal/image/master/profile.jpg"
-                                                : ApiConstants.downloadUrl +
-                                                ourStudentList[index]
-                                                ["image"].replaceAll('"', ''),
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["fee_amount"]
-                                                : ourStudentList[index]
-                                            ["fee_amount"] ?? " "
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]
-                                            ["fee_amount"] ==
-                                                null
-                                                ? " "
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["fee_amount"]
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["fee_amount"],
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["fee_arrear"]
-                                                : ourStudentList[index]["fee_arrear"]
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["fee_arrear"]
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["fee_arrear"],
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["parent_name"]
-                                                : ourStudentList[index]["parent_name"]
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["parent_name"]
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["parent_name"],
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["parent_phone"]
-                                                : ourStudentList[index]
-                                            ["parent_phone"]
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["parent_phone"]
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["parent_phone"],
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["admission_number"]
-                                                : ourStudentList[index]
-                                            ["admission_number"]
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["admission_number"]
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]
-                                            ["admission_number"],
-                                            studentFeebackList,
-                                            widget.name.toString(),
-                                            widget.LoginedUserEmployeeCode
-                                                .toString(),
-                                            widget.images.toString(),
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["mother_details"]["mother_name"] ??
-                                                '--'
-                                                : ourStudentList[index]["mother_details"]
-                                            ["mother_name"] ?? '--'
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["mother_details"]["mother_name"] ??
-                                                '--'
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["mother_details"]["mother_name"] ??
-                                                '--',
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["mother_details"]["mother_mobile"] ??
-                                                '--'
-                                                : ourStudentList[index]["mother_details"]
-                                            ["mother_mobile"] ?? '--'
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["mother_details"]["mother_mobile"] ??
-                                                '--'
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]
-                                            ["mother_details"]
-                                            ["mother_mobile"] ?? '--',
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index].containsKey(
-                                                "mother_details")
-                                                : ourStudentList[index]
-                                                .containsKey("mother_details")
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]
-                                                .containsKey("mother_details")
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"].containsKey(
-                                                "mother_details"),
-                                          );
+                                        if (afterAttendanceTaken == null) {
+                                          if (newResult[index].containsKey(
+                                              "mother_details") &&
+                                              newResult[index]["mother_details"]
+                                                  .isNotEmpty &&
+                                              newResult[index]["mother_details"]
+                                                  .containsKey("mother_name") &&
+                                              newResult[index]["mother_details"]
+                                                  .containsKey("mother_mobile")) {
+                                            Dialogbox(
+                                              context,
+                                              _searchController.text.isNotEmpty
+                                                  ? capitalizeFirstLetterOfEachWord(
+                                                  newResult[index]["username"]
+                                                      .toString()
+                                                      .toLowerCase())
+                                                  .toString()
+                                                  : afterAttendanceTaken ==
+                                                  null ||
+                                                  afterAttendanceTaken.isEmpty
+                                                  ? capitalizeFirstLetterOfEachWord(
+                                                  ourStudentList[index]
+                                                  ["username"]
+                                                      .toString()
+                                                      .toLowerCase())
+                                                  .toString()
+                                                  : capitalizeFirstLetterOfEachWord(
+                                                  afterAttendanceTaken[
+                                                  index]["username"]
+                                                      .toString()
+                                                      .toLowerCase())
+                                                  .toString(),
+                                              afterAttendanceTaken != null
+                                                  ? (_searchController.text
+                                                  .isNotEmpty
+                                                  ? ApiConstants.downloadUrl +
+                                                  newResult[index]["feeDetails"]["image"]
+                                                      .replaceAll('"', '')
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["image"].replaceAll(
+                                                  '"', '') ==
+                                                  null
+                                                  ? "https://raw.githubusercontent.com/abdulmanafpfassal/image/master/profile.jpg"
+                                                  : ApiConstants.downloadUrl +
+                                                  afterAttendanceTaken[index]
+                                                  ["feeDetails"]["image"]
+                                                      .replaceAll('"', ''))
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? ApiConstants.downloadUrl +
+                                                  newResult[index]["image"]
+                                                      .replaceAll('"', '')
+                                                  : ourStudentList[index]["image"]
+                                                  .replaceAll('"', '') ==
+                                                  null
+                                                  ? "https://raw.githubusercontent.com/abdulmanafpfassal/image/master/profile.jpg"
+                                                  : ApiConstants.downloadUrl +
+                                                  ourStudentList[index]
+                                                  ["image"].replaceAll('"', ''),
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["fee_amount"]
+                                                  : ourStudentList[index]
+                                              ["fee_amount"] ==
+                                                  null
+                                                  ? " "
+                                                  : ourStudentList[index]
+                                              ["fee_amount"]
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]
+                                              ["fee_amount"] ==
+                                                  null
+                                                  ? " "
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["fee_amount"]
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["fee_amount"],
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["fee_arrear"]
+                                                  : ourStudentList[index]["fee_arrear"]
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["fee_arrear"]
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["fee_arrear"],
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["parent_name"]
+                                                  : ourStudentList[index]["parent_name"]
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["parent_name"]
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["parent_name"],
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["parent_phone"]
+                                                  : ourStudentList[index]
+                                              ["parent_phone"]
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["parent_phone"]
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["parent_phone"],
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["admission_number"]
+                                                  : ourStudentList[index]
+                                              ["admission_number"]
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["admission_number"]
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]
+                                              ["admission_number"],
+                                              studentFeebackList,
+                                              widget.name.toString(),
+                                              widget.LoginedUserEmployeeCode
+                                                  .toString(),
+                                              widget.images.toString(),
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["mother_details"]["mother_name"] ??
+                                                  '--'
+                                                  : ourStudentList[index]["mother_details"]
+                                              ["mother_name"] ?? '--'
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["mother_details"]["mother_name"] ??
+                                                  '--'
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["mother_details"]["mother_name"] ??
+                                                  '--',
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["mother_details"]["mother_mobile"] ??
+                                                  '--'
+                                                  : ourStudentList[index]["mother_details"]
+                                              ["mother_mobile"] ?? '--'
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["mother_details"]["mother_mobile"] ??
+                                                  '--'
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]
+                                              ["mother_details"]
+                                              ["mother_mobile"] ?? '--',
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index].containsKey(
+                                                  "mother_details")
+                                                  : ourStudentList[index]
+                                                  .containsKey("mother_details")
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]
+                                                  .containsKey("mother_details")
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"].containsKey(
+                                                  "mother_details"),
+                                            );
+                                          } else {
+                                            DialogboxWithoutMotherDetails(
+                                              context,
+                                              _searchController.text.isNotEmpty
+                                                  ? capitalizeFirstLetterOfEachWord(
+                                                  newResult[index]["username"]
+                                                      .toString()
+                                                      .toLowerCase())
+                                                  .toString()
+                                                  : afterAttendanceTaken ==
+                                                  null ||
+                                                  afterAttendanceTaken.isEmpty
+                                                  ? capitalizeFirstLetterOfEachWord(
+                                                  ourStudentList[index]
+                                                  ["username"]
+                                                      .toString()
+                                                      .toLowerCase())
+                                                  .toString()
+                                                  : capitalizeFirstLetterOfEachWord(
+                                                  afterAttendanceTaken[
+                                                  index]["username"]
+                                                      .toString()
+                                                      .toLowerCase())
+                                                  .toString(),
+                                              afterAttendanceTaken != null
+                                                  ? (_searchController.text
+                                                  .isNotEmpty
+                                                  ? ApiConstants.downloadUrl +
+                                                  newResult[index]["feeDetails"]["image"]
+                                                      .replaceAll('"', '')
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["image"].replaceAll(
+                                                  '"', '') ==
+                                                  null
+                                                  ? "https://raw.githubusercontent.com/abdulmanafpfassal/image/master/profile.jpg"
+                                                  : ApiConstants.downloadUrl +
+                                                  afterAttendanceTaken[index]
+                                                  ["feeDetails"]["image"]
+                                                      .replaceAll('"', ''))
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? ApiConstants.downloadUrl +
+                                                  newResult[index]["image"]
+                                                      .replaceAll('"', '')
+                                                  : ourStudentList[index]["image"]
+                                                  .replaceAll('"', '') ==
+                                                  null
+                                                  ? "https://raw.githubusercontent.com/abdulmanafpfassal/image/master/profile.jpg"
+                                                  : ApiConstants.downloadUrl +
+                                                  ourStudentList[index]
+                                                  ["image"].replaceAll('"', ''),
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["fee_amount"]
+                                                  .toString()
+                                                  : ourStudentList[index]
+                                              ["fee_amount"] ==
+                                                  null
+                                                  ? " "
+                                                  : ourStudentList[index]
+                                              ["fee_amount"]
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]
+                                              ["fee_amount"] ==
+                                                  null
+                                                  ? " "
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["fee_amount"]
+                                                  .toString()
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["fee_amount"],
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["fee_arrear"]
+                                                  : ourStudentList[index]["fee_arrear"]
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["fee_arrear"]
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["fee_arrear"],
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["parent_name"]
+                                                  .toString()
+                                                  : ourStudentList[index]["parent_name"]
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["parent_name"]
+                                                  .toString()
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["parent_name"],
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["parent_phone"]
+                                                  .toString()
+                                                  : ourStudentList[index]
+                                              ["parent_phone"]
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["parent_phone"]
+                                                  .toString()
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["parent_phone"],
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["admission_number"]
+                                                  .toString()
+                                                  : ourStudentList[index]
+                                              ["admission_number"]
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["admission_number"]
+                                                  .toString()
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]
+                                              ["admission_number"],
+                                              studentFeebackList,
+                                              widget.name.toString(),
+                                              widget.LoginedUserEmployeeCode
+                                                  .toString(),
+                                              widget.images.toString(),
+                                            );
+                                          }
                                         } else {
-                                          DialogboxWithoutMotherDetails(
-                                            context,
-                                            _searchController.text.isNotEmpty
-                                                ? capitalizeFirstLetterOfEachWord(
-                                                newResult[index]["username"]
-                                                    .toString()
-                                                    .toLowerCase())
-                                                .toString()
-                                                : afterAttendanceTaken ==
-                                                null ||
-                                                afterAttendanceTaken.isEmpty
-                                                ? capitalizeFirstLetterOfEachWord(
-                                                ourStudentList[index]
-                                                ["username"]
-                                                    .toString()
-                                                    .toLowerCase())
-                                                .toString()
-                                                : capitalizeFirstLetterOfEachWord(
-                                                afterAttendanceTaken[
-                                                index]["username"]
-                                                    .toString()
-                                                    .toLowerCase())
-                                                .toString(),
-                                            afterAttendanceTaken != null
-                                                ? (_searchController.text
-                                                .isNotEmpty
-                                                ? ApiConstants.downloadUrl +
-                                                newResult[index]["feeDetails"]["image"]
-                                                    .replaceAll('"', '')
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["image"].replaceAll(
-                                                '"', '') ==
-                                                null
-                                                ? "https://raw.githubusercontent.com/abdulmanafpfassal/image/master/profile.jpg"
-                                                : ApiConstants.downloadUrl +
-                                                afterAttendanceTaken[index]
-                                                ["feeDetails"]["image"]
-                                                    .replaceAll('"', ''))
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? ApiConstants.downloadUrl +
-                                                newResult[index]["image"]
-                                                    .replaceAll('"', '')
-                                                : ourStudentList[index]["image"]
-                                                .replaceAll('"', '') ==
-                                                null
-                                                ? "https://raw.githubusercontent.com/abdulmanafpfassal/image/master/profile.jpg"
-                                                : ApiConstants.downloadUrl +
-                                                ourStudentList[index]
-                                                ["image"].replaceAll('"', ''),
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["fee_amount"]
-                                                : ourStudentList[index]
-                                            ["fee_amount"] ==
-                                                null
-                                                ? " "
-                                                : ourStudentList[index]
-                                            ["fee_amount"]
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]
-                                            ["fee_amount"] ==
-                                                null
-                                                ? " "
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["fee_amount"]
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["fee_amount"],
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["fee_arrear"]
-                                                : ourStudentList[index]["fee_arrear"]
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["fee_arrear"]
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["fee_arrear"],
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["parent_name"]
-                                                : ourStudentList[index]["parent_name"]
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["parent_name"]
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["parent_name"],
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["parent_phone"]
-                                                : ourStudentList[index]
-                                            ["parent_phone"]
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["parent_phone"]
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["parent_phone"],
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["admission_number"]
-                                                : ourStudentList[index]
-                                            ["admission_number"]
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["admission_number"]
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]
-                                            ["admission_number"],
-                                            studentFeebackList,
-                                            widget.name.toString(),
-                                            widget.LoginedUserEmployeeCode
-                                                .toString(),
-                                            widget.images.toString(),
-                                          );
+                                          if (newResult[index]
+                                          ["feeDetails"].containsKey(
+                                              "mother_details") &&
+                                              newResult[index]
+                                              ["feeDetails"]
+                                              ["mother_details"].isNotEmpty &&
+                                              newResult[index]
+                                              ["feeDetails"]
+                                              ["mother_details"].containsKey(
+                                                  "mother_name") &&
+                                              newResult[index]
+                                              ["feeDetails"]
+                                              ["mother_details"].containsKey(
+                                                  "mother_mobile")) {
+                                            Dialogbox(
+                                              context,
+                                              _searchController.text.isNotEmpty
+                                                  ? capitalizeFirstLetterOfEachWord(
+                                                  newResult[index]["username"]
+                                                      .toString()
+                                                      .toLowerCase())
+                                                  .toString()
+                                                  : afterAttendanceTaken ==
+                                                  null ||
+                                                  afterAttendanceTaken.isEmpty
+                                                  ? capitalizeFirstLetterOfEachWord(
+                                                  ourStudentList[index]
+                                                  ["username"]
+                                                      .toString()
+                                                      .toLowerCase())
+                                                  .toString()
+                                                  : capitalizeFirstLetterOfEachWord(
+                                                  afterAttendanceTaken[
+                                                  index]["username"]
+                                                      .toString()
+                                                      .toLowerCase())
+                                                  .toString(),
+                                              afterAttendanceTaken != null
+                                                  ? (_searchController.text
+                                                  .isNotEmpty
+                                                  ? ApiConstants.downloadUrl +
+                                                  newResult[index]["feeDetails"]["image"]
+                                                      .replaceAll('"', '')
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["image"].replaceAll(
+                                                  '"', '') ==
+                                                  null
+                                                  ? "https://raw.githubusercontent.com/abdulmanafpfassal/image/master/profile.jpg"
+                                                  : ApiConstants.downloadUrl +
+                                                  afterAttendanceTaken[index]
+                                                  ["feeDetails"]["image"]
+                                                      .replaceAll('"', ''))
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? ApiConstants.downloadUrl +
+                                                  newResult[index]["image"]
+                                                      .replaceAll('"', '')
+                                                  : ourStudentList[index]["image"]
+                                                  .replaceAll('"', '') ==
+                                                  null
+                                                  ? "https://raw.githubusercontent.com/abdulmanafpfassal/image/master/profile.jpg"
+                                                  : ApiConstants.downloadUrl +
+                                                  ourStudentList[index]
+                                                  ["image"].replaceAll('"', ''),
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["fee_amount"]
+                                                  .toString()
+                                                  : ourStudentList[index]
+                                              ["fee_amount"] ==
+                                                  null
+                                                  ? " "
+                                                  : ourStudentList[index]
+                                              ["fee_amount"]
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]
+                                              ["fee_amount"] ==
+                                                  null
+                                                  ? " "
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["fee_amount"]
+                                                  .toString()
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["fee_amount"],
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["fee_arrear"]
+                                                  : ourStudentList[index]["fee_arrear"]
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["fee_arrear"]
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["fee_arrear"],
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["parent_name"]
+                                                  .toString()
+                                                  : ourStudentList[index]["parent_name"]
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["parent_name"]
+                                                  .toString()
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["parent_name"],
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["parent_phone"]
+                                                  .toString()
+                                                  : ourStudentList[index]
+                                              ["parent_phone"]
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["parent_phone"]
+                                                  .toString()
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["parent_phone"],
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["admission_number"]
+                                                  .toString()
+                                                  : ourStudentList[index]
+                                              ["admission_number"]
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["admission_number"]
+                                                  .toString()
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]
+                                              ["admission_number"],
+                                              studentFeebackList,
+                                              widget.name.toString(),
+                                              widget.LoginedUserEmployeeCode
+                                                  .toString(),
+                                              widget.images.toString(),
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["mother_details"]["mother_name"] ??
+                                                  '--'
+                                                  : ourStudentList[index]["mother_details"]
+                                              ["mother_name"] ?? '--'
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["mother_details"]["mother_name"] ??
+                                                  '--'
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["mother_details"]["mother_name"] ??
+                                                  '--',
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["mother_details"]["mother_mobile"] ??
+                                                  '--'
+                                                  : ourStudentList[index]["mother_details"]
+                                              ["mother_mobile"] ?? '--'
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["mother_details"]["mother_mobile"] ??
+                                                  '--'
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]
+                                              ["mother_details"]
+                                              ["mother_mobile"] ?? '--',
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index].containsKey(
+                                                  "mother_details")
+                                                  : ourStudentList[index]
+                                                  .containsKey("mother_details")
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]
+                                                  .containsKey("mother_details")
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"].containsKey(
+                                                  "mother_details"),
+                                            );
+                                          } else {
+                                            DialogboxWithoutMotherDetails(
+                                              context,
+                                              _searchController.text.isNotEmpty
+                                                  ? capitalizeFirstLetterOfEachWord(
+                                                  newResult[index]["username"]
+                                                      .toString()
+                                                      .toLowerCase())
+                                                  .toString()
+                                                  : afterAttendanceTaken ==
+                                                  null ||
+                                                  afterAttendanceTaken.isEmpty
+                                                  ? capitalizeFirstLetterOfEachWord(
+                                                  ourStudentList[index]
+                                                  ["username"]
+                                                      .toString()
+                                                      .toLowerCase())
+                                                  .toString()
+                                                  : capitalizeFirstLetterOfEachWord(
+                                                  afterAttendanceTaken[
+                                                  index]["username"]
+                                                      .toString()
+                                                      .toLowerCase())
+                                                  .toString(),
+                                              afterAttendanceTaken != null
+                                                  ? (_searchController.text
+                                                  .isNotEmpty
+                                                  ? ApiConstants.downloadUrl +
+                                                  newResult[index]["feeDetails"]["image"]
+                                                      .replaceAll('"', '')
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["image"].replaceAll(
+                                                  '"', '') ==
+                                                  null
+                                                  ? "https://raw.githubusercontent.com/abdulmanafpfassal/image/master/profile.jpg"
+                                                  : ApiConstants.downloadUrl +
+                                                  afterAttendanceTaken[index]
+                                                  ["feeDetails"]["image"]
+                                                      .replaceAll('"', ''))
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? ApiConstants.downloadUrl +
+                                                  newResult[index]["image"]
+                                                      .replaceAll('"', '')
+                                                  : ourStudentList[index]["image"]
+                                                  .replaceAll('"', '') ==
+                                                  null
+                                                  ? "https://raw.githubusercontent.com/abdulmanafpfassal/image/master/profile.jpg"
+                                                  : ApiConstants.downloadUrl +
+                                                  ourStudentList[index]
+                                                  ["image"].replaceAll('"', ''),
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["fee_amount"]
+                                                  : ourStudentList[index]
+                                              ["fee_amount"] ==
+                                                  null
+                                                  ? " "
+                                                  : ourStudentList[index]
+                                              ["fee_amount"]
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]
+                                              ["fee_amount"] ==
+                                                  null
+                                                  ? " "
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["fee_amount"]
+                                                  .toString()
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["fee_amount"],
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["fee_arrear"]
+                                                  : ourStudentList[index]["fee_arrear"]
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["fee_arrear"]
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["fee_arrear"],
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["parent_name"]
+                                                  .toString()
+                                                  : ourStudentList[index]["parent_name"]
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["parent_name"]
+                                                  .toString()
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["parent_name"],
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["parent_phone"]
+                                                  .toString()
+                                                  : ourStudentList[index]
+                                              ["parent_phone"]
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["parent_phone"]
+                                                  .toString()
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]["parent_phone"],
+                                              afterAttendanceTaken == null
+                                                  ? _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["admission_number"]
+                                                  .toString()
+                                                  : ourStudentList[index]
+                                              ["admission_number"]
+                                                  : _searchController.text
+                                                  .isNotEmpty
+                                                  ? newResult[index]["feeDetails"]["admission_number"]
+                                                  .toString()
+                                                  : afterAttendanceTaken[index]
+                                              ["feeDetails"]
+                                              ["admission_number"],
+                                              studentFeebackList,
+                                              widget.name.toString(),
+                                              widget.LoginedUserEmployeeCode
+                                                  .toString(),
+                                              widget.images.toString(),
+                                            );
+                                          }
                                         }
                                       }
-                                    } else {
-                                      if (afterAttendanceTaken == null) {
-                                        if (newResult[index].containsKey(
-                                            "mother_details") &&
-                                            newResult[index]["mother_details"]
-                                                .isNotEmpty &&
-                                            newResult[index]["mother_details"]
-                                                .containsKey("mother_name") &&
-                                            newResult[index]["mother_details"]
-                                                .containsKey("mother_mobile")) {
-                                          Dialogbox(
-                                            context,
-                                            _searchController.text.isNotEmpty
-                                                ? capitalizeFirstLetterOfEachWord(
-                                                newResult[index]["username"]
-                                                    .toString()
-                                                    .toLowerCase())
-                                                .toString()
-                                                : afterAttendanceTaken ==
-                                                null ||
-                                                afterAttendanceTaken.isEmpty
-                                                ? capitalizeFirstLetterOfEachWord(
-                                                ourStudentList[index]
-                                                ["username"]
-                                                    .toString()
-                                                    .toLowerCase())
-                                                .toString()
-                                                : capitalizeFirstLetterOfEachWord(
-                                                afterAttendanceTaken[
-                                                index]["username"]
-                                                    .toString()
-                                                    .toLowerCase())
-                                                .toString(),
-                                            afterAttendanceTaken != null
-                                                ? (_searchController.text
-                                                .isNotEmpty
-                                                ? ApiConstants.downloadUrl +
-                                                newResult[index]["feeDetails"]["image"]
-                                                    .replaceAll('"', '')
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["image"].replaceAll(
-                                                '"', '') ==
-                                                null
-                                                ? "https://raw.githubusercontent.com/abdulmanafpfassal/image/master/profile.jpg"
-                                                : ApiConstants.downloadUrl +
-                                                afterAttendanceTaken[index]
-                                                ["feeDetails"]["image"]
-                                                    .replaceAll('"', ''))
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? ApiConstants.downloadUrl +
-                                                newResult[index]["image"]
-                                                    .replaceAll('"', '')
-                                                : ourStudentList[index]["image"]
-                                                .replaceAll('"', '') ==
-                                                null
-                                                ? "https://raw.githubusercontent.com/abdulmanafpfassal/image/master/profile.jpg"
-                                                : ApiConstants.downloadUrl +
-                                                ourStudentList[index]
-                                                ["image"].replaceAll('"', ''),
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["fee_amount"]
-                                                : ourStudentList[index]
-                                            ["fee_amount"] ==
-                                                null
-                                                ? " "
-                                                : ourStudentList[index]
-                                            ["fee_amount"]
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]
-                                            ["fee_amount"] ==
-                                                null
-                                                ? " "
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["fee_amount"]
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["fee_amount"],
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["fee_arrear"]
-                                                : ourStudentList[index]["fee_arrear"]
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["fee_arrear"]
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["fee_arrear"],
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["parent_name"]
-                                                : ourStudentList[index]["parent_name"]
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["parent_name"]
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["parent_name"],
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["parent_phone"]
-                                                : ourStudentList[index]
-                                            ["parent_phone"]
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["parent_phone"]
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["parent_phone"],
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["admission_number"]
-                                                : ourStudentList[index]
-                                            ["admission_number"]
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["admission_number"]
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]
-                                            ["admission_number"],
-                                            studentFeebackList,
-                                            widget.name.toString(),
-                                            widget.LoginedUserEmployeeCode
-                                                .toString(),
-                                            widget.images.toString(),
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["mother_details"]["mother_name"] ??
-                                                '--'
-                                                : ourStudentList[index]["mother_details"]
-                                            ["mother_name"] ?? '--'
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["mother_details"]["mother_name"] ??
-                                                '--'
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["mother_details"]["mother_name"] ??
-                                                '--',
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["mother_details"]["mother_mobile"] ??
-                                                '--'
-                                                : ourStudentList[index]["mother_details"]
-                                            ["mother_mobile"] ?? '--'
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["mother_details"]["mother_mobile"] ??
-                                                '--'
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]
-                                            ["mother_details"]
-                                            ["mother_mobile"] ?? '--',
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index].containsKey(
-                                                "mother_details")
-                                                : ourStudentList[index]
-                                                .containsKey("mother_details")
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]
-                                                .containsKey("mother_details")
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"].containsKey(
-                                                "mother_details"),
-                                          );
-                                        } else {
-                                          DialogboxWithoutMotherDetails(
-                                            context,
-                                            _searchController.text.isNotEmpty
-                                                ? capitalizeFirstLetterOfEachWord(
-                                                newResult[index]["username"]
-                                                    .toString()
-                                                    .toLowerCase())
-                                                .toString()
-                                                : afterAttendanceTaken ==
-                                                null ||
-                                                afterAttendanceTaken.isEmpty
-                                                ? capitalizeFirstLetterOfEachWord(
-                                                ourStudentList[index]
-                                                ["username"]
-                                                    .toString()
-                                                    .toLowerCase())
-                                                .toString()
-                                                : capitalizeFirstLetterOfEachWord(
-                                                afterAttendanceTaken[
-                                                index]["username"]
-                                                    .toString()
-                                                    .toLowerCase())
-                                                .toString(),
-                                            afterAttendanceTaken != null
-                                                ? (_searchController.text
-                                                .isNotEmpty
-                                                ? ApiConstants.downloadUrl +
-                                                newResult[index]["feeDetails"]["image"]
-                                                    .replaceAll('"', '')
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["image"].replaceAll(
-                                                '"', '') ==
-                                                null
-                                                ? "https://raw.githubusercontent.com/abdulmanafpfassal/image/master/profile.jpg"
-                                                : ApiConstants.downloadUrl +
-                                                afterAttendanceTaken[index]
-                                                ["feeDetails"]["image"]
-                                                    .replaceAll('"', ''))
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? ApiConstants.downloadUrl +
-                                                newResult[index]["image"]
-                                                    .replaceAll('"', '')
-                                                : ourStudentList[index]["image"]
-                                                .replaceAll('"', '') ==
-                                                null
-                                                ? "https://raw.githubusercontent.com/abdulmanafpfassal/image/master/profile.jpg"
-                                                : ApiConstants.downloadUrl +
-                                                ourStudentList[index]
-                                                ["image"].replaceAll('"', ''),
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["fee_amount"]
-                                                .toString()
-                                                : ourStudentList[index]
-                                            ["fee_amount"] ==
-                                                null
-                                                ? " "
-                                                : ourStudentList[index]
-                                            ["fee_amount"]
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]
-                                            ["fee_amount"] ==
-                                                null
-                                                ? " "
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["fee_amount"]
-                                                .toString()
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["fee_amount"],
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["fee_arrear"]
-                                                : ourStudentList[index]["fee_arrear"]
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["fee_arrear"]
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["fee_arrear"],
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["parent_name"]
-                                                .toString()
-                                                : ourStudentList[index]["parent_name"]
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["parent_name"]
-                                                .toString()
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["parent_name"],
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["parent_phone"]
-                                                .toString()
-                                                : ourStudentList[index]
-                                            ["parent_phone"]
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["parent_phone"]
-                                                .toString()
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["parent_phone"],
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["admission_number"]
-                                                .toString()
-                                                : ourStudentList[index]
-                                            ["admission_number"]
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["admission_number"]
-                                                .toString()
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]
-                                            ["admission_number"],
-                                            studentFeebackList,
-                                            widget.name.toString(),
-                                            widget.LoginedUserEmployeeCode
-                                                .toString(),
-                                            widget.images.toString(),
-                                          );
-                                        }
-                                      } else {
-                                        if (newResult[index]
-                                        ["feeDetails"].containsKey(
-                                            "mother_details") &&
-                                            newResult[index]
-                                            ["feeDetails"]
-                                            ["mother_details"].isNotEmpty &&
-                                            newResult[index]
-                                            ["feeDetails"]
-                                            ["mother_details"].containsKey(
-                                                "mother_name") &&
-                                            newResult[index]
-                                            ["feeDetails"]
-                                            ["mother_details"].containsKey(
-                                                "mother_mobile")) {
-                                          Dialogbox(
-                                            context,
-                                            _searchController.text.isNotEmpty
-                                                ? capitalizeFirstLetterOfEachWord(
-                                                newResult[index]["username"]
-                                                    .toString()
-                                                    .toLowerCase())
-                                                .toString()
-                                                : afterAttendanceTaken ==
-                                                null ||
-                                                afterAttendanceTaken.isEmpty
-                                                ? capitalizeFirstLetterOfEachWord(
-                                                ourStudentList[index]
-                                                ["username"]
-                                                    .toString()
-                                                    .toLowerCase())
-                                                .toString()
-                                                : capitalizeFirstLetterOfEachWord(
-                                                afterAttendanceTaken[
-                                                index]["username"]
-                                                    .toString()
-                                                    .toLowerCase())
-                                                .toString(),
-                                            afterAttendanceTaken != null
-                                                ? (_searchController.text
-                                                .isNotEmpty
-                                                ? ApiConstants.downloadUrl +
-                                                newResult[index]["feeDetails"]["image"]
-                                                    .replaceAll('"', '')
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["image"].replaceAll(
-                                                '"', '') ==
-                                                null
-                                                ? "https://raw.githubusercontent.com/abdulmanafpfassal/image/master/profile.jpg"
-                                                : ApiConstants.downloadUrl +
-                                                afterAttendanceTaken[index]
-                                                ["feeDetails"]["image"]
-                                                    .replaceAll('"', ''))
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? ApiConstants.downloadUrl +
-                                                newResult[index]["image"]
-                                                    .replaceAll('"', '')
-                                                : ourStudentList[index]["image"]
-                                                .replaceAll('"', '') ==
-                                                null
-                                                ? "https://raw.githubusercontent.com/abdulmanafpfassal/image/master/profile.jpg"
-                                                : ApiConstants.downloadUrl +
-                                                ourStudentList[index]
-                                                ["image"].replaceAll('"', ''),
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["fee_amount"]
-                                                .toString()
-                                                : ourStudentList[index]
-                                            ["fee_amount"] ==
-                                                null
-                                                ? " "
-                                                : ourStudentList[index]
-                                            ["fee_amount"]
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]
-                                            ["fee_amount"] ==
-                                                null
-                                                ? " "
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["fee_amount"]
-                                                .toString()
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["fee_amount"],
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["fee_arrear"]
-                                                : ourStudentList[index]["fee_arrear"]
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["fee_arrear"]
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["fee_arrear"],
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["parent_name"]
-                                                .toString()
-                                                : ourStudentList[index]["parent_name"]
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["parent_name"]
-                                                .toString()
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["parent_name"],
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["parent_phone"]
-                                                .toString()
-                                                : ourStudentList[index]
-                                            ["parent_phone"]
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["parent_phone"]
-                                                .toString()
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["parent_phone"],
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["admission_number"]
-                                                .toString()
-                                                : ourStudentList[index]
-                                            ["admission_number"]
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["admission_number"]
-                                                .toString()
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]
-                                            ["admission_number"],
-                                            studentFeebackList,
-                                            widget.name.toString(),
-                                            widget.LoginedUserEmployeeCode
-                                                .toString(),
-                                            widget.images.toString(),
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["mother_details"]["mother_name"] ??
-                                                '--'
-                                                : ourStudentList[index]["mother_details"]
-                                            ["mother_name"] ?? '--'
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["mother_details"]["mother_name"] ??
-                                                '--'
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["mother_details"]["mother_name"] ??
-                                                '--',
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["mother_details"]["mother_mobile"] ??
-                                                '--'
-                                                : ourStudentList[index]["mother_details"]
-                                            ["mother_mobile"] ?? '--'
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["mother_details"]["mother_mobile"] ??
-                                                '--'
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]
-                                            ["mother_details"]
-                                            ["mother_mobile"] ?? '--',
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index].containsKey(
-                                                "mother_details")
-                                                : ourStudentList[index]
-                                                .containsKey("mother_details")
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]
-                                                .containsKey("mother_details")
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"].containsKey(
-                                                "mother_details"),
-                                          );
-                                        } else {
-                                          DialogboxWithoutMotherDetails(
-                                            context,
-                                            _searchController.text.isNotEmpty
-                                                ? capitalizeFirstLetterOfEachWord(
-                                                newResult[index]["username"]
-                                                    .toString()
-                                                    .toLowerCase())
-                                                .toString()
-                                                : afterAttendanceTaken ==
-                                                null ||
-                                                afterAttendanceTaken.isEmpty
-                                                ? capitalizeFirstLetterOfEachWord(
-                                                ourStudentList[index]
-                                                ["username"]
-                                                    .toString()
-                                                    .toLowerCase())
-                                                .toString()
-                                                : capitalizeFirstLetterOfEachWord(
-                                                afterAttendanceTaken[
-                                                index]["username"]
-                                                    .toString()
-                                                    .toLowerCase())
-                                                .toString(),
-                                            afterAttendanceTaken != null
-                                                ? (_searchController.text
-                                                .isNotEmpty
-                                                ? ApiConstants.downloadUrl +
-                                                newResult[index]["feeDetails"]["image"]
-                                                    .replaceAll('"', '')
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["image"].replaceAll(
-                                                '"', '') ==
-                                                null
-                                                ? "https://raw.githubusercontent.com/abdulmanafpfassal/image/master/profile.jpg"
-                                                : ApiConstants.downloadUrl +
-                                                afterAttendanceTaken[index]
-                                                ["feeDetails"]["image"]
-                                                    .replaceAll('"', ''))
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? ApiConstants.downloadUrl +
-                                                newResult[index]["image"]
-                                                    .replaceAll('"', '')
-                                                : ourStudentList[index]["image"]
-                                                .replaceAll('"', '') ==
-                                                null
-                                                ? "https://raw.githubusercontent.com/abdulmanafpfassal/image/master/profile.jpg"
-                                                : ApiConstants.downloadUrl +
-                                                ourStudentList[index]
-                                                ["image"].replaceAll('"', ''),
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["fee_amount"]
-                                                : ourStudentList[index]
-                                            ["fee_amount"] ==
-                                                null
-                                                ? " "
-                                                : ourStudentList[index]
-                                            ["fee_amount"]
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]
-                                            ["fee_amount"] ==
-                                                null
-                                                ? " "
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["fee_amount"]
-                                                .toString()
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["fee_amount"],
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["fee_arrear"]
-                                                : ourStudentList[index]["fee_arrear"]
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["fee_arrear"]
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["fee_arrear"],
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["parent_name"]
-                                                .toString()
-                                                : ourStudentList[index]["parent_name"]
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["parent_name"]
-                                                .toString()
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["parent_name"],
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["parent_phone"]
-                                                .toString()
-                                                : ourStudentList[index]
-                                            ["parent_phone"]
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["parent_phone"]
-                                                .toString()
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]["parent_phone"],
-                                            afterAttendanceTaken == null
-                                                ? _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["admission_number"]
-                                                .toString()
-                                                : ourStudentList[index]
-                                            ["admission_number"]
-                                                : _searchController.text
-                                                .isNotEmpty
-                                                ? newResult[index]["feeDetails"]["admission_number"]
-                                                .toString()
-                                                : afterAttendanceTaken[index]
-                                            ["feeDetails"]
-                                            ["admission_number"],
-                                            studentFeebackList,
-                                            widget.name.toString(),
-                                            widget.LoginedUserEmployeeCode
-                                                .toString(),
-                                            widget.images.toString(),
-                                          );
-                                        }
-                                      }
-                                    }
-                                  },
-                                  // leftSwipeWidget:  Container(
-                                  //   padding: EdgeInsets.all(30),
-                                  //   color: ColorUtils.LOGIN_BUTTON,
-                                  //   child: Icon(
-                                  //     Icons.contacts,
-                                  //     color: Colors.white,
-                                  //   ),
-                                  // ),
-                                  // onLeftSwipe: () {
-                                  //   Container(
-                                  //     height: 200,
-                                  //     color: Colors.red,
-                                  //   );
-                                  // },
-                                  child: Container(
-                                      margin: EdgeInsets.only(left: 10.w),
-                                      child: Column(
-                                        children: [
-                                          Theme(
-                                            data: ThemeData().copyWith(
-                                                dividerColor:
-                                                Colors.transparent),
-                                            child: Row(
-                                              children: [
-                                                badges.Badge(
-
-                                                  position: badges.BadgePosition
-                                                      .bottomEnd(
-                                                      end: 0, bottom: -10),
-
-                                                  badgeContent: Text(
-                                                    "${index + 1}",
-                                                    style: TextStyle(
+                                    },
+                                    // leftSwipeWidget:  Container(
+                                    //   padding: EdgeInsets.all(30),
+                                    //   color: ColorUtils.LOGIN_BUTTON,
+                                    //   child: Icon(
+                                    //     Icons.contacts,
+                                    //     color: Colors.white,
+                                    //   ),
+                                    // ),
+                                    // onLeftSwipe: () {
+                                    //   Container(
+                                    //     height: 200,
+                                    //     color: Colors.red,
+                                    //   );
+                                    // },
+                                    child: Container(
+                                        margin: EdgeInsets.only(left: 10.w),
+                                        child: Column(
+                                          children: [
+                                            Theme(
+                                              data: ThemeData().copyWith(
+                                                  dividerColor:
+                                                  Colors.transparent),
+                                              child: Row(
+                                                children: [
+                                                  badges.Badge(
+                              
+                                                    position: badges.BadgePosition
+                                                        .bottomEnd(
+                                                        end: 0, bottom: -10),
+                              
+                                                    badgeContent: Text(
+                                                      "${index + 1}",
+                                                      style: TextStyle(
+                                                          color: Colorutils
+                                                              .userdetailcolor),
+                                                    ),
+                                                    badgeStyle:
+                                                    badges.BadgeStyle(
+                              
+                                                      elevation: 0,
+                                                      badgeColor: Colorutils
+                                                          .Whitecolor,
+                                                      borderSide: BorderSide(
                                                         color: Colorutils
-                                                            .userdetailcolor),
-                                                  ),
-                                                  badgeStyle:
-                                                  badges.BadgeStyle(
-
-                                                    elevation: 0,
-                                                    badgeColor: Colorutils
-                                                        .Whitecolor,
-                                                    borderSide: BorderSide(
-                                                      color: Colorutils
-                                                          .chatcolor,
-                                                      // Replace with your desired border color
-                                                      width: 1.0, // Adjust the width of the border
-                                                    ),
-                                                  ),
-                                                  child: Container(
-                                                    width: 60.w,
-                                                    height: 60.h,
-                                                    decoration: BoxDecoration(
-                                                      border: Border.all(
-                                                          color: Color(
-                                                              0xFFD6E4FA)),
-                                                      shape: BoxShape.circle,
-                                                      // image: DecorationImage(
-                                                      //     image: NetworkImage( afterAttendanceTaken != null
-                                                      //         ? (afterAttendanceTaken[index]["feeDetails"]["image"] ==
-                                                      //                 "avathar"
-                                                      //             ? "https://raw.githubusercontent.com/abdulmanafpfassal/image/master/profile.jpg"
-                                                      //             :_searchController.text.isNotEmpty
-                                                      //         ? ApiConstants.downloadUrl + newResult[index]["feeDetails"]["image"].replaceAll('"', '') : ApiConstants
-                                                      //                     .downloadUrl +
-                                                      //                 afterAttendanceTaken[index]
-                                                      //                         ["feeDetails"][
-                                                      //                     "image"].replaceAll('"', ''))
-                                                      //         : (ourStudentList[index]["image"].replaceAll('"', '') ==
-                                                      //                 null
-                                                      //             ? "https://raw.githubusercontent.com/abdulmanafpfassal/image/master/profile.jpg"
-                                                      //             : _searchController.text.isNotEmpty
-                                                      //         ? ApiConstants.downloadUrl + newResult[index]["image"].replaceAll('"', '') : ApiConstants
-                                                      //                     .downloadUrl +
-                                                      //                 ourStudentList[index]
-                                                      //                     ["image"].replaceAll('"', ''))),
-                                                      //     fit: BoxFit.fill),
-                                                    ),
-                                                    child:
-                                                    afterAttendanceTaken == null
-                                                        ?
-                                                    ClipRRect(
-                                                      borderRadius: BorderRadius
-                                                          .circular(100),
-                                                      child: CachedNetworkImage(
-                                                        width: 50,
-                                                        height: 50,
-                                                        fit: BoxFit.fill,
-                                                        imageUrl: "${ApiConstants.downloadUrl}${ourStudentList[index]['feeDetails']?["image"] ?? ''}",
-                                                        placeholder: (context,
-                                                            url) =>
-                                                            Center(
-                                                              child: Text(
-                                                                '${ourStudentList[index]["username"]!
-                                                                    .split(
-                                                                    ' ')[0]
-                                                                    .toString()[0]}'
-                                                                // '${ourStudentList[index]["username"].split(' ')[1].toString()[0]}'
-                                                                ,
-                                                                style: TextStyle(
-                                                                    color: Colorutils
-                                                                        .chatcolor,
-                                                                    fontWeight: FontWeight
-                                                                        .bold,
-                                                                    fontSize: 20),
-                                                              ),
-                                                            ),
-                                                        errorWidget: (context,
-                                                            url, error) =>
-                                                            Center(
-                                                              child: Text(
-                                                                '${ourStudentList[index]["username"]!
-                                                                    .split(
-                                                                    ' ')[0]
-                                                                    .toString()[0]}'
-                                                                // '${ourStudentList[index]["username"].split(' ')[1].toString()[0]}'
-                                                                ,
-                                                                style: TextStyle(
-                                                                    color: Colorutils
-                                                                        .chatcolor,
-                                                                    fontWeight: FontWeight
-                                                                        .bold,
-                                                                    fontSize: 20),
-                                                              ),
-                                                            ),
+                                                            .chatcolor,
+                                                        // Replace with your desired border color
+                                                        width: 1.0, // Adjust the width of the border
                                                       ),
-                                                    )
-                                                        : ClipRRect(
-                                                      borderRadius: BorderRadius
-                                                          .circular(100),
-                                                      child: CachedNetworkImage(
-                                                        width: 50,
-                                                        height: 50,
-                                                        fit: BoxFit.fill,
-                                                        imageUrl: "${ApiConstants.downloadUrl}${afterAttendanceTaken[index]['feeDetails']["image"]}",
-                                                        placeholder: (context,
-                                                            url) =>
-                                                            Center(
-                                                              child: Text(
-                                                                '${afterAttendanceTaken[index]["username"]!
-                                                                    .split(
-                                                                    ' ')[0]
-                                                                    .toString()[0]}'
-                                                                // '${afterAttendanceTaken[index]["username"].split(' ')[1].toString()[0]}'
-                                                                ,
-                                                                style: TextStyle(
-                                                                    color: Color(
-                                                                        0xFFB1BFFF),
-                                                                    fontWeight: FontWeight
-                                                                        .bold,
-                                                                    fontSize: 20),
+                                                    ),
+                                                    child: Container(
+                                                      width: 60.w,
+                                                      height: 60.h,
+                                                      decoration: BoxDecoration(
+                                                        border: Border.all(
+                                                            color: Color(
+                                                                0xFFD6E4FA)),
+                                                        shape: BoxShape.circle,
+                                                        // image: DecorationImage(
+                                                        //     image: NetworkImage( afterAttendanceTaken != null
+                                                        //         ? (afterAttendanceTaken[index]["feeDetails"]["image"] ==
+                                                        //                 "avathar"
+                                                        //             ? "https://raw.githubusercontent.com/abdulmanafpfassal/image/master/profile.jpg"
+                                                        //             :_searchController.text.isNotEmpty
+                                                        //         ? ApiConstants.downloadUrl + newResult[index]["feeDetails"]["image"].replaceAll('"', '') : ApiConstants
+                                                        //                     .downloadUrl +
+                                                        //                 afterAttendanceTaken[index]
+                                                        //                         ["feeDetails"][
+                                                        //                     "image"].replaceAll('"', ''))
+                                                        //         : (ourStudentList[index]["image"].replaceAll('"', '') ==
+                                                        //                 null
+                                                        //             ? "https://raw.githubusercontent.com/abdulmanafpfassal/image/master/profile.jpg"
+                                                        //             : _searchController.text.isNotEmpty
+                                                        //         ? ApiConstants.downloadUrl + newResult[index]["image"].replaceAll('"', '') : ApiConstants
+                                                        //                     .downloadUrl +
+                                                        //                 ourStudentList[index]
+                                                        //                     ["image"].replaceAll('"', ''))),
+                                                        //     fit: BoxFit.fill),
+                                                      ),
+                                                      child:
+                                                      afterAttendanceTaken == null
+                                                          ?
+                                                      ClipRRect(
+                                                        borderRadius: BorderRadius
+                                                            .circular(100),
+                                                        child: CachedNetworkImage(
+                                                          width: 50,
+                                                          height: 50,
+                                                          fit: BoxFit.fill,
+                                                          imageUrl: "${ApiConstants.downloadUrl}${ourStudentList[index]['feeDetails']?["image"] ?? ''}",
+                                                          placeholder: (context,
+                                                              url) =>
+                                                              Center(
+                                                                child: Text(
+                                                                  '${ourStudentList[index]["username"]!
+                                                                      .split(
+                                                                      ' ')[0]
+                                                                      .toString()[0]}'
+                                                                  // '${ourStudentList[index]["username"].split(' ')[1].toString()[0]}'
+                                                                  ,
+                                                                  style: TextStyle(
+                                                                      color: Colorutils
+                                                                          .chatcolor,
+                                                                      fontWeight: FontWeight
+                                                                          .bold,
+                                                                      fontSize: 20),
+                                                                ),
                                                               ),
-                                                            ),
-                                                        errorWidget: (context,
-                                                            url, error) =>
-                                                            Center(
-                                                              child: Text(
-                                                                '${afterAttendanceTaken[index]["username"]!
-                                                                    .split(
-                                                                    ' ')[0]
-                                                                    .toString()[0]}'
-                                                                // '${afterAttendanceTaken[index]["username"].split(' ')[1].toString()[0]}'
-                                                                ,
-                                                                style: TextStyle(
-                                                                    color: Color(
-                                                                        0xFFB1BFFF),
-                                                                    fontWeight: FontWeight
-                                                                        .bold,
-                                                                    fontSize: 20),
+                                                          errorWidget: (context,
+                                                              url, error) =>
+                                                              Center(
+                                                                child: Text(
+                                                                  '${ourStudentList[index]["username"]!
+                                                                      .split(
+                                                                      ' ')[0]
+                                                                      .toString()[0]}'
+                                                                  // '${ourStudentList[index]["username"].split(' ')[1].toString()[0]}'
+                                                                  ,
+                                                                  style: TextStyle(
+                                                                      color: Colorutils
+                                                                          .chatcolor,
+                                                                      fontWeight: FontWeight
+                                                                          .bold,
+                                                                      fontSize: 20),
+                                                                ),
                                                               ),
-                                                            ),
+                                                        ),
+                                                      )
+                                                          : ClipRRect(
+                                                        borderRadius: BorderRadius
+                                                            .circular(100),
+                                                        child: CachedNetworkImage(
+                                                          width: 50,
+                                                          height: 50,
+                                                          fit: BoxFit.fill,
+                                                          imageUrl: "${ApiConstants.downloadUrl}${afterAttendanceTaken[index]['feeDetails']["image"]}",
+                                                          placeholder: (context,
+                                                              url) =>
+                                                              Center(
+                                                                child: Text(
+                                                                  '${afterAttendanceTaken[index]["username"]!
+                                                                      .split(
+                                                                      ' ')[0]
+                                                                      .toString()[0]}'
+                                                                  // '${afterAttendanceTaken[index]["username"].split(' ')[1].toString()[0]}'
+                                                                  ,
+                                                                  style: TextStyle(
+                                                                      color: Color(
+                                                                          0xFFB1BFFF),
+                                                                      fontWeight: FontWeight
+                                                                          .bold,
+                                                                      fontSize: 20),
+                                                                ),
+                                                              ),
+                                                          errorWidget: (context,
+                                                              url, error) =>
+                                                              Center(
+                                                                child: Text(
+                                                                  '${afterAttendanceTaken[index]["username"]!
+                                                                      .split(
+                                                                      ' ')[0]
+                                                                      .toString()[0]}'
+                                                                  // '${afterAttendanceTaken[index]["username"].split(' ')[1].toString()[0]}'
+                                                                  ,
+                                                                  style: TextStyle(
+                                                                      color: Color(
+                                                                          0xFFB1BFFF),
+                                                                      fontWeight: FontWeight
+                                                                          .bold,
+                                                                      fontSize: 20),
+                                                                ),
+                                                              ),
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
-                                                ),
-                                                SizedBox(
-                                                  width: 14.w,
-                                                ),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                                  children: [
-                                                    Container(
-                                                        width: 200.w,
-                                                        child: SingleChildScrollView(
-                                                          scrollDirection: Axis
-                                                              .horizontal,
-                                                          child: Text(
-                                                              _searchController
-                                                                  .text
-                                                                  .isNotEmpty
-                                                                  ? capitalizeFirstLetterOfEachWord(
-                                                                  newResult[index]["username"]
-                                                                      .toString()
-                                                                      .toLowerCase())
-                                                                  .toString()
-                                                                  : afterAttendanceTaken ==
-                                                                  null ||
-                                                                  afterAttendanceTaken
-                                                                      .isEmpty
-                                                                  ? capitalizeFirstLetterOfEachWord(
-                                                                  ourStudentList[index]["username"]
-                                                                      .toString()
-                                                                      .toLowerCase())
-                                                                  .toString()
-                                                                  : capitalizeFirstLetterOfEachWord(
-                                                                  afterAttendanceTaken[index]["username"]
-                                                                      .toString()
-                                                                      .toLowerCase())
+                                                  SizedBox(
+                                                    width: 14.w,
+                                                  ),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                    children: [
+                                                      Container(
+                                                          width: 200.w,
+                                                          child: SingleChildScrollView(
+                                                            scrollDirection: Axis
+                                                                .horizontal,
+                                                            child: Text(
+                                                                _searchController
+                                                                    .text
+                                                                    .isNotEmpty
+                                                                    ? capitalizeFirstLetterOfEachWord(
+                                                                    newResult[index]["username"]
+                                                                        .toString()
+                                                                        .toLowerCase())
+                                                                    .toString()
+                                                                    : afterAttendanceTaken ==
+                                                                    null ||
+                                                                    afterAttendanceTaken
+                                                                        .isEmpty
+                                                                    ? capitalizeFirstLetterOfEachWord(
+                                                                    ourStudentList[index]["username"]
+                                                                        .toString()
+                                                                        .toLowerCase())
+                                                                    .toString()
+                                                                    : capitalizeFirstLetterOfEachWord(
+                                                                    afterAttendanceTaken[index]["username"]
+                                                                        .toString()
+                                                                        .toLowerCase())
+                                                                    .toString(),
+                                                                overflow: TextOverflow
+                                                                    .ellipsis,
+                                                                style: GoogleFonts
+                                                                    .inter(
+                                                                    textStyle: TextStyle(
+                                                                        fontSize:
+                                                                        16.sp,
+                                                                        color: Colors
+                                                                            .black,
+                                                                        fontWeight:
+                                                                        FontWeight
+                                                                            .bold))),
+                                                          )),
+                                                      SizedBox(
+                                                        height: 6.h,
+                                                      ),
+                                                      _searchController.text.isNotEmpty
+                                                          ? (afterAttendanceTaken == null ||
+                                                          afterAttendanceTaken.isEmpty)
+                                                          ? newResult[index]["fee_arrear"] == false
+                                                          ? Text("No Pending Fees")
+                                                          : ((double.tryParse(
+                                                          newResult[index]["fee_amount"]
+                                                              .toString()
+                                                              .replaceAll(
+                                                              ',', '')) ?? 0) < 1) ? Text("No Pending Fees")
+                                                          : Row(
+                                                        mainAxisAlignment: MainAxisAlignment
+                                                            .spaceBetween,
+                                                        children: [
+                                                          Container(
+                                                            child: Text(
+                                                              "AED : ",
+                                                              style: TextStyle(
+                                                                  fontSize:
+                                                                  13),
+                                                            ),
+                                                          ),
+                                                          Container(
+                                                            child: Text(
+                                                              newResult[index]["fee_amount"]
                                                                   .toString(),
-                                                              overflow: TextOverflow
-                                                                  .ellipsis,
-                                                              style: GoogleFonts
-                                                                  .inter(
-                                                                  textStyle: TextStyle(
-                                                                      fontSize:
-                                                                      16.sp,
-                                                                      color: Colors
-                                                                          .black,
-                                                                      fontWeight:
-                                                                      FontWeight
-                                                                          .bold))),
-                                                        )),
-                                                    SizedBox(
-                                                      height: 6.h,
-                                                    ),
-                                                    _searchController.text.isNotEmpty
-                                                        ? (afterAttendanceTaken == null ||
-                                                        afterAttendanceTaken.isEmpty)
-                                                        ? newResult[index]["fee_arrear"] == false
-                                                        ? Text("No Pending Fees")
-                                                        : ((double.tryParse(
-                                                        newResult[index]["fee_amount"]
-                                                            .toString()
-                                                            .replaceAll(
-                                                            ',', '')) ?? 0) < 1) ? Text("No Pending Fees")
-                                                        : Row(
-                                                      mainAxisAlignment: MainAxisAlignment
-                                                          .spaceBetween,
-                                                      children: [
-                                                        Container(
-                                                          child: Text(
-                                                            "AED : ",
-                                                            style: TextStyle(
-                                                                fontSize:
-                                                                13),
+                                                              style: TextStyle(
+                                                                  fontSize: 13,
+                                                                  color: Colors
+                                                                      .red,
+                                                                  fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                            ),
                                                           ),
-                                                        ),
-                                                        Container(
-                                                          child: Text(
-                                                            newResult[index]["fee_amount"]
-                                                                .toString(),
-                                                            style: TextStyle(
-                                                                fontSize: 13,
-                                                                color: Colors
-                                                                    .red,
-                                                                fontWeight:
-                                                                FontWeight
-                                                                    .bold),
+                              
+                                                        ],
+                                                      )
+                                                          : newResult[index]['feeDetails']["fee_arrear"] == false
+                                                          ? Text("No Pending Fees") : ((double.tryParse(
+                                                          newResult[index]['feeDetails']["fee_amount"]
+                                                              .toString()
+                                                              .replaceAll(
+                                                              ',', '')) ?? 0) < 1) ? Text("No Pending Fees")
+                                                          : Row(
+                                                        mainAxisAlignment: MainAxisAlignment
+                                                            .spaceBetween,
+                                                        children: [
+                                                          Container(
+                                                            child: Text(
+                                                              "AED : ",
+                                                              style: TextStyle(
+                                                                  fontSize:
+                                                                  13),
+                                                            ),
                                                           ),
-                                                        ),
-
-                                                      ],
-                                                    )
-                                                        : newResult[index]['feeDetails']["fee_arrear"] == false
-                                                        ? Text("No Pending Fees") : ((double.tryParse(
-                                                        newResult[index]['feeDetails']["fee_amount"]
-                                                            .toString()
-                                                            .replaceAll(
-                                                            ',', '')) ?? 0) < 1) ? Text("No Pending Fees")
-                                                        : Row(
-                                                      mainAxisAlignment: MainAxisAlignment
-                                                          .spaceBetween,
-                                                      children: [
-                                                        Container(
-                                                          child: Text(
-                                                            "AED : ",
-                                                            style: TextStyle(
-                                                                fontSize:
-                                                                13),
+                                                          Container(
+                                                            child: Text(
+                                                              newResult[index]['feeDetails']["fee_amount"]
+                                                                  .toString(),
+                                                              style: TextStyle(
+                                                                  fontSize: 13,
+                                                                  color: Colors
+                                                                      .red,
+                                                                  fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                            ),
                                                           ),
-                                                        ),
-                                                        Container(
-                                                          child: Text(
-                                                            newResult[index]['feeDetails']["fee_amount"]
-                                                                .toString(),
-                                                            style: TextStyle(
-                                                                fontSize: 13,
-                                                                color: Colors
-                                                                    .red,
-                                                                fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                          ),
-                                                        ),
-
-                                                      ],
-                                                    )
-                                                        :
-                                                    afterAttendanceTaken ==
-                                                        null ||
-                                                        afterAttendanceTaken
-                                                            .isEmpty
-                                                        ? ourStudentList[index]["fee_arrear"] == false
-                                                        ? ((double.tryParse(
-                                                        newResult[index]["fee_amount"]
-                                                            .toString()
-                                                            .replaceAll(
-                                                            ',', '')) ?? 0) < 1) ? Text("No Pending Fees") : Text(
-                                                      "No Pending Fees",)
-                                                        : ((double.tryParse(
-                                                        newResult[index]["fee_amount"]
-                                                            .toString()
-                                                            .replaceAll(
-                                                            ',', '')) ?? 0) < 1) ? Text("No Pending Fees") : Row(
-                                                      mainAxisAlignment: MainAxisAlignment
-                                                          .spaceBetween,
-                                                      children: [
-                                                        Container(
-                                                          child: Text(
-                                                            "AED : ",
-                                                            style: TextStyle(
-                                                                fontSize:
-                                                                13),
-                                                          ),
-                                                        ),
-                                                        Container(
-                                                          child: Text(
-                                                            ourStudentList[index]
-                                                            ["fee_amount"]
-                                                                .toString(),
-                                                            style: TextStyle(
-                                                                fontSize: 13,
-                                                                color: Colors
-                                                                    .red,
-                                                                fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                          ),
-                                                        ),
-
-                                                      ],
-                                                    )
-                                                        : afterAttendanceTaken[index]["feeDetails"]["fee_arrear"] == false
-                                                        ? ((double.tryParse(
-                                                        newResult[index]["fee_amount"]
-                                                            .toString()
-                                                            .replaceAll(
-                                                            ',', '')) ?? 0) < 1) ? Text("No Pending Fees") : Row(
-                                                      children: [
-                                                        Text(
-                                                            "No Pending Fees"),
-                                                        SizedBox(width: 34.w,),
-
-                                                      ],
-                                                    )
-                                                        : Row(
-                                                      mainAxisAlignment: MainAxisAlignment
-                                                          .spaceBetween,
-                                                      children: [
-                                                        Container(
-                                                          width: 40.w,
-                                                          child: Text(
-                                                            "AED : ",
-                                                            style: TextStyle(
-                                                                fontSize:
-                                                                13),
-                                                          ),
-                                                        ),
-                                                        Container(
-                                                          width: 90.w,
-                                                          child: Text(
-                                                            afterAttendanceTaken[index]["feeDetails"]["fee_amount"].toString(),
-                                                            style: TextStyle(
-                                                                fontSize: 13,
-                                                                color: Colors
-                                                                    .red,
-                                                                fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                          ),
-                                                        ),
-
-                                                        SizedBox(width: 40.w,),
-
-                                                      ],
-                                                    ),
-
-                                                  ],
-                                                ),
-                                                Spacer(),
-
-                                                // SizedBox(
-                                                //   width: 15.w,
-                                                // ),
-                                                Container(
-                                                  child: FlutterSwitch(
-                                                      width: 80.w,
-                                                      height: 35.h,
-                                                      valueFontSize: 16.sp,
-                                                      toggleSize: 35.h,
-                                                      toggleBorder: Border.all(
-                                                          color: Color(
-                                                              0xFFD6E4FA),
-                                                          width: 2),
-                                                      activeText: "P",
-                                                      inactiveText: "A",
-                                                      value: afterAttendanceTaken ==
+                              
+                                                        ],
+                                                      )
+                                                          :
+                                                      afterAttendanceTaken ==
                                                           null ||
                                                           afterAttendanceTaken
                                                               .isEmpty
-                                                          ? _searchController
-                                                          .text.isNotEmpty
-                                                          ? newResult[index]["is_present"]
-                                                          : ourStudentList[index]
-                                                      ["is_present"]
-                                                          : _searchController
-                                                          .text.isNotEmpty
-                                                          ? newResult[index]["selected"]
-                                                          : afterAttendanceTaken[
-                                                      index]["selected"],
-                                                      borderRadius: 30.0,
-                                                      padding: 0,
-                                                      activeColor: Colorutils
-                                                          .userdetailcolor
-                                                          .withOpacity(0.8),
-                                                      inactiveColor: Colors.red,
-                                                      inactiveTextColor:
-                                                      Colors.white,
-                                                      activeTextColor:
-                                                      Colors.white,
-                                                      showOnOff: true,
-                                                      onToggle: (val) {
-                                                        bool? isTaken = isStudentListnull[index]["late"];
-                                                        if (isTaken != null &&
-                                                            isTaken == true) {
-                                                          snackBar(
-                                                              context: context,
-                                                              message: "Attendance already taken for this student",
-                                                              color: Colors
-                                                                  .red);
-                                                        } else {
-                                                          attendance_flag = val;
-                                                          // print('remarks------uuu------${afterAttendanceTaken[index]["remarks"]}');
-                                                          //  print('username------uuu------${afterAttendanceTaken[index]["username"]}');
-                                                          // print('selected------uuu------${afterAttendanceTaken[index]["selected"]}');
-                                                          // print('late------uuu------${afterAttendanceTaken[index]["late"]}');
-                                                          // print('user_id------uuu------${afterAttendanceTaken[index]["user_id"]}');
-                                                          // print('reason------uuu------${afterAttendanceTaken[index]["reason"]}');
-
-
-                                                          // if (attendance_flag ==
-                                                          //     true) {
-                                                          //   attendance_flag =
-                                                          //   false;
-                                                          // }
-                                                          print(
-                                                              'attendance fl0-----$attendance_flag');
-                                                          //print('toggle value--->$val');
-                                                          if (lateMark) {
-                                                            if (attendance_flag ==
-                                                                true) {
-                                                              print(
-                                                                  'late attendance><><><><><><><><><><>$lateattendence');
-                                                              //_showMyDialog;
-                                                              showDialog(
-                                                                  barrierDismissible: false,
-                                                                  context: context,
-                                                                  builder: (
-                                                                      BuildContext context) =>
-                                                                      AlertDialog(
-                                                                        title: Container(
-                                                                          decoration: BoxDecoration(
-                                                                            borderRadius: BorderRadius
-                                                                                .all(
-                                                                                Radius
-                                                                                    .circular(
-                                                                                    50)),
-                                                                          ),
-                                                                          child: Form(
-                                                                            key: _frmKey,
-                                                                            child: Column(
-                                                                              crossAxisAlignment: CrossAxisAlignment
-                                                                                  .start,
-                                                                              children: [
-                                                                                Text(
-                                                                                  afterAttendanceTaken[index]["feeDetails"]["username"]
-                                                                                      .toString()
-                                                                                      .toUpperCase(),
-                                                                                  style: TextStyle(
-                                                                                    fontSize: 16
-                                                                                        .sp,
-                                                                                    fontWeight: FontWeight
-                                                                                        .w800,),),
-                                                                                SizedBox(
-                                                                                  height: 15
-                                                                                      .h,),
-                                                                                Text(
-                                                                                  'Remarks',
-                                                                                  style: TextStyle(
-                                                                                      fontSize: 14
-                                                                                          .sp),),
-                                                                                SizedBox(
-                                                                                  height: 10
-                                                                                      .h,),
-                                                                                TextFormField(
-                                                                                  maxLength: 32,
-                                                                                  validator: (
-                                                                                      val) =>
-                                                                                  val!
-                                                                                      .trim()
-                                                                                      .isEmpty
-                                                                                      ? '*Enter the Reason'
-                                                                                      : null,
-                                                                                  controller: _reasontextController,
-                                                                                  cursorColor: Colors
-                                                                                      .grey,
-                                                                                  decoration: InputDecoration(
-                                                                                      hintStyle: TextStyle(
-                                                                                          color: Colors
-                                                                                              .grey),
-                                                                                      contentPadding: EdgeInsets
-                                                                                          .symmetric(
-                                                                                          vertical: 10.0,
-                                                                                          horizontal: 20.0),
-                                                                                      border: OutlineInputBorder(
-                                                                                        borderRadius: BorderRadius
-                                                                                            .all(
-                                                                                          Radius
-                                                                                              .circular(
-                                                                                              0),
-                                                                                        ),
-                                                                                      ),
-                                                                                      enabledBorder: OutlineInputBorder(
-                                                                                        borderSide:
-                                                                                        BorderSide(
-                                                                                            color: Color
-                                                                                                .fromRGBO(
-                                                                                                230,
-                                                                                                236,
-                                                                                                254,
-                                                                                                8),
-                                                                                            width: 1.0),
-                                                                                        borderRadius: BorderRadius
-                                                                                            .all(
-                                                                                            Radius
-                                                                                                .circular(
-                                                                                                10)),
-                                                                                      ),
-                                                                                      focusedBorder: OutlineInputBorder(
-                                                                                        borderSide:
-                                                                                        BorderSide(
-                                                                                            color: Color
-                                                                                                .fromRGBO(
-                                                                                                230,
-                                                                                                236,
-                                                                                                254,
-                                                                                                8),
-                                                                                            width: 1.0),
-                                                                                        borderRadius: BorderRadius
-                                                                                            .all(
-                                                                                            Radius
-                                                                                                .circular(
-                                                                                                5)),
-                                                                                      ),
-                                                                                      fillColor: Colorutils
-                                                                                          .chatcolor
-                                                                                          .withOpacity(
-                                                                                          0.2),
-                                                                                      filled: true),
-                                                                                  keyboardType: TextInputType
-                                                                                      .text,
-                                                                                  maxLines: 5,
-                                                                                ),
-                                                                                SizedBox(
-                                                                                  height: 10
-                                                                                      .h,),
-                                                                                Center(
-                                                                                  child: GestureDetector(
-                                                                                    onTap: () {
-                                                                                      if (_frmKey
-                                                                                          .currentState!
-                                                                                          .validate()) {
-                                                                                        setState(() {
-                                                                                          _reasontextController;
-                                                                                          lateidreason =
-                                                                                          afterAttendanceTaken[index]["feeDetails"]["username"];
-                                                                                        });
-                                                                                        // if(afterAttendanceTaken[index]["late"] == true) {
-                                                                                        latestudents
-                                                                                            .add(
-                                                                                            {
-                                                                                              "_id": afterAttendanceTaken[index]["user_id"],
-                                                                                              "username": afterAttendanceTaken[index]["username"],
-                                                                                              "selected": afterAttendanceTaken[index]["selected"],
-                                                                                              // "reason": afterAttendanceTaken[index]["reason"],
-                                                                                              "reason": "Late",
-                                                                                              "remarks": _reasontextController
-                                                                                                  .text,
-                                                                                              "late": true,
-                                                                                            });
-                                                                                        // };
-                                                                                        // latestudents.add({
-                                                                                        //
-                                                                                        // });
-                                                                                        Navigator
-                                                                                            .pop(
-                                                                                            context);
-                                                                                        _reasontextController
-                                                                                            .clear();
-                                                                                        print(
-                                                                                            '------>>>>latestudnts<<<<<<<$latestudents');
-                                                                                        print(
-                                                                                            'attendance----late----students----${ afterAttendanceTaken[index]["late"]}');
-                                                                                        print(
-                                                                                            'attendance----late----students----${StudentList}');
-                                                                                      }
-                                                                                    },
-                                                                                    child: Container(
-                                                                                        height: 40
-                                                                                            .h,
-                                                                                        width: 120
-                                                                                            .w,
-                                                                                        decoration: BoxDecoration(
-                                                                                          color: Colorutils
-                                                                                              .bottomnaviconcolor,
-                                                                                          borderRadius:
-                                                                                          BorderRadius
-                                                                                              .all(
-                                                                                              Radius
-                                                                                                  .circular(
-                                                                                                  50)),
-                                                                                        ),
-                                                                                        child: Center(
-                                                                                          child: Text(
-                                                                                            'Mark as Late',
-                                                                                            style: TextStyle(
-                                                                                                color: Colors
-                                                                                                    .white,
-                                                                                                fontSize: 12),
-                                                                                          ),
-                                                                                        )),
-
-                                                                                  ),
-                                                                                ),
-                                                                              ],
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                      ));
-                                                            }
-                                                          }
-                                                          setState(() {
-                                                            afterAttendanceTaken ==
-                                                                null ||
-                                                                afterAttendanceTaken
-                                                                    .isEmpty
-                                                                ?
-                                                            _searchController
-                                                                .text
-                                                                .isNotEmpty
-                                                                ?
-                                                            newResult[index]["is_present"] =
-                                                                val
-                                                                : ourStudentList[
-                                                            index][
-                                                            "is_present"] =
-                                                                val
-                                                                : _searchController
-                                                                .text.isNotEmpty
-                                                                ?
-                                                            newResult[index]["selected"] =
-                                                                val
-                                                                : afterAttendanceTaken[
-                                                            index][
-                                                            "selected"] =
-                                                                val;
-                                                            print(
-                                                                'searcharrayselecyted${newResult[index]["selected"]}');
-                                                            print(
-                                                                'searcharrayispresent${newResult[index]["is_present"]}');
+                                                          ? ourStudentList[index]["fee_arrear"] == false
+                                                          ? ((double.tryParse(
+                                                          newResult[index]["fee_amount"]
+                                                              .toString()
+                                                              .replaceAll(
+                                                              ',', '')) ?? 0) < 1) ? Text("No Pending Fees") : Text(
+                                                        "No Pending Fees",)
+                                                          : ((double.tryParse(
+                                                          newResult[index]["fee_amount"]
+                                                              .toString()
+                                                              .replaceAll(
+                                                              ',', '')) ?? 0) < 1) ? Text("No Pending Fees") : Row(
+                                                        mainAxisAlignment: MainAxisAlignment
+                                                            .spaceBetween,
+                                                        children: [
+                                                          Container(
+                                                            child: Text(
+                                                              "AED : ",
+                                                              style: TextStyle(
+                                                                  fontSize:
+                                                                  13),
+                                                            ),
+                                                          ),
+                                                          Container(
+                                                            child: Text(
+                                                              ourStudentList[index]
+                                                              ["fee_amount"]
+                                                                  .toString(),
+                                                              style: TextStyle(
+                                                                  fontSize: 13,
+                                                                  color: Colors
+                                                                      .red,
+                                                                  fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                            ),
+                                                          ),
+                              
+                                                        ],
+                                                      )
+                                                          : afterAttendanceTaken[index]["feeDetails"]["fee_arrear"] == false
+                                                          ? ((double.tryParse(
+                                                          newResult[index]["fee_amount"]
+                                                              .toString()
+                                                              .replaceAll(
+                                                              ',', '')) ?? 0) < 1) ? Text("No Pending Fees") : Row(
+                                                        children: [
+                                                          Text(
+                                                              "No Pending Fees"),
+                                                          SizedBox(width: 34.w,),
+                              
+                                                        ],
+                                                      )
+                                                          : Row(
+                                                        mainAxisAlignment: MainAxisAlignment
+                                                            .spaceBetween,
+                                                        children: [
+                                                          Container(
+                                                            width: 40.w,
+                                                            child: Text(
+                                                              "AED : ",
+                                                              style: TextStyle(
+                                                                  fontSize:
+                                                                  13),
+                                                            ),
+                                                          ),
+                                                          Container(
+                                                            width: 90.w,
+                                                            child: Text(
+                                                              afterAttendanceTaken[index]["feeDetails"]["fee_amount"].toString(),
+                                                              style: TextStyle(
+                                                                  fontSize: 13,
+                                                                  color: Colors
+                                                                      .red,
+                                                                  fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                            ),
+                                                          ),
+                              
+                                                          SizedBox(width: 40.w,),
+                              
+                                                        ],
+                                                      ),
+                              
+                                                    ],
+                                                  ),
+                                                  Spacer(),
+                              
+                                                  // SizedBox(
+                                                  //   width: 15.w,
+                                                  // ),
+                                                  Container(
+                                                    child: FlutterSwitch(
+                                                        width: 80.w,
+                                                        height: 35.h,
+                                                        valueFontSize: 16.sp,
+                                                        toggleSize: 35.h,
+                                                        toggleBorder: Border.all(
+                                                            color: Color(
+                                                                0xFFD6E4FA),
+                                                            width: 2),
+                                                        activeText: "P",
+                                                        inactiveText: "A",
+                                                        value: afterAttendanceTaken ==
+                                                            null ||
+                                                            afterAttendanceTaken
+                                                                .isEmpty
+                                                            ? _searchController
+                                                            .text.isNotEmpty
+                                                            ? newResult[index]["is_present"]
+                                                            : ourStudentList[index]
+                                                        ["is_present"]
+                                                            : _searchController
+                                                            .text.isNotEmpty
+                                                            ? newResult[index]["selected"]
+                                                            : afterAttendanceTaken[
+                                                        index]["selected"],
+                                                        borderRadius: 30.0,
+                                                        padding: 0,
+                                                        activeColor: Colorutils
+                                                            .userdetailcolor
+                                                            .withOpacity(0.8),
+                                                        inactiveColor: Colors.red,
+                                                        inactiveTextColor:
+                                                        Colors.white,
+                                                        activeTextColor:
+                                                        Colors.white,
+                                                        showOnOff: true,
+                                                        onToggle: (val) {
+                                                          bool? isTaken = isStudentListnull[index]["late"];
+                                                          if (isTaken != null &&
+                                                              isTaken == true) {
+                                                            snackBar(
+                                                                context: context,
+                                                                message: "Attendance already taken for this student",
+                                                                color: Colors
+                                                                    .red);
+                                                          } else {
+                                                            attendance_flag = val;
+                                                            // print('remarks------uuu------${afterAttendanceTaken[index]["remarks"]}');
+                                                            //  print('username------uuu------${afterAttendanceTaken[index]["username"]}');
+                                                            // print('selected------uuu------${afterAttendanceTaken[index]["selected"]}');
+                                                            // print('late------uuu------${afterAttendanceTaken[index]["late"]}');
+                                                            // print('user_id------uuu------${afterAttendanceTaken[index]["user_id"]}');
+                                                            // print('reason------uuu------${afterAttendanceTaken[index]["reason"]}');
+                              
+                              
                                                             // if (attendance_flag ==
                                                             //     true) {
                                                             //   attendance_flag =
                                                             //   false;
                                                             // }
-                                                          });
-                                                        }
-                                                      }
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  width: 10.w,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment
-                                                .end,
-                                            children: [
-                                              _searchController.text.isNotEmpty
-                                                  ? newResult[index]["late"] ==
-                                                  true ? GestureDetector(
-                                                  onTap: () async {
-                                                    showDialog(
-
-                                                      context: context,
-                                                      builder: (
-                                                          BuildContext context) =>
-                                                          AlertDialog(
-                                                            backgroundColor: Colors
-                                                                .transparent,
-                                                            title: Container(
-                                                              width: 300,
-                                                              height: 150,
-                                                              margin: EdgeInsets
-                                                                  .only(top: 40,
-                                                                  bottom: 10),
-                                                              decoration: BoxDecoration(
-                                                                color: Colors.white,
-                                                                borderRadius: BorderRadius
-                                                                    .all(
-                                                                    Radius.circular(
-                                                                        20)),
-                                                                boxShadow: [
-                                                                  BoxShadow(
-                                                                    color: Colors
-                                                                        .black
-                                                                        .withOpacity(
-                                                                        0.2),
-                                                                    spreadRadius: 2,
-                                                                    blurRadius: 10,
-                                                                    offset: Offset(
-                                                                        0, 4),
-                                                                  ),
-                                                                ],
-                                                              ),
-
-                                                              child: Column(
-                                                                crossAxisAlignment: CrossAxisAlignment
-                                                                    .start,
-                                                                children: [
-                                                                  Row(
-
-                                                                    children: [
-
-                                                                      Padding(
-                                                                        padding: const EdgeInsets
-                                                                            .only(
-                                                                            top: 10,
-                                                                            left: 40),
-                                                                        child: Text(
-                                                                          'Remarks ',
-                                                                          style: TextStyle(
-                                                                              fontSize: 18
-                                                                                  .sp,
-                                                                              fontWeight: FontWeight
-                                                                                  .bold),
-                                                                        ),
-                                                                      ),
-                                                                      SizedBox(
-                                                                          width: 45),
-
-                                                                    ],
-                                                                    mainAxisAlignment: MainAxisAlignment
-                                                                        .center,
-                                                                  ),
-                                                                  SizedBox(
-                                                                      height: 15),
-                                                                  Padding(
-                                                                    padding: const EdgeInsets
-                                                                        .only(
-                                                                      left: 10,
-                                                                      right: 10,),
-                                                                    child: Container(
-                                                                      height: 60,
-                                                                      decoration: BoxDecoration(
-                                                                        borderRadius: BorderRadius
-                                                                            .circular(
-                                                                            10),
-                                                                        color: Colorutils
-                                                                            .chatcolor
-                                                                            .withOpacity(
-                                                                            0.2),
-                                                                      ),
-
-                                                                      child: Row(
-                                                                        mainAxisAlignment: MainAxisAlignment
-                                                                            .center,
-                                                                        children: [
-                                                                          Padding(
-                                                                            padding: const EdgeInsets
-                                                                                .only(
-                                                                                left: 3,
-                                                                                right: 3),
-                                                                            child: Text(
-                                                                              newResult[index]["remarks"] ??
-                                                                                  "No Remarks Added",
-                                                                              style: TextStyle(
-                                                                                  fontSize: 16
-                                                                                      .sp,
-                                                                                  fontWeight: FontWeight
-                                                                                      .w500),
+                                                            print(
+                                                                'attendance fl0-----$attendance_flag');
+                                                            //print('toggle value--->$val');
+                                                            if (lateMark) {
+                                                              if (attendance_flag ==
+                                                                  true) {
+                                                                print(
+                                                                    'late attendance><><><><><><><><><><>$lateattendence');
+                                                                //_showMyDialog;
+                                                                showDialog(
+                                                                    barrierDismissible: false,
+                                                                    context: context,
+                                                                    builder: (
+                                                                        BuildContext context) =>
+                                                                        AlertDialog(
+                                                                          title: Container(
+                                                                            decoration: BoxDecoration(
+                                                                              borderRadius: BorderRadius
+                                                                                  .all(
+                                                                                  Radius
+                                                                                      .circular(
+                                                                                      50)),
+                                                                            ),
+                                                                            child: Form(
+                                                                              key: _frmKey,
+                                                                              child: Column(
+                                                                                crossAxisAlignment: CrossAxisAlignment
+                                                                                    .start,
+                                                                                children: [
+                                                                                  Text(
+                                                                                    afterAttendanceTaken[index]["feeDetails"]["username"]
+                                                                                        .toString()
+                                                                                        .toUpperCase(),
+                                                                                    style: TextStyle(
+                                                                                      fontSize: 16
+                                                                                          .sp,
+                                                                                      fontWeight: FontWeight
+                                                                                          .w800,),),
+                                                                                  SizedBox(
+                                                                                    height: 15
+                                                                                        .h,),
+                                                                                  Text(
+                                                                                    'Remarks',
+                                                                                    style: TextStyle(
+                                                                                        fontSize: 14
+                                                                                            .sp),),
+                                                                                  SizedBox(
+                                                                                    height: 10
+                                                                                        .h,),
+                                                                                  TextFormField(
+                                                                                    maxLength: 32,
+                                                                                    validator: (
+                                                                                        val) =>
+                                                                                    val!
+                                                                                        .trim()
+                                                                                        .isEmpty
+                                                                                        ? '*Enter the Reason'
+                                                                                        : null,
+                                                                                    controller: _reasontextController,
+                                                                                    cursorColor: Colors
+                                                                                        .grey,
+                                                                                    decoration: InputDecoration(
+                                                                                        hintStyle: TextStyle(
+                                                                                            color: Colors
+                                                                                                .grey),
+                                                                                        contentPadding: EdgeInsets
+                                                                                            .symmetric(
+                                                                                            vertical: 10.0,
+                                                                                            horizontal: 20.0),
+                                                                                        border: OutlineInputBorder(
+                                                                                          borderRadius: BorderRadius
+                                                                                              .all(
+                                                                                            Radius
+                                                                                                .circular(
+                                                                                                0),
+                                                                                          ),
+                                                                                        ),
+                                                                                        enabledBorder: OutlineInputBorder(
+                                                                                          borderSide:
+                                                                                          BorderSide(
+                                                                                              color: Color
+                                                                                                  .fromRGBO(
+                                                                                                  230,
+                                                                                                  236,
+                                                                                                  254,
+                                                                                                  8),
+                                                                                              width: 1.0),
+                                                                                          borderRadius: BorderRadius
+                                                                                              .all(
+                                                                                              Radius
+                                                                                                  .circular(
+                                                                                                  10)),
+                                                                                        ),
+                                                                                        focusedBorder: OutlineInputBorder(
+                                                                                          borderSide:
+                                                                                          BorderSide(
+                                                                                              color: Color
+                                                                                                  .fromRGBO(
+                                                                                                  230,
+                                                                                                  236,
+                                                                                                  254,
+                                                                                                  8),
+                                                                                              width: 1.0),
+                                                                                          borderRadius: BorderRadius
+                                                                                              .all(
+                                                                                              Radius
+                                                                                                  .circular(
+                                                                                                  5)),
+                                                                                        ),
+                                                                                        fillColor: Colorutils
+                                                                                            .chatcolor
+                                                                                            .withOpacity(
+                                                                                            0.2),
+                                                                                        filled: true),
+                                                                                    keyboardType: TextInputType
+                                                                                        .text,
+                                                                                    maxLines: 5,
+                                                                                  ),
+                                                                                  SizedBox(
+                                                                                    height: 10
+                                                                                        .h,),
+                                                                                  Center(
+                                                                                    child: GestureDetector(
+                                                                                      onTap: () {
+                                                                                        if (_frmKey
+                                                                                            .currentState!
+                                                                                            .validate()) {
+                                                                                          setState(() {
+                                                                                            _reasontextController;
+                                                                                            lateidreason =
+                                                                                            afterAttendanceTaken[index]["feeDetails"]["username"];
+                                                                                          });
+                                                                                          // if(afterAttendanceTaken[index]["late"] == true) {
+                                                                                          latestudents
+                                                                                              .add(
+                                                                                              {
+                                                                                                "_id": afterAttendanceTaken[index]["user_id"],
+                                                                                                "username": afterAttendanceTaken[index]["username"],
+                                                                                                "selected": afterAttendanceTaken[index]["selected"],
+                                                                                                // "reason": afterAttendanceTaken[index]["reason"],
+                                                                                                "reason": "Late",
+                                                                                                "remarks": _reasontextController
+                                                                                                    .text,
+                                                                                                "late": true,
+                                                                                              });
+                                                                                          // };
+                                                                                          // latestudents.add({
+                                                                                          //
+                                                                                          // });
+                                                                                          Navigator
+                                                                                              .pop(
+                                                                                              context);
+                                                                                          _reasontextController
+                                                                                              .clear();
+                                                                                          print(
+                                                                                              '------>>>>latestudnts<<<<<<<$latestudents');
+                                                                                          print(
+                                                                                              'attendance----late----students----${ afterAttendanceTaken[index]["late"]}');
+                                                                                          print(
+                                                                                              'attendance----late----students----${StudentList}');
+                                                                                        }
+                                                                                      },
+                                                                                      child: Container(
+                                                                                          height: 40
+                                                                                              .h,
+                                                                                          width: 120
+                                                                                              .w,
+                                                                                          decoration: BoxDecoration(
+                                                                                            color: Colorutils
+                                                                                                .bottomnaviconcolor,
+                                                                                            borderRadius:
+                                                                                            BorderRadius
+                                                                                                .all(
+                                                                                                Radius
+                                                                                                    .circular(
+                                                                                                    50)),
+                                                                                          ),
+                                                                                          child: Center(
+                                                                                            child: Text(
+                                                                                              'Mark as Late',
+                                                                                              style: TextStyle(
+                                                                                                  color: Colors
+                                                                                                      .white,
+                                                                                                  fontSize: 12),
+                                                                                            ),
+                                                                                          )),
+                              
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
                                                                             ),
                                                                           ),
-                                                                        ],
-                                                                      ),
+                                                                        ));
+                                                              }
+                                                            }
+                                                            setState(() {
+                                                              afterAttendanceTaken ==
+                                                                  null ||
+                                                                  afterAttendanceTaken
+                                                                      .isEmpty
+                                                                  ?
+                                                              _searchController
+                                                                  .text
+                                                                  .isNotEmpty
+                                                                  ?
+                                                              newResult[index]["is_present"] =
+                                                                  val
+                                                                  : ourStudentList[
+                                                              index][
+                                                              "is_present"] =
+                                                                  val
+                                                                  : _searchController
+                                                                  .text.isNotEmpty
+                                                                  ?
+                                                              newResult[index]["selected"] =
+                                                                  val
+                                                                  : afterAttendanceTaken[
+                                                              index][
+                                                              "selected"] =
+                                                                  val;
+                                                              print(
+                                                                  'searcharrayselecyted${newResult[index]["selected"]}');
+                                                              print(
+                                                                  'searcharrayispresent${newResult[index]["is_present"]}');
+                                                              // if (attendance_flag ==
+                                                              //     true) {
+                                                              //   attendance_flag =
+                                                              //   false;
+                                                              // }
+                                                            });
+                                                          }
+                                                        }
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 10.w,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment
+                                                  .end,
+                                              children: [
+                                                _searchController.text.isNotEmpty
+                                                    ? newResult[index]["late"] ==
+                                                    true ? GestureDetector(
+                                                    onTap: () async {
+                                                      showDialog(
+                              
+                                                        context: context,
+                                                        builder: (
+                                                            BuildContext context) =>
+                                                            AlertDialog(
+                                                              backgroundColor: Colors
+                                                                  .transparent,
+                                                              title: Container(
+                                                                width: 300,
+                                                                height: 150,
+                                                                margin: EdgeInsets
+                                                                    .only(top: 40,
+                                                                    bottom: 10),
+                                                                decoration: BoxDecoration(
+                                                                  color: Colors.white,
+                                                                  borderRadius: BorderRadius
+                                                                      .all(
+                                                                      Radius.circular(
+                                                                          20)),
+                                                                  boxShadow: [
+                                                                    BoxShadow(
+                                                                      color: Colors
+                                                                          .black
+                                                                          .withOpacity(
+                                                                          0.2),
+                                                                      spreadRadius: 2,
+                                                                      blurRadius: 10,
+                                                                      offset: Offset(
+                                                                          0, 4),
                                                                     ),
-                                                                  ),
-                                                                  SizedBox(
-                                                                      height: 10),
-                                                                  Center(
-                                                                    child: GestureDetector(
-                                                                      onTap: () {
-                                                                        Navigator
-                                                                            .pop(
-                                                                            context);
-                                                                      },
+                                                                  ],
+                                                                ),
+                              
+                                                                child: Column(
+                                                                  crossAxisAlignment: CrossAxisAlignment
+                                                                      .start,
+                                                                  children: [
+                                                                    Row(
+                              
+                                                                      children: [
+                              
+                                                                        Padding(
+                                                                          padding: const EdgeInsets
+                                                                              .only(
+                                                                              top: 10,
+                                                                              left: 40),
+                                                                          child: Text(
+                                                                            'Remarks ',
+                                                                            style: TextStyle(
+                                                                                fontSize: 18
+                                                                                    .sp,
+                                                                                fontWeight: FontWeight
+                                                                                    .bold),
+                                                                          ),
+                                                                        ),
+                                                                        SizedBox(
+                                                                            width: 45),
+                              
+                                                                      ],
+                                                                      mainAxisAlignment: MainAxisAlignment
+                                                                          .center,
+                                                                    ),
+                                                                    SizedBox(
+                                                                        height: 15),
+                                                                    Padding(
+                                                                      padding: const EdgeInsets
+                                                                          .only(
+                                                                        left: 10,
+                                                                        right: 10,),
                                                                       child: Container(
+                                                                        height: 60,
                                                                         decoration: BoxDecoration(
-                                                                          color: Colors
-                                                                              .red,
                                                                           borderRadius: BorderRadius
-                                                                              .all(
-                                                                              Radius
-                                                                                  .circular(
-                                                                                  10)),
-                                                                          boxShadow: [
-                                                                            BoxShadow(
-                                                                              color: Colors
-                                                                                  .grey
-                                                                                  .withOpacity(
-                                                                                  0.1),
-                                                                              spreadRadius: 1,
-                                                                              blurRadius: 1,
-                                                                              offset: Offset(
-                                                                                  0,
-                                                                                  1),
+                                                                              .circular(
+                                                                              10),
+                                                                          color: Colorutils
+                                                                              .chatcolor
+                                                                              .withOpacity(
+                                                                              0.2),
+                                                                        ),
+                              
+                                                                        child: Row(
+                                                                          mainAxisAlignment: MainAxisAlignment
+                                                                              .center,
+                                                                          children: [
+                                                                            Padding(
+                                                                              padding: const EdgeInsets
+                                                                                  .only(
+                                                                                  left: 3,
+                                                                                  right: 3),
+                                                                              child: Text(
+                                                                                newResult[index]["remarks"] ??
+                                                                                    "No Remarks Added",
+                                                                                style: TextStyle(
+                                                                                    fontSize: 16
+                                                                                        .sp,
+                                                                                    fontWeight: FontWeight
+                                                                                        .w500),
+                                                                              ),
                                                                             ),
                                                                           ],
                                                                         ),
-
-                                                                        height: 25,
-                                                                        width: 50,
-                                                                        child: Center(
-                                                                          child: Text(
-                                                                            "Close",
-                                                                            style: TextStyle(
-                                                                                fontSize: 15,
+                                                                      ),
+                                                                    ),
+                                                                    SizedBox(
+                                                                        height: 10),
+                                                                    Center(
+                                                                      child: GestureDetector(
+                                                                        onTap: () {
+                                                                          Navigator
+                                                                              .pop(
+                                                                              context);
+                                                                        },
+                                                                        child: Container(
+                                                                          decoration: BoxDecoration(
+                                                                            color: Colors
+                                                                                .red,
+                                                                            borderRadius: BorderRadius
+                                                                                .all(
+                                                                                Radius
+                                                                                    .circular(
+                                                                                    10)),
+                                                                            boxShadow: [
+                                                                              BoxShadow(
                                                                                 color: Colors
-                                                                                    .white
-                                                                            ),),
-                                                                        ),
-
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ),
-                                                    );
-                                                  },
-                                                  child: Padding(
-                                                    padding: const EdgeInsets
-                                                        .only(right: 15),
-                                                    child: Container(child: Row(
-
-                                                      children: [
-                                                        Icon(Icons
-                                                            .remove_red_eye_outlined,
-                                                          size: 18,),
-                                                        SizedBox(width: 5.w,),
-                                                        Text('Late',
-                                                          style: TextStyle(
-                                                              fontWeight: FontWeight
-                                                                  .w900,
-                                                              color: Colors.red,
-                                                              fontSize: 15
-                                                                  .sp),),
-                                                      ],
-                                                    )),
-                                                  )) : Text('') :
-                                              isStudentListnull[index]["late"] ==
-                                                  true ?
-                                              GestureDetector(
-                                                  onTap: () async {
-                                                showDialog(
-
-                                                  context: context,
-                                                  builder: (
-                                                      BuildContext context) =>
-                                                      AlertDialog(
-                                                        backgroundColor: Colors
-                                                            .transparent,
-                                                        title: Container(
-                                                          width: 300,
-                                                          height: 150,
-                                                          margin: EdgeInsets
-                                                              .only(top: 40,
-                                                              bottom: 10),
-                                                          decoration: BoxDecoration(
-                                                            color: Colors.white,
-                                                            borderRadius: BorderRadius
-                                                                .all(
-                                                                Radius.circular(
-                                                                    20)),
-                                                            boxShadow: [
-                                                              BoxShadow(
-                                                                color: Colors
-                                                                    .black
-                                                                    .withOpacity(
-                                                                    0.2),
-                                                                spreadRadius: 2,
-                                                                blurRadius: 10,
-                                                                offset: Offset(
-                                                                    0, 4),
-                                                              ),
-                                                            ],
-                                                          ),
-
-                                                          child: Column(
-                                                            crossAxisAlignment: CrossAxisAlignment
-                                                                .start,
-                                                            children: [
-                                                              Row(
-
-                                                                children: [
-
-                                                                  Padding(
-                                                                    padding: const EdgeInsets
-                                                                        .only(
-                                                                        top: 10,
-                                                                        left: 40),
-                                                                    child: Text(
-                                                                      'Remarks ',
-                                                                      style: TextStyle(
-                                                                          fontSize: 18
-                                                                              .sp,
-                                                                          fontWeight: FontWeight
-                                                                              .bold),
-                                                                    ),
-                                                                  ),
-                                                                  SizedBox(
-                                                                      width: 45),
-
-                                                                ],
-                                                                mainAxisAlignment: MainAxisAlignment
-                                                                    .center,
-                                                              ),
-                                                              SizedBox(
-                                                                  height: 15),
-                                                              Padding(
-                                                                padding: const EdgeInsets
-                                                                    .only(
-                                                                  left: 10,
-                                                                  right: 10,),
-                                                                child: Container(
-                                                                  height: 60,
-                                                                  decoration: BoxDecoration(
-                                                                    borderRadius: BorderRadius
-                                                                        .circular(
-                                                                        10),
-                                                                    color: Colorutils
-                                                                        .chatcolor
-                                                                        .withOpacity(
-                                                                        0.2),
-                                                                  ),
-
-                                                                  child: Row(
-                                                                    mainAxisAlignment: MainAxisAlignment
-                                                                        .center,
-                                                                    children: [
-                                                                      Padding(
-                                                                        padding: const EdgeInsets
-                                                                            .only(
-                                                                            left: 3,
-                                                                            right: 3),
-                                                                        child: Text(
-                                                                          afterAttendanceTaken[index]["remarks"] ??
-                                                                              "No Remarks Added",
-                                                                          style: TextStyle(
-                                                                              fontSize: 16
-                                                                                  .sp,
-                                                                              fontWeight: FontWeight
-                                                                                  .w500),
+                                                                                    .grey
+                                                                                    .withOpacity(
+                                                                                    0.1),
+                                                                                spreadRadius: 1,
+                                                                                blurRadius: 1,
+                                                                                offset: Offset(
+                                                                                    0,
+                                                                                    1),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                              
+                                                                          height: 25,
+                                                                          width: 50,
+                                                                          child: Center(
+                                                                            child: Text(
+                                                                              "Close",
+                                                                              style: TextStyle(
+                                                                                  fontSize: 15,
+                                                                                  color: Colors
+                                                                                      .white
+                                                                              ),),
+                                                                          ),
+                              
                                                                         ),
                                                                       ),
-                                                                    ],
-                                                                  ),
+                                                                    ),
+                                                                  ],
                                                                 ),
                                                               ),
-                                                              SizedBox(
-                                                                  height: 10),
-                                                              Center(
-                                                                child: GestureDetector(
-                                                                  onTap: () {
-                                                                    Navigator
-                                                                        .pop(
-                                                                        context);
-                                                                  },
+                                                            ),
+                                                      );
+                                                    },
+                                                    child: Padding(
+                                                      padding: const EdgeInsets
+                                                          .only(right: 15),
+                                                      child: Container(child: Row(
+                              
+                                                        children: [
+                                                          Icon(Icons
+                                                              .remove_red_eye_outlined,
+                                                            size: 18,),
+                                                          SizedBox(width: 5.w,),
+                                                          Text('Late',
+                                                            style: TextStyle(
+                                                                fontWeight: FontWeight
+                                                                    .w900,
+                                                                color: Colors.red,
+                                                                fontSize: 15
+                                                                    .sp),),
+                                                        ],
+                                                      )),
+                                                    )) : Text('') :
+                                                isStudentListnull[index]["late"] ==
+                                                    true ?
+                                                GestureDetector(
+                                                    onTap: () async {
+                                                  showDialog(
+                              
+                                                    context: context,
+                                                    builder: (
+                                                        BuildContext context) =>
+                                                        AlertDialog(
+                                                          backgroundColor: Colors
+                                                              .transparent,
+                                                          title: Container(
+                                                            width: 300,
+                                                            height: 150,
+                                                            margin: EdgeInsets
+                                                                .only(top: 40,
+                                                                bottom: 10),
+                                                            decoration: BoxDecoration(
+                                                              color: Colors.white,
+                                                              borderRadius: BorderRadius
+                                                                  .all(
+                                                                  Radius.circular(
+                                                                      20)),
+                                                              boxShadow: [
+                                                                BoxShadow(
+                                                                  color: Colors
+                                                                      .black
+                                                                      .withOpacity(
+                                                                      0.2),
+                                                                  spreadRadius: 2,
+                                                                  blurRadius: 10,
+                                                                  offset: Offset(
+                                                                      0, 4),
+                                                                ),
+                                                              ],
+                                                            ),
+                              
+                                                            child: Column(
+                                                              crossAxisAlignment: CrossAxisAlignment
+                                                                  .start,
+                                                              children: [
+                                                                Row(
+                              
+                                                                  children: [
+                              
+                                                                    Padding(
+                                                                      padding: const EdgeInsets
+                                                                          .only(
+                                                                          top: 10,
+                                                                          left: 40),
+                                                                      child: Text(
+                                                                        'Remarks ',
+                                                                        style: TextStyle(
+                                                                            fontSize: 18
+                                                                                .sp,
+                                                                            fontWeight: FontWeight
+                                                                                .bold),
+                                                                      ),
+                                                                    ),
+                                                                    SizedBox(
+                                                                        width: 45),
+                              
+                                                                  ],
+                                                                  mainAxisAlignment: MainAxisAlignment
+                                                                      .center,
+                                                                ),
+                                                                SizedBox(
+                                                                    height: 15),
+                                                                Padding(
+                                                                  padding: const EdgeInsets
+                                                                      .only(
+                                                                    left: 10,
+                                                                    right: 10,),
                                                                   child: Container(
+                                                                    height: 60,
                                                                     decoration: BoxDecoration(
-                                                                      color: Colors
-                                                                          .red,
                                                                       borderRadius: BorderRadius
-                                                                          .all(
-                                                                          Radius
-                                                                              .circular(
-                                                                              10)),
-                                                                      boxShadow: [
-                                                                        BoxShadow(
-                                                                          color: Colors
-                                                                              .grey
-                                                                              .withOpacity(
-                                                                              0.1),
-                                                                          spreadRadius: 1,
-                                                                          blurRadius: 1,
-                                                                          offset: Offset(
-                                                                              0,
-                                                                              1),
+                                                                          .circular(
+                                                                          10),
+                                                                      color: Colorutils
+                                                                          .chatcolor
+                                                                          .withOpacity(
+                                                                          0.2),
+                                                                    ),
+                              
+                                                                    child: Row(
+                                                                      mainAxisAlignment: MainAxisAlignment
+                                                                          .center,
+                                                                      children: [
+                                                                        Padding(
+                                                                          padding: const EdgeInsets
+                                                                              .only(
+                                                                              left: 3,
+                                                                              right: 3),
+                                                                          child: Text(
+                                                                            afterAttendanceTaken[index]["remarks"] ??
+                                                                                "No Remarks Added",
+                                                                            style: TextStyle(
+                                                                                fontSize: 16
+                                                                                    .sp,
+                                                                                fontWeight: FontWeight
+                                                                                    .w500),
+                                                                          ),
                                                                         ),
                                                                       ],
                                                                     ),
-
-                                                                    height: 25,
-                                                                    width: 50,
-                                                                    child: Center(
-                                                                      child: Text(
-                                                                        "Close",
-                                                                        style: TextStyle(
-                                                                            fontSize: 15,
-                                                                            color: Colors
-                                                                                .white
-                                                                        ),),
-                                                                    ),
-
                                                                   ),
                                                                 ),
-                                                              ),
-                                                            ],
+                                                                SizedBox(
+                                                                    height: 10),
+                                                                Center(
+                                                                  child: GestureDetector(
+                                                                    onTap: () {
+                                                                      Navigator
+                                                                          .pop(
+                                                                          context);
+                                                                    },
+                                                                    child: Container(
+                                                                      decoration: BoxDecoration(
+                                                                        color: Colors
+                                                                            .red,
+                                                                        borderRadius: BorderRadius
+                                                                            .all(
+                                                                            Radius
+                                                                                .circular(
+                                                                                10)),
+                                                                        boxShadow: [
+                                                                          BoxShadow(
+                                                                            color: Colors
+                                                                                .grey
+                                                                                .withOpacity(
+                                                                                0.1),
+                                                                            spreadRadius: 1,
+                                                                            blurRadius: 1,
+                                                                            offset: Offset(
+                                                                                0,
+                                                                                1),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                              
+                                                                      height: 25,
+                                                                      width: 50,
+                                                                      child: Center(
+                                                                        child: Text(
+                                                                          "Close",
+                                                                          style: TextStyle(
+                                                                              fontSize: 15,
+                                                                              color: Colors
+                                                                                  .white
+                                                                          ),),
+                                                                      ),
+                              
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
                                                           ),
                                                         ),
-                                                      ),
-                                                );
-                                              },
-                                                  child: Padding(
-                                                    padding: const EdgeInsets
-                                                        .only(right: 15),
-                                                    child: Container(child: Row(
-
-                                                      children: [
-                                                        Icon(Icons
-                                                            .remove_red_eye_outlined,
-                                                          size: 18,),
-                                                        SizedBox(width: 5.w,),
-                                                        Text('Late',
-                                                          style: TextStyle(
-                                                              fontWeight: FontWeight
-                                                                  .w900,
-                                                              color: Colors.red,
-                                                              fontSize: 15
-                                                                  .sp),),
-                                                      ],
-                                                    )),
-                                                  )) : Text(''),
-                                            ],
-                                          ),
-                                          Divider(
-                                            indent: 20,
-                                            endIndent: 20,
-                                            height: 20,
-                                            color: Colors.blue.shade50,
-                                          )
-
-                                        ],
-                                      )),
-                                );
-                              },
+                                                  );
+                                                },
+                                                    child: Padding(
+                                                      padding: const EdgeInsets
+                                                          .only(right: 15),
+                                                      child: Container(child: Row(
+                              
+                                                        children: [
+                                                          Icon(Icons
+                                                              .remove_red_eye_outlined,
+                                                            size: 18,),
+                                                          SizedBox(width: 5.w,),
+                                                          Text('Late',
+                                                            style: TextStyle(
+                                                                fontWeight: FontWeight
+                                                                    .w900,
+                                                                color: Colors.red,
+                                                                fontSize: 15
+                                                                    .sp),),
+                                                        ],
+                                                      )),
+                                                    )) : Text(''),
+                                              ],
+                                            ),
+                                            Divider(
+                                              indent: 20,
+                                              endIndent: 20,
+                                              height: 20,
+                                              color: Colors.blue.shade50,
+                                            )
+                              
+                                          ],
+                                        )),
+                                  );
+                                },
+                              ),
                             )),
 
                       ],
