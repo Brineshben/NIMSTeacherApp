@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -35,10 +36,31 @@ class _DrawerScreenState extends State<DrawerScreen> {
     final initialMessage = await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
     if (initialMessage?.didNotificationLaunchApp ?? false) {
       if (initialMessage?.notificationResponse?.payload != null) {
-        RemoteMessage message = RemoteMessage(
-          data: json.decode(initialMessage!.notificationResponse!.payload!),
-        );
-        _handleMessage(message);
+        // Fluttertoast.showToast(
+        //     msg: "${initialMessage?.notificationResponse?.payload}",
+        //     toastLength: Toast.LENGTH_SHORT,
+        //     gravity: ToastGravity.CENTER,
+        //     timeInSecForIosWeb: 1,
+        //     backgroundColor: Colors.red,
+        //     textColor: Colors.white,
+        //     fontSize: 16.0
+        // );
+        try {
+          RemoteMessage message = RemoteMessage(
+            data: json.decode(initialMessage!.notificationResponse!.payload!),
+          );
+          _handleMessage(message);
+        } catch(e) {
+          Fluttertoast.showToast(
+              msg: e.toString(),
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 16.0
+          );
+        }
       }
     }
 
@@ -74,6 +96,15 @@ class _DrawerScreenState extends State<DrawerScreen> {
       ),
       onDidReceiveNotificationResponse: (NotificationResponse response) {
         if (response.payload != null) {
+          Fluttertoast.showToast(
+              msg: "${response.payload}",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 16.0
+          );
           RemoteMessage message = RemoteMessage(
             data: json.decode(response.payload!),
           );
@@ -128,8 +159,15 @@ class _DrawerScreenState extends State<DrawerScreen> {
 
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Timer.periodic(const Duration(seconds: 1), (timer) async {
+        if(mounted) {
+          timer.cancel();
+          await setupInteractedMessage();
+        }
+      },);
+    },);
     super.initState();
-    setupInteractedMessage();
   }
 
   @override
