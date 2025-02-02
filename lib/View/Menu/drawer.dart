@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:teacherapp/Controller/api_controllers/chatClassGroupController.dart';
 import 'package:teacherapp/Controller/api_controllers/feedViewController.dart';
@@ -29,14 +30,43 @@ class _DrawerScreenState extends State<DrawerScreen> {
   final ZoomDrawerController _drawerController = ZoomDrawerController();
 
   Future<void> setupInteractedMessage() async {
-    RemoteMessage? initialMessage =
-        await FirebaseMessaging.instance.getInitialMessage();
-
-    if (initialMessage != null) {
-      _handleMessage(initialMessage);
+    // RemoteMessage? initialMessage =
+    //     await FirebaseMessaging.instance.getInitialMessage();
+    final initialMessage = await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+    if (initialMessage?.didNotificationLaunchApp ?? false) {
+      if (initialMessage?.notificationResponse?.payload != null) {
+        RemoteMessage message = RemoteMessage(
+          data: json.decode(initialMessage!.notificationResponse!.payload!),
+        );
+        _handleMessage(message);
+      }
     }
 
-    FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
+    // if (initialMessage != null) {
+    //   Fluttertoast.showToast(
+    //       msg: "Notification clicked 1",
+    //       toastLength: Toast.LENGTH_SHORT,
+    //       gravity: ToastGravity.CENTER,
+    //       timeInSecForIosWeb: 1,
+    //       backgroundColor: Colors.red,
+    //       textColor: Colors.white,
+    //       fontSize: 16.0
+    //   );
+    //   _handleMessage(initialMessage);
+    // }
+
+    // FirebaseMessaging.onMessageOpenedApp.listen((event) {
+    //   Fluttertoast.showToast(
+    //       msg: "Notification clicked 2",
+    //       toastLength: Toast.LENGTH_SHORT,
+    //       gravity: ToastGravity.CENTER,
+    //       timeInSecForIosWeb: 1,
+    //       backgroundColor: Colors.red,
+    //       textColor: Colors.white,
+    //       fontSize: 16.0
+    //   );
+    //   _handleMessage(event);
+    // },);
 
     flutterLocalNotificationsPlugin.initialize(
       const InitializationSettings(
