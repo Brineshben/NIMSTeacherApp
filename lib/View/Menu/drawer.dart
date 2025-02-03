@@ -31,42 +31,30 @@ class _DrawerScreenState extends State<DrawerScreen> {
   final ZoomDrawerController _drawerController = ZoomDrawerController();
 
   Future<void> setupInteractedMessage() async {
-    // RemoteMessage? initialMessage =
+    // RemoteMessage? initialMessageFirebase =
     //     await FirebaseMessaging.instance.getInitialMessage();
     final initialMessage = await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
     if (initialMessage?.didNotificationLaunchApp ?? false) {
       if (initialMessage?.notificationResponse?.payload != null) {
-        // Fluttertoast.showToast(
-        //     msg: "${initialMessage?.notificationResponse?.payload}",
-        //     toastLength: Toast.LENGTH_SHORT,
-        //     gravity: ToastGravity.CENTER,
-        //     timeInSecForIosWeb: 1,
-        //     backgroundColor: Colors.red,
-        //     textColor: Colors.white,
-        //     fontSize: 16.0
-        // );
-        try {
-          RemoteMessage message = RemoteMessage(
-            data: json.decode(initialMessage!.notificationResponse!.payload!),
-          );
-          _handleMessage(message);
-        } catch(e) {
-          Fluttertoast.showToast(
-              msg: e.toString(),
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.CENTER,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.red,
-              textColor: Colors.white,
-              fontSize: 16.0
-          );
-        }
+        RemoteMessage message = RemoteMessage(
+          data: json.decode(initialMessage!.notificationResponse!.payload!),
+        );
+        Fluttertoast.showToast(
+            msg: "------1-------",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0
+        );
+        await _handleMessage(message);
       }
     }
 
-    // if (initialMessage != null) {
+    // if (initialMessageFirebase != null) {
     //   Fluttertoast.showToast(
-    //       msg: "Notification clicked 1",
+    //       msg: "------3-------",
     //       toastLength: Toast.LENGTH_SHORT,
     //       gravity: ToastGravity.CENTER,
     //       timeInSecForIosWeb: 1,
@@ -74,12 +62,12 @@ class _DrawerScreenState extends State<DrawerScreen> {
     //       textColor: Colors.white,
     //       fontSize: 16.0
     //   );
-    //   _handleMessage(initialMessage);
+    //   _handleMessage(initialMessageFirebase);
     // }
 
     // FirebaseMessaging.onMessageOpenedApp.listen((event) {
     //   Fluttertoast.showToast(
-    //       msg: "Notification clicked 2",
+    //       msg: "------1-------",
     //       toastLength: Toast.LENGTH_SHORT,
     //       gravity: ToastGravity.CENTER,
     //       timeInSecForIosWeb: 1,
@@ -90,31 +78,31 @@ class _DrawerScreenState extends State<DrawerScreen> {
     //   _handleMessage(event);
     // },);
 
-    flutterLocalNotificationsPlugin.initialize(
-      const InitializationSettings(
-        android: AndroidInitializationSettings('@mipmap/ic_launcher'),
-      ),
-      onDidReceiveNotificationResponse: (NotificationResponse response) {
-        if (response.payload != null) {
-          Fluttertoast.showToast(
-              msg: "${response.payload}",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.CENTER,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.red,
-              textColor: Colors.white,
-              fontSize: 16.0
-          );
-          RemoteMessage message = RemoteMessage(
-            data: json.decode(response.payload!),
-          );
-          _handleMessage(message);
-        }
-      },
-    );
+    // flutterLocalNotificationsPlugin.initialize(
+    //   const InitializationSettings(
+    //     android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+    //   ),
+    //   onDidReceiveNotificationResponse: (NotificationResponse response) {
+    //     if (response.payload != null) {
+    //       RemoteMessage message = RemoteMessage(
+    //         data: json.decode(response.payload!),
+    //       );
+    //       Fluttertoast.showToast(
+    //           msg: "------2-------",
+    //           toastLength: Toast.LENGTH_SHORT,
+    //           gravity: ToastGravity.CENTER,
+    //           timeInSecForIosWeb: 1,
+    //           backgroundColor: Colors.red,
+    //           textColor: Colors.white,
+    //           fontSize: 16.0
+    //       );
+    //       _handleMessage(message);
+    //     }
+    //   },
+    // );
   }
 
-  void _handleMessage(RemoteMessage message) {
+  Future<void> _handleMessage(RemoteMessage message) async {
     if (message.data['category'] == 'student_tracking') {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => const DrawerScreen()),
@@ -128,16 +116,15 @@ class _DrawerScreenState extends State<DrawerScreen> {
       }
     } else if (message.data['category'] == 'chat') {
       print("push Notification data ----------------------- ${message.data}");
-      Get.delete<FeedViewController>();
-      Get.put(FeedViewController());
-      Get.delete<ChatClassGroupController>();
-      Get.put(ChatClassGroupController());
-      Get.delete<ParentChatListController>();
-      Get.put(ParentChatListController());
+      // Navigator.of(context).pushAndRemoveUntil(
+      //     MaterialPageRoute(builder: (context) => const DrawerScreen()),
+      //         (route) => false);
+      await Future.wait([
+        Get.delete<FeedViewController>().then((_) => Get.put(FeedViewController())),
+        Get.delete<ChatClassGroupController>().then((_) => Get.put(ChatClassGroupController())),
+        Get.delete<ParentChatListController>().then((_) => Get.put(ParentChatListController())),
+      ]);
 
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const DrawerScreen()),
-          (route) => false);
       Get.find<HomeController>().currentIndex.value = 2;
       Get.find<PageIndexController>().changePage(currentPage: 2);
 
@@ -159,13 +146,10 @@ class _DrawerScreenState extends State<DrawerScreen> {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Timer.periodic(const Duration(seconds: 1), (timer) async {
-        if(mounted) {
-          timer.cancel();
-          await setupInteractedMessage();
-        }
-      },);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if(mounted) {
+        await setupInteractedMessage();
+      }
     },);
     super.initState();
   }
