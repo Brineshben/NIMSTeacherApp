@@ -1,12 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:teacherapp/Controller/api_controllers/chatClassGroupController.dart';
 import 'package:teacherapp/Controller/api_controllers/feedViewController.dart';
@@ -21,7 +19,8 @@ import '../../main.dart';
 import 'menu_page.dart';
 
 class DrawerScreen extends StatefulWidget {
-  const DrawerScreen({super.key});
+  final RemoteMessage? message;
+  const DrawerScreen({super.key, this.message});
 
   @override
   State<DrawerScreen> createState() => _DrawerScreenState();
@@ -29,126 +28,102 @@ class DrawerScreen extends StatefulWidget {
 
 class _DrawerScreenState extends State<DrawerScreen> {
   final ZoomDrawerController _drawerController = ZoomDrawerController();
+  bool isForgroundTap = false;
+  bool isBackgroundTap = false;
 
   Future<void> setupInteractedMessage() async {
-    // RemoteMessage? initialMessageFirebase =
-    //     await FirebaseMessaging.instance.getInitialMessage();
-    final initialMessage = await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
-    if (initialMessage?.didNotificationLaunchApp ?? false) {
-      if (initialMessage?.notificationResponse?.payload != null) {
-        RemoteMessage message = RemoteMessage(
-          data: json.decode(initialMessage!.notificationResponse!.payload!),
-        );
-        Fluttertoast.showToast(
-            msg: "------1-------",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.CENTER,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 16.0
-        );
-        await _handleMessage(message);
-      }
-    }
 
-    // if (initialMessageFirebase != null) {
-    //   Fluttertoast.showToast(
-    //       msg: "------3-------",
-    //       toastLength: Toast.LENGTH_SHORT,
-    //       gravity: ToastGravity.CENTER,
-    //       timeInSecForIosWeb: 1,
-    //       backgroundColor: Colors.red,
-    //       textColor: Colors.white,
-    //       fontSize: 16.0
-    //   );
-    //   _handleMessage(initialMessageFirebase);
+    flutterLocalNotificationsPlugin.initialize(
+      const InitializationSettings(
+        android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+      ),
+      onDidReceiveNotificationResponse: (NotificationResponse response) {
+        if (response.payload != null) {
+          isBackgroundTap = true;
+          try {
+            final data = json.decode(response.payload!);
+            RemoteMessage message = RemoteMessage(data: data);
+            _handleMessage(message);
+          } catch (e) {
+            print("Error decoding notification payload: $e");
+          }
+        }
+      },
+    );
+
+    // final initialMessage = await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+    // if (initialMessage?.didNotificationLaunchApp ?? false) {
+    //   if (initialMessage?.notificationResponse?.payload != null) {
+    //     try {
+    //       final data = json.decode(initialMessage!.notificationResponse!.payload!);
+    //       RemoteMessage message = RemoteMessage(data: data);
+    //       await _handleMessage(message);
+    //     } catch (e) {
+    //       print("Error decoding notification payload: $e");
+    //     }
+    //   }
     // }
 
-    // FirebaseMessaging.onMessageOpenedApp.listen((event) {
-    //   Fluttertoast.showToast(
-    //       msg: "------1-------",
-    //       toastLength: Toast.LENGTH_SHORT,
-    //       gravity: ToastGravity.CENTER,
-    //       timeInSecForIosWeb: 1,
-    //       backgroundColor: Colors.red,
-    //       textColor: Colors.white,
-    //       fontSize: 16.0
-    //   );
-    //   _handleMessage(event);
-    // },);
-
-    // flutterLocalNotificationsPlugin.initialize(
-    //   const InitializationSettings(
-    //     android: AndroidInitializationSettings('@mipmap/ic_launcher'),
-    //   ),
-    //   onDidReceiveNotificationResponse: (NotificationResponse response) {
-    //     if (response.payload != null) {
-    //       RemoteMessage message = RemoteMessage(
-    //         data: json.decode(response.payload!),
-    //       );
-    //       Fluttertoast.showToast(
-    //           msg: "------2-------",
-    //           toastLength: Toast.LENGTH_SHORT,
-    //           gravity: ToastGravity.CENTER,
-    //           timeInSecForIosWeb: 1,
-    //           backgroundColor: Colors.red,
-    //           textColor: Colors.white,
-    //           fontSize: 16.0
-    //       );
-    //       _handleMessage(message);
-    //     }
-    //   },
-    // );
   }
 
   Future<void> _handleMessage(RemoteMessage message) async {
     if (message.data['category'] == 'student_tracking') {
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const DrawerScreen()),
-          (route) => false);
-      if (Get.find<PageIndexController>().navLength.value == 4) {
-        Get.find<HomeController>().currentIndex.value = 3;
-        Get.find<PageIndexController>().changePage(currentPage: 3);
-      } else if (Get.find<PageIndexController>().navLength.value == 5) {
-        Get.find<HomeController>().currentIndex.value = 4;
-        Get.find<PageIndexController>().changePage(currentPage: 4);
+      if(widget.message == null) {
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => DrawerScreen(message: message)),
+                (route) => false);
+      } else {
+        if (Get.find<PageIndexController>().navLength.value == 4) {
+          Get.find<HomeController>().currentIndex.value = 3;
+          Get.find<PageIndexController>().changePage(currentPage: 3);
+        } else if (Get.find<PageIndexController>().navLength.value == 5) {
+          Get.find<HomeController>().currentIndex.value = 4;
+          Get.find<PageIndexController>().changePage(currentPage: 4);
+        }
       }
     } else if (message.data['category'] == 'chat') {
       print("push Notification data ----------------------- ${message.data}");
-      // Navigator.of(context).pushAndRemoveUntil(
-      //     MaterialPageRoute(builder: (context) => const DrawerScreen()),
-      //         (route) => false);
-      await Future.wait([
-        Get.delete<FeedViewController>().then((_) => Get.put(FeedViewController())),
-        Get.delete<ChatClassGroupController>().then((_) => Get.put(ChatClassGroupController())),
-        Get.delete<ParentChatListController>().then((_) => Get.put(ParentChatListController())),
-      ]);
+      if(widget.message == null) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => DrawerScreen(message: message)),
+              (route) => false,
+        );
+      } else {
+        await Future.wait([
+          Get.delete<FeedViewController>().then((_) => Get.put(FeedViewController())),
+          Get.delete<ChatClassGroupController>().then((_) => Get.put(ChatClassGroupController())),
+          Get.delete<ParentChatListController>().then((_) => Get.put(ParentChatListController())),
+        ]);
 
-      Get.find<HomeController>().currentIndex.value = 2;
-      Get.find<PageIndexController>().changePage(currentPage: 2);
+        Get.find<HomeController>().currentIndex.value = 2;
+        Get.find<PageIndexController>().changePage(currentPage: 2);
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => FeedViewChatScreen(
-            msgData: ClassTeacherGroup(
-              classTeacherClass: message.data['class'],
-              batch: message.data['batch'],
-              subjectId: message.data['subject_Id'],
-              subjectName: message.data['subject'],
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => FeedViewChatScreen(
+              msgData: ClassTeacherGroup(
+                classTeacherClass: message.data['class'],
+                batch: message.data['batch'],
+                subjectId: message.data['subject_Id'],
+                subjectName: message.data['subject'],
+              ),
             ),
           ),
-        ),
-      );
+        );
+      }
     }
   }
 
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if(mounted) {
-        await setupInteractedMessage();
+      if(!isBackgroundTap) {
+        if(widget.message != null) {
+          _handleMessage(widget.message!);
+        } else {
+          await setupInteractedMessage();
+        }
       }
     },);
     super.initState();
@@ -173,7 +148,9 @@ class _DrawerScreenState extends State<DrawerScreen> {
         menuScreenWidth: double.infinity,
         style: DrawerStyle.defaultStyle,
         menuScreen: const MenuScreen(),
-        mainScreen: const MainScreen(),
+        mainScreen: MainScreen(isForgroundTap: isForgroundTap, isBackgroundTap: (p0) {
+          isBackgroundTap = p0;
+        },),
         borderRadius: 28.0,
         showShadow: true,
         drawerShadowsBackgroundColor: Colors.grey,
