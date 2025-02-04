@@ -19,9 +19,7 @@ import '../Home_Page/Home_Widgets/bottom_navigationbar.dart';
 import 'drawer.dart';
 
 class MainScreen extends StatefulWidget {
-  final bool isForgroundTap;
-  final Function(bool) isBackgroundTap;
-  const MainScreen({super.key, required this.isForgroundTap, required this.isBackgroundTap});
+  const MainScreen({super.key});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -42,7 +40,6 @@ class _MainScreenState extends State<MainScreen> {
     final initialMessage = await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
     if (initialMessage?.didNotificationLaunchApp ?? false) {
       if (initialMessage?.notificationResponse?.payload != null) {
-        widget.isBackgroundTap(true);
         RemoteMessage message = RemoteMessage(
           data: json.decode(initialMessage!.notificationResponse!.payload!),
         );
@@ -68,19 +65,11 @@ class _MainScreenState extends State<MainScreen> {
       // Navigator.of(context).pushAndRemoveUntil(
       //     MaterialPageRoute(builder: (context) => const DrawerScreen()),
       //         (route) => false);
-      Fluttertoast.showToast(
-          msg: "Background handler",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0
-      );
+
       await Future.wait([
-        Get.delete<FeedViewController>().then((_) => Get.put(FeedViewController())),
-        Get.delete<ChatClassGroupController>().then((_) => Get.put(ChatClassGroupController())),
-        Get.delete<ParentChatListController>().then((_) => Get.put(ParentChatListController())),
+        Get.delete<FeedViewController>().then((_) => Get.lazyPut(() => FeedViewController())),
+        Get.delete<ChatClassGroupController>().then((_) => Get.lazyPut(() => ChatClassGroupController())),
+        Get.delete<ParentChatListController>().then((_) => Get.lazyPut(() => ParentChatListController())),
       ]);
 
       Get.find<HomeController>().currentIndex.value = 2;
@@ -104,10 +93,8 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if(mounted && !widget.isForgroundTap) {
-        await setupInteractedMessage();
-      }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setupInteractedMessage();
     },);
     super.initState();
   }

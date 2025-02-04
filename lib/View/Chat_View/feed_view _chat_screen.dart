@@ -28,6 +28,7 @@ import 'package:teacherapp/View/Chat_View/Chat_widgets/chat_search.dart';
 import 'package:teacherapp/View/Chat_View/Chat_widgets/parent_select_bottomSheet.dart';
 import 'package:teacherapp/View/Chat_View/Chat_widgets/selected_parents_view.dart';
 import 'package:text_scroll/text_scroll.dart';
+import '../../Controller/ui_controllers/page_controller.dart';
 import '../../Models/api_models/chat_feed_view_model.dart';
 import '../../Models/api_models/chat_group_api_model.dart';
 import '../../Services/check_connectivity.dart';
@@ -70,6 +71,9 @@ class _FeedViewChatScreenState extends State<FeedViewChatScreen>
 
   @override
   void initState() {
+    print("--------5--------");
+    Get.find<PageIndexController>().message.value = null;
+    Get.find<PageIndexController>().isChatScreen.value = true;
     super.initState();
     Get.find<ChatSearchController>().setValueDefault(); // for set default//
     Get.find<FeedViewController>().showSelectAllIcon.value =
@@ -159,6 +163,7 @@ class _FeedViewChatScreenState extends State<FeedViewChatScreen>
   @override
   void dispose() {
     // Get.find<FeedViewController>().chatFeedViewScrollController.value.dispose();
+    Get.find<PageIndexController>().isChatScreen.value = false;
     if (chatUpdate != null) {
       chatUpdate!.cancel();
     }
