@@ -52,19 +52,16 @@ class _DrawerScreenState extends State<DrawerScreen> {
 
   Future<void> _handleMessage(RemoteMessage message) async {
     if (message.data['category'] == 'student_tracking') {
-      if(Get.find<PageIndexController>().message.value == null) {
-        Get.find<PageIndexController>().message.value = message;
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => const DrawerScreen()),
-                (route) => false);
-      } else {
-        if (Get.find<PageIndexController>().navLength.value == 4) {
-          Get.find<HomeController>().currentIndex.value = 3;
-          Get.find<PageIndexController>().changePage(currentPage: 3);
-        } else if (Get.find<PageIndexController>().navLength.value == 5) {
-          Get.find<HomeController>().currentIndex.value = 4;
-          Get.find<PageIndexController>().changePage(currentPage: 4);
-        }
+      Get.find<PageIndexController>().message.value = message;
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const DrawerScreen()),
+              (route) => false);
+      if (Get.find<PageIndexController>().navLength.value == 4) {
+        Get.find<HomeController>().currentIndex.value = 3;
+        Get.find<PageIndexController>().changePage(currentPage: 3);
+      } else if (Get.find<PageIndexController>().navLength.value == 5) {
+        Get.find<HomeController>().currentIndex.value = 4;
+        Get.find<PageIndexController>().changePage(currentPage: 4);
       }
     } else if (message.data['category'] == 'chat') {
       print("push Notification data ----------------------- ${message.data}");
