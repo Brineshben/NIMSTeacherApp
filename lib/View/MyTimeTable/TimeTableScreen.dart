@@ -248,14 +248,14 @@ class _MyTimeTableState extends State<MyTimeTable> {
                                     child: controller.selectedTimetable.isEmpty
                                         ?   RefreshIndicator(
                                           onRefresh: () async{
-                                            // await  controller.fetchTimeTable();
+                                            await  controller.fetchTimeTable();
                                          
-                                            //   controller
-                                            //             .setSelectedTimetable(
-                                            //                 result:
-                                            //                     timeTableList[
-                                            //                             _currentIndex]
-                                            //                         .timeTable);
+                                              controller
+                                                        .setSelectedTimetable(
+                                                            result:
+                                                                timeTableList[
+                                                                        _currentIndex]
+                                                                    .timeTable);
                                          
                                           },
                                           child: ListView.builder(
@@ -269,17 +269,17 @@ class _MyTimeTableState extends State<MyTimeTable> {
                                           }
                                           
                                           ),
-                                        ) 
+                                        )
                                         : RefreshIndicator(
                                           onRefresh: () async{
-                                          //  await  controller.fetchTimeTable();
+                                           await  controller.fetchTimeTable();
                                            
-                                          //     controller
-                                          //               .setSelectedTimetable(
-                                          //                   result:
-                                          //                       timeTableList[
-                                          //                               _currentIndex]
-                                          //                           .timeTable);
+                                              controller
+                                                        .setSelectedTimetable(
+                                                            result:
+                                                                timeTableList[
+                                                                        _currentIndex]
+                                                                    .timeTable);
                                    
                                           },
                                           child: ListView.builder(
