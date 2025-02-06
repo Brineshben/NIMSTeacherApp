@@ -50,7 +50,9 @@ class LearningwalkSubmitModel {
     lwFocus = json['lw_focus'];
     notes = json['notes'];
     observationDate = json['observation_date'];
-    observerRoles = (json['observer_roles']?.isNotEmpty ?? false) ? jsonDecode(json['observer_roles']) : [];
+    observerRoles = json['observer_roles'] is String
+        ? List<String>.from(jsonDecode(json['observer_roles']))
+        : json['observer_roles']?.cast<String>();
     qsToPuple = json['qs_to_puple'];
     qsToTeacher = json['qs_to_teacher'];
     schoolId = json['school_id'];

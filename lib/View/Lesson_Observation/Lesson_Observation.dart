@@ -631,61 +631,61 @@ class _LessonObservationState extends State<LessonObservation> {
                                         //     },
                                         //   ),
                                         // ),
-                                        Obx(() => Padding(
-                                          padding: EdgeInsets.only(
-                                              left: 25.w,
-                                              right: 25.w,
-                                              top: 20.h),
-                                          child: TextFormField(
-                                            controller: Get.find<LessonLearningController>().selectedDateController.value,
-                                            onTap: () async => await Get.find<LessonLearningController>().selectDate(context),
-                                            autovalidateMode: AutovalidateMode.onUserInteraction,
-                                            readOnly: true,
-                                            validator: (dynamic value) =>
-                                            value.toString().trim().isEmpty
-                                                ? 'Please Select Date'
-                                                : null,
-                                            decoration: InputDecoration(
-                                                hintStyle: TextStyle(
-                                                  color: Colors.black
-                                                      .withOpacity(0.5),
-                                                ),
-                                                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                                                hintText: "Date",
-                                                border: OutlineInputBorder(
-                                                  borderRadius:
-                                                  const BorderRadius.all(
-                                                    Radius.circular(10.0),
-                                                  ).r,
-                                                ),
-                                                enabledBorder:
-                                                const OutlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Color.fromRGBO(
-                                                          230, 236, 254, 8),
-                                                      width: 1.0),
-                                                ),
-                                                focusedBorder:
-                                                OutlineInputBorder(
-                                                  borderSide: const BorderSide(
-                                                      color: Color.fromRGBO(
-                                                          230, 236, 254, 8),
-                                                      width: 1.0),
-                                                  borderRadius:
-                                                  const BorderRadius.all(
-                                                      Radius.circular(
-                                                          10.0))
-                                                      .r,
-                                                ),
-                                                fillColor: const Color.fromRGBO(
-                                                    230, 236, 254, 8),
-                                                filled: true),
-                                            cursorColor: Colors.grey,
-                                            keyboardType: TextInputType.text,
-                                            maxLines: 1,
-                                          ),
-                                        ),
-                                        ),
+                                        // Obx(() => Padding(
+                                        //   padding: EdgeInsets.only(
+                                        //       left: 25.w,
+                                        //       right: 25.w,
+                                        //       top: 20.h),
+                                        //   child: TextFormField(
+                                        //     controller: Get.find<LessonLearningController>().selectedDateController.value,
+                                        //     onTap: () async => await Get.find<LessonLearningController>().selectDate(context),
+                                        //     autovalidateMode: AutovalidateMode.onUserInteraction,
+                                        //     readOnly: true,
+                                        //     validator: (dynamic value) =>
+                                        //     value.toString().trim().isEmpty
+                                        //         ? 'Please Select Date'
+                                        //         : null,
+                                        //     decoration: InputDecoration(
+                                        //         hintStyle: TextStyle(
+                                        //           color: Colors.black
+                                        //               .withOpacity(0.5),
+                                        //         ),
+                                        //         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                                        //         hintText: "Date",
+                                        //         border: OutlineInputBorder(
+                                        //           borderRadius:
+                                        //           const BorderRadius.all(
+                                        //             Radius.circular(10.0),
+                                        //           ).r,
+                                        //         ),
+                                        //         enabledBorder:
+                                        //         const OutlineInputBorder(
+                                        //           borderSide: BorderSide(
+                                        //               color: Color.fromRGBO(
+                                        //                   230, 236, 254, 8),
+                                        //               width: 1.0),
+                                        //         ),
+                                        //         focusedBorder:
+                                        //         OutlineInputBorder(
+                                        //           borderSide: const BorderSide(
+                                        //               color: Color.fromRGBO(
+                                        //                   230, 236, 254, 8),
+                                        //               width: 1.0),
+                                        //           borderRadius:
+                                        //           const BorderRadius.all(
+                                        //               Radius.circular(
+                                        //                   10.0))
+                                        //               .r,
+                                        //         ),
+                                        //         fillColor: const Color.fromRGBO(
+                                        //             230, 236, 254, 8),
+                                        //         filled: true),
+                                        //     cursorColor: Colors.grey,
+                                        //     keyboardType: TextInputType.text,
+                                        //     maxLines: 1,
+                                        //   ),
+                                        // ),
+                                        // ),
                                         Padding(
                                           padding: EdgeInsets.only(
                                               left: 25.w,

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -841,7 +843,7 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                                 observationDate:
                                                 DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(DateTime.now()),
 
-                                                observerRoles: Get.find<UserAuthController>().userData.value.roleIds.toString(),
+                                                observerRoles: jsonEncode(Get.find<UserAuthController>().userData.value.roleIds),
                                               );
                                               bool connection =
                                               await CheckConnectivity().check();
@@ -860,7 +862,7 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                                 final result = await dbHelper
                                                     .insertLearningWalk(
                                                     submitLW.toMap());
-                                                print("brineshDB${result}");
+                                                print("brineshDB--${result}");
                                                 TeacherAppPopUps.submitFailedThreeLearningBack(
                                                   title: "Success",
                                                   message: "Learning Walk Added Successfully",

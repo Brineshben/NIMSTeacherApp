@@ -26,6 +26,7 @@ class LearningwalksubmitController extends GetxController {
     isLoaded.value = false;
     try {
       Map<String, dynamic> resp = await ApiServices.getLearningwalksubmit(data: data);
+      print("-----learning resp-------$resp");
       if (resp['status']['code'] == 200) {
         TeacherAppPopUps.submitFailedTwoBackforupdate (
             title: resp["status"]["message"],

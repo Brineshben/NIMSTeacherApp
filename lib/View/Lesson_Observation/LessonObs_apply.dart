@@ -233,21 +233,21 @@ class _LessonObservationApplyState extends State<LessonObservationApply> {
                                                           ),
                                                         ),
                                                       ),
-                                                      SizedBox(
-                                                        width: 200.w,
-                                                        child:
-                                                        SingleChildScrollView(
-                                                          child: Text(
-                                                            widget.selectedDate,
-                                                            style: TextStyle(
-                                                                color: Colors.white,
-                                                                fontSize: 13.h,
-                                                                fontWeight:
-                                                                FontWeight
-                                                                    .w400),
-                                                          ),
-                                                        ),
-                                                      ),
+                                                      // SizedBox(
+                                                      //   width: 200.w,
+                                                      //   child:
+                                                      //   SingleChildScrollView(
+                                                      //     child: Text(
+                                                      //       widget.selectedDate,
+                                                      //       style: TextStyle(
+                                                      //           color: Colors.white,
+                                                      //           fontSize: 13.h,
+                                                      //           fontWeight:
+                                                      //           FontWeight
+                                                      //               .w400),
+                                                      //     ),
+                                                      //   ),
+                                                      // ),
                                                       SizedBox(
                                                         width: 200.w,
                                                         child:
@@ -493,8 +493,7 @@ class _LessonObservationApplyState extends State<LessonObservationApply> {
                                                 iconColor: Colors.green,
                                               );
                                             }
-                                          }
-                                          else{
+                                          } else {
                                             TeacherAppPopUps.submitFailed(
                                               title: "Warning",
                                               message: "Please Enter all Mandatory Fields",
@@ -502,9 +501,6 @@ class _LessonObservationApplyState extends State<LessonObservationApply> {
                                               iconData: Icons.info,
                                               iconColor: Colors.red,
                                             );
-
-
-
                                           }
                                         },
                                         child: Padding(
