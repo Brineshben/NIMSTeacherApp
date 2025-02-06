@@ -236,7 +236,7 @@ class _PendingLeaveState extends State<PendingLeave> {
                                         ),
                                       ),
                                       Text(
-                                        "To: ${leaveList[i].endDate.toString().split('T')[0].split('-').last}-${leaveList[i].startDate.toString().split('T')[0].split('-')[1]}-${leaveList[i].startDate.toString().split('T')[0].split('-').first}",
+                                        "To: ${leaveList[i].endDate.toString().split('T')[0].split('-').last}-${leaveList[i].endDate.toString().split('T')[0].split('-')[1]}-${leaveList[i].endDate.toString().split('T')[0].split('-').first}",
                                         style: const TextStyle(fontSize: 12),
                                       ),
                             
