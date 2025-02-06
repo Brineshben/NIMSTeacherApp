@@ -140,7 +140,7 @@ class _LeaderState extends State<Leader> {
 
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20),
-                                  color: const Color.fromRGBO(101, 63, 244, 8),
+                                  color: const Color.fromRGBO(101, 63, 244, 1),
                                 ),
                                 child: Row(
                                   children: [

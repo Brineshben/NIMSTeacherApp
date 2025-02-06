@@ -33,6 +33,7 @@ import '../../Models/api_models/chat_feed_view_model.dart';
 import '../../Models/api_models/chat_group_api_model.dart';
 import '../../Services/check_connectivity.dart';
 import '../../Services/dialog_box.dart';
+import '../../Services/fcm_service.dart';
 import '../../Services/snackBar.dart';
 import '../CWidgets/TeacherAppPopUps.dart';
 import 'Grouped_view.dart';
@@ -71,7 +72,6 @@ class _FeedViewChatScreenState extends State<FeedViewChatScreen>
 
   @override
   void initState() {
-    print("--------5--------");
     Get.find<PageIndexController>().message.value = null;
     Get.find<PageIndexController>().isChatScreen.value = true;
     super.initState();
@@ -172,6 +172,8 @@ class _FeedViewChatScreenState extends State<FeedViewChatScreen>
 
   Future<void> initialize() async {
     // context.loaderOverlay.show();
+    int notiId = "${widget.msgData?.classTeacherClass}${widget.msgData?.batch}${widget.msgData?.subjectId}".hashCode;
+    await FcmService().removeNotificationWithPayload(notiId);
 
     ChatFeedViewReqModel chatFeedViewReqModel = ChatFeedViewReqModel(
       teacherId: userAuthController.userData.value.userId,
