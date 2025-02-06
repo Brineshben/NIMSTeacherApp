@@ -1,6 +1,8 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:teacherapp/Controller/api_controllers/userAuthController.dart';
 import '../../Models/api_models/LearningwalkSubmit.dart';
 import '../../Models/api_models/learning_observation_api_model.dart';
@@ -15,6 +17,8 @@ import '../../sqflite_db/lessonLearnDatabase/lessonLearnDbHelper.dart';
 class LessonLearningController extends GetxController {
   RxList<TeacherData> teacherNameList = <TeacherData>[].obs;
   Rx<TeacherData?> selectedTeacher = Rx<TeacherData?>(null);
+  Rx<TextEditingController> selectedDateController = TextEditingController().obs;
+  Rx<DateTime?> selectedDate = Rx(null);
   RxList<TeacherDetails> teacherClassList = <TeacherDetails>[].obs;
   Rx<TeacherDetails?> selectedClass = Rx<TeacherDetails?>(null);
   RxList<SubjectDetail> teacherSubjectList = <SubjectDetail>[].obs;
@@ -114,6 +118,45 @@ class LessonLearningController extends GetxController {
     } catch (e) {}
   }
 
+  Future<void> selectDate(BuildContext context) async {
+    try {
+      String? academicYear = Get.find<UserAuthController>().userData.value.academicYear;
+      academicYear ??= "${DateTime.now().year - 1}-${DateTime.now().year + 1}";
+
+      int initialYr = int.parse(academicYear.split("-").first);
+      int finalYr = int.parse(academicYear.split("-").last) + 1;
+
+      final DateTime? picked = await showDatePicker(
+        initialEntryMode: DatePickerEntryMode.calendarOnly,
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(initialYr),
+        lastDate: DateTime(finalYr),
+      );
+      if (picked != null) {
+        selectedDateController.value.text = 'Date : ${picked.day.toString().padLeft(2, '0')}-${picked.month.toString().padLeft(2, '0')}-${picked.year}';
+        selectedDate.value = picked;
+      }
+
+      if (kDebugMode) {
+        print("date selected --------------------- ${selectedDateController.value.text}");
+      }
+    } catch(e) {
+      if (kDebugMode) {
+        print("date select error --------------------- ${e.toString()}");
+      }
+    }
+  }
+
+  String formatSelectDate(String? dateStr) {
+    if(dateStr == null) return "Date";
+    DateFormat inputFormat = DateFormat("dd-MM-yyyy");
+    DateFormat outputFormat = DateFormat("dd/MM/yyyy");
+
+    DateTime dateTime = inputFormat.parse(dateStr);
+    return outputFormat.format(dateTime);
+  }
+
   Future<void> refreshLessLearnData() async {
     List<LessonLearningApplyModel> lessLearn =
         await LessonLearningDatabase.instance.readAllLessonLearn();
@@ -186,7 +229,6 @@ class LessonLearningController extends GetxController {
   }
 
   Future<void> learningSubmit(BuildContext context) async {
-    print("brineshhsh");
     bool result = await CheckConnectivity().check();
     if (!result) {
       await snackBar(

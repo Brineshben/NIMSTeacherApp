@@ -39,7 +39,7 @@ class _AllTimeTableState extends State<AllTimeTable> {
                     currentPage: 4);
               } else {
                 Get.find<PageIndexController>().changePage(
-                  currentPage: Get.find<TimeTableController>().classTeacherSubjects.value.isEmpty ? 4 : 5);
+                  currentPage: Get.find<TimeTableController>().classTeacherSubjects.value.isEmpty ? 5 : 6);
               }
             },
             style: const ButtonStyle(

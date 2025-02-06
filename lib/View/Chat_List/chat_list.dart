@@ -70,7 +70,7 @@ class _ChatWithParentsPageState extends State<ChatWithParentsPage>
 
   @override
   void dispose() {
-    chatUpdate!.cancel();
+    chatUpdate?.cancel();
     super.dispose();
   }
 

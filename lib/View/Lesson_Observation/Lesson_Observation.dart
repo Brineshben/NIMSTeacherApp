@@ -1,9 +1,8 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_getx_widget.dart';
+import 'package:get/get.dart';
 import 'package:teacherapp/View/CWidgets/AppBarBackground.dart';
-import 'package:teacherapp/View/Home_Page/Home_Widgets/class_list.dart';
 import '../../Controller/api_controllers/lessonLearningController.dart';
 import '../../Models/api_models/learning_observation_api_model.dart';
 import '../../Utils/Colors.dart';
@@ -34,6 +33,8 @@ class _LessonObservationState extends State<LessonObservation> {
   @override
   void initState() {
     super.initState();
+    Get.find<LessonLearningController>().selectedDateController.value.clear();
+    Get.find<LessonLearningController>().selectedDate.value = null;
     _controller.addListener(() {
       setState(() {});
     });
@@ -114,9 +115,7 @@ class _LessonObservationState extends State<LessonObservation> {
                                               right: 25.w,
                                               top: 20.h),
                                           child: DropdownButtonHideUnderline(
-                                            
                                             child: DropdownButtonFormField2<String>(
-                                              
                                               validator: (value) {
                                                 if(value==null){
                                                   return '          Please Select Teacher';
@@ -632,6 +631,61 @@ class _LessonObservationState extends State<LessonObservation> {
                                         //     },
                                         //   ),
                                         // ),
+                                        Obx(() => Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 25.w,
+                                              right: 25.w,
+                                              top: 20.h),
+                                          child: TextFormField(
+                                            controller: Get.find<LessonLearningController>().selectedDateController.value,
+                                            onTap: () async => await Get.find<LessonLearningController>().selectDate(context),
+                                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                                            readOnly: true,
+                                            validator: (dynamic value) =>
+                                            value.toString().trim().isEmpty
+                                                ? 'Please Select Date'
+                                                : null,
+                                            decoration: InputDecoration(
+                                                hintStyle: TextStyle(
+                                                  color: Colors.black
+                                                      .withOpacity(0.5),
+                                                ),
+                                                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                                                hintText: "Date",
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                  const BorderRadius.all(
+                                                    Radius.circular(10.0),
+                                                  ).r,
+                                                ),
+                                                enabledBorder:
+                                                const OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Color.fromRGBO(
+                                                          230, 236, 254, 8),
+                                                      width: 1.0),
+                                                ),
+                                                focusedBorder:
+                                                OutlineInputBorder(
+                                                  borderSide: const BorderSide(
+                                                      color: Color.fromRGBO(
+                                                          230, 236, 254, 8),
+                                                      width: 1.0),
+                                                  borderRadius:
+                                                  const BorderRadius.all(
+                                                      Radius.circular(
+                                                          10.0))
+                                                      .r,
+                                                ),
+                                                fillColor: const Color.fromRGBO(
+                                                    230, 236, 254, 8),
+                                                filled: true),
+                                            cursorColor: Colors.grey,
+                                            keyboardType: TextInputType.text,
+                                            maxLines: 1,
+                                          ),
+                                        ),
+                                        ),
                                         Padding(
                                           padding: EdgeInsets.only(
                                               left: 25.w,
@@ -716,6 +770,7 @@ class _LessonObservationState extends State<LessonObservation> {
                                                                     selectedValue1!,
                                                                 subjectName:
                                                                     selectedValue2!,
+                                                                selectedDate: Get.find<LessonLearningController>().selectedDateController.value.text,
                                                                 topic:
                                                                     _controller
                                                                         .text,
@@ -748,7 +803,7 @@ class _LessonObservationState extends State<LessonObservation> {
                                   }
                                 },
                               ),
-                              SizedBox(height: 150.h),
+                              SizedBox(height: 100.h),
                             ]),
                       ),
                     ),

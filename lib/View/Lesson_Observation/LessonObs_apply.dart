@@ -25,12 +25,14 @@ class LessonObservationApply extends StatefulWidget {
   final String teacherName;
   final String classAndBatch;
   final String subjectName;
+  final String selectedDate;
   final String topic;
   const LessonObservationApply({
     super.key,
     required this.teacherName,
     required this.classAndBatch,
     required this.subjectName,
+    required this.selectedDate,
     required this.topic,
   });
 
@@ -236,7 +238,22 @@ class _LessonObservationApplyState extends State<LessonObservationApply> {
                                                         child:
                                                         SingleChildScrollView(
                                                           child: Text(
-                                                            "Topic: ${widget.topic}",
+                                                            widget.selectedDate,
+                                                            style: TextStyle(
+                                                                color: Colors.white,
+                                                                fontSize: 13.h,
+                                                                fontWeight:
+                                                                FontWeight
+                                                                    .w400),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        width: 200.w,
+                                                        child:
+                                                        SingleChildScrollView(
+                                                          child: Text(
+                                                            "Topic : ${widget.topic}",
                                                             style: TextStyle(
                                                                 color: Colors.white,
                                                                 fontSize: 13.h,
@@ -585,6 +602,7 @@ class _LessonObservationApplyState extends State<LessonObservationApply> {
         sessionId: lessonObservationController.selectedClass.value?.sessionId ?? '',
         curriculumId: lessonObservationController.selectedClass.value?.curriculumId ?? '',
         isJoin: isChecked,
+        submittedDate: lessonObservationController.selectedDate.toString(),
         remarksData: [
           RemarksData(indicators: lessonObservationController.markedIndicators.value),
         ],

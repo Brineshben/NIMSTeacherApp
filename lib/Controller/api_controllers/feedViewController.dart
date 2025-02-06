@@ -74,7 +74,7 @@ class FeedViewController extends GetxController {
 
   @override
   void onClose() {
-    chatFeedViewScrollController.value.dispose();
+    // chatFeedViewScrollController.value.dispose();
     super.onClose();
   }
 
@@ -153,6 +153,11 @@ class FeedViewController extends GetxController {
       offset: 0,
       limit: Get.find<FeedViewController>().chatMsgCount,
     );
+
+    await Get.find<FeedDBController>().createMessageTable(
+        subId: reqBody.subjectId ?? " ",
+        studentclass: reqBody.classs ?? "",
+        batch: reqBody.batch ?? "");
 
     final messageList1 = await Get.find<FeedDBController>().getAllMessages(
         batch: reqBody.batch ?? "",
