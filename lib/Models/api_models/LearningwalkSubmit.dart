@@ -12,7 +12,7 @@ class LearningwalkSubmitModel {
   String? lwFocus;
   String? notes;
   String? observationDate;
-  String? observerRoles;
+  List<dynamic>? observerRoles;
   String? qsToPuple;
   String? qsToTeacher;
   String? schoolId;
@@ -50,9 +50,7 @@ class LearningwalkSubmitModel {
     lwFocus = json['lw_focus'];
     notes = json['notes'];
     observationDate = json['observation_date'];
-    observerRoles = json['observer_roles'] is String
-        ? List<String>.from(jsonDecode(json['observer_roles']))
-        : json['observer_roles']?.cast<String>();
+    observerRoles = json['observer_roles'];
     qsToPuple = json['qs_to_puple'];
     qsToTeacher = json['qs_to_teacher'];
     schoolId = json['school_id'];

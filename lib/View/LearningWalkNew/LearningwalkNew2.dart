@@ -843,7 +843,7 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                                 observationDate:
                                                 DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(DateTime.now()),
 
-                                                observerRoles: jsonEncode(Get.find<UserAuthController>().userData.value.roleIds),
+                                                observerRoles: Get.find<UserAuthController>().userData.value.roleIds,
                                               );
                                               bool connection =
                                               await CheckConnectivity().check();

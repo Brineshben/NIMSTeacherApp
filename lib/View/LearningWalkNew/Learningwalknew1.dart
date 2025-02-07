@@ -279,9 +279,9 @@ class _LearningWalknew1State extends State<LearningWalknew1> {
                                               value: _selectedValue2,
                                               onChanged: (batch) {
                                                 setState(() {
-
                                                   _selectedValue2 = batch ?? "";
                                                 });
+                                                controller.setSelectedBatch(division: _selectedValue2.toString());
                                                 // controller.fetchteacherdata(
                                                 //     _selectedValue2!);
                                               },

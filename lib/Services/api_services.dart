@@ -924,7 +924,7 @@ class ApiServices {
         "${ApiConstants.baseUrl}${reqData.isLesson ? ApiConstants.lessonSubmit : ApiConstants.learningWalkSubmit}";
     print(url);
     Map apiBody = reqData.lessonLearning.toJson();
-    apiBody.remove('submitted_date');
+    // apiBody.remove('submitted_date');
     try {
       var request = http.Request('POST', Uri.parse(url));
       request.body = (json.encode(apiBody));
