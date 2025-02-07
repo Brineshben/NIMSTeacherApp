@@ -40,7 +40,7 @@ class ApiServices {
     try {
       var request = http.Request('POST', Uri.parse(url));
       request.body = (json.encode(apiBody));
-      print('Api body---------------------->${request.body}');
+      print('Api body----------------------> user login${request.body}');
       request.headers.addAll(ApiConstants.headers);
       http.StreamedResponse response = await request.send();
       var respString = await response.stream.bytesToString();
@@ -90,7 +90,7 @@ class ApiServices {
     try {
       var request = http.Request('POST', Uri.parse(url));
       request.body = (json.encode(apiBody));
-      print('Api body---------------------->${request.body}');
+      print('Api body---------------------->get hos${request.body}');
       request.headers.addAll(ApiConstants.headers);
       http.StreamedResponse response = await request.send();
       var respString = await response.stream.bytesToString();
@@ -113,7 +113,7 @@ class ApiServices {
     try {
       var request = http.Request('POST', Uri.parse(url));
       request.body = (json.encode(apiBody));
-      print('Api body---------------------->${request.body}');
+      print('Api body----------------------> get workd load api ${request.body}');
       request.headers.addAll(ApiConstants.headers);
       http.StreamedResponse response = await request.send();
       var respString = await response.stream.bytesToString();
@@ -143,7 +143,7 @@ class ApiServices {
     try {
       var request = http.Request('POST', Uri.parse(url));
       request.body = (json.encode(apiBody));
-      print('Api body---------------------->${request.body}');
+      print('Api body----------------------> of get leadership${request.body}');
       request.headers.addAll(ApiConstants.headers);
       http.StreamedResponse response = await request.send();
       var respString = await response.stream.bytesToString();
@@ -204,10 +204,11 @@ class ApiServices {
       "what_went_well": data.whatWentWell
 
     };
+    print('Lesson observa $apiBody');
     try {
       var request = http.Request('POST', Uri.parse(url));
       request.body = (json.encode(apiBody));
-      print('Api body---------------------->${request.body}');
+      print('Api body----------------------> of learning walk submit${request.body}');
       request.headers.addAll(ApiConstants.headers);
       http.StreamedResponse response = await request.send();
       var respString = await response.stream.bytesToString();
@@ -238,7 +239,7 @@ class ApiServices {
     try {
       var request = http.Request('POST', Uri.parse(url));
       request.body = (json.encode(apiBody));
-      print('Api body---------------------->${request.body}');
+      print('Api body---------------------->get foucus${request.body}');
       request.headers.addAll(ApiConstants.headers);
       http.StreamedResponse response = await request.send();
       var respString = await response.stream.bytesToString();
@@ -269,7 +270,7 @@ class ApiServices {
     try {
       var request = http.Request('POST', Uri.parse(url));
       request.body = (json.encode(apiBody));
-      print('Api body---------------------->${request.body}');
+      print('Api body----------------------> get class ${request.body}');
       request.headers.addAll(ApiConstants.headers);
       http.StreamedResponse response = await request.send();
       var respString = await response.stream.bytesToString();
@@ -307,7 +308,7 @@ class ApiServices {
     try {
       var request = http.Request('POST', Uri.parse(url));
       request.body = (json.encode(apiBody));
-      print('Api body---------------------->${request.body}');
+      print('Api body---------------------->get batch${request.body}');
       request.headers.addAll(ApiConstants.headers);
       http.StreamedResponse response = await request.send();
       var respString = await response.stream.bytesToString();
@@ -351,7 +352,7 @@ class ApiServices {
     try {
       var request = http.Request('POST', Uri.parse(url));
       request.body = (json.encode(apiBody));
-      print('Api body-----bennn----------------->${request.body}');
+      print('Api body-----bennn-----------------> get teachers data${request.body}');
       request.headers.addAll(ApiConstants.headers);
       http.StreamedResponse response = await request.send();
       var respString = await response.stream.bytesToString();
@@ -377,7 +378,7 @@ class ApiServices {
     try {
       var request = http.Request('POST', Uri.parse(url));
       request.body = (json.encode(apiBody));
-      print('Api body---------------------->${request.body}');
+      print('Api body----------------------> get qrcodes${request.body}');
       request.headers.addAll(ApiConstants.headers);
       http.StreamedResponse response = await request.send();
       var respString = await response.stream.bytesToString();
@@ -401,7 +402,7 @@ class ApiServices {
     try {
       var request = http.Request('POST', Uri.parse(url));
       request.body = (json.encode(apiBody));
-      print('Api body---------------------->${request.body}');
+      print('Api body----------------------> get search${request.body}');
       request.headers.addAll(ApiConstants.headers);
       http.StreamedResponse response = await request.send();
       var respString = await response.stream.bytesToString();
@@ -429,7 +430,7 @@ class ApiServices {
     try {
       var request = http.Request('POST', Uri.parse(url));
       request.body = (json.encode(apiBody));
-      print('Api body---------------------->${request.body}');
+      print('Api body---------------------->get timetable data${request.body}');
       request.headers.addAll(ApiConstants.headers);
       http.StreamedResponse response = await request.send();
       var respString = await response.stream.bytesToString();
@@ -479,7 +480,7 @@ class ApiServices {
     try {
       var request = http.Request('PUT', Uri.parse(url));
       request.body = (json.encode(apiBody));
-      print('Api body---------------------->${request.body}');
+      print('Api body----------------------> get mrkasRead${request.body}');
       request.headers.addAll(ApiConstants.headers);
       http.StreamedResponse response = await request.send();
       var respString = await response.stream.bytesToString();
@@ -508,7 +509,7 @@ class ApiServices {
     try {
       var request = http.Request('POST', Uri.parse(url));
       request.body = (json.encode(apiBody));
-      print('Api body---------------------->${request.body}');
+      print('Api body----------------------> get timetable${request.body}');
       request.headers.addAll(ApiConstants.headers);
       http.StreamedResponse response = await request.send();
       var respString = await response.stream.bytesToString();
@@ -536,7 +537,7 @@ class ApiServices {
     try {
       var request = http.Request('POST', Uri.parse(url));
       request.body = (json.encode(apiBody));
-      print('Api body---------------------->${request.body}');
+      print('Api body----------------------> get chalass group list${request.body}');
       request.headers.addAll(ApiConstants.headers);
       http.StreamedResponse response = await request.send();
       var respString = await response.stream.bytesToString();
@@ -565,7 +566,7 @@ class ApiServices {
     try {
       var request = http.Request('POST', Uri.parse(url));
       request.body = (json.encode(apiBody));
-      print('Api body---------------------->${request.body}');
+      print('Api body---------------------->get parrantes chat${request.body}');
       request.headers.addAll(ApiConstants.headers);
       http.StreamedResponse response = await request.send();
       var respString = await response.stream.bytesToString();
@@ -590,7 +591,7 @@ class ApiServices {
     try {
       var request = http.Request('POST', Uri.parse(url));
       request.body = (json.encode(apiBody));
-      print('Api body---------------------->${request.body}');
+      print('Api body----------------------> google sing in api ${request.body}');
       request.headers.addAll(ApiConstants.headers);
       http.StreamedResponse response = await request.send();
       var respString = await response.stream.bytesToString();
@@ -629,7 +630,7 @@ class ApiServices {
     try {
       var request = http.Request('POST', Uri.parse(url));
       request.body = (json.encode(apiBody));
-      print('Api body---------------------->${request.body}');
+      print('Api body---------------------->sent msgTecher${request.body}');
       request.headers.addAll(ApiConstants.headers);
       http.StreamedResponse response = await request.send();
       var respString = await response.stream.bytesToString();
@@ -660,7 +661,7 @@ class ApiServices {
     try {
       var request = http.Request('POST', Uri.parse(url));
       request.body = (json.encode(apiBody));
-      print('Api body---------------------->${request.body}');
+      print('Api body----------------------> get Chatfeddview${request.body}');
       request.headers.addAll(ApiConstants.headers);
       http.StreamedResponse response = await request.send();
       var respString = await response.stream.bytesToString();
@@ -706,7 +707,7 @@ class ApiServices {
 
       var request = http.Request('POST', Uri.parse(url));
       request.body = json.encode(apiBody);
-      print('Api body---------------------->${request.body}');
+      print('Api body----------------------> get delete sender msg${request.body}');
       request.headers.addAll(ApiConstants.headers);
       http.StreamedResponse response = await request.send();
       String respString = await response.stream.bytesToString();
@@ -765,7 +766,7 @@ class ApiServices {
 
       var request = http.Request('POST', Uri.parse(url));
       request.body = json.encode(apiBody);
-      print('Api body---------------------->${request.body}');
+      print('Api body----------------------> get group list${request.body}');
       request.headers.addAll(ApiConstants.headers);
       http.StreamedResponse response = await request.send();
       String respString = await response.stream.bytesToString();
@@ -792,7 +793,7 @@ class ApiServices {
     try {
       var request = http.Request('POST', Uri.parse(url));
       request.body = (json.encode(apiBody));
-      print('Api body---------------------->${request.body}');
+      print('Api body---------------------->Get parrent chating ${request.body}');
       request.headers.addAll(ApiConstants.headers);
       http.StreamedResponse response = await request.send();
       var respString = await response.stream.bytesToString();
@@ -821,7 +822,7 @@ class ApiServices {
     try {
       var request = http.Request('POST', Uri.parse(url));
       request.body = (json.encode(apiBody));
-      print('Api body---------------------->${request.body}');
+      print('Api body----------------------> get leave Reqlist${request.body}');
       request.headers.addAll(ApiConstants.headers);
       http.StreamedResponse response = await request.send();
       var respString = await response.stream.bytesToString();
@@ -850,7 +851,7 @@ class ApiServices {
     try {
       var request = http.Request('POST', Uri.parse(url));
       request.body = (json.encode(apiBody));
-      print('Api body---------------------->${request.body}');
+      print('Api body----------------------> get leave approval${request.body}');
       request.headers.addAll(ApiConstants.headers);
       http.StreamedResponse response = await request.send();
       var respString = await response.stream.bytesToString();
@@ -902,7 +903,7 @@ class ApiServices {
     try {
       var request = http.Request('POST', Uri.parse(url));
       request.body = (json.encode(apiBody));
-      print('Api body---------------------->${request.body}');
+      print('Api body----------------------> leave Reqsubmit${request.body}');
       request.headers.addAll(ApiConstants.headers);
       http.StreamedResponse response = await request.send();
       var respString = await response.stream.bytesToString();
@@ -927,7 +928,7 @@ class ApiServices {
     try {
       var request = http.Request('POST', Uri.parse(url));
       request.body = (json.encode(apiBody));
-      log('Api body---------------------->${request.body}');
+      log('Api body----------------------> lsswon walk sumbit + lseson${request.body}');
       request.headers.addAll(ApiConstants.headers);
       http.StreamedResponse response = await request.send();
       var respString = await response.stream.bytesToString();
@@ -961,7 +962,7 @@ class ApiServices {
     try {
       var request = http.Request('POST', Uri.parse(url));
       request.body = (json.encode(apiBody));
-      log('Api body---------------------->${request.body}');
+      log('Api body----------------------> loadhireay list${request.body}');
       request.headers.addAll(ApiConstants.headers);
       http.StreamedResponse response = await request.send();
       var respString = await response.stream.bytesToString();
@@ -990,7 +991,7 @@ class ApiServices {
     try {
       var request = http.Request('POST', Uri.parse(url));
       request.body = (json.encode(apiBody));
-      log('Api body---------------------->${request.body}');
+      log('Api body----------------------> loadobsresult${request.body}');
       request.headers.addAll(ApiConstants.headers);
       http.StreamedResponse response = await request.send();
       var respString = await response.stream.bytesToString();
@@ -1021,7 +1022,7 @@ class ApiServices {
     try {
       var request = http.Request('POST', Uri.parse(url));
       request.body = (json.encode(apiBody));
-      log('Api body---------------------->${request.body}');
+      log('Api body---------------------->get recentlist${request.body}');
       request.headers.addAll(ApiConstants.headers);
       http.StreamedResponse response = await request.send();
       var respString = await response.stream.bytesToString();
@@ -1051,7 +1052,7 @@ class ApiServices {
     try {
       var request = http.Request('POST', Uri.parse(url));
       request.body = (json.encode(apiBody));
-      log('Api body---------------------->${request.body}');
+      log('Api body---------------------->get all studndents list${request.body}');
       request.headers.addAll(ApiConstants.headers);
       http.StreamedResponse response = await request.send();
       var respString = await response.stream.bytesToString();
@@ -1081,7 +1082,7 @@ class ApiServices {
     try {
       var request = http.Request('POST', Uri.parse(url));
       request.body = (json.encode(apiBody));
-      log('Api body---------------------->${request.body}');
+      log('Api body---------------------->pop controler ${request.body}');
       request.headers.addAll(ApiConstants.headers);
       http.StreamedResponse response = await request.send();
       var respString = await response.stream.bytesToString();
@@ -1113,7 +1114,7 @@ class ApiServices {
     try {
       var request = http.Request('POST', Uri.parse(url));
       request.body = (json.encode(apiBody));
-      log('Api body---------------------->${request.body}');
+      log('Api body---------------------->get hos studentlist${request.body}');
       request.headers.addAll(ApiConstants.headers);
       http.StreamedResponse response = await request.send();
       var respString = await response.stream.bytesToString();
@@ -1178,7 +1179,7 @@ class ApiServices {
     try {
       var request = http.Request('POST', Uri.parse(url));
       request.body = (json.encode(apiBody));
-      log('Api body---------------------->${request.body}');
+      log('Api body----------------------> get resend deatials${request.body}');
       request.headers.addAll(ApiConstants.headers);
       http.StreamedResponse response = await request.send();
       var respString = await response.stream.bytesToString();
@@ -1322,7 +1323,7 @@ class ApiServices {
     try {
       var request = http.Request('POST', Uri.parse(url));
       request.body = (json.encode(apiBody));
-      log('Api body---------------------->${request.body}');
+      log('Api body----------------------> submit data${request.body}');
       request.headers.addAll(ApiConstants.headers);
       http.StreamedResponse response = await request.send();
       var respString = await response.stream.bytesToString();
@@ -1349,7 +1350,7 @@ class ApiServices {
     try {
       var request = http.Request('POST', Uri.parse(url));
       request.body = (json.encode(apiBody));
-      log('Api body---------------------->${request.body}');
+      log('Api body----------------------> fcm tomeken send${request.body}');
       request.headers.addAll(ApiConstants.headers);
       http.StreamedResponse response = await request.send();
       var respString = await response.stream.bytesToString();

@@ -184,7 +184,7 @@ class _QuestionRadioFieldsState extends State<QuestionRadioFields> {
                                                       point: 3,
                                                       dbKey: 'Weak',
                                                       alias: 'Weak',
-                                                    );
+                                                    );/*  */
                                                     controller.markedIndicators1.value[i] = Indicator(
                                                       name: lessonWalkList[i].indicator ?? '',
                                                       remark: 'Weak',

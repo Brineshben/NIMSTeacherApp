@@ -108,7 +108,7 @@ class _ObsResultState extends State<ObsResult> {
                                   decoration: InputDecoration(
                                       hintStyle:
                                           const TextStyle(color: Colors.grey,),
-                                      hintText: "Search by Observation Name or Date",
+                                      hintText: "Search by Observer Name or Date",
                                       prefixIcon: const Icon(
                                         Icons.search,
                                         color: Colorutils.userdetailcolor,

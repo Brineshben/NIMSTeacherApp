@@ -386,14 +386,14 @@ class _ObsResultdisplayState extends State<ObsResultdisplay> {
                                             children: [
                                               SizedBox(
                         
-                                                  width: 300.w,
+                                                  width: 370.w,
                                                   child: Row(
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
                                                       SizedBox(
-                                                        width: 60.w,
+                                                        width: 100.w,
                                                         child: Text(
-                                                          'NAME',
+                                                          'Name',
                                                           // 'Observer Name',
                                                           style: TextStyle(fontSize: 14.sp,fontWeight: FontWeight.bold),
                                                         ),
@@ -407,7 +407,7 @@ class _ObsResultdisplayState extends State<ObsResultdisplay> {
                                                         ),
                                                       ),
                                                       SizedBox(
-                                                        width: 230.w,
+                                                        width: 260.w,
                                                         child: Text(
                                                           '${widget.Doneby}',
                                                           // 'Observer',
@@ -427,14 +427,14 @@ class _ObsResultdisplayState extends State<ObsResultdisplay> {
                                           ),
                                           SizedBox(
                         
-                                              width: 300.w,
+                                              width: 370.w,
                                               child: Row(
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   SizedBox(
-                                                    width: 60.w,
+                                                    width: 100.w,
                                                     child: Text(
-                                                      'DATE',
+                                                      'Observed Date',
                                                       // 'Observer Name',
                                                       style: TextStyle(fontSize: 14.sp,fontWeight: FontWeight.bold),
                                                     ),
@@ -510,29 +510,112 @@ class _ObsResultdisplayState extends State<ObsResultdisplay> {
                                             children: [
                                               Type == 'lesson_observation'
                                                   ? Container(
+                                               child: SizedBox(
                         
+                                              width: 370.w,
+                                              child: Row(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  SizedBox(
+                                                    width: 100.w,
+                                                    child:const Text(
+                                                      'Topic',
+                                                      // 'Observer Name',
+                                                      style: TextStyle(
+                                                 fontSize: 14,
+                                               fontWeight: FontWeight.w600,
+                                                     color: Colors.blueAccent),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 10.w,
+                                                    child: const Text(
+                                                      ':',
+                                                      // 'Observer',
+                                                      style:TextStyle(
+                                                 fontSize: 14,
+                                               fontWeight: FontWeight.w600,
+                                                     color: Colors.blueAccent),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 230.w,
+                                                    child: Text(
+                                                      '${topic_lesson.toString()[0].toUpperCase()}${topic_lesson.toString().substring(1, topic_lesson.toString().length)}',
                         
-                                                child: Text(
-                                                  'TOPIC    : ${topic_lesson.toString()[0].toUpperCase()}${topic_lesson.toString().substring(1, topic_lesson.toString().length)}',
-                                                  style: const TextStyle(
-                                                      fontSize: 14,
-                                                      fontWeight: FontWeight.w600,
-                                                      color: Colors.blueAccent),
-                                                ),
+                                                      // 'Observer',
+                                                      style: const TextStyle(
+                                                 fontSize: 14,
+                                               fontWeight: FontWeight.w600,
+                                                     color: Colors.blueAccent),
+                                                    ),
+                                                  ),
+                                                ],
+                                              )),
+                        
+                                                // child: Text(
+                                                //   'Topic             : ${topic_lesson.toString()[0].toUpperCase()}${topic_lesson.toString().substring(1, topic_lesson.toString().length)}',
+                                                //   style: const TextStyle(
+                                                //       fontSize: 14,
+                                                //       fontWeight: FontWeight.w600,
+                                                //       color: Colors.blueAccent),
+                                                // ),
                         
                                               )
+                                              
                                                   : const Text(''),
                                               const SizedBox(height: 3,),
-                                              isjoin != null
-                                                  ? Text(
-                                              //  'JOINED  : ${isjoin.toString()[0].toUpperCase()}${isjoin.toString().substring(1, isjoin.toString().length)}',
-                                               'JOINED :  ${isjoin?'Yes':'No'}',
-                                                style: const TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w600,
-                                                    color: Colors.blueAccent),
-                                              )
-                                                  : const Text(
+                                              isjoin != null?
+                                              //     ? Text(
+                                              // //  'JOINED  : ${isjoin.toString()[0].toUpperCase()}${isjoin.toString().substring(1, isjoin.toString().length)}',
+                                              //  'Joined           :  ${isjoin?'Yes':'No'}',
+                                              //   style: const TextStyle(
+                                              //       fontSize: 14,
+                                              //       fontWeight: FontWeight.w600,
+                                              //       color: Colors.blueAccent),
+                                              // )
+                                              SizedBox(
+                        
+                                              width: 370.w,
+                                              child: Row(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  SizedBox(
+                                                    width: 100.w,
+                                                    child:const Text(
+                                                      'Joined',
+                                                      // 'Observer Name',
+                                                      style: TextStyle(
+                                                 fontSize: 14,
+                                               fontWeight: FontWeight.w600,
+                                                     color: Colors.blueAccent),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 10.w,
+                                                    child: const Text(
+                                                      ':',
+                                                      // 'Observer',
+                                                      style:TextStyle(
+                                                 fontSize: 14,
+                                               fontWeight: FontWeight.w600,
+                                                     color: Colors.blueAccent),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 230.w,
+                                                    child: Text(
+                                                      '${isjoin?'Yes':'No'}',
+                        
+                                                      // 'Observer',
+                                                      style: const TextStyle(
+                                                 fontSize: 14,
+                                               fontWeight: FontWeight.w600,
+                                                     color: Colors.blueAccent),
+                                                    ),
+                                                  ),
+                                                ],
+                                              )): const Text(
                           
                                                '',
                                                 
