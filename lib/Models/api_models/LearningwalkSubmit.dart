@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 class LearningwalkSubmitModel {
   int? id;
@@ -50,13 +51,16 @@ class LearningwalkSubmitModel {
     lwFocus = json['lw_focus'];
     notes = json['notes'];
     observationDate = json['observation_date'];
-    observerRoles = (json['observer_roles']?.isNotEmpty ?? false) ? jsonDecode(json['observer_roles']) : [];
+    observerRoles = (json['observer_roles']?.isNotEmpty ?? false) ? json['observer_roles'].replaceAll("[", "").replaceAll("]", "") : '';
     qsToPuple = json['qs_to_puple'];
     qsToTeacher = json['qs_to_teacher'];
     schoolId = json['school_id'];
     senderId = json['sender_id'];
     sessionId = json['session_id'];
     whatWentWell = json['what_went_well'];
+     print('Lesson observation batch id  $batchId');
+     print('Lesson observation  class id $classId');
+     print('Lesson observation ciculum id $curriculumId');
   }
 
   // Map<String, dynamic> toMap() {

@@ -658,6 +658,12 @@ class _LessonObservationState extends State<LessonObservation> {
                                                     Radius.circular(10.0),
                                                   ).r,
                                                 ),
+                                                
+                                                suffixIcon: Padding(
+                                                  padding:  EdgeInsets.only(right: 35.w),
+                                                  child:  Icon(Icons.calendar_month_outlined,color: Colors.black
+                                                      .withOpacity(0.5),),
+                                                ),
                                                 enabledBorder:
                                                 const OutlineInputBorder(
                                                   borderSide: BorderSide(
@@ -683,6 +689,7 @@ class _LessonObservationState extends State<LessonObservation> {
                                             cursorColor: Colors.grey,
                                             keyboardType: TextInputType.text,
                                             maxLines: 1,
+                                          
                                           ),
                                         ),
                                         ),
