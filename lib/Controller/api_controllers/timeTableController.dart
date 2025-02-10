@@ -1,7 +1,11 @@
 
+import 'dart:io';
+
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:teacherapp/Controller/api_controllers/userAuthController.dart';
 import 'package:teacherapp/Controller/ui_controllers/page_controller.dart';
+import 'package:teacherapp/Services/check_connectivity.dart';
 import '../../Models/api_models/time_table_api_model.dart';
 import '../../Models/api_models/work_load_api_model.dart';
 import '../../Services/api_services.dart';
@@ -10,6 +14,13 @@ class TimeTableController extends GetxController {
   RxBool isLoading = false.obs;
   RxBool isLoaded = false.obs;
   RxBool isError = false.obs;
+  RxBool TimetabelError = false.obs;
+  RxBool conncetion = false.obs;
+
+  //Error Msg
+
+  RxString TableErrorMsg = 'Somthing Went Wrong'.obs;
+  RxString HomeErrorMsg = 'Somthing Went Wrong'.obs;
   RxList<TeacherSubject> teacherSubjects = <TeacherSubject>[].obs;
   RxList<TeacherSubject> classTeacherSubjects = <TeacherSubject>[].obs;
 
@@ -20,12 +31,13 @@ class TimeTableController extends GetxController {
 
   void resetStatus() {
     isLoading.value = false;
-    isError.value = false;
   }
 
   Future<void> fetchTimeTable() async {
     isLoading.value = true;
     isLoaded.value = false;
+    TimetabelError.value  = false;
+    conncetion.value  = await CheckConnectivity().check();
     try {
       String? userId = Get.find<UserAuthController>().userData.value.schoolId;
       String? acYr = Get.find<UserAuthController>().userData.value.academicYear;
@@ -46,11 +58,18 @@ class TimeTableController extends GetxController {
             currentTabIndex.value = week.id ?? 0;
           }
         }
+      }else{
+          TimetabelError.value = true;
+          TableErrorMsg.value = resp['message'];
       }
-      print('its called   perfetchly ');
+      print('its called   perfetchly  ');
         isLoaded.value = true;
-    } catch (e) {
-      print("------time table error---------");
+    }on SocketException {
+      TimetabelError.value =true;
+      print(' this is exep');
+    }catch (e) {
+      print("------time table error---$e------");
+      TimetabelError.value = true;
       isLoaded.value = false;
     } finally {
       resetStatus();
@@ -60,6 +79,8 @@ class TimeTableController extends GetxController {
   Future<void> fetchWorkLoad() async {
     isLoading.value = true;
     isLoaded.value = false;
+    isError.value = false;
+       conncetion.value  = await CheckConnectivity().check();
     try {
       String? userId = Get.find<UserAuthController>().userData.value.userId;
       Map<String, dynamic> resp = await ApiServices.getWorkLoadApi(userId: userId.toString());
@@ -98,14 +119,21 @@ class TimeTableController extends GetxController {
             ));
           }
         }
+      }else{
+         HomeErrorMsg.value = resp['message'];
       }
 
       if(classTeacherSubjects.value.isEmpty) {
         Get.find<PageIndexController>().setMenuItems(userRole: UserRole.teacher, isClassTeacher: false);
       }
        isLoaded.value = true;
+    }on SocketException{
+        HomeErrorMsg.value = 'Check Your Internet';
+      isError.value = true;
     } catch (e) {
-      print("------work load error---------");
+      isError.value = true;
+      print("------work load error----$e-----");
+
       isLoaded.value = false;
     } finally {
       resetStatus();

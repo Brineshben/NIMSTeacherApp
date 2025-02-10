@@ -85,8 +85,10 @@ class _allleaveState extends State<allleave> {
             child: GetX<LeaveApprovalController>(
               builder: (LeaveApprovalController controller) {
                 List<AllLeaves> leaveList = controller.filteredAllLeaves.value.reversed.toList();
-                if(!leaveApprovalController.isLoaded.value){
+                if(leaveApprovalController.isLoading.value){
                   return LeaveApprovelShimmer();
+                }else if(controller.isError.value){
+                  return Center();
                 }else if(leaveList.isNotEmpty) {
                   return RefreshIndicator(
                     onRefresh: () async{

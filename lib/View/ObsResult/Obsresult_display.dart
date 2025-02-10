@@ -1057,7 +1057,7 @@ class _ObsResultdisplayState extends State<ObsResultdisplay> {
                                                     },
                     
                                                     decoration:  const InputDecoration(
-                                                      
+                                                      hintText: 'Type Here',
                                                         hintStyle:
                                                         TextStyle(color: Colors.black26),
                                                         contentPadding: EdgeInsets.symmetric(

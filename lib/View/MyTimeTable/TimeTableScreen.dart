@@ -158,6 +158,19 @@ class _MyTimeTableState extends State<MyTimeTable> {
                         builder: (TimeTableController controller) {
                           List<ResultArray> timeTableList =
                               controller.teacherTimeTable.value;
+                               if(controller.TimetabelError.value){
+                                return  SizedBox(
+                                  height:  900.h,
+                                  child:Container(
+                      child: SizedBox(
+                        height: 400.h,
+                        child: Center(
+                          child: Image.asset("assets/images/nodata.gif"),
+                        ),
+                      ),
+                    ),
+                                );
+                               }
                           return Padding(
                             padding: const EdgeInsets.only(left: 15,
                                           right: 15,),
