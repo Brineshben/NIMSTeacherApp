@@ -82,9 +82,49 @@ class _ApproveRejectedState extends State<ApproveRejected> {
             child: GetX<LeaveApprovalController>
               (builder: (LeaveApprovalController controller) {
               List<ApprovedOrRejected> leaveList = controller.filteredApprovedOrRejectedLeaves.value.reversed.toList();
-             if(!leaveApprovalController.isLoaded.value){
-              return LeaveApprovelShimmer();
-             }else if(leaveList.isNotEmpty) {
+             if(leaveApprovalController.isLoading.value){
+                  return LeaveApprovelShimmer();
+                }else if(leaveApprovalController.isError.value){
+                  return RefreshIndicator(
+                    onRefresh: () async{
+                            initialize();
+                  leaveApprovalController.setCurrentLeaveTab(index: 1);
+                    },
+                    child: ListView(
+                      children: [
+                        SizedBox(
+                           height:  450.h,
+                           child: Center(
+                            child: Text('Somthing Went Wrong.',style: TextStyle(
+                                      color:  Colors.red,fontSize: 19.h
+                                    )
+                                                        ),
+                           ),
+                        ),
+                      ],
+                    ),
+                  );
+                }else if(!leaveApprovalController.connection.value){
+                  return RefreshIndicator(
+                    onRefresh: () async{
+                              initialize();
+                  leaveApprovalController.setCurrentLeaveTab(index: 1);
+                    },
+                    child: ListView(
+                      children: [
+                        SizedBox(
+                           height:  450.h,
+                           child: Center(
+                            child: Text('Internet Not Connected...',style: TextStyle(
+                                      color:  Colors.red,fontSize: 19.h
+                                    )
+                                                        ),
+                           ),
+                        ),
+                      ],
+                    ),
+                  );
+                } else if(leaveList.isNotEmpty) {
                 
                 return RefreshIndicator(
                   onRefresh: () async{
