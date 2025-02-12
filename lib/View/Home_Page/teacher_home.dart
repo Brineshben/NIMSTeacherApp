@@ -24,13 +24,11 @@ class Teacher extends StatefulWidget {
 
 class _TeacherState extends State<Teacher> {
   TimeTableController timeTableController = Get.find<TimeTableController>();
-   bool isloded = false;
-
+  bool isloded = false;
 
   @override
   void initState() {
     print("-------------Arun print-here---");
-
 
     initialize();
     Get.find<Popupcontoller>().fetchAllStudentDateList();
@@ -49,7 +47,7 @@ class _TeacherState extends State<Teacher> {
 
   @override
   void dispose() {
-    if(!mounted) {
+    if (!mounted) {
       context.loaderOverlay.hide();
     }
     super.dispose();
@@ -73,15 +71,14 @@ class _TeacherState extends State<Teacher> {
               ),
               GetX<TimeTableController>(
                 builder: (TimeTableController controller) {
-                   if(!timeTableController.isLoaded.value){
-                return   HomeScreenShimmer();
-                   }
+                  if (!timeTableController.isLoaded.value) {
+                    return HomeScreenShimmer();
+                  }
                   return SizedBox(
                     height: MediaQuery.of(context).size.height * 0.8,
                     child: RefreshIndicator(
-
                       color: Colorutils.userdetailcolor,
-                      onRefresh: () async{
+                      onRefresh: () async {
                         initialize();
                         Get.find<Popupcontoller>().fetchAllStudentDateList();
                       },
@@ -96,11 +93,12 @@ class _TeacherState extends State<Teacher> {
                                 controller.classTeacherSubjects.value,
                           ),
                           SubjectList(
-                              teacherSubjects: controller.teacherSubjects.value),
-                          if(controller.teacherTimeTableToday.value.isNotEmpty)
+                              teacherSubjects:
+                                  controller.teacherSubjects.value),
+                          if (controller.teacherTimeTableToday.value.isNotEmpty)
                             AllTimeTable(
                                 todaySubjects:
-                                controller.teacherTimeTableToday.value),
+                                    controller.teacherTimeTableToday.value),
                           Topic(
                               todaySubjects:
                                   controller.teacherTimeTableToday.value),
@@ -117,4 +115,3 @@ class _TeacherState extends State<Teacher> {
     );
   }
 }
-
