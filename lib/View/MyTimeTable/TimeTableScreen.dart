@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,13 +19,20 @@ class MyTimeTable extends StatefulWidget {
 
 class _MyTimeTableState extends State<MyTimeTable> {
   int _currentIndex = 0;
-
+     final ScrollController  _scrollController =  ScrollController();
+       
   @override
   void initState() {
     setState(() {
-      _currentIndex = Get.find<TimeTableController>().currentTabIndex.value;
+      _currentIndex =    Get.find<TimeTableController>().currentTabIndex.value;
     });
+      
+      WidgetsBinding.instance
+        .addPostFrameCallback((_) => scrolleingset(_currentIndex *40.toDouble())); 
     super.initState();
+  }
+  void scrolleingset(value){
+    _scrollController.animateTo(value,duration: const Duration(milliseconds: 500),curve: Curves.ease);
   }
 
   @override
@@ -150,17 +158,35 @@ class _MyTimeTableState extends State<MyTimeTable> {
                         builder: (TimeTableController controller) {
                           List<ResultArray> timeTableList =
                               controller.teacherTimeTable.value;
-                          return Column(
-                            children: [
-                              Container(
-                                child: SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 15,
-                                        right: 15,
-                                        top: 10,
-                                        bottom: 3),
+                               if(controller.TimetabelError.value){
+                                return  SizedBox(
+                                  height:  900.h,
+                                  child:Container(
+                      child: SizedBox(
+                        height: 400.h,
+                        child: Center(
+                          child: Image.asset("assets/images/nodata.gif"),
+                        ),
+                      ),
+                    ),
+                                );
+                               }
+                          return Padding(
+                            padding: const EdgeInsets.only(left: 15,
+                                          right: 15,),
+                            child: Column(
+                              children: [
+                                Container(
+                                  child: SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                 controller: _scrollController,
+                                
+                                
+ padding:    const EdgeInsets.only(
+                                          left: 2,
+                                          right: 2,
+                                          top: 10,
+                                          bottom: 3),
                                     child: Row(
                                       children: [
                                         for (int i = 0;
@@ -229,140 +255,174 @@ class _MyTimeTableState extends State<MyTimeTable> {
                                     ),
                                   ),
                                 ),
-                              ),
-                              Container(
-                                child: Expanded(
-                                  child: controller.selectedTimetable.isEmpty
-                                      ? const Center(
-                                          child: Text(
-                                              "Timetable not allocated for the particular day"),
+  
+                                Container(
+                                  child: Expanded(
+                                    child: controller.selectedTimetable.isEmpty
+                                        ?   RefreshIndicator(
+                                          onRefresh: () async{
+                                            await  controller.fetchTimeTable();
+                                         
+                                              controller
+                                                        .setSelectedTimetable(
+                                                            result:
+                                                                timeTableList[
+                                                                        _currentIndex]
+                                                                    .timeTable);
+                                         
+                                          },
+                                          child: ListView.builder(
+                                              padding: EdgeInsets.only(top: 300.h),
+                                             itemCount: 1,itemBuilder: (context, index) {
+                                            
+                                            return   Center(
+                                              child: Text(
+                                                  "Timetable not allocated \n   for the particular day"),
+                                            );
+                                          }
+                                          
+                                          ),
                                         )
-                                      : ListView.builder(
-                                          itemCount: controller
-                                              .selectedTimetable.length,
-                                          itemBuilder: (context, index) {
-                                            List<TimeTable> data = controller
-                                                .selectedTimetable.value;
-                                            List<Color> colors = [
-                                              Colorutils.userdetailcolor
-                                                  .withOpacity(0.9),
-                                              Colorutils.Classcolour1
-                                                  .withOpacity(0.9),
-                                              Colorutils.Classcolour3
-                                                  .withOpacity(0.9),
-                                              Colorutils.svguicolour2
-                                                  .withOpacity(0.9),
-                                            ];
-                                            Color color =
-                                                colors[index % colors.length];
-                                            List<Color> colors1 = [
-                                              Colorutils.userdetailcolor
-                                                  .withOpacity(0.8),
-                                              Colorutils.Classcolour1
-                                                  .withOpacity(0.6),
-                                              Colorutils.Classcolour3
-                                                  .withOpacity(0.8),
-                                              Colorutils.svguicolour2
-                                                  .withOpacity(0.8),
-                                            ];
-                                            Color color1 = colors1[
-                                                index % colors.length];
-
-                                            return ListTile(
-                                              title: SizedBox(
-                                                height: 60,
-                                                child: Row(
-                                                  children: [
-                                                    SizedBox(
-                                                      height: 50,
-                                                      width: 150,
-                                                      child: Container(
-                                                        height: 40.w,
-                                                        width: 120.w,
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .symmetric(
-                                                                    horizontal:
-                                                                        5)
-                                                                .w,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: color,
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                      .circular(
-                                                                          12.0)
-                                                                  .r,
-                                                        ),
-                                                        child: Row(
-                                                          mainAxisSize:
-                                                              MainAxisSize
-                                                                  .min,
-                                                          children: [
-                                                            CircleAvatar(
-                                                              radius: 16,
-                                                              backgroundColor:
-                                                                  color1,
-                                                              child: Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(
-                                                                        3),
-                                                                child: Text(
-                                                                    data[index]
-                                                                            .batchName ??
-                                                                        '--',
-                                                                    style: const TextStyle(
-                                                                        color: Colors
-                                                                            .white,
-                                                                        fontSize:
-                                                                            12)),
-                                                              ),
+                                        : RefreshIndicator(
+                                          onRefresh: () async{
+                                           await  controller.fetchTimeTable();
+                                           
+                                              controller
+                                                        .setSelectedTimetable(
+                                                            result:
+                                                                timeTableList[
+                                                                        _currentIndex]
+                                                                    .timeTable);
+                                   
+                                          },
+                                          child: ListView.builder(
+                                              itemCount: controller
+                                                  .selectedTimetable.length,
+                                              itemBuilder: (context, index) {
+                                                List<TimeTable> data = controller
+                                                    .selectedTimetable.value;
+                                                List<Color> colors = [
+                                                  Colorutils.userdetailcolor
+                                                      .withOpacity(0.9),
+                                                  Colorutils.Classcolour1
+                                                      .withOpacity(0.9),
+                                                  Colorutils.Classcolour3
+                                                      .withOpacity(0.9),
+                                                  Colorutils.svguicolour2
+                                                      .withOpacity(0.9),
+                                                ];
+                                                Color color =
+                                                    colors[index % colors.length];
+                                                List<Color> colors1 = [
+                                                  Colorutils.userdetailcolor
+                                                      .withOpacity(0.8),
+                                                  Colorutils.Classcolour1
+                                                      .withOpacity(0.6),
+                                                  Colorutils.Classcolour3
+                                                      .withOpacity(0.8),
+                                                  Colorutils.svguicolour2
+                                                      .withOpacity(0.8),
+                                                ];
+                                                Color color1 = colors1[
+                                                    index % colors.length];
+                                                                      
+                                                return ListTile(
+                                                  title: SizedBox(
+                                                    height: 60,
+                                                    child: Row(
+                                                      children: [
+                                                        SizedBox(
+                                                          height: 50,
+                                                          width: 150,
+                                                          child: Container(
+                                                            height: 40.w,
+                                                            width: 120.w,
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .symmetric(
+                                                                        horizontal:
+                                                                            5)
+                                                                    .w,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color: color,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                          .circular(
+                                                                              12.0)
+                                                                      .r,
                                                             ),
-                                                            SizedBox(
-                                                                width: 5.w),
-                                                            Expanded(
-                                                              child:
-                                                                  SingleChildScrollView(
-                                                                scrollDirection:
-                                                                    Axis.horizontal,
-                                                                child: Row(
-                                                                  children: [
-                                                                    Text(
-                                                                        data[index].subject ??
+                                                            child: Row(
+                                                              mainAxisSize:
+                                                                  MainAxisSize
+                                                                      .min,
+                                                              children: [
+                                                                CircleAvatar(
+                                                                  radius: 16,
+                                                                  backgroundColor:
+                                                                      color1,
+                                                                  child: Padding(
+                                                                    padding:
+                                                                        const EdgeInsets
+                                                                            .all(
+                                                                            3),
+                                                                    child: Text(
+                                                                        data[index]
+                                                                                .batchName ??
                                                                             '--',
                                                                         style: const TextStyle(
-                                                                            color: Colors.white,
-                                                                            fontSize: 15)),
-                                                                  ],
+                                                                            color: Colors
+                                                                                .white,
+                                                                            fontSize:
+                                                                                12)),
+                                                                  ),
                                                                 ),
-                                                              ),
+                                                                SizedBox(
+                                                                    width: 5.w),
+                                                                Expanded(
+                                                                  child:
+                                                                      SingleChildScrollView(
+                                                                    scrollDirection:
+                                                                        Axis.horizontal,
+                                                                    child: Row(
+                                                                      children: [
+                                                                        Text(
+                                                                            data[index].subject ??
+                                                                                '--',
+                                                                            style: const TextStyle(
+                                                                                color: Colors.white,
+                                                                                fontSize: 15)),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
                                                             ),
-                                                          ],
+                                                          ),
                                                         ),
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      height: 50,
-                                                      width: 150,
-                                                      child: Center(
-                                                        child: Text(
-                                                          "${data[index].timeString?.replaceAll("[", "").replaceAll("]", "").split("-").first} - ${data[index].timeString?.replaceAll("[", "").replaceAll("]", "").split("-").last}",
-                                                          style: TextStyle(
-                                                              color: color,
-                                                              fontSize: 12),
+                                                        SizedBox(
+                                                          height: 50,
+                                                          width: 150,
+                                                          child: Center(
+                                                            child: Text(
+                                                              "${data[index].timeString?.replaceAll("[", "").replaceAll("]", "").split("-").first} - ${data[index].timeString?.replaceAll("[", "").replaceAll("]", "").split("-").last}",
+                                                              style: TextStyle(
+                                                                  color: color,
+                                                                  fontSize: 12),
+                                                            ),
+                                                          ),
                                                         ),
-                                                      ),
+                                                      ],
                                                     ),
-                                                  ],
-                                                ),
-                                              ),
-                                            );
-                                          },
+                                                  ),
+                                                );
+                                              },
+                                            ),
                                         ),
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           );
                         },
                       ),

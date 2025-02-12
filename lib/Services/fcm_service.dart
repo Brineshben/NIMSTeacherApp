@@ -42,8 +42,13 @@ class FcmService extends GetxService {
     String channelId = 'notification_id_${notification['sound'] ?? 'default'}';
 
     if(notification['title'] != null) {
+      int notiId = notification.hashCode;
+      if(notification['category'] == 'chat') {
+        notiId = "${notification['class']}${notification['batch']}${notification['subject_Id']}".hashCode;
+        await removeNotificationWithPayload(notiId);
+      }
       flutterLocalNotificationsPlugin.show(
-        notification.hashCode,
+        notiId,
         notification['title'],
         notification['message'],
         NotificationDetails(
@@ -73,6 +78,18 @@ class FcmService extends GetxService {
     }
   }
 
+  Future<void> removeNotificationWithPayload(int targetMessageId) async {
+    final List<ActiveNotification> activeNotifications =
+    await flutterLocalNotificationsPlugin.getActiveNotifications();
+
+    for (var notification in activeNotifications) {
+      if (notification.id == targetMessageId) {
+        await flutterLocalNotificationsPlugin.cancel(notification.id ?? 0);
+        break;
+      }
+    }
+  }
+
 
   //Background
   // Future<void> _fcmBackgroundHandler(RemoteMessage message) async {
@@ -94,7 +111,7 @@ class FcmService extends GetxService {
     //Foreground Handler
     requestPermission();
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print("------gbfgb--------${message.data}");
+      print("------gbfgb--------${message.toMap()}");
       Map<String, dynamic>? notification = message.data;
       displayNotification(notification);
       // AndroidNotification? android = message.notification?.android;

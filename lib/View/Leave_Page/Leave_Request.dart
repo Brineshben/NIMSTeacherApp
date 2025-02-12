@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:loader_overlay/loader_overlay.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:teacherapp/Controller/api_controllers/leaveRequestController.dart';
 import 'package:teacherapp/Utils/api_constants.dart';
 import 'package:teacherapp/View/Leave_Page/leave_apply.dart';
@@ -31,7 +32,8 @@ class _LeaveRequestState extends State<LeaveRequest>
 
   @override
   void initState() {
-    initialize();
+     initialize();
+
     _searchController.addListener(() {
       setState(() {});
     });
@@ -40,10 +42,10 @@ class _LeaveRequestState extends State<LeaveRequest>
   }
 
   Future<void> initialize() async {
-    context.loaderOverlay.show();
+    // context.loaderOverlay.show();
     await leaveRequestController.fetchLeaveReqList();
     if (!mounted) return;
-    context.loaderOverlay.hide();
+    // context.loaderOverlay.hide();
   }
 
   @override
@@ -121,6 +123,7 @@ class _LeaveRequestState extends State<LeaveRequest>
                       ],
                     ),
                     child: SingleChildScrollView(
+                      physics: NeverScrollableScrollPhysics(),
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -179,7 +182,7 @@ class _LeaveRequestState extends State<LeaveRequest>
                                                           onTap: () {
                                                             setState(() {
                                                               print(
-                                                                  "object----------------------------------");
+                                                                  "object--------------------------------- $index");
                                                               _currentIndex =
                                                                   index;
                                                               controller.setStudentList(
@@ -309,195 +312,264 @@ class _LeaveRequestState extends State<LeaveRequest>
                                       .toUpperCase()
                                       .compareTo(b.name!.trim().toUpperCase()),
                                 );
-
-                                if (studentList.isNotEmpty) {
+                    
+                               if(leaveRequestController.isLoading.value){
+                                return const LeaveApplyShimmer();
+                               }else if(!leaveRequestController.conncetion.value){
+                                return SizedBox(
+                height: ScreenUtil().screenHeight * 0.6,
+                child: RefreshIndicator(
+                  onRefresh: () async{
+                      await initialize();
+                                         
+                                        setState(() {
+                                          if(leaveRequestController.filteredStudentList.isNotEmpty){
+                                            _currentIndex= 0;
+                                          }
+                                        });
+                  },
+                  child: ListView(
+                    children :[
+                      SizedBox(height: 200.h,),
+                       Center(
+                      child:   Text('Internet Not Connected..',style: TextStyle(
+                                color:  Colors.red,fontSize: 19.h
+                              )
+                    ),
+                                    )]
+                  ),
+                ));
+                               }else if(leaveRequestController.isError.value){
+                                 return SizedBox(
+                height: ScreenUtil().screenHeight * 0.6,
+                child: RefreshIndicator(
+                  onRefresh: () async{
+                      await initialize();
+                                         
+                                        setState(() {
+                                          if(leaveRequestController.filteredStudentList.isNotEmpty){
+                                            _currentIndex= 0;
+                                          }
+                                        });
+                  },
+                  child: ListView(
+                    children :[
+                      SizedBox(height: 200.h,),
+                       Center(
+                      child:  Text('Somthing Went Wrong',style: TextStyle(
+                                    color:  Colors.red,fontSize: 19.h
+                                  ),
+                    ),
+                                    )]
+                  ),
+                ));
+                               }else if (studentList.isNotEmpty) {
                                   return SizedBox(
                                     height: ScreenUtil().screenHeight * 0.7,
-                                    child: SingleChildScrollView(
-                                      padding: EdgeInsets.only(
-                                              bottom: View.of(context)
-                                                          .viewInsets
-                                                          .bottom ==
-                                                      0
-                                                  ? 200
-                                                  : 400)
-                                          .h,
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          for (int i = 0;
-                                              i < studentList.length;
-                                              i++)
-                                            InkWell(
-                                              onTap: () {
-                                                Navigator.of(context).push(
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        LeaveApply(
-                                                      studentsData:
-                                                          studentList[i],
-                                                      claas: controller
-                                                          .claass.value,
-                                                      batch: controller
-                                                          .batch.value,
+                                    child: RefreshIndicator(
+                                      onRefresh: () async{
+                                        await initialize();
+                                         
+                                        setState(() {
+                                          if(leaveRequestController.filteredStudentList.isNotEmpty){
+                                            _currentIndex= 0;
+                                          }
+                                        });
+                                      },
+                                      child: SingleChildScrollView(
+                                        padding: EdgeInsets.only(
+                                                bottom: View.of(context)
+                                                            .viewInsets
+                                                            .bottom ==
+                                                        0
+                                                    ? 200
+                                                    : 400)
+                                            .h,
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            for (int i = 0;
+                                                i < studentList.length;
+                                                i++)
+                                              InkWell(
+                                                onTap: () {
+                                                  Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          LeaveApply(
+                                                        studentsData:
+                                                            studentList[i],
+                                                        claas: controller
+                                                            .claass.value,
+                                                        batch: controller
+                                                            .batch.value,
+                                                      ),
                                                     ),
-                                                  ),
-                                                );
-                                              },
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 10,
-                                                    left: 15,
-                                                    right: 15,
-                                                    bottom: 5),
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
-                                                      color: Colorutils
-                                                          .chatcolor
-                                                          .withOpacity(0.05),
-                                                      border: Border.all(
-                                                          color: Colorutils
-                                                              .chatcolor)),
-                                                  child: Padding(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        horizontal: 8,
-                                                        vertical: 8),
-                                                    child: Row(
-                                                      children: [
-                                                        Container(
-                                                          width: 50.w,
-                                                          height: 50.h,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            shape:
-                                                                BoxShape.circle,
-                                                            border: Border.all(
-                                                                color: Colorutils
-                                                                    .chatcolor),
-                                                          ),
-                                                          child: ClipRRect(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                        .circular(
-                                                                            100)
-                                                                    .r,
-                                                            child:
-                                                                CachedNetworkImage(
-                                                              imageUrl:
-                                                                  "${ApiConstants.downloadUrl}${studentList[i].profileImage}",
-                                                              placeholder:
-                                                                  (context,
-                                                                          url) =>
-                                                                      Center(
-                                                                child: Text(
-                                                                  studentList[i]
-                                                                          .name
-                                                                          ?.substring(
-                                                                              0,
-                                                                              1) ??
-                                                                      '',
-                                                                  style: const TextStyle(
-                                                                      color: Color(
-                                                                          0xFFB1BFFF),
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      fontSize:
-                                                                          20),
+                                                  );
+                                                },
+                                                child: Padding(
+                                                  padding: const EdgeInsets.only(
+                                                      top: 10,
+                                                      left: 15,
+                                                      right: 15,
+                                                      bottom: 5),
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                                10),
+                                                        color: Colorutils
+                                                            .chatcolor
+                                                            .withOpacity(0.05),
+                                                        border: Border.all(
+                                                            color: Colorutils
+                                                                .chatcolor)),
+                                                    child: Padding(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 8,
+                                                          vertical: 8),
+                                                      child: Row(
+                                                        children: [
+                                                          Container(
+                                                            width: 50.w,
+                                                            height: 50.h,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              shape:
+                                                                  BoxShape.circle,
+                                                              border: Border.all(
+                                                                  color: Colorutils
+                                                                      .chatcolor),
+                                                            ),
+                                                            child: ClipRRect(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                          .circular(
+                                                                              100)
+                                                                      .r,
+                                                              child:
+                                                                  CachedNetworkImage(
+                                                                imageUrl:
+                                                                    "${ApiConstants.downloadUrl}${studentList[i].profileImage}",
+                                                                placeholder:
+                                                                    (context,
+                                                                            url) =>
+                                                                        Center(
+                                                                  child: Text(
+                                                                    studentList[i]
+                                                                            .name
+                                                                            ?.substring(
+                                                                                0,
+                                                                                1) ??
+                                                                        '',
+                                                                    style: const TextStyle(
+                                                                        color: Color(
+                                                                            0xFFB1BFFF),
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
+                                                                        fontSize:
+                                                                            20),
+                                                                  ),
                                                                 ),
-                                                              ),
-                                                              errorWidget:
-                                                                  (context, url,
-                                                                          error) =>
-                                                                      Center(
-                                                                child: Text(
-                                                                  studentList[i]
-                                                                          .name
-                                                                          ?.substring(
-                                                                              0,
-                                                                              1) ??
-                                                                      '',
-                                                                  style: const TextStyle(
-                                                                      color: Color(
-                                                                          0xFFB1BFFF),
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      fontSize:
-                                                                          20),
+                                                                errorWidget:
+                                                                    (context, url,
+                                                                            error) =>
+                                                                        Center(
+                                                                  child: Text(
+                                                                    studentList[i]
+                                                                            .name
+                                                                            ?.substring(
+                                                                                0,
+                                                                                1) ??
+                                                                        '',
+                                                                    style: const TextStyle(
+                                                                        color: Color(
+                                                                            0xFFB1BFFF),
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
+                                                                        fontSize:
+                                                                            20),
+                                                                  ),
                                                                 ),
                                                               ),
                                                             ),
                                                           ),
-                                                        ),
-                                                        SizedBox(
-                                                          width: 10.w,
-                                                        ),
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .only(
-                                                                  left: 5),
-                                                          child: Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              SizedBox(
-                                                                width: 250.w,
-                                                                child: Text(
-                                                                  studentList[i]
-                                                                          .name
-                                                                          ?.toUpperCase() ??
-                                                                      '--',
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis,
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          16.sp,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w600),
-                                                                ),
-                                                              ),
-                                                              SizedBox(
-                                                                width: 250.w,
-                                                                child: Text(
-                                                                  "Adm. No. : ${studentList[i].admissionNumber ?? '--'}",
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          16.sp,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w400),
-                                                                ),
-                                                              ),
-                                                            ],
+                                                          SizedBox(
+                                                            width: 10.w,
                                                           ),
-                                                        )
-                                                      ],
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .only(
+                                                                    left: 5),
+                                                            child: Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                SizedBox(
+                                                                  width: 250.w,
+                                                                  child: Text(
+                                                                    studentList[i]
+                                                                            .name
+                                                                            ?.toUpperCase() ??
+                                                                        '--',
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            16.sp,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .w600),
+                                                                  ),
+                                                                ),
+                                                                SizedBox(
+                                                                  width: 250.w,
+                                                                  child: Text(
+                                                                    "Adm. No. : ${studentList[i].admissionNumber ?? '--'}",
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            16.sp,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .w400),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   );
                                 } else {
-                                  return SizedBox(
-                                    height: ScreenUtil().screenHeight * 0.7,
-                                    child: SizedBox(
-                                      height: 250.h,
-                                      child: Center(
-                                        child: Image.asset(
-                                            "assets/images/nodata.gif"),
+                                  return RefreshIndicator(
+                                    onRefresh: ()  async{
+                                     await initialize();
+                                    },
+                                    child: SingleChildScrollView(
+                                      physics: const AlwaysScrollableScrollPhysics(),
+                                      child: SizedBox(
+                                        height: ScreenUtil().screenHeight * 0.7,
+                                        child: SizedBox(
+                                          height: 250.h,
+                                          child: Center(
+                                            child: Image.asset(
+                                                "assets/images/nodata.gif"),
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   );
@@ -526,4 +598,62 @@ String capitalizeFirstLetterOfEachWord(String input) {
     print("$removeSpace...........removeSpace..............");
     return removeSpace[0].toUpperCase() + removeSpace.substring(1);
   }).join(' ');
+}
+
+
+class LeaveApplyShimmer extends StatelessWidget {
+  const LeaveApplyShimmer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+    height: ScreenUtil().screenHeight * 0.7,
+         child: ListView.separated(
+          separatorBuilder: (context, index) {
+            return SizedBox(height: 4.h,);
+          },
+       padding: const EdgeInsets.only(
+                                                      top: 10,
+                                                      left: 15,
+                                                      right: 15,
+                                                      bottom: 5),
+          itemCount: 10,
+          itemBuilder: (context,indext){
+          return Container(
+           decoration:  BoxDecoration(
+             borderRadius:
+                                                            BorderRadius.circular(
+                                                                10),
+            color: Colors.grey[50]
+           ),
+            child: Shimmer.fromColors(
+              baseColor:  Colors.grey[200]!,
+              highlightColor: Colors.grey[300]!,
+              child: ListTile(
+                leading: Container(
+                   height:  45.h,
+                   width: 45.w,
+                  decoration:  BoxDecoration(
+                    color:  Colors.blue,
+                     borderRadius: BorderRadius.circular(30.r)
+                    
+                  ),
+                ),
+                trailing: const Text(''),
+                  title: Container(height: 10.h,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color:  Colors.blue),
+                  ),
+                  subtitle:   Container(height: 8.h,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color:  Colors.blue),
+                  ),
+              ),
+            ),
+          );
+         }), 
+      );
+  }
 }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -54,6 +56,7 @@ class LearningWalkDB {
   }
 
   Future<int> insertLearningWalk(Map<String, dynamic> data) async {
+    data['observer_roles'] = jsonEncode(data['observer_roles']);
     final db = await database;
     return await db.insert('learning_walks', data);
   }
@@ -70,8 +73,13 @@ class LearningWalkDB {
   Future<List<LearningwalkSubmitModel>> fetchLearningWalks() async {
     final db = await database;
     List<Map<String, dynamic>> data = await db.query('learning_walks');
-    List<LearningwalkSubmitModel> resp =
-        data.map((e) => LearningwalkSubmitModel.fromJson(e)).toList();
+    List<LearningwalkSubmitModel> resp = data.map((e) {
+      final mutableMap = Map<String, dynamic>.from(e);
+
+      mutableMap['observer_roles'] = jsonDecode(mutableMap['observer_roles']);
+
+      return LearningwalkSubmitModel.fromJson(mutableMap);
+    }).toList();
     return resp;
   }
 }

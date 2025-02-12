@@ -81,6 +81,14 @@ class LearningWalkController extends GetxController {
     } finally {}
   }
 
+  void setSelectedBatch({required String division}) {
+    for (var batch in batchDetils.value) {
+      if(batch.name == division) {
+        batchDetails.value = batch;
+      }
+    }
+  }
+
   Future<void> fetchteacherdata(String batchDetail) async {
     for (var batch in batchDetils.value) {
       if (batch.name == batchDetail) {

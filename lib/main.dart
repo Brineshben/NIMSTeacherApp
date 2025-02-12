@@ -67,8 +67,13 @@ Future<void> _fcmBackgroundHandler(RemoteMessage message) async {
   // Prepare the notification
   Map<String, dynamic> notification = message.data;
   if (notification['title'] != null) {
+    int notiId = notification.hashCode;
+    if(notification['category'] == 'chat') {
+      notiId = "${notification['class']}${notification['batch']}${notification['subject_Id']}".hashCode;
+      await FcmService().removeNotificationWithPayload(notiId);
+    }
     flutterLocalNotificationsPlugin.show(
-      notification.hashCode,
+      notiId,
       notification['title'],
       notification['message'],
       NotificationDetails(

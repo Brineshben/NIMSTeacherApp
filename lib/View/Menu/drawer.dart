@@ -1,10 +1,11 @@
+import 'dart:async';
 import 'dart:convert';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:teacherapp/Controller/api_controllers/chatClassGroupController.dart';
 import 'package:teacherapp/Controller/api_controllers/feedViewController.dart';
@@ -29,35 +30,32 @@ class _DrawerScreenState extends State<DrawerScreen> {
   final ZoomDrawerController _drawerController = ZoomDrawerController();
 
   Future<void> setupInteractedMessage() async {
-    RemoteMessage? initialMessage =
-        await FirebaseMessaging.instance.getInitialMessage();
-
-    if (initialMessage != null) {
-      _handleMessage(initialMessage);
-    }
-
-    FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
 
     flutterLocalNotificationsPlugin.initialize(
       const InitializationSettings(
         android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+        iOS: DarwinInitializationSettings(),
       ),
       onDidReceiveNotificationResponse: (NotificationResponse response) {
         if (response.payload != null) {
-          RemoteMessage message = RemoteMessage(
-            data: json.decode(response.payload!),
-          );
-          _handleMessage(message);
+          try {
+            final data = json.decode(response.payload!);
+            RemoteMessage message = RemoteMessage(data: data);
+            _handleMessage(message);
+          } catch (e) {
+            print("Error decoding notification payload: $e");
+          }
         }
       },
     );
   }
 
-  void _handleMessage(RemoteMessage message) {
+  Future<void> _handleMessage(RemoteMessage message) async {
     if (message.data['category'] == 'student_tracking') {
+      Get.find<PageIndexController>().message.value = message;
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => const DrawerScreen()),
-          (route) => false);
+              (route) => false);
       if (Get.find<PageIndexController>().navLength.value == 4) {
         Get.find<HomeController>().currentIndex.value = 3;
         Get.find<PageIndexController>().changePage(currentPage: 3);
@@ -67,39 +65,61 @@ class _DrawerScreenState extends State<DrawerScreen> {
       }
     } else if (message.data['category'] == 'chat') {
       print("push Notification data ----------------------- ${message.data}");
-      Get.delete<FeedViewController>();
-      Get.put(FeedViewController());
-      Get.delete<ChatClassGroupController>();
-      Get.put(ChatClassGroupController());
-      Get.delete<ParentChatListController>();
-      Get.put(ParentChatListController());
+      if(Get.find<PageIndexController>().message.value == null) {
+        Get.find<PageIndexController>().message.value = message;
+        if(Get.find<HomeController>().currentIndex.value == 2) {
+          Get.find<HomeController>().currentIndex.value = 0;
+          Get.find<PageIndexController>().changePage(currentPage: 0);
+        }
 
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const DrawerScreen()),
-          (route) => false);
-      Get.find<HomeController>().currentIndex.value = 2;
-      Get.find<PageIndexController>().changePage(currentPage: 2);
+        await Future.wait([
+          Get.delete<FeedViewController>().then((_) => Get.lazyPut(() => FeedViewController())),
+          Get.delete<ChatClassGroupController>().then((_) => Get.lazyPut(() => ChatClassGroupController())),
+          Get.delete<ParentChatListController>().then((_) => Get.lazyPut(() => ParentChatListController())),
+        ]);
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => FeedViewChatScreen(
-            msgData: ClassTeacherGroup(
-              classTeacherClass: message.data['class'],
-              batch: message.data['batch'],
-              subjectId: message.data['subject_Id'],
-              subjectName: message.data['subject'],
+        Get.find<HomeController>().currentIndex.value = 2;
+        Get.find<PageIndexController>().changePage(currentPage: 2);
+
+        if(Get.find<PageIndexController>().isChatScreen.value) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => FeedViewChatScreen(
+                msgData: ClassTeacherGroup(
+                  classTeacherClass: message.data['class'],
+                  batch: message.data['batch'],
+                  subjectId: message.data['subject_Id'],
+                  subjectName: message.data['subject'],
+                ),
+              ),
             ),
-          ),
-        ),
-      );
+          );
+        } else {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => FeedViewChatScreen(
+                msgData: ClassTeacherGroup(
+                  classTeacherClass: message.data['class'],
+                  batch: message.data['batch'],
+                  subjectId: message.data['subject_Id'],
+                  subjectName: message.data['subject'],
+                ),
+              ),
+            ),
+          );
+        }
+      }
     }
   }
 
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setupInteractedMessage();
+    },);
     super.initState();
-    setupInteractedMessage();
   }
 
   @override

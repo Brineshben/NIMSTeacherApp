@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:shimmer/shimmer.dart';
 
 import '../../Controller/api_controllers/userAuthController.dart';
 import '../../Utils/Colors.dart';
@@ -72,6 +73,7 @@ class _ObsResultdisplayState extends State<ObsResultdisplay> {
   var TeacherComment;
   var count;
   int Count = 0;
+   bool isloaded = false;
   Map<String, dynamic>? notificationResult;
 
   Timer? timer;
@@ -83,6 +85,7 @@ class _ObsResultdisplayState extends State<ObsResultdisplay> {
 
   Future getObservationResultdata() async {
     print('callingdetdata');
+    isloaded = false;
     setState(() {
       isSpinner = true;
     });
@@ -141,11 +144,13 @@ class _ObsResultdisplayState extends State<ObsResultdisplay> {
         TeacherComment =
             ObservationResult!['data']['details']['teacherComment'];
         _teachertextController = TextEditingController(text: TeacherComment);
+        isloaded = true;
         print('....Strength$Strength');
         print('....total_percentage$total_percentage');
         print('....total_grade$total_grade');
         print('....Areasforimprovements$Areasforimprovements');
         print('....RemedialMeasures$RemedialMeasures');
+        print('isjoind type is bool or null$isjoin');
       });
       _summarytextController.text = Strength;
       _whatwentwelltextController.text = Areasforimprovements;
@@ -323,64 +328,113 @@ class _ObsResultdisplayState extends State<ObsResultdisplay> {
                     ],
                   ),
 
-
-                  child: SingleChildScrollView(
-
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10,top: 10,bottom: 30),
-                          child:SingleChildScrollView(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                  height: 10.h,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(5, 0, 15, 0),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
+        
+                  child: RefreshIndicator(
+                    onRefresh: () async{
+                       await  getObservationResultdata();
+                    },
+        child: SingleChildScrollView(
+                          
+                      child: Form(
+                        key: _formKey,
+                        child:  !isloaded?ObservationPageShimmer(): Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            
+                            Padding(
+                              padding: const EdgeInsets.only(left: 10,top: 10,bottom: 30),
+                              child:SingleChildScrollView(
+                                 
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                       
+                                    SizedBox(
+                                      height: 10.h,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(5, 0, 15, 0),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Text(
-                                  '${widget.Subject_name}',
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.w600,
-                                                color: Colors.blue[800]),
+                                          Row(
+                                            children: [
+                                              Text(
+                                      '${widget.Subject_name}',
+                                                style: TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.w600,
+                                                    color: Colors.blue[800]),
+                                              ),
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
+                                              Text(
+                                                '- $class_and_batch',
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w600,
+                                                    color: Colors.blue[800]),
+                                              ),
+                                            ],
                                           ),
-                                          const SizedBox(
-                                            width: 10,
-                                          ),
-                                          Text(
-                                            '- $class_and_batch',
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w600,
-                                                color: Colors.blue[800]),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 20.h,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
                                           SizedBox(
-
-                                              width: 300.w,
+                                            height: 20.h,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              SizedBox(
+                        
+                                                  width: 370.w,
+                                                  child: Row(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      SizedBox(
+                                                        width: 100.w,
+                                                        child: Text(
+                                                          'Name',
+                                                          // 'Observer Name',
+                                                          style: TextStyle(fontSize: 14.sp,fontWeight: FontWeight.bold),
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        width: 10.w,
+                                                        child: Text(
+                                                          ':',
+                                                          // 'Observer',
+                                                          style: TextStyle(fontSize: 14.sp,),
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        width: 260.w,
+                                                        child: Text(
+                                                          '${widget.Doneby}',
+                                                          // 'Observer',
+                                                          style: TextStyle(fontSize: 14.sp,),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  )),
+                                              // SizedBox(
+                                              //   width: 150.w,
+                                              // ),
+                        
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 10.h,
+                                          ),
+                                          SizedBox(
+                        
+                                              width: 370.w,
                                               child: Row(
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   SizedBox(
-                                                    width: 60.w,
+                                                    width: 100.w,
                                                     child: Text(
-                                                      'NAME',
+                                                      'Observed Date',
                                                       // 'Observer Name',
                                                       style: TextStyle(fontSize: 14.sp,fontWeight: FontWeight.bold),
                                                     ),
@@ -396,681 +450,739 @@ class _ObsResultdisplayState extends State<ObsResultdisplay> {
                                                   SizedBox(
                                                     width: 230.w,
                                                     child: Text(
-                                                      '${widget.Doneby}',
+                                                      '${widget.Date!.split('T')[0].split('-').last}-${widget.Date!.split('T')[0].split('-')[1]}-${widget.Date!.split('T')[0].split('-').first}',
+                        
                                                       // 'Observer',
                                                       style: TextStyle(fontSize: 14.sp,),
                                                     ),
                                                   ),
                                                 ],
                                               )),
-                                          // SizedBox(
-                                          //   width: 150.w,
-                                          // ),
-
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 10.h,
-                                      ),
-                                      SizedBox(
-
-                                          width: 300.w,
-                                          child: Row(
+                                          SizedBox(
+                                            height: 5.h,
+                                          ),
+                                          // Container(
+                                          //
+                                          //     width: 300.w,
+                                          //     child: Row(
+                                          //       crossAxisAlignment: CrossAxisAlignment.start,
+                                          //       children: [
+                                          //         Container(
+                                          //           width: 60.w,
+                                          //           child: Text(
+                                          //             'TOPIC',
+                                          //             // 'Observer Name',
+                                          //             style: TextStyle(fontSize: 14.sp,fontWeight: FontWeight.bold),
+                                          //           ),
+                                          //         ),
+                                          //         Container(
+                                          //           width: 10.w,
+                                          //           child: Text(
+                                          //             ':',
+                                          //             // 'Observer',
+                                          //             style: TextStyle(fontSize: 14.sp,),
+                                          //           ),
+                                          //         ),
+                                          //         SingleChildScrollView(
+                                          //           scrollDirection: Axis.horizontal,
+                                          //           child: Row(
+                                          //             children: [
+                                          //               Container(
+                                          //                 width: 230.w,
+                                          //                 child: Text(
+                                          //                   maxLines: 1,
+                                          //                   'Arts and Science Eductaion wefgergh werqghdfgfbger4b',
+                                          //                   // 'Observer',
+                                          //                   style: TextStyle(fontSize: 14.sp,),
+                                          //                 ),
+                                          //               ),
+                                          //             ],
+                                          //           ),
+                                          //         ),
+                                          //       ],
+                                          //     )),
+                                          topic_lesson != null
+                                              ? Column(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.start,
                                             crossAxisAlignment: CrossAxisAlignment.start,
+                        
                                             children: [
-                                              SizedBox(
-                                                width: 60.w,
-                                                child: Text(
-                                                  'DATE',
-                                                  // 'Observer Name',
-                                                  style: TextStyle(fontSize: 14.sp,fontWeight: FontWeight.bold),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: 10.w,
-                                                child: Text(
-                                                  ':',
-                                                  // 'Observer',
-                                                  style: TextStyle(fontSize: 14.sp,),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: 230.w,
-                                                child: Text(
-                                                  '${widget.Date!.split('T')[0].split('-').last}-${widget.Date!.split('T')[0].split('-')[1]}-${widget.Date!.split('T')[0].split('-').first}',
-
-                                                  // 'Observer',
-                                                  style: TextStyle(fontSize: 14.sp,),
-                                                ),
-                                              ),
-                                            ],
-                                          )),
-                                      SizedBox(
-                                        height: 5.h,
-                                      ),
-                                      // Container(
-                                      //
-                                      //     width: 300.w,
-                                      //     child: Row(
-                                      //       crossAxisAlignment: CrossAxisAlignment.start,
-                                      //       children: [
-                                      //         Container(
-                                      //           width: 60.w,
-                                      //           child: Text(
-                                      //             'TOPIC',
-                                      //             // 'Observer Name',
-                                      //             style: TextStyle(fontSize: 14.sp,fontWeight: FontWeight.bold),
-                                      //           ),
-                                      //         ),
-                                      //         Container(
-                                      //           width: 10.w,
-                                      //           child: Text(
-                                      //             ':',
-                                      //             // 'Observer',
-                                      //             style: TextStyle(fontSize: 14.sp,),
-                                      //           ),
-                                      //         ),
-                                      //         SingleChildScrollView(
-                                      //           scrollDirection: Axis.horizontal,
-                                      //           child: Row(
-                                      //             children: [
-                                      //               Container(
-                                      //                 width: 230.w,
-                                      //                 child: Text(
-                                      //                   maxLines: 1,
-                                      //                   'Arts and Science Eductaion wefgergh werqghdfgfbger4b',
-                                      //                   // 'Observer',
-                                      //                   style: TextStyle(fontSize: 14.sp,),
-                                      //                 ),
-                                      //               ),
-                                      //             ],
-                                      //           ),
-                                      //         ),
-                                      //       ],
-                                      //     )),
-                                      topic_lesson != null
-                                          ? Column(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-
-                                        children: [
-                                          Type == 'lesson_observation'
-                                              ? Container(
-
-
-                                            child: Text(
-                                              'TOPIC    : ${topic_lesson.toString()[0].toUpperCase()}${topic_lesson.toString().substring(1, topic_lesson.toString().length)}',
-                                              style: const TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Colors.blueAccent),
-                                            ),
-
-                                          )
-                                              : const Text(''),
-                                          const SizedBox(height: 3,),
-                                          isjoin != null
-                                              ? Text(
-                                            'JOINED  : ${isjoin.toString()[0].toUpperCase()}${isjoin.toString().substring(1, isjoin.toString().length)}',
-                                            style: const TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w600,
-                                                color: Colors.blueAccent),
-                                          )
-                                              : const Text('')
-                                        ],
-                                      )
-                                          : Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'Joined:${isjoin.toString()[0].toUpperCase()}${isjoin.toString().substring(1, isjoin.toString().length)}',
-                                            style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w600,
-                                                color: Colors.blueAccent),
-                                          )
-                                        ],
-                                      ),
-
-
-                                      // Container(
-                                      //
-                                      //     width: 300.w,
-                                      //     child: Row(
-                                      //       crossAxisAlignment: CrossAxisAlignment.start,
-                                      //       children: [
-                                      //         Container(
-                                      //           width: 60.w,
-                                      //           child: Text(
-                                      //             'JOINED',
-                                      //             // 'Observer Name',
-                                      //             style: TextStyle(fontSize: 14.sp,fontWeight: FontWeight.bold,color: Colors.blue),
-                                      //           ),
-                                      //         ),
-                                      //         Container(
-                                      //           width: 10.w,
-                                      //           child: Text(
-                                      //             ':',
-                                      //             // 'Observer',
-                                      //             style: TextStyle(fontSize: 14.sp,color: Colors.blue),
-                                      //           ),
-                                      //         ),
-                                      //         Container(
-                                      //           width: 230.w,
-                                      //           child: Text(
-                                      //             'NO',
-                                      //             // 'Observer',
-                                      //             style: TextStyle(fontSize: 14.sp,color: Colors.blue),
-                                      //           ),
-                                      //         ),
-                                      //       ],
-                                      //     )),
-
-
-
-                                      //     ? Row(
-                                      //   mainAxisAlignment:
-                                      //   MainAxisAlignment.spaceBetween,
-                                      //   children: [
-                                      //     Type == 'lesson_observation'
-                                      //         ? Container(
-                                      //       width: 200.w,
-                                      //       child: Text(
-                                      //         'Topic:${topic_lesson.toString()[0].toUpperCase()}${topic_lesson.toString().substring(1, topic_lesson.toString().length)}',
-                                      //         style: TextStyle(
-                                      //             fontSize: 16,
-                                      //             fontWeight: FontWeight.w600,
-                                      //             color: Colors.blueAccent),
-                                      //       ),
-                                      //     )
-                                      //         : Text(''),
-                                      //     isjoin != null
-                                      //         ? Text(
-                                      //       'Joined:${isjoin.toString()[0].toUpperCase()}${isjoin.toString().substring(1, isjoin.toString().length)}',
-                                      //       style: TextStyle(
-                                      //           fontSize: 16,
-                                      //           fontWeight: FontWeight.w600,
-                                      //           color: Colors.blueAccent),
-                                      //     )
-                                      //         : Text('')
-                                      //   ],
-                                      // )
-                                      //     : Row(
-                                      //   mainAxisAlignment: MainAxisAlignment.start,
-                                      //   children: [
-                                      //     Text(
-                                      //       'Joined:${isjoin.toString()[0].toUpperCase()}${isjoin.toString().substring(1, isjoin.toString().length)}',
-                                      //       style: TextStyle(
-                                      //           fontSize: 16,
-                                      //           fontWeight: FontWeight.w600,
-                                      //           color: Colors.blueAccent),
-                                      //     )
-                                      //   ],
-                                      // ),
-                                      SingleChildScrollView(
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            if(ObservationResultList.isNotEmpty)
-                                              Container(
-                                                // height: ObservationResultList.length * 110.h,
-                                                child: ListView.builder(
-                                                  physics: const NeverScrollableScrollPhysics(),
-                                                  itemCount: ObservationResultList.length,
-                                                  shrinkWrap: true,
-                                                  itemBuilder:
-                                                      (BuildContext context, int index) {
-                                                    return _resultlist(index,
-                                                        Observation:
-                                                        ObservationResultList[index]
-                                                        ['name'],
-                                                        Result: ObservationResultList[index]
-                                                        ['remark']);
-                                                  },
-                                                ),
-                                              ),
-                                            const SizedBox(height: 20,),
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children: [
-                                                Container(
-                                                    height: 30.h,
-                                                    width: 150.w,
-                                                    decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 8),
-                                                        border: Border.all(
-                                                            color: Colors.grey,width: 0.3),
-                                                        borderRadius: const BorderRadius.only(
-                                                          topLeft: Radius.circular(10),
-                                                        )),child: const Center(child: Text('Score %',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600),))),
-                                                Container(
-                                                    height: 30.h,
-                                                    width: 150.w,
-                                                    decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 8),
-                                                        border: Border.all(
-                                                            color: Colors.grey,width: 0.3),
-                                                        borderRadius: const BorderRadius.only(
-                                                          topRight: Radius.circular(10),
-                                                        )),child: const Center(child: Text('Rating',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600),))),
-                                              ],
-                                            ),
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-
-                                              children: [
-                                                Container(
-                                                    height: 25.h,
-                                                    width: 150.w,
-                                                    decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 8),
-                                                        border: Border.all(
-                                                            color: Colors.grey,width: 0.1)),child: const Center(child: Text('100-95',style: TextStyle(fontSize: 12)))),
-                                                Container(
-                                                    height: 25.h,
-                                                    width: 150.w,
-                                                    decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 8),
-                                                        border:
-                                                        Border.all(color: Colors.grey,width: 0.1)),child: const Center(child: Text('Outstanding',style: TextStyle(fontSize: 12)))
-                                                ),
-                                              ],
-                                            ),
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-
-                                              children: [
-                                                Container(
-                                                    height: 25.h,
-                                                    width: 150.w,
-                                                    decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 8),
-                                                        border: Border.all(
-                                                            color: Colors.grey,width: 0.1)),child: const Center(child: Text('94-85',style: TextStyle(fontSize: 12)))),
-                                                Container(
-                                                    height: 25.h,
-                                                    width: 150.w,
-                                                    decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 8),
-                                                        border:
-                                                        Border.all(color: Colors.grey,width: 0.1)),child: const Center(child: Text('Very Good',style: TextStyle(fontSize: 12)))
-                                                ),
-                                              ],
-                                            ),
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-
-                                              children: [
-                                                Container(
-                                                    height: 25.h,
-                                                    width: 150.w,
-                                                    decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 8),
-                                                        border: Border.all(
-                                                            color: Colors.grey,width: 0.1)),child: const Center(child: Text('84-66',style: TextStyle(fontSize: 12)))),
-                                                Container(
-                                                    height: 25.h,
-                                                    width: 150.w,
-                                                    decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 8),
-                                                        border:
-                                                        Border.all(color: Colors.grey,width: 0.1)),child: const Center(child: Text('Good',style: TextStyle(fontSize: 12)))
-                                                ),
-                                              ],
-                                            ),
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-
-                                              children: [
-                                                Container(
-                                                    height: 25.h,
-                                                    width: 150.w,
-                                                    decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 8),
-                                                        border: Border.all(
-                                                            color: Colors.grey,width: 0.1)),child: const Center(child: Text('65-41',style: TextStyle(fontSize: 12)))),
-                                                Container(
-                                                    height: 25.h,
-                                                    width: 150.w,
-                                                    decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 8),
-                                                        border:
-                                                        Border.all(color: Colors.grey,width: 0.1)),child: const Center(child: Text('Acceptable',style: TextStyle(fontSize: 12)))
-                                                ),
-                                              ],
-                                            ),
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-
-                                              children: [
-                                                Container(
-                                                    height: 25.h,
-                                                    width: 150.w,
-                                                    decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 8),
-                                                        border: Border.all(
-                                                            color: Colors.grey,width: 0.1),
-                                                        borderRadius: const BorderRadius.only(
-                                                          bottomLeft: Radius.circular(10),
-                                                        )),child: const Center(child: Text('40-0',style: TextStyle(fontSize: 12)))),
-                                                Container(
-                                                    height: 25.h,
-                                                    width: 150.w,
-                                                    decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 8),
-                                                        border: Border.all(
-                                                            color: Colors.grey,width: 0.1),
-                                                        borderRadius: const BorderRadius.only(
-                                                          bottomRight:
-                                                          Radius.circular(10),
-                                                        )),child: const Center(child: Text('Weak',style: TextStyle(fontSize: 12)))),
-                                              ],
-                                            ),
-                                            const SizedBox(height: 10,),
-                                            Padding(
-                                              padding: const EdgeInsets.only(left: 10),
-                                              child: Text(
-                                                'Summary',
-                                                style: TextStyle(
-                                                    fontSize: 14.sp,
-                                                    fontWeight: FontWeight.w600),
-                                              ),
-                                            ),
-                                            TextFormField(
-
-                                              readOnly: true,
-                                              controller: _summarytextController,
-
-                                              decoration: InputDecoration(
-                                                  hintStyle:
-                                                  const TextStyle(color: Colors.black26),
-                                                  contentPadding: const EdgeInsets.symmetric(
-                                                      vertical: 10.0, horizontal: 20.0),
-
-                                                  border: const OutlineInputBorder(
-                                                    borderRadius: BorderRadius.all(
-                                                      Radius.circular(15.0),
-                                                    ),
-                                                  ),
-                                                  enabledBorder: const OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                        color: Color.fromRGBO(
-                                                            230, 236, 254, 8),
-                                                        width: 1.0),
-                                                    borderRadius: BorderRadius.all(
-                                                        Radius.circular(15)),
-                                                  ),
-                                                  focusedBorder: const OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                        color: Color.fromRGBO(
-                                                            230, 236, 254, 8),
-                                                        width: 1.0),
-                                                    borderRadius: BorderRadius.all(
-                                                        Radius.circular(15.0)),
-                                                  ),
-                                                  fillColor: Colorutils.chatcolor
-                                                      .withOpacity(0.3),
-                                                  filled: true),
-                                              maxLines: 5,
-                                            ),
-                                            SizedBox(
-                                              height: 10.h,
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(left: 10),
-                                              child: Text(
-                                                'What Went Well',
-                                                style: TextStyle(
-                                                    fontSize: 14.sp,
-                                                    fontWeight: FontWeight.w600),
-                                              ),
-                                            ),
-                                            TextFormField(
-                                              controller: _whatwentwelltextController,
-
-                                              readOnly: true,
-
-                                              decoration: InputDecoration(
-                                                  hintStyle:
-                                                  const TextStyle(color: Colors.black26),
-                                                  contentPadding: const EdgeInsets.symmetric(
-                                                      vertical: 10.0, horizontal: 20.0),
-
-                                                  border: const OutlineInputBorder(
-                                                    borderRadius: BorderRadius.all(
-                                                      Radius.circular(15.0),
-                                                    ),
-                                                  ),
-                                                  enabledBorder: const OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                        color: Color.fromRGBO(
-                                                            230, 236, 254, 8),
-                                                        width: 1.0),
-                                                    borderRadius: BorderRadius.all(
-                                                        Radius.circular(15)),
-                                                  ),
-                                                  focusedBorder: const OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                        color: Color.fromRGBO(
-                                                            230, 236, 254, 8),
-                                                        width: 1.0),
-                                                    borderRadius: BorderRadius.all(
-                                                        Radius.circular(15.0)),
-                                                  ),
-                                                  fillColor: Colorutils.chatcolor
-                                                      .withOpacity(0.3),
-                                                  filled: true),
-                                              maxLines: 5,
-                                            ),
-                                            SizedBox(
-                                              height: 10.h,
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(left: 10),
-                                              child: Text(
-                                                'Even Better If',
-                                                style: TextStyle(
-                                                    fontSize: 14.sp,
-                                                    fontWeight: FontWeight.w600),
-                                              ),
-                                            ),
-                                            const SizedBox(height: 10,),
-                                            TextFormField(
-                                              controller: _evenbetteriftextController,
-
-                                              readOnly: true,
-
-                                              decoration: InputDecoration(
-                                                  hintStyle:
-                                                  const TextStyle(color: Colors.black26),
-                                                  contentPadding: const EdgeInsets.symmetric(
-                                                      vertical: 10.0, horizontal: 20.0),
-
-                                                  border: const OutlineInputBorder(
-                                                    borderRadius: BorderRadius.all(
-                                                      Radius.circular(15.0),
-                                                    ),
-                                                  ),
-                                                  enabledBorder: const OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                        color: Color.fromRGBO(
-                                                            230, 236, 254, 8),
-                                                        width: 1.0),
-                                                    borderRadius: BorderRadius.all(
-                                                        Radius.circular(15)),
-                                                  ),
-                                                  focusedBorder: const OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                        color: Color.fromRGBO(
-                                                            230, 236, 254, 8),
-                                                        width: 1.0),
-                                                    borderRadius: BorderRadius.all(
-                                                        Radius.circular(15.0)),
-                                                  ),
-                                                  fillColor: Colorutils.chatcolor
-                                                      .withOpacity(0.3),
-                                                  filled: true),
-                                              maxLines: 5,
-                                            ),
-                                            SizedBox(
-                                              height: 10.h,
-                                            ),
-                                            Container(
-                                              padding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
-
-                                              height: 60.h,
-                                              decoration: BoxDecoration(color: Colorutils.chatcolor.withOpacity(0.3),borderRadius: BorderRadius.circular(10)),
+                                              Type == 'lesson_observation'
+                                                  ? Container(
+                                               child: SizedBox(
+                        
+                                              width: 370.w,
                                               child: Row(
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
-                                                  Text( total_grade ?? '--',style: TextStyle(
-                                                      fontSize: 14.sp,
-                                                      fontWeight: FontWeight.bold),),
-                                                  // SizedBox(
-                                                  //   height: 5.h,
-                                                  // ),
-                                                  Text('  ${_percentage(total_percentage)}',style: TextStyle(
-                                                      fontSize: 14.sp,
-                                                      fontWeight: FontWeight.w500),),
+                                                  SizedBox(
+                                                    width: 100.w,
+                                                    child:const Text(
+                                                      'Topic',
+                                                      // 'Observer Name',
+                                                      style: TextStyle(
+                                                 fontSize: 14,
+                                               fontWeight: FontWeight.w600,
+                                                     color: Colors.blueAccent),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 10.w,
+                                                    child: const Text(
+                                                      ':',
+                                                      // 'Observer',
+                                                      style:TextStyle(
+                                                 fontSize: 14,
+                                               fontWeight: FontWeight.w600,
+                                                     color: Colors.blueAccent),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 230.w,
+                                                    child: Text(
+                                                      '${topic_lesson.toString()[0].toUpperCase()}${topic_lesson.toString().substring(1, topic_lesson.toString().length)}',
+                        
+                                                      // 'Observer',
+                                                      style: const TextStyle(
+                                                 fontSize: 14,
+                                               fontWeight: FontWeight.w600,
+                                                     color: Colors.blueAccent),
+                                                    ),
+                                                  ),
                                                 ],
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 10.h,
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(left: 10),
-                                              child: Text(
-                                                'Teacher Comment',
-                                                style: TextStyle(
-                                                    fontSize: 14.sp,
-                                                    fontWeight: FontWeight.w600),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: 5.h,
-                                            ),
-                                            // (TeacherComment.toString().isEmpty)?
-                                            Focus(
-                                              autofocus: true,
-                                              child: Form(
-                                                key: _formKey,
-                                              child: TextFormField(
-                                                controller: _teachertextController,
-                                              readOnly: TeacherComment != null,
-                                                maxLength: 1000,
+                                              )),
+                        
+                                                // child: Text(
+                                                //   'Topic             : ${topic_lesson.toString()[0].toUpperCase()}${topic_lesson.toString().substring(1, topic_lesson.toString().length)}',
+                                                //   style: const TextStyle(
+                                                //       fontSize: 14,
+                                                //       fontWeight: FontWeight.w600,
+                                                //       color: Colors.blueAccent),
+                                                // ),
+                        
+                                              )
                                               
-                                                decoration: const InputDecoration(
-                                                    hintStyle:
-                                                    TextStyle(color: Colors.black26),
-                                                    contentPadding: EdgeInsets.symmetric(
-                                                        vertical: 10.0, horizontal: 20.0),
-                                              
-                                                    border: OutlineInputBorder(
-                                                      borderRadius: BorderRadius.all(
-                                                        Radius.circular(15.0),
-                                                      ),
-                                                    ),
-                                                    enabledBorder: OutlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                          color: Colorutils.chatcolor,
-                                                          width: 1.0),
-                                                      borderRadius: BorderRadius.all(
-                                                          Radius.circular(15)),
-                                                    ),
-                                                    focusedBorder: OutlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                          color: Colorutils.chatcolor,
-                                                          width: 1.0),
-                                                      borderRadius: BorderRadius.all(
-                                                          Radius.circular(15.0)),
-                                                    ),
-                                                    fillColor: Colors.white,
-                                                    filled: true),
-                                                maxLines: 5,
-                                              ),
-                                            ),
-                                            ),
-
-
-                        //         : TextFormField(
-                        // readOnly: true,
-                        // controller: _teachertextController,
-                        //     cursorColor: Colors.grey,
-                        //     decoration: InputDecoration(
-                        //         hintStyle: TextStyle(color: Colors.grey),
-                        //         contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-                        //         border: OutlineInputBorder(
-                        //           borderRadius: BorderRadius.all(
-                        //             Radius.circular(0),
-                        //           ),
-                        //         ),
-                        //         enabledBorder: OutlineInputBorder(
-                        //           borderSide:
-                        //           BorderSide(color: Color.fromRGBO(230, 236, 254, 8), width: 1.0),
-                        //           borderRadius: BorderRadius.all(Radius.circular(10)),
-                        //         ),
-                        //         focusedBorder: OutlineInputBorder(
-                        //           borderSide:
-                        //           BorderSide(color: Color.fromRGBO(230, 236, 254, 8), width: 1.0),
-                        //           borderRadius: BorderRadius.all(Radius.circular(5)),
-                        //         ),
-                        //         fillColor: Color.fromRGBO(230, 236, 254, 8),
-                        //         filled: true),
-                        //     keyboardType: TextInputType.text,
-                        //     maxLines: 5,
-                        // ),
-                                            if(TeacherComment == null)
-                                              GestureDetector(
-                                              onTap: () async {
-                                                if (_formKey.currentState!
-                                                    .validate()) {
-                                                  if (Type ==
-                                                      'lesson_observation') {
-
-                                                     await submitRemarksLesonObservation(
-
-
-                                                    );
-                                                    Navigator.of(context).pop();
-
-                                                  } else {
-                                                    if (Type == 'learning_walk') {
-                                                      await submitRemarksLearningWalk();
-                                                    }
-                                                  }
-                                                }
-                                              },
-
-
+                                                  : const Text(''),
+                                              const SizedBox(height: 3,),
+                                              isjoin != null?
+                                              //     ? Text(
+                                              // //  'JOINED  : ${isjoin.toString()[0].toUpperCase()}${isjoin.toString().substring(1, isjoin.toString().length)}',
+                                              //  'Joined           :  ${isjoin?'Yes':'No'}',
+                                              //   style: const TextStyle(
+                                              //       fontSize: 14,
+                                              //       fontWeight: FontWeight.w600,
+                                              //       color: Colors.blueAccent),
+                                              // )
+                                              SizedBox(
+                        
+                                              width: 370.w,
                                               child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
-                                                  Container(
-                                                      height: 40.h,
-                                                      width: 100.w,
-                                                      // width: 220.w,
-                                                      decoration: const BoxDecoration(
-                                                        color: Colorutils.userdetailcolor,
-                                                        borderRadius: BorderRadius.all(
-                                                            Radius.circular(10)),
-                                                      ),
-                                                      child: const Center(
-                                                        child: Text(
-                                                          'Submit',
-                                                          style: TextStyle(
-                                                              color: Colors.white),
-                                                        ),
-                                                      )),
+                                                  SizedBox(
+                                                    width: 100.w,
+                                                    child:const Text(
+                                                      'Joined',
+                                                      // 'Observer Name',
+                                                      style: TextStyle(
+                                                 fontSize: 14,
+                                               fontWeight: FontWeight.w600,
+                                                     color: Colors.blueAccent),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 10.w,
+                                                    child: const Text(
+                                                      ':',
+                                                      // 'Observer',
+                                                      style:TextStyle(
+                                                 fontSize: 14,
+                                               fontWeight: FontWeight.w600,
+                                                     color: Colors.blueAccent),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 230.w,
+                                                    child: Text(
+                                                      '${isjoin?'Yes':'No'}',
+                        
+                                                      // 'Observer',
+                                                      style: const TextStyle(
+                                                 fontSize: 14,
+                                               fontWeight: FontWeight.w600,
+                                                     color: Colors.blueAccent),
+                                                    ),
+                                                  ),
                                                 ],
-                                              ),
+                                              )): const Text(
+                          
+                                               '',
+                                                
+                                              )
+                                            ],
+                                          )
+                                              : Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                'Joined:${isjoin.toString()[0].toUpperCase()}${isjoin.toString().substring(1, isjoin.toString().length)}',
+                                                style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w600,
+                                                    color: Colors.blueAccent),
+                                              )
+                                            ],
+                                          ),
+                        
+                        
+                                          // Container(
+                                          //
+                                          //     width: 300.w,
+                                          //     child: Row(
+                                          //       crossAxisAlignment: CrossAxisAlignment.start,
+                                          //       children: [
+                                          //         Container(
+                                          //           width: 60.w,
+                                          //           child: Text(
+                                          //             'JOINED',
+                                          //             // 'Observer Name',
+                                          //             style: TextStyle(fontSize: 14.sp,fontWeight: FontWeight.bold,color: Colors.blue),
+                                          //           ),
+                                          //         ),
+                                          //         Container(
+                                          //           width: 10.w,
+                                          //           child: Text(
+                                          //             ':',
+                                          //             // 'Observer',
+                                          //             style: TextStyle(fontSize: 14.sp,color: Colors.blue),
+                                          //           ),
+                                          //         ),
+                                          //         Container(
+                                          //           width: 230.w,
+                                          //           child: Text(
+                                          //             'NO',
+                                          //             // 'Observer',
+                                          //             style: TextStyle(fontSize: 14.sp,color: Colors.blue),
+                                          //           ),
+                                          //         ),
+                                          //       ],
+                                          //     )),
+                        
+                        
+                        
+                                          //     ? Row(
+                                          //   mainAxisAlignment:
+                                          //   MainAxisAlignment.spaceBetween,
+                                          //   children: [
+                                          //     Type == 'lesson_observation'
+                                          //         ? Container(
+                                          //       width: 200.w,
+                                          //       child: Text(
+                                          //         'Topic:${topic_lesson.toString()[0].toUpperCase()}${topic_lesson.toString().substring(1, topic_lesson.toString().length)}',
+                                          //         style: TextStyle(
+                                          //             fontSize: 16,
+                                          //             fontWeight: FontWeight.w600,
+                                          //             color: Colors.blueAccent),
+                                          //       ),
+                                          //     )
+                                          //         : Text(''),
+                                          //     isjoin != null
+                                          //         ? Text(
+                                          //       'Joined:${isjoin.toString()[0].toUpperCase()}${isjoin.toString().substring(1, isjoin.toString().length)}',
+                                          //       style: TextStyle(
+                                          //           fontSize: 16,
+                                          //           fontWeight: FontWeight.w600,
+                                          //           color: Colors.blueAccent),
+                                          //     )
+                                          //         : Text('')
+                                          //   ],
+                                          // )
+                                          //     : Row(
+                                          //   mainAxisAlignment: MainAxisAlignment.start,
+                                          //   children: [
+                                          //     Text(
+                                          //       'Joined:${isjoin.toString()[0].toUpperCase()}${isjoin.toString().substring(1, isjoin.toString().length)}',
+                                          //       style: TextStyle(
+                                          //           fontSize: 16,
+                                          //           fontWeight: FontWeight.w600,
+                                          //           color: Colors.blueAccent),
+                                          //     )
+                                          //   ],
+                                          // ),
+                                          SingleChildScrollView(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                if(ObservationResultList.isNotEmpty)
+                                                  Container(
+                                                    // height: ObservationResultList.length * 110.h,
+                                                    child: ListView.builder(
+                                                      physics: const NeverScrollableScrollPhysics(),
+                                                      itemCount: ObservationResultList.length,
+                                                      shrinkWrap: true,
+                                                      itemBuilder:
+                                                          (BuildContext context, int index) {
+                                                        return _resultlist(index,
+                                                            Observation:
+                                                            ObservationResultList[index]
+                                                            ['name'],
+                                                            Result: ObservationResultList[index]
+                                                            ['remark']);
+                                                      },
+                                                    ),
+                                                  ),
+                                                const SizedBox(height: 20,),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: [
+                                                    Container(
+                                                        height: 30.h,
+                                                        width: 150.w,
+                                                        decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 8),
+                                                            border: Border.all(
+                                                                color: Colors.grey,width: 0.3),
+                                                            borderRadius: const BorderRadius.only(
+                                                              topLeft: Radius.circular(10),
+                                                            )),child: const Center(child: Text('Score %',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600),))),
+                                                    Container(
+                                                        height: 30.h,
+                                                        width: 150.w,
+                                                        decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 8),
+                                                            border: Border.all(
+                                                                color: Colors.grey,width: 0.3),
+                                                            borderRadius: const BorderRadius.only(
+                                                              topRight: Radius.circular(10),
+                                                            )),child: const Center(child: Text('Rating',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600),))),
+                                                  ],
+                                                ),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                        
+                                                  children: [
+                                                    Container(
+                                                        height: 25.h,
+                                                        width: 150.w,
+                                                        decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 8),
+                                                            border: Border.all(
+                                                                color: Colors.grey,width: 0.1)),child: const Center(child: Text('100-95',style: TextStyle(fontSize: 12)))),
+                                                    Container(
+                                                        height: 25.h,
+                                                        width: 150.w,
+                                                        decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 8),
+                                                            border:
+                                                            Border.all(color: Colors.grey,width: 0.1)),child: const Center(child: Text('Outstanding',style: TextStyle(fontSize: 12)))
+                                                    ),
+                                                  ],
+                                                ),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                        
+                                                  children: [
+                                                    Container(
+                                                        height: 25.h,
+                                                        width: 150.w,
+                                                        decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 8),
+                                                            border: Border.all(
+                                                                color: Colors.grey,width: 0.1)),child: const Center(child: Text('94-85',style: TextStyle(fontSize: 12)))),
+                                                    Container(
+                                                        height: 25.h,
+                                                        width: 150.w,
+                                                        decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 8),
+                                                            border:
+                                                            Border.all(color: Colors.grey,width: 0.1)),child: const Center(child: Text('Very Good',style: TextStyle(fontSize: 12)))
+                                                    ),
+                                                  ],
+                                                ),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                        
+                                                  children: [
+                                                    Container(
+                                                        height: 25.h,
+                                                        width: 150.w,
+                                                        decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 8),
+                                                            border: Border.all(
+                                                                color: Colors.grey,width: 0.1)),child: const Center(child: Text('84-66',style: TextStyle(fontSize: 12)))),
+                                                    Container(
+                                                        height: 25.h,
+                                                        width: 150.w,
+                                                        decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 8),
+                                                            border:
+                                                            Border.all(color: Colors.grey,width: 0.1)),child: const Center(child: Text('Good',style: TextStyle(fontSize: 12)))
+                                                    ),
+                                                  ],
+                                                ),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                        
+                                                  children: [
+                                                    Container(
+                                                        height: 25.h,
+                                                        width: 150.w,
+                                                        decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 8),
+                                                            border: Border.all(
+                                                                color: Colors.grey,width: 0.1)),child: const Center(child: Text('65-41',style: TextStyle(fontSize: 12)))),
+                                                    Container(
+                                                        height: 25.h,
+                                                        width: 150.w,
+                                                        decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 8),
+                                                            border:
+                                                            Border.all(color: Colors.grey,width: 0.1)),child: const Center(child: Text('Acceptable',style: TextStyle(fontSize: 12)))
+                                                    ),
+                                                  ],
+                                                ),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                        
+                                                  children: [
+                                                    Container(
+                                                        height: 25.h,
+                                                        width: 150.w,
+                                                        decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 8),
+                                                            border: Border.all(
+                                                                color: Colors.grey,width: 0.1),
+                                                            borderRadius: const BorderRadius.only(
+                                                              bottomLeft: Radius.circular(10),
+                                                            )),child: const Center(child: Text('40-0',style: TextStyle(fontSize: 12)))),
+                                                    Container(
+                                                        height: 25.h,
+                                                        width: 150.w,
+                                                        decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 8),
+                                                            border: Border.all(
+                                                                color: Colors.grey,width: 0.1),
+                                                            borderRadius: const BorderRadius.only(
+                                                              bottomRight:
+                                                              Radius.circular(10),
+                                                            )),child: const Center(child: Text('Weak',style: TextStyle(fontSize: 12)))),
+                                                  ],
+                                                ),
+                                                const SizedBox(height: 10,),
+                                                Padding(
+                                                  padding: const EdgeInsets.only(left: 10),
+                                                  child: Text(
+                                                    'Summary',
+                                                    style: TextStyle(
+                                                        fontSize: 14.sp,
+                                                        fontWeight: FontWeight.w600),
+                                                  ),
+                                                ),
+                                                TextFormField(
+                        
+                                                  readOnly: true,
+                                                  controller: _summarytextController,
+                        
+                                                  decoration: InputDecoration(
+                                                      hintStyle:
+                                                      const TextStyle(color: Colors.black26),
+                                                      contentPadding: const EdgeInsets.symmetric(
+                                                          vertical: 10.0, horizontal: 20.0),
+                        
+                                                      border: const OutlineInputBorder(
+                                                        borderRadius: BorderRadius.all(
+                                                          Radius.circular(15.0),
+                                                        ),
+                                                      ),
+                                                      enabledBorder: const OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                            color: Color.fromRGBO(
+                                                                230, 236, 254, 8),
+                                                            width: 1.0),
+                                                        borderRadius: BorderRadius.all(
+                                                            Radius.circular(15)),
+                                                      ),
+                                                      focusedBorder: const OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                            color: Color.fromRGBO(
+                                                                230, 236, 254, 8),
+                                                            width: 1.0),
+                                                        borderRadius: BorderRadius.all(
+                                                            Radius.circular(15.0)),
+                                                      ),
+                                                      fillColor: Colorutils.chatcolor
+                                                          .withOpacity(0.3),
+                                                      filled: true),
+                                                  maxLines: 5,
+                                                ),
+                                                SizedBox(
+                                                  height: 10.h,
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets.only(left: 10),
+                                                  child: Text(
+                                                    'What Went Well',
+                                                    style: TextStyle(
+                                                        fontSize: 14.sp,
+                                                        fontWeight: FontWeight.w600),
+                                                  ),
+                                                ),
+                                                TextFormField(
+                                                  controller: _whatwentwelltextController,
+                        
+                                                  readOnly: true,
+                        
+                                                  decoration: InputDecoration(
+                                                      hintStyle:
+                                                      const TextStyle(color: Colors.black26),
+                                                      contentPadding: const EdgeInsets.symmetric(
+                                                          vertical: 10.0, horizontal: 20.0),
+                        
+                                                      border: const OutlineInputBorder(
+                                                        borderRadius: BorderRadius.all(
+                                                          Radius.circular(15.0),
+                                                        ),
+                                                      ),
+                                                      enabledBorder: const OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                            color: Color.fromRGBO(
+                                                                230, 236, 254, 8),
+                                                            width: 1.0),
+                                                        borderRadius: BorderRadius.all(
+                                                            Radius.circular(15)),
+                                                      ),
+                                                      focusedBorder: const OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                            color: Color.fromRGBO(
+                                                                230, 236, 254, 8),
+                                                            width: 1.0),
+                                                        borderRadius: BorderRadius.all(
+                                                            Radius.circular(15.0)),
+                                                      ),
+                                                      fillColor: Colorutils.chatcolor
+                                                          .withOpacity(0.3),
+                                                      filled: true),
+                                                  maxLines: 5,
+                                                ),
+                                                SizedBox(
+                                                  height: 10.h,
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets.only(left: 10),
+                                                  child: Text(
+                                                    'Even Better If',
+                                                    style: TextStyle(
+                                                        fontSize: 14.sp,
+                                                        fontWeight: FontWeight.w600),
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 10,),
+                                                TextFormField(
+                                                  controller: _evenbetteriftextController,
+                        
+                                                  readOnly: true,
+                        
+                                                  decoration: InputDecoration(
+                                                      hintStyle:
+                                                      const TextStyle(color: Colors.black26),
+                                                      contentPadding: const EdgeInsets.symmetric(
+                                                          vertical: 10.0, horizontal: 20.0),
+                        
+                                                      border: const OutlineInputBorder(
+                                                        borderRadius: BorderRadius.all(
+                                                          Radius.circular(15.0),
+                                                        ),
+                                                      ),
+                                                      enabledBorder: const OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                            color: Color.fromRGBO(
+                                                                230, 236, 254, 8),
+                                                            width: 1.0),
+                                                        borderRadius: BorderRadius.all(
+                                                            Radius.circular(15)),
+                                                      ),
+                                                      focusedBorder: const OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                            color: Color.fromRGBO(
+                                                                230, 236, 254, 8),
+                                                            width: 1.0),
+                                                        borderRadius: BorderRadius.all(
+                                                            Radius.circular(15.0)),
+                                                      ),
+                                                      fillColor: Colorutils.chatcolor
+                                                          .withOpacity(0.3),
+                                                      filled: true),
+                                                  maxLines: 5,
+                                                ),
+                                                SizedBox(
+                                                  height: 10.h,
+                                                ),
+                                                Container(
+                                                  padding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
+                        
+                                                  height: 60.h,
+                                                  decoration: BoxDecoration(color: Colorutils.chatcolor.withOpacity(0.3),borderRadius: BorderRadius.circular(10)),
+                                                  child: Row(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text( total_grade ?? '--',style: TextStyle(
+                                                          fontSize: 14.sp,
+                                                          fontWeight: FontWeight.bold),),
+                                                      // SizedBox(
+                                                      //   height: 5.h,
+                                                      // ),
+                                                      Text('  ${_percentage(total_percentage)}',style: TextStyle(
+                                                          fontSize: 14.sp,
+                                                          fontWeight: FontWeight.w500),),
+                                                    ],
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 10.h,
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets.only(left: 10),
+                                                  child: Text(
+                                                    'Teacher Comment',
+                                                    style: TextStyle(
+                                                        fontSize: 14.sp,
+                                                        fontWeight: FontWeight.w600),
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 5.h,
+                                                ),
+                                                // (TeacherComment.toString().isEmpty)?
+                                                Focus(
+                                                  autofocus: true,
+                                                  child: TextFormField(
+                                                    controller: _teachertextController,
+                                                  readOnly: TeacherComment != null,
+                                                    maxLength: 1000,
+                                                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                                                    validator: (teachnercomment){
+                                                     if(teachnercomment==null||teachnercomment.isEmpty){
+                                                      return 'Commets is Required';
+                                                     }
+                                                     return null;
+                                                    },
+                    
+                                                    decoration:  const InputDecoration(
+                                                      hintText: 'Type Here',
+                                                        hintStyle:
+                                                        TextStyle(color: Colors.black26),
+                                                        contentPadding: EdgeInsets.symmetric(
+                                                            vertical: 10.0, horizontal: 20.0),
+                                                                                            
+                                                        border: OutlineInputBorder(
+                                                        
+                                                          borderRadius: BorderRadius.all(
+                                                            Radius.circular(15.0),
+                                                          ),
+                                                        ),
+                                                        enabledBorder: OutlineInputBorder(
+                                                          borderSide: BorderSide(
+                                                              color: Colorutils.chatcolor,
+                                                              width: 1.0),
+                                                          borderRadius: BorderRadius.all(
+                                                              Radius.circular(15)),
+                                                        ),
+                                                        focusedBorder: OutlineInputBorder(
+                                                          borderSide: BorderSide(
+                                                              color: Colorutils.chatcolor,
+                                                              width: 1.0),
+                                                              
+                                                          borderRadius: BorderRadius.all(
+                                                              Radius.circular(15.0)),
+                                                        ),
+                                                        fillColor: Colors.white,
+                                                        filled: true),
+                                                    maxLines: 5,
+                                                  ),
+                                                ),
+                        
+                        
+                            //         : TextFormField(
+                            // readOnly: true,
+                            // controller: _teachertextController,
+                            //     cursorColor: Colors.grey,
+                            //     decoration: InputDecoration(
+                            //         hintStyle: TextStyle(color: Colors.grey),
+                            //         contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                            //         border: OutlineInputBorder(
+                            //           borderRadius: BorderRadius.all(
+                            //             Radius.circular(0),
+                            //           ),
+                            //         ),
+                            //         enabledBorder: OutlineInputBorder(
+                            //           borderSide:
+                            //           BorderSide(color: Color.fromRGBO(230, 236, 254, 8), width: 1.0),
+                            //           borderRadius: BorderRadius.all(Radius.circular(10)),
+                            //         ),
+                            //         focusedBorder: OutlineInputBorder(
+                            //           borderSide:
+                            //           BorderSide(color: Color.fromRGBO(230, 236, 254, 8), width: 1.0),
+                            //           borderRadius: BorderRadius.all(Radius.circular(5)),
+                            //         ),
+                            //         fillColor: Color.fromRGBO(230, 236, 254, 8),
+                            //         filled: true),
+                            //     keyboardType: TextInputType.text,
+                            //     maxLines: 5,
+                            // ),
+                                                if(TeacherComment == null)
+                                                  GestureDetector(
+                                                  onTap: () async {
+                                                    if (_formKey.currentState!
+                                                        .validate()) {
+                                                      if (Type ==
+                                                          'lesson_observation') {
+                                                  
+                                                         await submitRemarksLesonObservation(
+                        
+                        
+                                                        );
+                                                          Navigator.of(context).pop();
+                        
+                                                      } else {
+                                                        if (Type == 'learning_walk') {
+                                                        
+                                                          await submitRemarksLearningWalk();
+                                                        }
+                                                      }
+                                                    
+                                                    }
+                                                  },
+                        
+                        
+                                                  child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    children: [
+                                                      Container(
+                                                          height: 40.h,
+                                                          width: 100.w,
+                                                          // width: 220.w,
+                                                          decoration: const BoxDecoration(
+                                                            color: Colorutils.userdetailcolor,
+                                                            borderRadius: BorderRadius.all(
+                                                                Radius.circular(10)),
+                                                          ),
+                                                          child: const Center(
+                                                            child: Text(
+                                                              'Submit',
+                                                              style: TextStyle(
+                                                                  color: Colors.white),
+                                                            ),
+                                                          )),
+                                                    ],
+                                                  ),
+                                                ),
+                        ]
                                             ),
-                    ]
-                                        ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                    SizedBox(
+                                      height: 10.h,
+                                    )
+                                  ],
                                 ),
-                                SizedBox(
-                                  height: 10.h,
-                                )
-                              ],
+                              ),
                             ),
-                          ),
+                        
+                        
+                          ],
                         ),
-
-
-                      ],
+                      ),
                     ),
                   ),
                 ),
@@ -1128,7 +1240,7 @@ class _ObsResultdisplayState extends State<ObsResultdisplay> {
                                 style:
                                 TextStyle(fontSize: 15.sp, color: Colors.black,fontWeight: FontWeight.bold),
                               ),
-                              Container(
+                               Container(
                                 // width: 350.w,
                                 child: Text(
                                   '$Observation',
@@ -1201,5 +1313,179 @@ class _ObsResultdisplayState extends State<ObsResultdisplay> {
     }else{
       return '${percent.toString()}%';
     }
+  }
+}
+
+
+class ObservationPageShimmer extends StatelessWidget {
+  const ObservationPageShimmer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return  SingleChildScrollView(
+      physics:  const NeverScrollableScrollPhysics(),
+      child: Shimmer.fromColors(
+        baseColor: Colors.grey[200]!,
+        highlightColor: Colors.grey[300]!,
+        child: SizedBox(
+          height: 900.h,
+          child: Padding(
+            padding:  EdgeInsets.only(top: 25.h,right: 12.h,left: 12.h ),
+            child:  Column(
+               crossAxisAlignment:  CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 150.w,
+                  height: 22.h,
+                  decoration:  BoxDecoration(
+                 borderRadius: BorderRadius.circular(12),
+                 color:  Colors.yellowAccent
+                  ),
+                ),  SizedBox(
+                  height: 25.h,
+                ),
+                 Row(
+                   children: [
+                     Container(
+                      width: 100.w,
+                      height: 15.h,
+                      decoration:  BoxDecoration(
+                     borderRadius: BorderRadius.circular(12),
+                     color:  Colors.yellowAccent
+                      ),
+                                   ),
+                                   const SizedBox(width: 20,),
+                              Container(
+                      width: 100.w,
+                      height: 15.h,
+                      decoration:  BoxDecoration(
+                     borderRadius: BorderRadius.circular(12),
+                     color:  Colors.yellowAccent
+                      ),
+                                   ),                              
+                   ],
+                 ), 
+                 SizedBox(
+                  height: 18.h,
+                ),
+                  Row(
+                   children: [
+                     Container(
+                      width: 100.w,
+                      height: 15.h,
+                      decoration:  BoxDecoration(
+                     borderRadius: BorderRadius.circular(12),
+                     color:  Colors.yellowAccent
+                      ),
+                                   ),
+                                   const SizedBox(width: 20,),
+                              Container(
+                      width: 100.w,
+                      height: 15.h,
+                      decoration:  BoxDecoration(
+                     borderRadius: BorderRadius.circular(12),
+                     color:  Colors.yellowAccent
+                      ),
+                                   ),                              
+                   ],
+                 ), 
+                  SizedBox(
+                  height: 18.h,
+                ),
+                  Row(
+                   children: [
+                     Container(
+                      width: 100.w,
+                      height: 15.h,
+                      decoration:  BoxDecoration(
+                     borderRadius: BorderRadius.circular(12),
+                     color:  Colors.yellowAccent
+                      ),
+                                   ),
+                                   const SizedBox(width: 20,),
+                              Container(
+                      width: 100.w,
+                      height: 15.h,
+                      decoration:  BoxDecoration(
+                     borderRadius: BorderRadius.circular(12),
+                     color:  Colors.yellowAccent
+                      ),
+                                   ),                              
+                   ],
+                 ), 
+                  SizedBox(
+                  height: 18.h,
+                ),
+                  Row(
+                   children: [
+                     Container(
+                      width: 100.w,
+                      height: 15.h,
+                      decoration:  BoxDecoration(
+                     borderRadius: BorderRadius.circular(12),
+                     color:  Colors.yellowAccent
+                      ),
+                                   ),
+                                   const SizedBox(width: 20,),
+                              Container(
+                      width: 100.w,
+                      height: 15.h,
+                      decoration:  BoxDecoration(
+                     borderRadius: BorderRadius.circular(12),
+                     color:  Colors.yellowAccent
+                      ),
+                                   ),                              
+                   ],
+                 ),  SizedBox(height:  40.h,),
+               Container(
+                height:  120.h,
+                 width:  440.w,
+                decoration:  BoxDecoration(
+                  color:   Colors.blue,
+                  borderRadius: BorderRadius.circular(12)
+                ),
+               ),
+               SizedBox( height:  10.h,),
+                  Container(
+                height:  120.h,
+                 width:  440.w,
+                decoration:  BoxDecoration(
+                  color:   Colors.blue,
+                  borderRadius: BorderRadius.circular(12)
+                ),
+               ),
+                SizedBox( height:  10.h,),
+                  Container(
+                height:  120.h,
+                 width:  440.w,
+                decoration:  BoxDecoration(
+                  color:   Colors.blue,
+                  borderRadius: BorderRadius.circular(12)
+                ),
+               ),
+                SizedBox( height:  10.h,),
+                  Container(
+                height:  120.h,
+                 width:  440.w,
+                decoration:  BoxDecoration(
+                  color:   Colors.blue,
+                  borderRadius: BorderRadius.circular(12)
+                ),
+               ),
+                SizedBox( height:  10.h,),
+                  Container(
+                height:  120.h,
+                 width:  440.w,
+                decoration:  BoxDecoration(
+                  color:   Colors.blue,
+                  borderRadius: BorderRadius.circular(12)
+                ),
+               ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

@@ -1137,12 +1137,15 @@ class FeedDBController extends GetxController {
   }) async {
     String portion = studentClass + batch + subId;
     String parentTableName = "parentTable$portion";
-    // Query all rows from teacherchatRoomList
-    final List<Map<String, dynamic>> parentMaps =
-        await db.query(parentTableName);
+
+    await createParentListTable(subId: subId, batch: batch, studentClass: studentClass);
 
     // Initialize the room list
     List<ParentDataSelected> parentList = [];
+
+    // Query all rows from teacherchatRoomList
+    final List<Map<String, dynamic>> parentMaps =
+        await db.query(parentTableName);
 
     // log("parent list local table name ${parentTableName}-------------- ${parentMaps}");
 

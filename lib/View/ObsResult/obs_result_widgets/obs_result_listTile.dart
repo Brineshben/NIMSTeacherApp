@@ -57,24 +57,28 @@ class ObsResultListTile extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      width: 50.h,
-                      height: 50.h,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colorutils.chatcolor),
-                      ),
-                      child: Center(
-                        child: CachedNetworkImage(
-                          imageUrl:
-                              "${ApiConstants.downloadUrl}${Get.find<UserAuthController>().userData.value.image}",
-                          errorWidget: (context, url, error) => Text(
-                            obsData?.subjectName.toString().substring(0, 1) ??
-                                '--',
-                            style: TextStyle(
-                                color: const Color(0xFFB1BFFF),
-                                fontWeight: FontWeight.bold,
-                                fontSize: 22.h),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(45),
+                      child: Container(
+                        width: 50.h,
+                        height: 50.h,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colorutils.chatcolor),
+                        ),
+                        child: Center(
+                          child: CachedNetworkImage(
+                            
+                            imageUrl:
+                                "${ApiConstants.downloadUrl}${Get.find<UserAuthController>().userData.value.image}",
+                            errorWidget: (context, url, error) => Text(
+                              obsData?.subjectName.toString().substring(0, 1) ??
+                                  '--',
+                              style: TextStyle(
+                                  color: const Color(0xFFB1BFFF),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 22.h),
+                            ),
                           ),
                         ),
                       ),
@@ -129,6 +133,7 @@ class ObsResultListTile extends StatelessWidget {
                                     child: Text(
                                       obsData?.observerName ?? '--',
                                       // 'Observer',
+                                      maxLines: 2,
                                       style: TextStyle(
                                         fontSize: 15.h,
                                       ),

@@ -108,7 +108,7 @@ class _NotificationscreenState extends State<Notificationscreen> {
                                         width: 2,
                                       ),
                                       Text(
-                                        "Notifications",
+                                        "Notificationsss",
                                         style: TextStyle(
                                             fontSize: 16.sp,
                                             color: Colors.black,

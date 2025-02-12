@@ -2,6 +2,7 @@
 import 'package:get/get.dart';
 import 'package:teacherapp/Controller/api_controllers/userAuthController.dart';
 import 'package:teacherapp/Models/api_models/leave_req_list_api_model.dart';
+import 'package:teacherapp/Services/check_connectivity.dart';
 import '../../Services/api_services.dart';
 
 class LeaveRequestController extends GetxController {
@@ -15,10 +16,11 @@ class LeaveRequestController extends GetxController {
   RxInt currentClassIndex = 0.obs;
   RxString claass = ''.obs;
   RxString batch = ''.obs;
+  RxBool conncetion = true.obs;
 
   void resetStatus() {
     isLoading.value = false;
-    isError.value = false;
+    // isError.value = false;
   }
 
   void resetData() {
@@ -28,9 +30,12 @@ class LeaveRequestController extends GetxController {
   }
 
   Future<void> fetchLeaveReqList() async {
+
     resetData();
     isLoading.value = true;
     isLoaded.value = false;
+    isError.value = false;
+    conncetion.value = await CheckConnectivity().check();
     try {
       String usrId = Get.find<UserAuthController>().userData.value.userId ?? '';
       String acYr = Get.find<UserAuthController>().userData.value.academicYear ?? '';
@@ -42,6 +47,7 @@ class LeaveRequestController extends GetxController {
         classList.value = leaveRequestListApiModel.data?.details ?? [];
 
         if(classList.value.isNotEmpty) {
+                     classList.sort((a, b) =>"${a.className!}${a.batchName!}".compareTo("${b.className!}${b.batchName!}"));
           studentList.value = classList.value.first.students ?? [];
           classData.value = classList.value.first;
           filteredStudentList.value = studentList.value;
@@ -50,8 +56,12 @@ class LeaveRequestController extends GetxController {
           batch.value = classList.value.first.batchName ?? '--';
 
         }
+        isLoaded = true.obs;
+      }else{
+        isError.value = true;
       }
     } catch (e) {
+        isError.value = true;
       isLoaded.value = false;
       print("-----------leave req error-----------");
     } finally {
