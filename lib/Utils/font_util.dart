@@ -47,6 +47,13 @@ class TeacherAppFonts {
     color: Colorutils.Whitecolor,
   );
 
+  static final TextStyle interW600_25sp_textWhite = TextStyle(
+    fontFamily: _interFont,
+    fontWeight: FontWeight.w600,
+    fontSize: 25.sp,
+    color: Colorutils.Whitecolor,
+  );
+
   static final TextStyle interW600_18sp_textWhite = TextStyle(
     fontFamily: _interFont,
     fontWeight: FontWeight.w600,
@@ -209,6 +216,12 @@ class TeacherAppFonts {
     fontFamily: _interFont,
     fontWeight: FontWeight.w400,
     fontSize: 18.sp,
+    color: Colorutils.Whitecolor,
+  );
+  static final TextStyle interW400_20sp = TextStyle(
+    fontFamily: _interFont,
+    fontWeight: FontWeight.w400,
+    fontSize: 20.sp,
     color: Colorutils.Whitecolor,
   );
 

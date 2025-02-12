@@ -10,6 +10,7 @@ class Colorutils {
   static const red = Colors.red;
   static const yellow = Colors.yellow;
   static const transparent = Colors.transparent;
+  static const blue = Colors.blue;
 
   static const userdetailcolor = Color(0xFF128174);
   static const Whitecolor = Color(0xFFFFFFFF);
@@ -115,5 +116,5 @@ class Colorutils {
   static const popcolor1 = Color(0xFF118376);
   static const popcolor2 = Color(0xFFFAF2F2);
   static const replayBg = Color(0xFFEFEFEF);
-  static const progresscolor= Color(0xFF1E474D);
+  static const progresscolor = Color(0xFF1E474D);
 }
