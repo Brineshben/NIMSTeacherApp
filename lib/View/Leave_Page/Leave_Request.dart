@@ -123,6 +123,7 @@ class _LeaveRequestState extends State<LeaveRequest>
                       ],
                     ),
                     child: SingleChildScrollView(
+                      physics: NeverScrollableScrollPhysics(),
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -312,8 +313,56 @@ class _LeaveRequestState extends State<LeaveRequest>
                                       .compareTo(b.name!.trim().toUpperCase()),
                                 );
                     
-                               if(!leaveRequestController.isLoaded.value){
+                               if(leaveRequestController.isLoading.value){
                                 return const LeaveApplyShimmer();
+                               }else if(!leaveRequestController.conncetion.value){
+                                return SizedBox(
+                height: ScreenUtil().screenHeight * 0.6,
+                child: RefreshIndicator(
+                  onRefresh: () async{
+                      await initialize();
+                                         
+                                        setState(() {
+                                          if(leaveRequestController.filteredStudentList.isNotEmpty){
+                                            _currentIndex= 0;
+                                          }
+                                        });
+                  },
+                  child: ListView(
+                    children :[
+                      SizedBox(height: 200.h,),
+                       Center(
+                      child:   Text('Internet Not Connected..',style: TextStyle(
+                                color:  Colors.red,fontSize: 19.h
+                              )
+                    ),
+                                    )]
+                  ),
+                ));
+                               }else if(leaveRequestController.isError.value){
+                                 return SizedBox(
+                height: ScreenUtil().screenHeight * 0.6,
+                child: RefreshIndicator(
+                  onRefresh: () async{
+                      await initialize();
+                                         
+                                        setState(() {
+                                          if(leaveRequestController.filteredStudentList.isNotEmpty){
+                                            _currentIndex= 0;
+                                          }
+                                        });
+                  },
+                  child: ListView(
+                    children :[
+                      SizedBox(height: 200.h,),
+                       Center(
+                      child:  Text('Somthing Went Wrong',style: TextStyle(
+                                    color:  Colors.red,fontSize: 19.h
+                                  ),
+                    ),
+                                    )]
+                  ),
+                ));
                                }else if (studentList.isNotEmpty) {
                                   return SizedBox(
                                     height: ScreenUtil().screenHeight * 0.7,

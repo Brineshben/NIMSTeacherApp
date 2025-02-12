@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -8,6 +9,7 @@ import 'package:teacherapp/Services/common_services.dart';
 import 'package:teacherapp/Utils/Colors.dart';
 import 'package:teacherapp/View/Home_Page/Home_Widgets/my_class.dart';
 import '../../Controller/api_controllers/popUpContoller.dart';
+import '../../Services/check_connectivity.dart';
 import 'Home_Widgets/class_list.dart';
 import 'Home_Widgets/homepage_shimmer.dart';
 import 'Home_Widgets/subject_list.dart';
@@ -24,11 +26,14 @@ class Teacher extends StatefulWidget {
 
 class _TeacherState extends State<Teacher> {
   TimeTableController timeTableController = Get.find<TimeTableController>();
-  bool isloded = false;
+   bool isloded = false;
+   
+
 
   @override
   void initState() {
     print("-------------Arun print-here---");
+
 
     initialize();
     Get.find<Popupcontoller>().fetchAllStudentDateList();
@@ -47,7 +52,7 @@ class _TeacherState extends State<Teacher> {
 
   @override
   void dispose() {
-    if (!mounted) {
+    if(!mounted) {
       context.loaderOverlay.hide();
     }
     super.dispose();
@@ -71,14 +76,59 @@ class _TeacherState extends State<Teacher> {
               ),
               GetX<TimeTableController>(
                 builder: (TimeTableController controller) {
-                  if (!timeTableController.isLoaded.value) {
-                    return HomeScreenShimmer();
-                  }
+                   if(timeTableController.isLoading.value){
+                return   HomeScreenShimmer();
+                   }
+                      if(!timeTableController.conncetion.value){
+                      return SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.8,
+                      child: RefreshIndicator(
+                        onRefresh: () async{
+                         await  initialize();
+                              Get.find<Popupcontoller>().fetchAllStudentDateList();
+                        },
+                        child: ListView(
+                          children: [
+                            SizedBox(height: 350.h,),
+                            Center(
+                              child:  Text('Internet Not Connected.',style: TextStyle(
+                                color:  Colors.red,fontSize: 19.h
+                              ),),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                    }
+                   if(timeTableController.isError.value){
+                 
+                    return SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.8,
+                      child: RefreshIndicator(
+                        onRefresh: () async{
+                         await  initialize();
+                              Get.find<Popupcontoller>().fetchAllStudentDateList();
+                        },
+                        child: ListView(
+                          children: [
+                            SizedBox(height: 350.h,),
+                            Center(
+                              child:  Text('${controller.HomeErrorMsg}',style: TextStyle(
+                                color:  Colors.red,fontSize: 19.h
+                              ),),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                   }
+                   
                   return SizedBox(
                     height: MediaQuery.of(context).size.height * 0.8,
                     child: RefreshIndicator(
+
                       color: Colorutils.userdetailcolor,
-                      onRefresh: () async {
+                      onRefresh: () async{
                         initialize();
                         Get.find<Popupcontoller>().fetchAllStudentDateList();
                       },
@@ -93,12 +143,11 @@ class _TeacherState extends State<Teacher> {
                                 controller.classTeacherSubjects.value,
                           ),
                           SubjectList(
-                              teacherSubjects:
-                                  controller.teacherSubjects.value),
-                          if (controller.teacherTimeTableToday.value.isNotEmpty)
+                              teacherSubjects: controller.teacherSubjects.value),
+                          if(controller.teacherTimeTableToday.value.isNotEmpty)
                             AllTimeTable(
                                 todaySubjects:
-                                    controller.teacherTimeTableToday.value),
+                                controller.teacherTimeTableToday.value),
                           Topic(
                               todaySubjects:
                                   controller.teacherTimeTableToday.value),
@@ -115,3 +164,4 @@ class _TeacherState extends State<Teacher> {
     );
   }
 }
+

@@ -131,7 +131,7 @@ class LessonLearningController extends GetxController {
         context: context,
         initialDate: DateTime.now(),
         firstDate: DateTime(initialYr),
-        lastDate: DateTime(finalYr),
+        lastDate: DateTime.now(),
       );
       if (picked != null) {
         selectedDateController.value.text = 'Date : ${picked.day.toString().padLeft(2, '0')}-${picked.month.toString().padLeft(2, '0')}-${picked.year}';

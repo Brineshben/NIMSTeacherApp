@@ -97,10 +97,49 @@ class _PendingLeaveState extends State<PendingLeave> {
               builder: (LeaveApprovalController controller) {
                 List<Pendings> leaveList = controller.filteredPendingLeaves.value.reversed.toList();
                 UserRole? userRole = Get.find<UserAuthController>().userRole.value;
-                if(!leaveApprovalController.isLoaded.value){
+             if(leaveApprovalController.isLoading.value){
                   return LeaveApprovelShimmer();
-                }
-                else if(leaveList.isNotEmpty){
+                }else if(leaveApprovalController.isError.value){
+                  return RefreshIndicator(
+                    onRefresh: () async{
+                            initialize();
+                  leaveApprovalController.setCurrentLeaveTab(index: 0);
+                    },
+                    child: ListView(
+                      children: [
+                        SizedBox(
+                           height:  450.h,
+                           child: Center(
+                            child: Text('Somthing Went Wrong.',style: TextStyle(
+                                      color:  Colors.red,fontSize: 19.h
+                                    )
+                                                        ),
+                           ),
+                        ),
+                      ],
+                    ),
+                  );
+                }else if(!leaveApprovalController.connection.value){
+                  return RefreshIndicator(
+                    onRefresh: () async{
+                              initialize();
+                  leaveApprovalController.setCurrentLeaveTab(index: 0);
+                    },
+                    child: ListView(
+                      children: [
+                        SizedBox(
+                           height:  450.h,
+                           child: Center(
+                            child: Text('Internet Not Connected...',style: TextStyle(
+                                      color:  Colors.red,fontSize: 19.h
+                                    )
+                                                        ),
+                           ),
+                        ),
+                      ],
+                    ),
+                  );
+                } else if(leaveList.isNotEmpty) {
                 return RefreshIndicator(
                   onRefresh: () async{
                               initialize();

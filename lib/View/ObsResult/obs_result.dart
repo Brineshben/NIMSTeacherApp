@@ -147,7 +147,7 @@ class _ObsResultState extends State<ObsResult> {
                             // (controller.isLoading.value) {
                             //   return const Center(child: CircularProgressIndicator(color: Colors.teal));
                             // } else if
-                           if(!controller.isLoaded.value) {
+                           if(controller.isLoading.value) {
                             return  Expanded(
                               child: SizedBox(
                                 height: 900.h,
@@ -162,7 +162,35 @@ class _ObsResultState extends State<ObsResult> {
                                 ),
                               ),
                             );
-                           }else if (!controller.isLoaded.value&&
+                           }else if(!controller.connection.value){
+                             return SizedBox(
+                              height:  400.h,
+                              child: ListView(
+                                                  children :[
+                                                    SizedBox(height: 200.h,),
+                                                     Center(
+                                                    child:   Text('Internet Not Connected..',style: TextStyle(
+                                color:  Colors.red,fontSize: 19.h
+                              )
+                                                  ),
+                                    )]
+                                                ),
+                             );
+                           }  else if(controller.isError.value){
+                            return  SizedBox(
+                              height:  400.h,
+                              child: ListView(
+                                                  children :[
+                                                    SizedBox(height: 200.h,),
+                                                     Center(
+                                                    child:   Text('Somthing Went Wrong.',style: TextStyle(
+                                color:  Colors.red,fontSize: 19.h
+                              )
+                                                  ),
+                                    )]
+                                                ),
+                             );
+                           }  else if (!controller.isLoaded.value&&
                                 obsList.isEmpty) {
                               return Expanded(
                                 child: SizedBox(

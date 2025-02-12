@@ -1,6 +1,7 @@
 
 import 'package:get/get.dart';
 import 'package:teacherapp/Controller/api_controllers/userAuthController.dart';
+import 'package:teacherapp/Services/check_connectivity.dart';
 import '../../Models/api_models/leave_approval_api_model.dart';
 import '../../Services/api_services.dart';
 
@@ -17,15 +18,15 @@ class LeaveApprovalController extends GetxController {
   RxList<AllLeaves> filteredAllLeaves = <AllLeaves>[].obs;
   Rx<ApprovedOrRejected> selectedLeave = ApprovedOrRejected().obs;
   RxInt currentTab = 0.obs;
-
+  RxBool connection = true.obs;
   void resetStatus() {
     isLoading.value = false;
-    isError.value = false;
+    // isError.value = false;
   }
 
   void resetData() {
     isLoading.value = false;
-    isError.value = false;
+    // isError.value = false;
     isLoaded.value = false;
     leaveData.value = LeaveData();
     pendingLeaves.value = [];
@@ -42,6 +43,8 @@ class LeaveApprovalController extends GetxController {
     resetData();
     isLoading.value = true;
     isLoaded.value = false;
+    isError.value = false;
+    connection.value = await CheckConnectivity().check();
     try {
       String usrId = Get.find<UserAuthController>().userData.value.userId ?? '';
       String acYr = Get.find<UserAuthController>().userData.value.academicYear ?? '';
@@ -58,9 +61,12 @@ class LeaveApprovalController extends GetxController {
         allLeaves.value = leaveData.value.allLeaves ?? [];
         filteredAllLeaves.value = allLeaves.value;
         isLoaded.value = true;
+      }else{
+        isError.value = true;
       }
     } catch (e) {
       isLoaded.value = false;
+       isError.value = true;
       print("-----------leave approval error-----------");
     } finally {
       resetStatus();

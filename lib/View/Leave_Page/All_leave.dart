@@ -85,9 +85,49 @@ class _allleaveState extends State<allleave> {
             child: GetX<LeaveApprovalController>(
               builder: (LeaveApprovalController controller) {
                 List<AllLeaves> leaveList = controller.filteredAllLeaves.value.reversed.toList();
-                if(!leaveApprovalController.isLoaded.value){
+                if(leaveApprovalController.isLoading.value){
                   return LeaveApprovelShimmer();
-                }else if(leaveList.isNotEmpty) {
+                }else if(leaveApprovalController.isError.value){
+                  return RefreshIndicator(
+                    onRefresh: () async{
+                            initialize();
+                  leaveApprovalController.setCurrentLeaveTab(index: 2);
+                    },
+                    child: ListView(
+                      children: [
+                        SizedBox(
+                           height:  450.h,
+                           child: Center(
+                            child: Text('Somthing Went Wrong.',style: TextStyle(
+                                      color:  Colors.red,fontSize: 19.h
+                                    )
+                                                        ),
+                           ),
+                        ),
+                      ],
+                    ),
+                  );
+                }else if(!leaveApprovalController.connection.value){
+                  return RefreshIndicator(
+                    onRefresh: () async{
+                              initialize();
+                  leaveApprovalController.setCurrentLeaveTab(index: 2);
+                    },
+                    child: ListView(
+                      children: [
+                        SizedBox(
+                           height:  450.h,
+                           child: Center(
+                            child: Text('Internet Not Connected...',style: TextStyle(
+                                      color:  Colors.red,fontSize: 19.h
+                                    )
+                                                        ),
+                           ),
+                        ),
+                      ],
+                    ),
+                  );
+                } else if(leaveList.isNotEmpty) {
                   return RefreshIndicator(
                     onRefresh: () async{
                                 initialize();

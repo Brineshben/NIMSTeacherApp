@@ -520,7 +520,7 @@ class ApiServices {
         throw Exception(response.statusCode);
       }
     } catch (e) {
-      throw Exception("Service Error");
+      throw Exception("Service Error$e");
     }
   }
 
