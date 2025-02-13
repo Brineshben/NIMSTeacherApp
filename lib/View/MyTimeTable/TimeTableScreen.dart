@@ -32,7 +32,9 @@ class _MyTimeTableState extends State<MyTimeTable> {
     super.initState();
   }
   void scrolleingset(value){
-    _scrollController.animateTo(value,duration: const Duration(milliseconds: 500),curve: Curves.ease);
+      
+      
+      _scrollController.animateTo(value,duration: const Duration(milliseconds: 500),curve: Curves.ease);
   }
 
   @override

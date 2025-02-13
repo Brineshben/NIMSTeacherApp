@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:teacherapp/Controller/api_controllers/chat_push_notification.dart';
+import 'package:teacherapp/Controller/api_controllers/update_controller.dart';
 import 'package:teacherapp/Controller/db_controller/Feed_db_controller.dart';
 import 'package:teacherapp/Controller/db_controller/group_db_controller.dart';
 import 'package:teacherapp/Controller/db_controller/parent_db_controller.dart';
@@ -87,6 +88,7 @@ class HandleControllers {
     Get.put(LearningWalkController());
     Get.put(Learningfocuscontroller());
     Get.put(LearningwalksubmitController());
+    Get.put(AppUpdateController());
 
     // for initialising thie DB //
     Get.find<FeedDBController>().initDatabaseForChat();
@@ -137,5 +139,6 @@ class HandleControllers {
     Get.delete<LearningWalkController>();
     Get.delete<Learningfocuscontroller>();
     Get.delete<LearningwalksubmitController>();
+    Get.delete<AppUpdateController>();
   }
 }
