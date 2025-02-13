@@ -260,19 +260,22 @@ class _LessonWalkApplyState extends State<LessonWalkApply> {
                                             right: 20.w,
                                             bottom: 5.h),
                                         child: TextFormField(
+                                          
                                           maxLength: 1000,
                                           validator: (val) => val!.isEmpty
                                               ? 'Please Enter Summary'
                                               : null,
+                                              
                                           controller: _summaryController,
                                           focusNode: keyboardController.summaryFocusNode.value,
                                           decoration: InputDecoration(
                                               hintStyle: const TextStyle(color: Colors.black26),
                                               contentPadding: EdgeInsets.symmetric(
                                                   vertical: 10.h, horizontal: 20.w),
-                                              hintText: " Summary  ",
-
+                                              hintText: " Summaryyy  ",
+                                            
                                               border: OutlineInputBorder(
+                                                
                                                 borderRadius: const BorderRadius.all(
                                                   Radius.circular(10.0),
                                                 ).r,

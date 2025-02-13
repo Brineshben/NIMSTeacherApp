@@ -88,6 +88,7 @@ class HandleControllers {
     Get.put(Learningfocuscontroller());
     Get.put(LearningwalksubmitController());
 
+
     // for initialising thie DB //
     Get.find<FeedDBController>().initDatabaseForChat();
     Get.find<ParentDbController>().initDatabaseForChat();
@@ -137,5 +138,6 @@ class HandleControllers {
     Get.delete<LearningWalkController>();
     Get.delete<Learningfocuscontroller>();
     Get.delete<LearningwalksubmitController>();
+
   }
 }

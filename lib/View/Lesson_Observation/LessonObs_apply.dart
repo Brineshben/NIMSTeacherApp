@@ -51,6 +51,7 @@ class _LessonObservationApplyState extends State<LessonObservationApply> {
 
   @override
   Widget build(BuildContext context) {
+    log('the widget is rebuilding ');
     List<String> nameParts = widget.teacherName.split(" ").map((name) => name.trim()).toList();
     nameParts = nameParts.where((name) => name.isNotEmpty).toList();
     String? placeholderName;
@@ -295,6 +296,7 @@ class _LessonObservationApplyState extends State<LessonObservationApply> {
                                               ? 'Please Enter  Summary.'
                                               : null,
                                           controller: _summaryController,
+                                          autovalidateMode: AutovalidateMode.onUserInteraction,
                                           focusNode: keyboardController.summaryFocusNode.value,
                                           decoration: InputDecoration(
                                               hintStyle: const TextStyle(color: Colors.black26),
@@ -342,6 +344,7 @@ class _LessonObservationApplyState extends State<LessonObservationApply> {
                                           validator: (val) => val!.isEmpty
                                               ? 'Please Enter What went well.'
                                               : null,
+                                                autovalidateMode: AutovalidateMode.onUserInteraction,
                                           decoration: InputDecoration(
                                               hintStyle:
                                               const TextStyle(color: Colors.black26),
@@ -388,6 +391,7 @@ class _LessonObservationApplyState extends State<LessonObservationApply> {
                                           validator: (val) => val!.isEmpty
                                               ? 'Please Enter Even better if.'
                                               : null,
+                                                autovalidateMode: AutovalidateMode.onUserInteraction,
                                           controller: _evenBetterIfController,
                                           focusNode: keyboardController.evenBetterIfFocusNode.value,
                                           decoration: InputDecoration(

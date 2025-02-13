@@ -6,11 +6,14 @@ import 'package:get/get.dart';
 import 'package:teacherapp/Controller/api_controllers/userAuthController.dart';
 import 'package:teacherapp/Controller/ui_controllers/page_controller.dart';
 import 'package:teacherapp/Utils/Colors.dart';
+import 'package:teacherapp/Utils/font_util.dart';
 import 'package:teacherapp/View/Menu/drawer.dart';
 import 'package:teacherapp/View/RoleNavigation/choice_page.dart';
 import 'package:teacherapp/View/Login_page/login.dart';
 import 'package:teacherapp/View/RoleNavigation/hos_listing.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../Services/common_services.dart';
 import '../Services/controller_handling.dart';
 import '../Services/shared_preferences.dart';
 
@@ -26,6 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     navigate();
+
   }
 
   Future<void> navigate() async {
@@ -92,4 +96,5 @@ class _SplashScreenState extends State<SplashScreen> {
           ),
         ));
   }
+ 
 }
