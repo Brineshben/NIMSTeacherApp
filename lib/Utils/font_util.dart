@@ -322,16 +322,4 @@ class TeacherAppFonts {
     fontSize: 16.sp,
     color: Colorutils.letters1,
   );
-static final TextStyle interW400_20sp = TextStyle(
-    fontFamily: _interFont,
-    fontWeight: FontWeight.w400,
-    fontSize: 20.sp,
-    color: Colorutils.Whitecolor,
-  );
-  static final TextStyle interW600_25sp_textWhite = TextStyle(
-    fontFamily: _interFont,
-    fontWeight: FontWeight.w600,
-    fontSize: 25.sp,
-    color: Colorutils.Whitecolor,
-  );
 }

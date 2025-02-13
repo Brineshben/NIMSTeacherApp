@@ -10,7 +10,6 @@ class Colorutils {
   static const red = Colors.red;
   static const yellow = Colors.yellow;
   static const transparent = Colors.transparent;
-  static const blue = Colors.blue;
 
   static const userdetailcolor = Color(0xFF128174);
   static const Whitecolor = Color(0xFFFFFFFF);

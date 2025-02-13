@@ -129,11 +129,11 @@ class _NotificationscreenState extends State<Notificationscreen> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Icon(
+                                const    Icon(
                                       Icons.notifications_none_sharp,
                                       color: Colors.black,
                                     ),
-                                    SizedBox(
+                                 const   SizedBox(
                                       width: 2,
                                     ),
                                     Text(
@@ -163,18 +163,18 @@ class _NotificationscreenState extends State<Notificationscreen> {
                                                       BorderRadius.circular(
                                                           12.h))),
                                           underline: const SizedBox(),
-                                          style: TextStyle(color: Colors.black),
-                                          items: [
+                                          style:const TextStyle(color: Colors.black),
+                                          items:const [
                                             DropdownMenuItem(
-                                              child: Text('Last 7 Days'),
                                               value: '1',
+                                              child: Text('Last 7 Days'),
                                             ),
                                             DropdownMenuItem(
-                                                child: Text('All '),
-                                                value: '2'),
+                                                value: '2',
+                                                child: Text('All ')),
                                             DropdownMenuItem(
-                                                child: Text('Unread '),
-                                                value: '3')
+                                                value: '3',
+                                                child: Text('Unread '))
                                           ],
                                           onChanged: onDropdownChanged),
                                     )
@@ -194,7 +194,7 @@ class _NotificationscreenState extends State<Notificationscreen> {
                                     messagelist = controller.Recentnotification;
                                   }
                                   return SizedBox(
-                                    height: 900.h,
+                                    height: 690.h,
                                     child: ListView(
                                       padding: EdgeInsets.only(top: 0.h),
                                       //  mainAxisSize: MainAxisSize.min,
@@ -205,7 +205,7 @@ class _NotificationscreenState extends State<Notificationscreen> {
                                             child: Center(
                                               child: Text(
                                                 controller.validationmsg.value,
-                                                style: TextStyle(
+                                                style:const TextStyle(
                                                     color: Colors.red,
                                                     fontStyle:
                                                         FontStyle.italic),
@@ -264,7 +264,7 @@ Widget _notifyme(BuildContext context, RecentNotifications notification) =>
               "${notification.msg}",
               style: TextStyle(color: Colors.blueGrey),
             ),
-            SizedBox(
+           const SizedBox(
               height: 10,
             ),
             Row(
@@ -280,7 +280,7 @@ Widget _notifyme(BuildContext context, RecentNotifications notification) =>
                   margin: const EdgeInsets.only(left: 4, top: 4),
                   child: Text(
                     "${DateFormat('dd-MM-yyyy HH:mm').format(DateTime.parse(notification.genDate.toString()).toLocal())}",
-                    style: TextStyle(
+                    style:const  TextStyle(
                         fontSize: 12, color: Colorutils.bottomnaviconcolor),
                   ),
                 ),
@@ -294,7 +294,7 @@ Widget _notifyme(BuildContext context, RecentNotifications notification) =>
                                   notificationId: notification.sId.toString());
                           context.loaderOverlay.hide();
                         },
-                        child: Text(
+                        child: const Text(
                           "Mark as Read",
                           style: TextStyle(color: Colors.red),
                         ))

@@ -87,5 +87,4 @@ class ApiConstants {
   static String batchLW = "/v0/get/batches";
   static String Focus = "/v0/get/user/lw_focus";
   static String LearningWalksubmit = "/v0/submit/lw";
-  static const update = "/v4/get/settings/appupdate";
 }
