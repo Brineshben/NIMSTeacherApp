@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "560185133261",
     "project_id": "bm-teacherapp",
-    "storage_bucket": "bm-teacherapp.appspot.com"
+    "storage_bucket": "bm-teacherapp.firebasestorage.app"
   },
   "client": [
     {
@@ -43,6 +43,14 @@
           "android_info": {
             "package_name": "com.educore.bmteacher",
             "certificate_hash": "f0a14a7c126c3b82b5ef92b37b390856f2d61f2d"
+          }
+        },
+        {
+          "client_id": "560185133261-vbiu6140gstesncg2etllhmngve6g58s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.educore.bmteacher",
+            "certificate_hash": "d9044654b08cb3b76a421e54abe3ad9ef1e2c068"
           }
         },
         {

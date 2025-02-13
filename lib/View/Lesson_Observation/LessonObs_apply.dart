@@ -233,21 +233,21 @@ class _LessonObservationApplyState extends State<LessonObservationApply> {
                                                           ),
                                                         ),
                                                       ),
-                                                      // SizedBox(
-                                                      //   width: 200.w,
-                                                      //   child:
-                                                      //   SingleChildScrollView(
-                                                      //     child: Text(
-                                                      //       widget.selectedDate,
-                                                      //       style: TextStyle(
-                                                      //           color: Colors.white,
-                                                      //           fontSize: 13.h,
-                                                      //           fontWeight:
-                                                      //           FontWeight
-                                                      //               .w400),
-                                                      //     ),
-                                                      //   ),
-                                                      // ),
+                                                      SizedBox(
+                                                        width: 200.w,
+                                                        child:
+                                                        SingleChildScrollView(
+                                                          child: Text(
+                                                            widget.selectedDate,
+                                                            style: TextStyle(
+                                                                color: Colors.white,
+                                                                fontSize: 13.h,
+                                                                fontWeight:
+                                                                FontWeight
+                                                                    .w400),
+                                                          ),
+                                                        ),
+                                                      ),
                                                       SizedBox(
                                                         width: 200.w,
                                                         child:
