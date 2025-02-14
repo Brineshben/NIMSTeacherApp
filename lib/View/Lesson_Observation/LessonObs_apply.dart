@@ -51,7 +51,6 @@ class _LessonObservationApplyState extends State<LessonObservationApply> {
 
   @override
   Widget build(BuildContext context) {
-    log('the widget is rebuilding ');
     List<String> nameParts = widget.teacherName.split(" ").map((name) => name.trim()).toList();
     nameParts = nameParts.where((name) => name.isNotEmpty).toList();
     String? placeholderName;
@@ -99,452 +98,455 @@ class _LessonObservationApplyState extends State<LessonObservationApply> {
                                 width: MediaQuery.of(context).size.width,
                                 height: MediaQuery.of(context).size.height,
                                 // height: 800.h,
-                                child: ListView(
-                                    padding: const EdgeInsets.all(5),
-                                    //crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.fromLTRB(
-                                            20.w, 10.h, 0, 10.h),
-                                        child: Text(
-                                          'Lesson Observation',
-                                          style: TextStyle(
-                                              fontSize: 18.h,
-                                              fontWeight: FontWeight.w600),
+                                child: SingleChildScrollView(
+                                  child: Column(
+
+
+                                      //crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.fromLTRB(
+                                              20.w, 10.h, 0, 10.h),
+                                          child: Text(
+                                            'Lesson Observation',
+                                            style: TextStyle(
+                                                fontSize: 18.h,
+                                                fontWeight: FontWeight.w600),
+                                          ),
                                         ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            left: 20.w,
-                                            top: 5.h,
-                                            right: 20.w,
-                                            bottom: 5.h),
-                                        child: Container(
-                                          // height: 80.h,
-                                          // width: 280.w,
-                                          decoration: BoxDecoration(
-                                              color: Colorutils.userdetailcolor,
-                                              borderRadius:
-                                              BorderRadius.circular(15).r),
-                                          child: Column(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                            children: [
-                                              SizedBox(height: 8.w),
-                                              Row(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 10)
-                                                        .w,
-                                                    child: Container(
-                                                      width: 50.h,
-                                                      height: 50.h,
-                                                      decoration: BoxDecoration(
-                                                        shape: BoxShape.circle,
-                                                        border: Border.all(
-                                                            color:
-                                                            const Color(0xFFD6E4FA)),
-                                                        color: Colors.white,
-                                                      ),
-                                                      child: ClipRRect(
-                                                        borderRadius:
-                                                        BorderRadius.circular(
-                                                            100).r,
-                                                        child: CachedNetworkImage(
-                                                          width: 50.h,
-                                                          height: 50.h,
-                                                          fit: BoxFit.fill,
-                                                          imageUrl: "${ApiConstants.downloadUrl}${Get.find<LessonLearningController>().selectedTeacher.value?.teacherImage}",
-                                                          errorWidget: (context,
-                                                              url, error) =>
-                                                              Center(
-                                                                child: Text(
-                                                                  placeholderName ?? '--',
-                                                                  style: TextStyle(
-                                                                      color: const Color(0xFFB1BFFF),
-                                                                      fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                      fontSize: 22.h),
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 20.w,
+                                              top: 5.h,
+                                              right: 20.w,
+                                              bottom: 5.h),
+                                          child: Container(
+                                            // height: 80.h,
+                                            // width: 280.w,
+                                            decoration: BoxDecoration(
+                                                color: Colorutils.userdetailcolor,
+                                                borderRadius:
+                                                BorderRadius.circular(15).r),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                              children: [
+                                                SizedBox(height: 8.w),
+                                                Row(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Padding(
+                                                      padding:
+                                                      const EdgeInsets.symmetric(
+                                                          horizontal: 10)
+                                                          .w,
+                                                      child: Container(
+                                                        width: 50.h,
+                                                        height: 50.h,
+                                                        decoration: BoxDecoration(
+                                                          shape: BoxShape.circle,
+                                                          border: Border.all(
+                                                              color:
+                                                              const Color(0xFFD6E4FA)),
+                                                          color: Colors.white,
+                                                        ),
+                                                        child: ClipRRect(
+                                                          borderRadius:
+                                                          BorderRadius.circular(
+                                                              100).r,
+                                                          child: CachedNetworkImage(
+                                                            width: 50.h,
+                                                            height: 50.h,
+                                                            fit: BoxFit.fill,
+                                                            imageUrl: "${ApiConstants.downloadUrl}${Get.find<LessonLearningController>().selectedTeacher.value?.teacherImage}",
+                                                            errorWidget: (context,
+                                                                url, error) =>
+                                                                Center(
+                                                                  child: Text(
+                                                                    placeholderName ?? '--',
+                                                                    style: TextStyle(
+                                                                        color: const Color(0xFFB1BFFF),
+                                                                        fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                        fontSize: 22.h),
+                                                                  ),
                                                                 ),
-                                                              ),
+                                                          ),
                                                         ),
                                                       ),
                                                     ),
-                                                  ),
-                                                  Column(
-                                                    crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                    children: [
-                                                      SizedBox(
-                                                        width: 200.w,
-                                                        child:
-                                                        SingleChildScrollView(
-                                                          scrollDirection:
-                                                          Axis.horizontal,
-                                                          child: Text(
-                                                            widget.teacherName,
-                                                            style: TextStyle(
-                                                                color: const Color(0xffFFFFFF),
-                                                                fontSize: 14.h,
-                                                                fontWeight:
-                                                                FontWeight
-                                                                    .w400),
+                                                    Column(
+                                                      crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                      children: [
+                                                        SizedBox(
+                                                          width: 200.w,
+                                                          child:
+                                                          SingleChildScrollView(
+                                                            scrollDirection:
+                                                            Axis.horizontal,
+                                                            child: Text(
+                                                              widget.teacherName,
+                                                              style: TextStyle(
+                                                                  color: const Color(0xffFFFFFF),
+                                                                  fontSize: 14.h,
+                                                                  fontWeight:
+                                                                  FontWeight
+                                                                      .w400),
+                                                            ),
                                                           ),
                                                         ),
-                                                      ),
-                                                      // SizedBox(
-                                                      //   height: 2.h,
-                                                      // ),
-                                                      SizedBox(
-                                                        width: 180.w,
-                                                        child:
-                                                        SingleChildScrollView(
-                                                          scrollDirection:
-                                                          Axis.horizontal,
-                                                          child: Text(
-                                                            widget.classAndBatch,
-                                                            style: TextStyle(
-                                                                color: Colors.white,
-                                                                fontSize: 13.h,
-                                                                fontWeight:
-                                                                FontWeight
-                                                                    .w400),
+                                                        // SizedBox(
+                                                        //   height: 2.h,
+                                                        // ),
+                                                        SizedBox(
+                                                          width: 180.w,
+                                                          child:
+                                                          SingleChildScrollView(
+                                                            scrollDirection:
+                                                            Axis.horizontal,
+                                                            child: Text(
+                                                              widget.classAndBatch,
+                                                              style: TextStyle(
+                                                                  color: Colors.white,
+                                                                  fontSize: 13.h,
+                                                                  fontWeight:
+                                                                  FontWeight
+                                                                      .w400),
+                                                            ),
                                                           ),
                                                         ),
-                                                      ),
-                                                      // SizedBox(
-                                                      //   height: 2.h,
-                                                      // ),
-                                                      SizedBox(
-                                                        width: 180.w,
-                                                        child:
-                                                        SingleChildScrollView(
-                                                          child: Text(
-                                                            widget.subjectName,
-                                                            style: TextStyle(
-                                                                color: Colors.white,
-                                                                fontSize: 13.h,
-                                                                fontWeight:
-                                                                FontWeight
-                                                                    .w400),
+                                                        // SizedBox(
+                                                        //   height: 2.h,
+                                                        // ),
+                                                        SizedBox(
+                                                          width: 180.w,
+                                                          child:
+                                                          SingleChildScrollView(
+                                                            child: Text(
+                                                              widget.subjectName,
+                                                              style: TextStyle(
+                                                                  color: Colors.white,
+                                                                  fontSize: 13.h,
+                                                                  fontWeight:
+                                                                  FontWeight
+                                                                      .w400),
+                                                            ),
                                                           ),
                                                         ),
-                                                      ),
-                                                      SizedBox(
-                                                        width: 200.w,
-                                                        child:
-                                                        SingleChildScrollView(
-                                                          child: Text(
-                                                            widget.selectedDate,
-                                                            style: TextStyle(
-                                                                color: Colors.white,
-                                                                fontSize: 13.h,
-                                                                fontWeight:
-                                                                FontWeight
-                                                                    .w400),
+                                                        SizedBox(
+                                                          width: 200.w,
+                                                          child:
+                                                          SingleChildScrollView(
+                                                            child: Text(
+                                                              widget.selectedDate,
+                                                              style: TextStyle(
+                                                                  color: Colors.white,
+                                                                  fontSize: 13.h,
+                                                                  fontWeight:
+                                                                  FontWeight
+                                                                      .w400),
+                                                            ),
                                                           ),
                                                         ),
-                                                      ),
-                                                      SizedBox(
-                                                        width: 200.w,
-                                                        child:
-                                                        SingleChildScrollView(
-                                                          child: Text(
-                                                            "Topic : ${widget.topic}",
-                                                            style: TextStyle(
-                                                                color: Colors.white,
-                                                                fontSize: 13.h,
-                                                                fontWeight:
-                                                                FontWeight
-                                                                    .w400),
+                                                        SizedBox(
+                                                          width: 200.w,
+                                                          child:
+                                                          SingleChildScrollView(
+                                                            child: Text(
+                                                              "Topic : ${widget.topic}",
+                                                              style: TextStyle(
+                                                                  color: Colors.white,
+                                                                  fontSize: 13.h,
+                                                                  fontWeight:
+                                                                  FontWeight
+                                                                      .w400),
+                                                            ),
                                                           ),
                                                         ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                              SizedBox(height: 8.w),
-                                            ],
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(height: 8.w),
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                        EdgeInsets.fromLTRB(25.w, 5.h, 0, 5.h),
-                                        child: Text(
-                                          'Criteria',
-                                          style: TextStyle(
-                                              fontSize: 18.h,
-                                              fontWeight: FontWeight.w600),
+                                        Padding(
+                                          padding:
+                                          EdgeInsets.fromLTRB(25.w, 5.h, 0, 5.h),
+                                          child: Text(
+                                            'Criteria',
+                                            style: TextStyle(
+                                                fontSize: 18.h,
+                                                fontWeight: FontWeight.w600),
+                                          ),
                                         ),
-                                      ),
-                                      QuestionRadioFields(topicData: widget.topic),
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                            left: 20.w,
-                                            top: 10.h,
-                                            right: 20.w,
-                                            bottom: 5.h),
-                                        child: TextFormField(
-                                          maxLength: 1000,
-                                          validator: (val) => val!.isEmpty
-                                              ? 'Please Enter  Summary.'
-                                              : null,
-                                          controller: _summaryController,
-                                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                                          focusNode: keyboardController.summaryFocusNode.value,
-                                          decoration: InputDecoration(
-                                              hintStyle: const TextStyle(color: Colors.black26),
-                                              contentPadding: EdgeInsets.symmetric(
-                                                  vertical: 10.h, horizontal: 20.w),
-                                              hintText: " Summary  ",
+                                        QuestionRadioFields(topicData: widget.topic),
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 20.w,
+                                              top: 10.h,
+                                              right: 20.w,
+                                              bottom: 5.h),
+                                          child: TextFormField(
+                                            maxLength: 1000,
+                                            validator: (val) => val!.isEmpty
+                                                ? 'Please Enter  Summary.'
+                                                : null,
+                                            controller: _summaryController,
+                                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                                            focusNode: keyboardController.summaryFocusNode.value,
+                                            decoration: InputDecoration(
+                                                hintStyle: const TextStyle(color: Colors.black26),
+                                                contentPadding: EdgeInsets.symmetric(
+                                                    vertical: 10.h, horizontal: 20.w),
+                                                hintText: " Summary  ",
 
-                                              border: OutlineInputBorder(
-                                                borderRadius: const BorderRadius.all(
-                                                  Radius.circular(10.0),
-                                                ).r,
-                                              ),
-                                              enabledBorder: OutlineInputBorder(
-                                                borderSide: const BorderSide(
-                                                    color: Color.fromRGBO(
-                                                        230, 236, 254, 8),
-                                                    width: 1.0),
-                                                borderRadius: const BorderRadius.all(
-                                                    Radius.circular(22)).r,
-                                              ),
-                                              focusedBorder: OutlineInputBorder(
-                                                borderSide: const BorderSide(
-                                                    color: Color.fromRGBO(
-                                                        230, 236, 254, 8),
-                                                    width: 1.0),
-                                                borderRadius: const BorderRadius.all(
-                                                    Radius.circular(30.0)).r,
-                                              ),
-                                              fillColor: Colorutils.chatcolor
-                                                  .withOpacity(0.3),
-                                              filled: true),
-                                          maxLines: 5,
+                                                border: OutlineInputBorder(
+                                                  borderRadius: const BorderRadius.all(
+                                                    Radius.circular(10.0),
+                                                  ).r,
+                                                ),
+                                                enabledBorder: OutlineInputBorder(
+                                                  borderSide: const BorderSide(
+                                                      color: Color.fromRGBO(
+                                                          230, 236, 254, 8),
+                                                      width: 1.0),
+                                                  borderRadius: const BorderRadius.all(
+                                                      Radius.circular(22)).r,
+                                                ),
+                                                focusedBorder: OutlineInputBorder(
+                                                  borderSide: const BorderSide(
+                                                      color: Color.fromRGBO(
+                                                          230, 236, 254, 8),
+                                                      width: 1.0),
+                                                  borderRadius: const BorderRadius.all(
+                                                      Radius.circular(30.0)).r,
+                                                ),
+                                                fillColor: Colorutils.chatcolor
+                                                    .withOpacity(0.3),
+                                                filled: true),
+                                            maxLines: 5,
+                                          ),
                                         ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(
+                                        Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 20.w,
+                                              top: 5.h,
+                                              right: 20.w,
+                                              bottom: 5.h),
+                                          child: TextFormField(
+                                            controller: _whatWentWellController,
+                                            focusNode: keyboardController.whatWentWellFocusNode.value,
+                                            maxLength: 1000,
+                                            validator: (val) => val!.isEmpty
+                                                ? 'Please Enter What went well.'
+                                                : null,
+                                                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                                            decoration: InputDecoration(
+                                                hintStyle:
+                                                const TextStyle(color: Colors.black26),
+                                                contentPadding: EdgeInsets.symmetric(
+                                                    vertical: 10.h, horizontal: 20.w),
+                                                hintText: " What went well   ",
+
+                                                border: OutlineInputBorder(
+                                                  borderRadius: const BorderRadius.all(
+                                                    Radius.circular(10.0),
+                                                  ).r,
+                                                ),
+                                                enabledBorder: OutlineInputBorder(
+                                                  borderSide: const BorderSide(
+                                                      color: Color.fromRGBO(
+                                                          230, 236, 254, 8),
+                                                      width: 1.0),
+                                                  borderRadius: const BorderRadius.all(
+                                                      Radius.circular(22)).r,
+                                                ),
+                                                focusedBorder: OutlineInputBorder(
+                                                  borderSide: const BorderSide(
+                                                      color: Color.fromRGBO(
+                                                          230, 236, 254, 8),
+                                                      width: 1.0),
+                                                  borderRadius: const BorderRadius.all(
+                                                      Radius.circular(30.0)).r,
+                                                ),
+                                                fillColor: Colorutils.chatcolor
+                                                    .withOpacity(0.3),
+                                                filled: true),
+                                            maxLines: 5,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.only(
                                             left: 20.w,
                                             top: 5.h,
                                             right: 20.w,
-                                            bottom: 5.h),
-                                        child: TextFormField(
-                                          controller: _whatWentWellController,
-                                          focusNode: keyboardController.whatWentWellFocusNode.value,
-                                          maxLength: 1000,
-                                          validator: (val) => val!.isEmpty
-                                              ? 'Please Enter What went well.'
-                                              : null,
-                                                autovalidateMode: AutovalidateMode.onUserInteraction,
-                                          decoration: InputDecoration(
-                                              hintStyle:
-                                              const TextStyle(color: Colors.black26),
-                                              contentPadding: EdgeInsets.symmetric(
-                                                  vertical: 10.h, horizontal: 20.w),
-                                              hintText: " What went well   ",
+                                            bottom: 5.h,
+                                          ),
+                                          child: TextFormField(
+                                            maxLength: 1000,
+                                            validator: (val) => val!.isEmpty
+                                                ? 'Please Enter Even better if.'
+                                                : null,
+                                                  autovalidateMode: _evenBetterIfController.text.isNotEmpty?AutovalidateMode.always:AutovalidateMode.disabled,
+                                            controller: _evenBetterIfController,
+                                            focusNode: keyboardController.evenBetterIfFocusNode.value,
+                                            decoration: InputDecoration(
+                                                hintStyle:
+                                                const TextStyle(color: Colors.black26),
+                                                contentPadding: EdgeInsets.symmetric(
+                                                    vertical: 10.h, horizontal: 20.w),
+                                                hintText: " Even better if   ",
 
-                                              border: OutlineInputBorder(
-                                                borderRadius: const BorderRadius.all(
-                                                  Radius.circular(10.0),
-                                                ).r,
-                                              ),
-                                              enabledBorder: OutlineInputBorder(
-                                                borderSide: const BorderSide(
-                                                    color: Color.fromRGBO(
-                                                        230, 236, 254, 8),
-                                                    width: 1.0),
-                                                borderRadius: const BorderRadius.all(
-                                                    Radius.circular(22)).r,
-                                              ),
-                                              focusedBorder: OutlineInputBorder(
-                                                borderSide: const BorderSide(
-                                                    color: Color.fromRGBO(
-                                                        230, 236, 254, 8),
-                                                    width: 1.0),
-                                                borderRadius: const BorderRadius.all(
-                                                    Radius.circular(30.0)).r,
-                                              ),
-                                              fillColor: Colorutils.chatcolor
-                                                  .withOpacity(0.3),
-                                              filled: true),
-                                          maxLines: 5,
+                                                border: OutlineInputBorder(
+                                                  borderRadius: const BorderRadius.all(
+                                                    Radius.circular(10.0),
+                                                  ).r,
+                                                ),
+                                                enabledBorder: OutlineInputBorder(
+                                                  borderSide: const BorderSide(
+                                                      color: Color.fromRGBO(
+                                                          230, 236, 254, 8),
+                                                      width: 1.0),
+                                                  borderRadius: const BorderRadius.all(
+                                                      Radius.circular(22)).r,
+                                                ),
+                                                focusedBorder: OutlineInputBorder(
+                                                  borderSide: const BorderSide(
+                                                      color: Color.fromRGBO(
+                                                          230, 236, 254, 8),
+                                                      width: 1.0),
+                                                  borderRadius: const BorderRadius.all(
+                                                      Radius.circular(30.0)).r,
+                                                ),
+                                                fillColor: Colorutils.chatcolor
+                                                    .withOpacity(0.3),
+                                                filled: true),
+                                            maxLines: 5,
+                                          ),
                                         ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                          left: 20.w,
-                                          top: 5.h,
-                                          right: 20.w,
-                                          bottom: 5.h,
+                                        Padding(
+                                          padding:
+                                          EdgeInsets.fromLTRB(10.w, 0, 0, 0),
+                                          child: Row(
+                                            children: [
+                                              SizedBox(width: 10.w),
+                                              CustomCheckbox(
+                                                onChange: (value) {
+                                                  setState(() {
+                                                    isChecked = !isChecked;
+                                                  });
+                                                },
+                                                borderRadius: BorderRadius.circular(3).r,
+                                                checkIcon: const Icon(Icons.done),
+                                                borderColor: Colors.teal,
+                                                selectedColor: Colors.teal,
+                                                isChecked: isChecked,
+                                                size: 23,
+                                              ),
+                                              // Checkbox(
+                                              //   activeColor:
+                                              //   Colorutils.userdetailcolor,
+                                              //   value: isChecked,
+                                              //   onChanged: (value) {
+                                              //     setState(() {
+                                              //       isChecked = !isChecked;
+                                              //     });
+                                              //   },
+                                              // ),
+                                              SizedBox(width: 10.w),
+                                              Text(
+                                                'Joined Observation',
+                                                style: TextStyle(
+                                                  fontSize: 14.h,
+                                                ),
+                                              )
+                                            ],
+                                          ),
                                         ),
-                                        child: TextFormField(
-                                          maxLength: 1000,
-                                          validator: (val) => val!.isEmpty
-                                              ? 'Please Enter Even better if.'
-                                              : null,
-                                                autovalidateMode: AutovalidateMode.onUserInteraction,
-                                          controller: _evenBetterIfController,
-                                          focusNode: keyboardController.evenBetterIfFocusNode.value,
-                                          decoration: InputDecoration(
-                                              hintStyle:
-                                              const TextStyle(color: Colors.black26),
-                                              contentPadding: EdgeInsets.symmetric(
-                                                  vertical: 10.h, horizontal: 20.w),
-                                              hintText: " Even better if   ",
-
-                                              border: OutlineInputBorder(
-                                                borderRadius: const BorderRadius.all(
-                                                  Radius.circular(10.0),
-                                                ).r,
-                                              ),
-                                              enabledBorder: OutlineInputBorder(
-                                                borderSide: const BorderSide(
-                                                    color: Color.fromRGBO(
-                                                        230, 236, 254, 8),
-                                                    width: 1.0),
-                                                borderRadius: const BorderRadius.all(
-                                                    Radius.circular(22)).r,
-                                              ),
-                                              focusedBorder: OutlineInputBorder(
-                                                borderSide: const BorderSide(
-                                                    color: Color.fromRGBO(
-                                                        230, 236, 254, 8),
-                                                    width: 1.0),
-                                                borderRadius: const BorderRadius.all(
-                                                    Radius.circular(30.0)).r,
-                                              ),
-                                              fillColor: Colorutils.chatcolor
-                                                  .withOpacity(0.3),
-                                              filled: true),
-                                          maxLines: 5,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                        EdgeInsets.fromLTRB(10.w, 0, 0, 0),
-                                        child: Row(
-                                          children: [
-                                            SizedBox(width: 10.w),
-                                            CustomCheckbox(
-                                              onChange: (value) {
-                                                setState(() {
-                                                  isChecked = !isChecked;
-                                                });
-                                              },
-                                              borderRadius: BorderRadius.circular(3).r,
-                                              checkIcon: const Icon(Icons.done),
-                                              borderColor: Colors.teal,
-                                              selectedColor: Colors.teal,
-                                              isChecked: isChecked,
-                                              size: 23,
-                                            ),
-                                            // Checkbox(
-                                            //   activeColor:
-                                            //   Colorutils.userdetailcolor,
-                                            //   value: isChecked,
-                                            //   onChanged: (value) {
-                                            //     setState(() {
-                                            //       isChecked = !isChecked;
-                                            //     });
-                                            //   },
-                                            // ),
-                                            SizedBox(width: 10.w),
-                                            Text(
-                                              'Joined Observation',
-                                              style: TextStyle(
-                                                fontSize: 14.h,
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(height: 50.h),
-                                      GestureDetector(
-                                        onTap: () async {
-                                          bool radioNotSelected = false;
-                                          if(_formKey.currentState!.validate()) {
-                                            for(var point in Get.find<LessonLearningController>().markedIndicators.value){
-                                              if(point.point == null) {
-                                                radioNotSelected = true;
-                                                TeacherAppPopUps.submitFailed(
-                                                  title: "Warning",
-                                                  message: "Please Enter all Fields",
-                                                  actionName: "Close",
-                                                  iconData: Icons.info,
-                                                  iconColor: Colors.red,
-                                                );
-                                                break;
+                                        SizedBox(height: 50.h),
+                                        GestureDetector(
+                                          onTap: () async {
+                                            bool radioNotSelected = false;
+                                            if(_formKey.currentState!.validate()) {
+                                              for(var point in Get.find<LessonLearningController>().markedIndicators.value){
+                                                if(point.point == null) {
+                                                  radioNotSelected = true;
+                                                  TeacherAppPopUps.submitFailed(
+                                                    title: "Warning",
+                                                    message: "Please Enter all Fields",
+                                                    actionName: "Close",
+                                                    iconData: Icons.info,
+                                                    iconColor: Colors.red,
+                                                  );
+                                                  break;
+                                                }
                                               }
-                                            }
-                                            if(!radioNotSelected) {
-                                              await submitLessonObs();
-                                              Get.back();
-                                              Get.back();
+                                              if(!radioNotSelected) {
+                                                await submitLessonObs();
+                                                Get.back();
+                                                Get.back();
+                                                TeacherAppPopUps.submitFailed(
+                                                  title: "Success",
+                                                  message: "Lesson Observation Result Added Successfully",
+                                                  actionName: "Close",
+                                                  iconData: Icons.done,
+                                                  iconColor: Colors.green,
+                                                );
+                                              }
+                                            } else {
                                               TeacherAppPopUps.submitFailed(
-                                                title: "Success",
-                                                message: "Lesson Observation Result Added Successfully",
+                                                title: "Warning",
+                                                message: "Please Enter all Mandatory Fields",
                                                 actionName: "Close",
-                                                iconData: Icons.done,
-                                                iconColor: Colors.green,
+                                                iconData: Icons.info,
+                                                iconColor: Colors.red,
                                               );
                                             }
-                                          } else {
-                                            TeacherAppPopUps.submitFailed(
-                                              title: "Warning",
-                                              message: "Please Enter all Mandatory Fields",
-                                              actionName: "Close",
-                                              iconData: Icons.info,
-                                              iconColor: Colors.red,
-                                            );
-                                          }
-                                        },
-                                        child: Padding(
-                                          padding: EdgeInsets.only(left: 80.w, right: 80.w),
-                                          child: Container(
-                                            height: 50.h,
-                                            // width: 180.w,
-                                            decoration: BoxDecoration(
-                                                color: Colorutils.userdetailcolor,
-                                                borderRadius: BorderRadius.circular(30).r,
-                                            ),
-                                            child: Center(
-                                                child: Text(
-                                                  'SUBMIT',
-                                                  style: TextStyle(
-                                                      fontSize: 18.h,
-                                                      letterSpacing: 1,
-                                                      fontWeight: FontWeight.bold,
-                                                      color: Colors.white),
-                                                ),
+                                          },
+                                          child: Padding(
+                                            padding: EdgeInsets.only(left: 80.w, right: 80.w),
+                                            child: Container(
+                                              height: 50.h,
+                                              // width: 180.w,
+                                              decoration: BoxDecoration(
+                                                  color: Colorutils.userdetailcolor,
+                                                  borderRadius: BorderRadius.circular(30).r,
+                                              ),
+                                              child: Center(
+                                                  child: Text(
+                                                    'SUBMIT',
+                                                    style: TextStyle(
+                                                        fontSize: 18.h,
+                                                        letterSpacing: 1,
+                                                        fontWeight: FontWeight.bold,
+                                                        color: Colors.white),
+                                                  ),
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                      GetX<KeyboardController>(
-                                        builder: (KeyboardController controller) {
-                                          if(controller.summaryFocusNode.value.hasFocus ||
-                                          controller.whatWentWellFocusNode.value.hasFocus ||
-                                          controller.evenBetterIfFocusNode.value.hasFocus) {
-                                            return SizedBox(
-                                              height: MediaQuery.of(context).viewInsets.bottom + 50.h,
-                                            );
-                                          } else {
-                                            return SizedBox(
-                                              height: 50.h,
-                                            );
-                                          }
-                                        },
-                                      ),
-                                    ]),
+                                        GetX<KeyboardController>(
+                                          builder: (KeyboardController controller) {
+                                            if(controller.summaryFocusNode.value.hasFocus ||
+                                            controller.whatWentWellFocusNode.value.hasFocus ||
+                                            controller.evenBetterIfFocusNode.value.hasFocus) {
+                                              return SizedBox(
+                                                height: MediaQuery.of(context).viewInsets.bottom + 50.h,
+                                              );
+                                            } else {
+                                              return SizedBox(
+                                                height: 50.h,
+                                              );
+                                            }
+                                          },
+                                        ),
+                                      ]),
+                                ),
                               ),
                             )
                           ]),
