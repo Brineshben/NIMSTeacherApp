@@ -184,8 +184,9 @@ class _NonTeacherStudentListState extends State<NonTeacherStudentList> {
             ourStudentList = newStudentList[0]
                 ["feeDetails"]; // You can safely access the element here.
             // modifiedStudentList = newStudentList[0]['feeDetails'];
-            ourStudentList
-                .sort((a, b) => a['username'].compareTo(b['username']));
+          
+           ourStudentList.sort((a, b) => a['username'].toLowerCase().compareTo(b['username'].toLowerCase()));
+
           }
           for (var index = 0; index < ourStudentList.length; index++) {
             ourStudentList[index].addAll({"is_present": true});
