@@ -272,7 +272,7 @@ class _LessonWalkApplyState extends State<LessonWalkApply> {
                                               hintStyle: const TextStyle(color: Colors.black26),
                                               contentPadding: EdgeInsets.symmetric(
                                                   vertical: 10.h, horizontal: 20.w),
-                                              hintText: " Summaryyy  ",
+                                              hintText: " Summary  ",
                                             
                                               border: OutlineInputBorder(
                                                 
