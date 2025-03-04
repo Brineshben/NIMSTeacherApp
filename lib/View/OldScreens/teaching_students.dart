@@ -251,6 +251,7 @@ class _StudentListViewState extends State<StudentListView> {
             if (newStudentList != null && newStudentList.length != 0) {
               ourStudentList = newStudentList[0]["feeDetails"];
               ourStudentList.sort((a, b) => a['username'].compareTo(b['username']));
+              print('sorted 1 $ourStudentList');
               // You can safely access the element here.
               // modifiedStudentList = newStudentList[0]['feeDetails'];
             }
