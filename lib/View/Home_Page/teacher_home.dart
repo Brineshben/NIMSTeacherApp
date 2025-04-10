@@ -151,6 +151,10 @@ class _TeacherState extends State<Teacher> {
                           Topic(
                               todaySubjects:
                                   controller.teacherTimeTableToday.value),
+                                    if (controller.teacherSubjects.isEmpty &&
+                              controller.classTeacherSubjects.isEmpty 
+  )
+                            ValidationSceeninTeacherHome(),
                         ],
                       ),
                     ),
@@ -161,6 +165,29 @@ class _TeacherState extends State<Teacher> {
           ),
         ),
       ),
+    );
+  }
+}
+
+
+
+class ValidationSceeninTeacherHome extends StatelessWidget {
+  const ValidationSceeninTeacherHome({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(
+          height: 280.h,
+        ),
+        Center(
+          child: Text(
+            'No classes are assigned to you.',
+            style: TextStyle(fontSize: 20.h),
+          ),
+        ),
+      ],
     );
   }
 }

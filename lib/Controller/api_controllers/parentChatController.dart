@@ -298,27 +298,27 @@ class ParentChattingController extends GetxController {
 
   /////////////////////////////
   selectAttachment({required BuildContext context}) async {
-    filePath.value = null;
+    // filePath.value = null;
     bool connected = await CheckConnectivity().check();
 
     try {
       FilePickerResult? data = await FilePicker.platform
           .pickFiles(type: FileType.any, allowMultiple: true
-              // allowedExtensions: [
-              //   'pdf',
-              //   'jpg',
-              //   'jpeg',
-              //   'png',
-              //   'mp4',
-              //   'mov',
-              //   'avi',
-              //   'mkv',
-              //   'mp3',
-              //   'wav',
-              //   'opus',
-              //   'm4a',
-              // ],
-              )
+        // allowedExtensions: [
+        //   'pdf',
+        //   'jpg',
+        //   'jpeg',
+        //   'png',
+        //   'mp4',
+        //   'mov',
+        //   'avi',
+        //   'mkv',
+        //   'mp3',
+        //   'wav',
+        //   'opus',
+        //   'm4a',
+        // ],
+      )
           .whenComplete(() {
         if (!connected) {
           snackBar(
@@ -330,7 +330,7 @@ class ParentChattingController extends GetxController {
 
       if (data != null) {
         List<File> result = data.paths.map((path) => File(path!)).toList();
-        if (result.length == 1) {
+        if (filePath.value == null && filePathList.value.isEmpty && result.length == 1) {
           File file = File(result[0].path);
 
           int fileSizeInBytes = await file.length();
@@ -344,14 +344,14 @@ class ParentChattingController extends GetxController {
                 message: "The selected file is above 30 MB",
                 color: Colors.red);
           }
-        } else if (result.length > 10) {
+        } else if ((filePathList.value.length + result.length) > 10) {
           snackBar(
               context: context,
               message: "You cannot select more than 10 attachments.",
               color: Colors.red);
         } else {
           if (result.isNotEmpty) {
-            filePathList.value = [];
+            // filePathList.value = [];
             for (final fileData in result) {
               File file = File(fileData.path);
               int fileSizeInBytes = await file.length();
@@ -360,13 +360,17 @@ class ParentChattingController extends GetxController {
                 print("Loop working test");
                 // filePath.value = result[0].path;
 
+                if(filePath.value != null) {
+                  filePathList.add(filePath.value!);
+                  filePath.value = null;
+                }
                 filePathList.add(fileData.path);
               } else {
                 filePath.value = null;
                 snackBar(
                     context: context,
                     message:
-                        "The selected file ${fileData.path} is above 30 MB",
+                    "The selected file ${fileData.path.split("/").last} is above 30 MB",
                     color: Colors.red);
               }
             }
@@ -385,7 +389,13 @@ class ParentChattingController extends GetxController {
   }
 
   removeSelectedAttachment(int index) {
-    filePathList.removeAt(index);
+    if(filePathList.value.length == 2) {
+      filePathList.removeAt(index);
+      filePath.value = filePathList.first;
+      filePathList.value = [];
+    } else {
+      filePathList.removeAt(index);
+    }
   }
 
   //////////////////////////////
@@ -592,6 +602,8 @@ class ParentChattingController extends GetxController {
     }
   }
 
+  RxBool attachUploadFailed = false.obs;
+
   Future<dynamic> sendAttach(
       {required BuildContext context,
       required String classs,
@@ -631,12 +643,30 @@ class ParentChattingController extends GetxController {
             stuentId: studentId);
       }
       isSentLoading.value = false;
+      attachUploadFailed.value = false;
     } catch (e) {
       print("sendAttach Error :-------------- $e");
-      snackBar(
+      // snackBar(
+      //     context: context,
+      //     message: "Something went wrong.",
+      //     color: Colors.red);
+      if(!attachUploadFailed.value) {
+        attachUploadFailed.value = true;
+        await sendAttach(
           context: context,
-          message: "Something went wrong.",
-          color: Colors.red);
+          classs: classs,
+          batch: batch,
+          subId: subId,
+          sub: sub,
+          teacherId: teacherId,
+          filePath: filePath,
+          message: message,
+          parent: parent,
+          studentId: studentId,
+        );
+      } else {
+        attachUploadFailed.value = false;
+      }
       isSentLoading.value = false;
     }
   }

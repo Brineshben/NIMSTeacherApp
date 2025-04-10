@@ -214,6 +214,8 @@ class UserAuthController extends GetxController {
   }
 
   Future<void> getNotificationPeriodically() async {
+   Get.lazyPut(()=>NotificationController());
+  
     await Get.find<NotificationController>().fetchNotification();
     await Future.delayed(const Duration(seconds: 3));
     await getNotificationPeriodically();

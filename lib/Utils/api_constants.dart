@@ -7,7 +7,7 @@ class ApiConstants {
     return _instance;
   }
 
-  static String appVersion = "Version : 2.0.1";
+  static String appVersion = "Version : 1.0.0";
   static Map<String, String> headers = {
     'x-auth-token': 'tq355lY3MJyd8Uj2ySzm',
     'Content-Type': 'application/json'
@@ -16,7 +16,7 @@ class ApiConstants {
   //-----------------live url------------------
 
   // static String baseUrl = "https://nims3000.educore.guru";
-  // static String downloadUrl = "https://nims4000.educore.guru";
+  static String downloadUrl = "https://nims4000.educore.guru";
   // static String docMeUrl = "https://bmark.nimsuae.com";
   // static String bmClinic = "https://api-bmclinic.nimsuae.com";
   // static String chat = "https://chat.benchmark.school/api";
@@ -24,9 +24,9 @@ class ApiConstants {
   //-----------------test url------------------
   // static String baseUrl = "https://192.168.29.221";
 
-  static String baseUrl = "https://teamsqa3000.educore.guru";
-  // static String baseUrl = "https://sqa3000.educore.guru"; // smoke
-  static String downloadUrl = "https://teamsqa4000.educore.guru";
+  // // static String baseUrl = "https://teamsqa3000.educore.guru";
+  static String baseUrl = "https://sqa3000.educore.guru"; // smoke
+  // static String downloadUrl = "https://teamsqa4000.educore.guru";
   static String docMeUrl = "https://sqa.globtech.in/bm-school";
   static String bmClinic = "https://apiqa-bmclinic.docme.online";
   static String chat = "https://chat.bmark.in/api";
@@ -87,4 +87,5 @@ class ApiConstants {
   static String batchLW = "/v0/get/batches";
   static String Focus = "/v0/get/user/lw_focus";
   static String LearningWalksubmit = "/v0/submit/lw";
+  static const update = "/v4/get/settings/appupdate";
 }

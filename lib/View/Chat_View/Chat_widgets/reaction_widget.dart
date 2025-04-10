@@ -8,7 +8,7 @@ import 'package:teacherapp/Controller/api_controllers/parentChatController.dart'
 import 'package:teacherapp/Controller/reaction_controller/reaction_controller.dart';
 import 'package:teacherapp/Services/common_services.dart';
 import 'package:flutter/foundation.dart' as foundation;
-import 'package:teacherapp/View/Chat_View/feed_view%20_chat_screen.dart';
+import 'package:teacherapp/View/Chat_View/feed_view_chat_screen.dart';
 import 'package:teacherapp/View/Chat_View/parent_chat_screen.dart';
 
 class ReactionContainerWidget extends StatelessWidget {
@@ -94,7 +94,7 @@ class ReactionContainerWidget extends StatelessWidget {
                                     ? 1.20
                                     : 1.0),
                           ),
-                          swapCategoryAndBottomBar: false,
+                          // swapCategoryAndBottomBar: false,
                           categoryViewConfig: const CategoryViewConfig(
                               iconColorSelected: Colors.teal,
                               indicatorColor: Colors.teal),
@@ -267,7 +267,7 @@ class ReactionContainerWidget2 extends StatelessWidget {
                                     ? 1.20
                                     : 1.0),
                           ),
-                          swapCategoryAndBottomBar: false,
+                          // swapCategoryAndBottomBar: false,
                           categoryViewConfig: const CategoryViewConfig(
                               iconColorSelected: Colors.teal,
                               indicatorColor: Colors.teal),

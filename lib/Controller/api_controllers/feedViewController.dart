@@ -361,7 +361,7 @@ class FeedViewController extends GetxController {
 
   /////////////////////////////
   selectAttachment({required BuildContext context}) async {
-    filePath.value = null;
+    // filePath.value = null;
     bool connected = await CheckConnectivity().check();
 
     try {
@@ -393,7 +393,7 @@ class FeedViewController extends GetxController {
 
       if (data != null) {
         List<File> result = data.paths.map((path) => File(path!)).toList();
-        if (result.length == 1) {
+        if (filePath.value == null && filePathList.value.isEmpty && result.length == 1) {
           File file = File(result[0].path);
 
           int fileSizeInBytes = await file.length();
@@ -407,14 +407,14 @@ class FeedViewController extends GetxController {
                 message: "The selected file is above 30 MB",
                 color: Colors.red);
           }
-        } else if (result.length > 10) {
+        } else if ((filePathList.value.length + result.length) > 10) {
           snackBar(
               context: context,
               message: "You cannot select more than 10 attachments.",
               color: Colors.red);
         } else {
           if (result.isNotEmpty) {
-            filePathList.value = [];
+            // filePathList.value = [];
             for (final fileData in result) {
               File file = File(fileData.path);
               int fileSizeInBytes = await file.length();
@@ -423,13 +423,17 @@ class FeedViewController extends GetxController {
                 print("Loop working test");
                 // filePath.value = result[0].path;
 
+                if(filePath.value != null) {
+                  filePathList.add(filePath.value!);
+                  filePath.value = null;
+                }
                 filePathList.add(fileData.path);
               } else {
                 filePath.value = null;
                 snackBar(
                     context: context,
                     message:
-                        "The selected file ${fileData.path} is above 30 MB",
+                        "The selected file ${fileData.path.split("/").last} is above 30 MB",
                     color: Colors.red);
               }
             }
@@ -448,7 +452,13 @@ class FeedViewController extends GetxController {
   }
 
   removeSelectedAttachment(int index) {
-    filePathList.removeAt(index);
+    if(filePathList.value.length == 2) {
+      filePathList.removeAt(index);
+      filePath.value = filePathList.first;
+      filePathList.value = [];
+    } else {
+      filePathList.removeAt(index);
+    }
   }
 
   //////////////////////////////
@@ -603,9 +613,18 @@ class FeedViewController extends GetxController {
   }) async {
     print("Arun Msg Sent working ------------------------------");
     // for removing the parent list for replay msg and only sent the particular parent and teacher //
+
+    List<ParentDataSelected> finalParentList = [];
+    ParentDataSelected? parentData;
+
     if (sentMsgData.replyId != null) {
       if (replayMessage.roleName == "parents") {
         sentMsgData.parents = [replayMessage.messageFromId ?? ""];
+        finalParentList = await Get.find<FeedDBController>().getParentList(subId: sentMsgData.subjectId ?? '', batch: sentMsgData.batch ?? '', studentClass: sentMsgData.classs ?? '');
+        List<ParentDataSelected> parentDataList = finalParentList.where((element) => replayMessage.messageFromId == element.sId).toList();
+        if(parentDataList.isNotEmpty) {
+          parentData = parentDataList.first;
+        }
       } else {
         if (Get.find<UserAuthController>().userData.value.userId ==
             replayMessage.messageFromId) {
@@ -626,6 +645,7 @@ class FeedViewController extends GetxController {
         print(
             "snet Parent list ---------------------- ${setFinalParentListForNotification()}");
         // if (sentMsgData.replyId == null) {
+
         await Get.find<PushNotificationController>().sendNotification(
           teacherId: sentMsgData.messageFrom ?? "",
           message: sentMsgData.message,
@@ -638,7 +658,10 @@ class FeedViewController extends GetxController {
           subId: sentMsgData.subjectId ?? "",
           subjectName: sentMsgData.subject ?? "",
           fileName: sentMsgData.fileData?.name ?? "",
-          parentData: setFinalParentListForNotification(),
+          parentData: (sentMsgData.replyId != null && replayMessage.roleName == "parents") ? [{
+            "parent_id": replayMessage.messageFromId ?? '',
+            "student_id": parentData?.studentId ?? '',
+          }] : setFinalParentListForNotification(),
         );
         // }
 
@@ -742,6 +765,9 @@ class FeedViewController extends GetxController {
   //   }
   // }
 
+
+  RxBool attachUploadFailed = false.obs;
+
   Future<dynamic> sendAttach(
       {required BuildContext context,
       required String classs,
@@ -780,12 +806,28 @@ class FeedViewController extends GetxController {
         );
       }
       isSentLoading.value = false;
+      attachUploadFailed.value = false;
     } catch (e) {
       print("sendAttach Error :-------------- $e");
-      snackBar(
+      // snackBar(
+      //     context: context,
+      //     message: "Something went wrong.",
+      //     color: Colors.red);
+      if(!attachUploadFailed.value) {
+        attachUploadFailed.value = true;
+        await sendAttach(
           context: context,
-          message: "Something went wrong.",
-          color: Colors.red);
+          classs: classs,
+          batch: batch,
+          subId: subId,
+          sub: sub,
+          teacherId: teacherId,
+          filePath: filePath,
+          message: message,
+        );
+      } else {
+        attachUploadFailed.value = false;
+      }
       isSentLoading.value = false;
     }
   }

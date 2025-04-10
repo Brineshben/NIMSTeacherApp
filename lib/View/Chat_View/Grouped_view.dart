@@ -100,7 +100,8 @@ class GroupedViewChat extends StatelessWidget {
                   } catch (e) {}
                   String? formattedDate;
                   try {
-                    formattedDate = DateFormat('EEE hh:mm a').format(sentTime!);
+                    // formattedDate = DateFormat('EEE hh:mm a').format(sentTime!);
+                    formattedDate = DateFormat('EEE HH:mm').format(sentTime!);
                   } catch (e) {}
                   String? userId =
                       Get.find<UserAuthController>().userData.value.userId;

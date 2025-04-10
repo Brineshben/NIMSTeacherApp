@@ -251,7 +251,6 @@ class _StudentListViewState extends State<StudentListView> {
             if (newStudentList != null && newStudentList.length != 0) {
               ourStudentList = newStudentList[0]["feeDetails"];
               ourStudentList.sort((a, b) => a['username'].compareTo(b['username']));
-              print('sorted 1 $ourStudentList');
               // You can safely access the element here.
               // modifiedStudentList = newStudentList[0]['feeDetails'];
             }
@@ -703,7 +702,7 @@ class _StudentListViewState extends State<StudentListView> {
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
-                                      color: Color.fromRGBO(230, 236, 254, 8),
+                                      color:Color.fromRGBO(230, 236, 254, 0.966),
                                       width: 1.0),
                                   borderRadius:
                                   BorderRadius.all(Radius.circular(10)),

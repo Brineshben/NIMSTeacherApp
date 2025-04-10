@@ -124,7 +124,7 @@ class _ReportScreenState extends State<ReportScreen> {
         "employee_code": employeeUnderHOS.isEmpty ? widget.Empcodee : employeeUnderHOS
       };
 
-      log("the >>>>>>>>>>>>>>>>>>>>> $bdy");
+      print("the >>>>>>>>>>>>>>>>>>>>> $bdy");
 
       final response = await http.post(Uri.parse(ApiConstants.docMeUrl + ApiConstants.reportsApiEnd),
           headers: headers, body: json.encode(bdy));
@@ -642,7 +642,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                 MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                'Reportsz',
+                                'Reports',
                                 style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold),
@@ -729,7 +729,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                       Radius.circular(10.0)),
                                 ),
                                 fillColor:
-                                    const Color.fromRGBO(230, 236, 254, 8),
+                                    const Color.fromRGBO(230, 236, 254, 0.966),
                                 filled: true),
                           ),
                         ),

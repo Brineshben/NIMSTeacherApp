@@ -85,7 +85,7 @@
 //                                   ),
 //                                   enabledBorder: const OutlineInputBorder(
 //                                     borderSide: BorderSide(
-//                                       color: Color.fromRGBO(230, 236, 254, 8),
+//                                       color:Color.fromRGBO(230, 236, 254, 0.966),,
 //                                       width: 1.0,
 //                                     ),
 //                                     borderRadius:
@@ -93,13 +93,13 @@
 //                                   ),
 //                                   focusedBorder: const OutlineInputBorder(
 //                                     borderSide: BorderSide(
-//                                       color: Color.fromRGBO(230, 236, 254, 8),
+//                                       color:Color.fromRGBO(230, 236, 254, 0.966),,
 //                                       width: 1.0,
 //                                     ),
 //                                     borderRadius:
 //                                         BorderRadius.all(Radius.circular(10.0)),
 //                                   ),
-//                                   fillColor: const Color.fromRGBO(230, 236, 254, 8),
+//                                   fillColor: constColor.fromRGBO(230, 236, 254, 0.966),,
 //                                   filled: true),
 //                               padding:
 //                                   const EdgeInsets.only(left: 10, right: 5).w,

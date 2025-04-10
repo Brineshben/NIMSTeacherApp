@@ -4,11 +4,13 @@ import 'package:teacherapp/Controller/db_controller/Feed_db_controller.dart';
 import 'package:teacherapp/Controller/db_controller/group_db_controller.dart';
 import 'package:teacherapp/Controller/db_controller/parent_db_controller.dart';
 import 'package:teacherapp/Controller/search_controller/search_controller.dart';
+import 'package:teacherapp/View/CWidgets/TeacherAppPopUps.dart';
 import '../Controller/api_controllers/HosStudentUpdateController.dart';
 import '../Controller/api_controllers/LearningFocusController.dart';
 import '../Controller/api_controllers/LearningwalkController.dart';
 import '../Controller/api_controllers/LearningwalkSubmit.dart';
 import '../Controller/api_controllers/OwnHistoryController.dart';
+import '../Controller/api_controllers/appUpdateController.dart';
 import '../Controller/api_controllers/chatClassGroupController.dart';
 import '../Controller/api_controllers/feedViewController.dart';
 import '../Controller/api_controllers/groupedViewController.dart';
@@ -87,6 +89,9 @@ class HandleControllers {
     Get.put(LearningWalkController());
     Get.put(Learningfocuscontroller());
     Get.put(LearningwalksubmitController());
+    Get.put(SpringlishController());
+    Get.put(AppUpdateController());
+
 
 
     // for initialising thie DB //
@@ -138,6 +143,7 @@ class HandleControllers {
     Get.delete<LearningWalkController>();
     Get.delete<Learningfocuscontroller>();
     Get.delete<LearningwalksubmitController>();
+    Get.delete<AppUpdateController>();
 
   }
 }

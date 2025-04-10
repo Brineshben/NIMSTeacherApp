@@ -174,8 +174,8 @@ class _MyTimeTableState extends State<MyTimeTable> {
                                 );
                                }
                           return Padding(
-                            padding: const EdgeInsets.only(left: 15,
-                                          right: 15,),
+                            padding:  EdgeInsets.only(left: 13.w,
+                                          right: 13.w,),
                             child: Column(
                               children: [
                                 Container(
@@ -184,7 +184,7 @@ class _MyTimeTableState extends State<MyTimeTable> {
                                  controller: _scrollController,
                                 
                                 
- padding:    const EdgeInsets.only(
+                                 padding:    const EdgeInsets.only(
                                           left: 2,
                                           right: 2,
                                           top: 10,
@@ -335,7 +335,7 @@ class _MyTimeTableState extends State<MyTimeTable> {
                                                       children: [
                                                         SizedBox(
                                                           height: 50,
-                                                          width: 150,
+                                                          width: 180.w,
                                                           child: Container(
                                                             height: 40.w,
                                                             width: 120.w,
@@ -404,7 +404,7 @@ class _MyTimeTableState extends State<MyTimeTable> {
                                                         ),
                                                         SizedBox(
                                                           height: 50,
-                                                          width: 150,
+                                                          width: 150.w,
                                                           child: Center(
                                                             child: Text(
                                                               "${data[index].timeString?.replaceAll("[", "").replaceAll("]", "").split("-").first} - ${data[index].timeString?.replaceAll("[", "").replaceAll("]", "").split("-").last}",

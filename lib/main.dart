@@ -10,17 +10,19 @@ import 'package:get/get.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:teacherapp/Services/fcm_service.dart';
 import 'package:teacherapp/Utils/Colors.dart';
+import 'package:teacherapp/firebase_options.dart';
 import 'Services/controller_handling.dart';
 import 'Services/shared_preferences.dart';
 import 'View/splash_screen.dart';
-import 'firebase_options.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   await Get.putAsync(() => FcmService().init());
 
@@ -31,9 +33,9 @@ Future<void> main() async {
     statusBarIconBrightness: Brightness.light, // dark icons
     statusBarBrightness: Brightness.light, // iOS uses this property
   ));
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-  ]);
+  // SystemChrome.setPreferredOrientations([
+  //   DeviceOrientation.portraitUp,
+  // ]);
   // await Get.putAsync(() => FcmService().init());
   // Get.put(() => FcmService().handleBackground());
   final sharedPrefs = SharedPrefs();

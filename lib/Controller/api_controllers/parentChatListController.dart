@@ -242,7 +242,7 @@ class ParentChatListController extends GetxController {
         filteredParentList.value = parentList.value;
         if (filteredParentList.isNotEmpty) {
           filteredParentList
-              .sort((a, b) => a.studentName!.compareTo(b.studentName!));
+              .sort((a, b) => a.studentName!.toLowerCase().compareTo(b.studentName!.toLowerCase()));
         }
         isNewChatLoaded.value = true;
       } else {

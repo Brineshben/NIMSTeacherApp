@@ -203,11 +203,8 @@ class _ObsResultdisplayState extends State<ObsResultdisplay> {
         body: json.encode(body));
     var response = json.decode(request.body);
     if (response['status']['code'] == 200) {
-      log('----------rsssssobsubmitLessonObservation$response');
-      print('----------rsssssobsubmitLessonObservation${response['data']}');
-      print(
-          '----------rsssssobsubmitLessonObservation${response['data']['message']}');
-
+  
+      Get.back();
       TeacherAppPopUps.submitFailedTwoBack(
         title: "Success",
         message: response['data']['message'] ?? "Something went wrong.",
@@ -223,7 +220,8 @@ class _ObsResultdisplayState extends State<ObsResultdisplay> {
     setState(() {
       isSpinner = false;
     });
-    Navigator.of(context).pop();
+
+    // Navigator.of(context).pop();
 
   }
 
@@ -739,7 +737,7 @@ class _ObsResultdisplayState extends State<ObsResultdisplay> {
                                                     Container(
                                                         height: 30.h,
                                                         width: 150.w,
-                                                        decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 8),
+                                                        decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 0.966),
                                                             border: Border.all(
                                                                 color: Colors.grey,width: 0.3),
                                                             borderRadius: const BorderRadius.only(
@@ -748,7 +746,7 @@ class _ObsResultdisplayState extends State<ObsResultdisplay> {
                                                     Container(
                                                         height: 30.h,
                                                         width: 150.w,
-                                                        decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 8),
+                                                        decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 0.966),
                                                             border: Border.all(
                                                                 color: Colors.grey,width: 0.3),
                                                             borderRadius: const BorderRadius.only(
@@ -763,13 +761,13 @@ class _ObsResultdisplayState extends State<ObsResultdisplay> {
                                                     Container(
                                                         height: 25.h,
                                                         width: 150.w,
-                                                        decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 8),
+                                                        decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 0.966),
                                                             border: Border.all(
                                                                 color: Colors.grey,width: 0.1)),child: const Center(child: Text('100-95',style: TextStyle(fontSize: 12)))),
                                                     Container(
                                                         height: 25.h,
                                                         width: 150.w,
-                                                        decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 8),
+                                                        decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 0.966),
                                                             border:
                                                             Border.all(color: Colors.grey,width: 0.1)),child: const Center(child: Text('Outstanding',style: TextStyle(fontSize: 12)))
                                                     ),
@@ -782,13 +780,13 @@ class _ObsResultdisplayState extends State<ObsResultdisplay> {
                                                     Container(
                                                         height: 25.h,
                                                         width: 150.w,
-                                                        decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 8),
+                                                        decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 0.966),
                                                             border: Border.all(
                                                                 color: Colors.grey,width: 0.1)),child: const Center(child: Text('94-85',style: TextStyle(fontSize: 12)))),
                                                     Container(
                                                         height: 25.h,
                                                         width: 150.w,
-                                                        decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 8),
+                                                        decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 0.966),
                                                             border:
                                                             Border.all(color: Colors.grey,width: 0.1)),child: const Center(child: Text('Very Good',style: TextStyle(fontSize: 12)))
                                                     ),
@@ -801,13 +799,13 @@ class _ObsResultdisplayState extends State<ObsResultdisplay> {
                                                     Container(
                                                         height: 25.h,
                                                         width: 150.w,
-                                                        decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 8),
+                                                        decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 0.966),
                                                             border: Border.all(
                                                                 color: Colors.grey,width: 0.1)),child: const Center(child: Text('84-66',style: TextStyle(fontSize: 12)))),
                                                     Container(
                                                         height: 25.h,
                                                         width: 150.w,
-                                                        decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 8),
+                                                        decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 0.966),
                                                             border:
                                                             Border.all(color: Colors.grey,width: 0.1)),child: const Center(child: Text('Good',style: TextStyle(fontSize: 12)))
                                                     ),
@@ -820,13 +818,13 @@ class _ObsResultdisplayState extends State<ObsResultdisplay> {
                                                     Container(
                                                         height: 25.h,
                                                         width: 150.w,
-                                                        decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 8),
+                                                        decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 0.966),
                                                             border: Border.all(
                                                                 color: Colors.grey,width: 0.1)),child: const Center(child: Text('65-41',style: TextStyle(fontSize: 12)))),
                                                     Container(
                                                         height: 25.h,
                                                         width: 150.w,
-                                                        decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 8),
+                                                        decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 0.966),
                                                             border:
                                                             Border.all(color: Colors.grey,width: 0.1)),child: const Center(child: Text('Acceptable',style: TextStyle(fontSize: 12)))
                                                     ),
@@ -839,7 +837,7 @@ class _ObsResultdisplayState extends State<ObsResultdisplay> {
                                                     Container(
                                                         height: 25.h,
                                                         width: 150.w,
-                                                        decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 8),
+                                                        decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 0.966),
                                                             border: Border.all(
                                                                 color: Colors.grey,width: 0.1),
                                                             borderRadius: const BorderRadius.only(
@@ -848,7 +846,7 @@ class _ObsResultdisplayState extends State<ObsResultdisplay> {
                                                     Container(
                                                         height: 25.h,
                                                         width: 150.w,
-                                                        decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 8),
+                                                        decoration: BoxDecoration(color: const Color.fromRGBO(230, 236, 254, 0.966),
                                                             border: Border.all(
                                                                 color: Colors.grey,width: 0.1),
                                                             borderRadius: const BorderRadius.only(
@@ -885,16 +883,14 @@ class _ObsResultdisplayState extends State<ObsResultdisplay> {
                                                       ),
                                                       enabledBorder: const OutlineInputBorder(
                                                         borderSide: BorderSide(
-                                                            color: Color.fromRGBO(
-                                                                230, 236, 254, 8),
+                                                            color: Color.fromRGBO(230, 236, 254, 0.973),
                                                             width: 1.0),
                                                         borderRadius: BorderRadius.all(
                                                             Radius.circular(15)),
                                                       ),
                                                       focusedBorder: const OutlineInputBorder(
                                                         borderSide: BorderSide(
-                                                            color: Color.fromRGBO(
-                                                                230, 236, 254, 8),
+                                                            color: Color.fromRGBO(230, 236, 254, 0.973),
                                                             width: 1.0),
                                                         borderRadius: BorderRadius.all(
                                                             Radius.circular(15.0)),
@@ -934,16 +930,14 @@ class _ObsResultdisplayState extends State<ObsResultdisplay> {
                                                       ),
                                                       enabledBorder: const OutlineInputBorder(
                                                         borderSide: BorderSide(
-                                                            color: Color.fromRGBO(
-                                                                230, 236, 254, 8),
+                                                            color: Color.fromRGBO(230, 236, 254, 0.973),
                                                             width: 1.0),
                                                         borderRadius: BorderRadius.all(
                                                             Radius.circular(15)),
                                                       ),
                                                       focusedBorder: const OutlineInputBorder(
                                                         borderSide: BorderSide(
-                                                            color: Color.fromRGBO(
-                                                                230, 236, 254, 8),
+                                                            color: Color.fromRGBO(230, 236, 254, 0.973),
                                                             width: 1.0),
                                                         borderRadius: BorderRadius.all(
                                                             Radius.circular(15.0)),
@@ -984,16 +978,14 @@ class _ObsResultdisplayState extends State<ObsResultdisplay> {
                                                       ),
                                                       enabledBorder: const OutlineInputBorder(
                                                         borderSide: BorderSide(
-                                                            color: Color.fromRGBO(
-                                                                230, 236, 254, 8),
+                                                            color: Color.fromRGBO(230, 236, 254, 0.973),
                                                             width: 1.0),
                                                         borderRadius: BorderRadius.all(
                                                             Radius.circular(15)),
                                                       ),
                                                       focusedBorder: const OutlineInputBorder(
                                                         borderSide: BorderSide(
-                                                            color: Color.fromRGBO(
-                                                                230, 236, 254, 8),
+                                                            color: Color.fromRGBO(230, 236, 254, 0.973),
                                                             width: 1.0),
                                                         borderRadius: BorderRadius.all(
                                                             Radius.circular(15.0)),
@@ -1051,13 +1043,13 @@ class _ObsResultdisplayState extends State<ObsResultdisplay> {
                                                     autovalidateMode: AutovalidateMode.onUserInteraction,
                                                     validator: (teachnercomment){
                                                      if(teachnercomment==null||teachnercomment.isEmpty){
-                                                      return 'Commets is Required';
+                                                      return 'Teacher comment is required';
                                                      }
                                                      return null;
                                                     },
                     
                                                     decoration:  const InputDecoration(
-                                                      hintText: 'Type Here',
+                                                      hintText: 'type here',
                                                         hintStyle:
                                                         TextStyle(color: Colors.black26),
                                                         contentPadding: EdgeInsets.symmetric(
@@ -1105,15 +1097,15 @@ class _ObsResultdisplayState extends State<ObsResultdisplay> {
                             //         ),
                             //         enabledBorder: OutlineInputBorder(
                             //           borderSide:
-                            //           BorderSide(color: Color.fromRGBO(230, 236, 254, 8), width: 1.0),
+                            //           BorderSide(color:Color.fromRGBO(230, 236, 254, 0.966),, width: 1.0),
                             //           borderRadius: BorderRadius.all(Radius.circular(10)),
                             //         ),
                             //         focusedBorder: OutlineInputBorder(
                             //           borderSide:
-                            //           BorderSide(color: Color.fromRGBO(230, 236, 254, 8), width: 1.0),
+                            //           BorderSide(color:Color.fromRGBO(230, 236, 254, 0.966),, width: 1.0),
                             //           borderRadius: BorderRadius.all(Radius.circular(5)),
                             //         ),
-                            //         fillColor: Color.fromRGBO(230, 236, 254, 8),
+                            //         fillColor:Color.fromRGBO(230, 236, 254, 0.966),,
                             //         filled: true),
                             //     keyboardType: TextInputType.text,
                             //     maxLines: 5,
@@ -1130,7 +1122,7 @@ class _ObsResultdisplayState extends State<ObsResultdisplay> {
                         
                         
                                                         );
-                                                          Navigator.of(context).pop();
+                                             
                         
                                                       } else {
                                                         if (Type == 'learning_walk') {

@@ -15,6 +15,7 @@ import '../Models/api_models/sent_msg_by_teacher_model.dart';
 import '../Models/api_models/student_add_Model.dart';
 import '../Models/api_models/student_updateModel.dart';
 import '../Models/api_models/time_table_api_model.dart';
+import '../Models/api_models/update_app_model.dart';
 import '../Utils/api_constants.dart';
 import 'package:http/http.dart' as http;
 
@@ -258,12 +259,12 @@ class ApiServices {
       {required String userId,
         required String academicYear,
         required String schoolId,
-        required bool admin}) async {
+        required bool isAdmin}) async {
     String url = "${ApiConstants.baseUrl}${ApiConstants.classsLW}";
     print(url);
     Map apiBody = {
       "academic_year": academicYear,
-      "admin": true,
+      "admin": isAdmin,
       "school_id": schoolId,
       "user_id": userId
     };
@@ -887,7 +888,7 @@ class ApiServices {
       request.headers.addAll(ApiConstants.headers);
       http.StreamedResponse response = await request.send();
       String respString = await response.stream.bytesToString();
-      // print("Raw Response: $respString");
+      log("Raw Response: $respString");
       return respString;
     } catch (e) {
       print(e);
@@ -900,6 +901,13 @@ class ApiServices {
     String url = "${ApiConstants.baseUrl}${ApiConstants.requestLeave}";
     print(url);
     Map apiBody = reqData.toJson();
+
+    if (apiBody['documentPath'] is String) {
+      apiBody['documentPath'] = apiBody['documentPath']
+          .replaceAll("\"", "")
+          .replaceAll("\\", "");
+    }
+
     try {
       var request = http.Request('POST', Uri.parse(url));
       request.body = (json.encode(apiBody));
@@ -1387,6 +1395,39 @@ class ApiServices {
       }
     } catch (e) {
       throw Exception("Service Errorsdfgergwrtjhuytuiryi78");
+    }
+  }
+
+  Future<UpdateModel?> getUpdate() async {
+    final url = ApiConstants.baseUrl + ApiConstants.update;
+
+    print("---- URL --------- update ----------- : $url");
+
+    final body = {"app_name": "teacher_app"};
+
+    // Map<String, String> apiHeader = {
+    //   'x-auth-token': 'tq355lY3MJyd8Uj2ySzm',
+    //   'Content-Type': 'application/json',
+    //   'API-Key': '525-777-777'
+    // };
+
+    print("---- body --------- update ----------- : ${jsonEncode(body)}");
+
+    final resposne = await http.post(Uri.parse(url),
+        body: jsonEncode(body), headers: ApiConstants.headers);
+
+    print("-------resposne update--------${resposne.body}");
+
+    try {
+      if (resposne.statusCode == 200) {
+        final jsonData = jsonDecode(resposne.body);
+        final updateModelData = UpdateModel.fromJson(jsonData);
+        return updateModelData;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      return null;
     }
   }
 }

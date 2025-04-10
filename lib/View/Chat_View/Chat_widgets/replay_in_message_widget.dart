@@ -8,7 +8,7 @@ import 'package:teacherapp/Services/snackBar.dart';
 import 'package:teacherapp/Utils/Colors.dart';
 import 'package:teacherapp/Utils/font_util.dart';
 import 'package:teacherapp/View/Chat_View/Chat_widgets/text_and_file_widget.dart';
-import 'package:teacherapp/View/Chat_View/feed_view%20_chat_screen.dart';
+import 'package:teacherapp/View/Chat_View/feed_view_chat_screen.dart';
 import '../../../Models/api_models/chat_feed_view_model.dart';
 
 class ReplayMessageWidget extends StatelessWidget {
@@ -134,7 +134,7 @@ class ReplayMessageWidget extends StatelessWidget {
 // import 'package:teacherapp/Utils/Colors.dart';
 // import 'package:teacherapp/Utils/font_util.dart';
 // import 'package:teacherapp/View/Chat_View/Chat_widgets/text_and_file_widget.dart';
-// import 'package:teacherapp/View/Chat_View/feed_view%20_chat_screen.dart';
+// import 'package:teacherapp/View/Chat_View/feed_view_chat_screen.dart';
 // import '../../../Models/api_models/chat_feed_view_model.dart';
 
 // class ReplayMessageWidget extends StatelessWidget {

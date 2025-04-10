@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,12 +7,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:lottie/lottie.dart';
 import 'package:teacherapp/Controller/api_controllers/userAuthController.dart';
+import 'package:teacherapp/Services/controller_handling.dart';
 import 'package:teacherapp/Utils/Colors.dart';
 import 'package:teacherapp/Utils/api_constants.dart';
 import 'package:teacherapp/View/CWidgets/AppBarBackground.dart';
 import 'package:teacherapp/View/CWidgets/TeacherAppPopUps.dart';
 import 'package:teacherapp/View/RoleNavigation/choice_page.dart';
-
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import '../../Controller/ui_controllers/page_controller.dart';
 import '../../Services/check_connectivity.dart';
 import '../CWidgets/commons.dart';
 import '../Forgot_password/Forgot_password.dart';
@@ -41,6 +44,7 @@ class _LoginPageState extends State<LoginPage> {
     _passwordController = TextEditingController();
     _usernameFocusNode = FocusNode();
     _passwordFocusNode = FocusNode();
+
   }
 
   @override
@@ -85,6 +89,28 @@ class _LoginPageState extends State<LoginPage> {
         iconData: Icons.error_outline,
         iconColor: Colorutils.red,
       );
+    }
+  }
+
+  Future<void> _handleAppleIn() async {
+    try {
+      final credential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+
+      print("Account: ${credential.email}");
+      if (credential.email!.length == 0) {
+        print('Invalid Email');
+      } else {
+        await userAuthController.googleSignInUser(username: credential.email!);
+      }
+      // validateGoogleSignIn();
+    } catch (error) {
+      print(error);
+      // showSnackBar(context, "Something went wrong", Colors.red);
     }
   }
 
@@ -474,6 +500,7 @@ class _LoginPageState extends State<LoginPage> {
                                         iconColor: Colorutils.svguicolour2,
                                       );
                                     }
+                                    Get.put(()=>PageIndexController());
                                   }
                                 },
                                 child: Container(
@@ -510,9 +537,122 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                           SizedBox(height: 30.h),
-                          // const Spacer(),
+                          if(Platform.isIOS)
+                            Center(
+                              child: Padding(
+                                padding:
+                                const EdgeInsets.symmetric(horizontal: 30).w,
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    context.loaderOverlay.show();
+                                    await _handleAppleIn().then(
+                                          (value) {
+                                        if (userAuthController.isLoaded.value) {
+                                          UserRole? userRole =
+                                              userAuthController.userRole.value;
+                                          if (userRole != null) {
+                                            if (userRole == UserRole.leader) {
+                                              List<String>? rolIds =
+                                                  userAuthController.userData
+                                                      .value.roleIds ??
+                                                      [];
+                                              Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                      const DrawerScreen()));
+                                              // if((rolIds.contains("rolepri12") || rolIds.contains("role12123")) && !rolIds.contains("role121234")) {
+                                              //   Navigator.push(
+                                              //       context,
+                                              //       MaterialPageRoute(
+                                              //           builder: (context) =>
+                                              //           const HosListing()));
+                                              // } else {
+                                              //   userAuthController
+                                              //       .setSelectedHosData(
+                                              //     hosName: userAuthController
+                                              //         .userData.value.name ??
+                                              //         '--',
+                                              //     hosId: userAuthController
+                                              //         .userData
+                                              //         .value
+                                              //         .userId ??
+                                              //         '--',
+                                              //     isHos: true,
+                                              //   );
+                                              //   Navigator.pushReplacement(
+                                              //       context,
+                                              //       MaterialPageRoute(
+                                              //           builder: (context) =>
+                                              //           const DrawerScreen()));
+                                              // }
+                                            }
+                                            if (userRole ==
+                                                UserRole.bothTeacherAndLeader) {
+                                              Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                      const ChoicePage()));
+                                            }
+                                            if (userRole == UserRole.teacher) {
+                                              Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                      const DrawerScreen()));
+                                            }
+                                          } else {
+                                            TeacherAppPopUps.submitFailed(
+                                              title: "Failed",
+                                              message: "You are not an authorized user.",
+                                              actionName: "Close",
+                                              iconData: Icons.error_outline,
+                                              iconColor: Colorutils.svguicolour2,
+                                            );
+                                          }
+                                        }
+                                      },
+                                    );
+                                    context.loaderOverlay.hide();
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30.r),
+                                      border: Border.all(
+                                        color: Colorutils.userdetailcolor,
+                                        width: 0.8,
+                                      ),
+                                    ),
+                                    // width: 250.w,
+                                    height: 50.h,
+                                    child: Center(
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Image.asset(
+                                            height: 30.h,
+                                            "assets/images/ic_apple.png",
+                                            fit: BoxFit.fitHeight,
+                                          ),
+                                          SizedBox(width: 8.w),
+                                          Text(
+                                            'Sign in with Apple',
+                                            style: GoogleFonts.inter(
+                                              fontSize: 16.h,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          // SizedBox(height: 30.h),
+                          // // const Spacer(),
                           SizedBox(
-                            height: ScreenUtil().screenHeight * 0.07,
+                            height: Platform.isIOS ? ScreenUtil().screenHeight * 0.04 : ScreenUtil().screenHeight * 0.07,
                           ),
                           Center(
                             child: Text(

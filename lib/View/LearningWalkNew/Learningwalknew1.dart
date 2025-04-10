@@ -115,8 +115,7 @@ class _LearningWalknew1State extends State<LearningWalknew1> {
                                                   const BorderRadius.all(
                                                 Radius.circular(10.0),
                                               ).r,
-                                              color: Color.fromRGBO(
-                                                  230, 236, 254, 8)),
+                                              color: Color.fromRGBO(230, 236, 254, 0.966),),
                                           height: 55.w,
                                           child: DropdownButtonHideUnderline(
                                             child: DropdownButton2<String>(
@@ -143,6 +142,8 @@ class _LearningWalknew1State extends State<LearningWalknew1> {
                                               value: _selectedValue1,
                                               onChanged: (classes) {
                                                 setState(() {
+                                                  _selectedValue2 = null;
+                                                  batchList.clear();
                                                   _selectedValue1 =
                                                       classes ?? "";
                                                   controller
@@ -150,6 +151,8 @@ class _LearningWalknew1State extends State<LearningWalknew1> {
                                                           _selectedValue1!);
                                                   print(
                                                       "bweghrebghrghk$_selectedValue1");
+                                                      _isClassValid = _selectedValue1 != null && _selectedValue1!.isNotEmpty;
+                                  
                                                 });
                                                 // _selectedValue1=Class;
                                                 // controller.fetchteacherdata();
@@ -228,6 +231,7 @@ class _LearningWalknew1State extends State<LearningWalknew1> {
                                       const SizedBox(
                                         height: 2,
                                       ),
+                                    
                                       if (!_isClassValid)
                                         const Padding(
                                           padding: EdgeInsets.only(left: 25),
@@ -251,8 +255,7 @@ class _LearningWalknew1State extends State<LearningWalknew1> {
                                               const BorderRadius.all(
                                                 Radius.circular(10.0),
                                               ).r,
-                                              color: Color.fromRGBO(
-                                                  230, 236, 254, 8)),
+                                              color: Color.fromRGBO(230, 236, 254, 0.966),),
                                           height: 55.w,
                                           child: DropdownButtonHideUnderline(
                                             child: DropdownButton2<String>(
@@ -280,6 +283,8 @@ class _LearningWalknew1State extends State<LearningWalknew1> {
                                               onChanged: (batch) {
                                                 setState(() {
                                                   _selectedValue2 = batch ?? "";
+                                                
+                                        _isDivisionValid = _selectedValue2 != null && _selectedValue2!.isNotEmpty;
                                                 });
                                                 controller.setSelectedBatch(division: _selectedValue2.toString());
                                                 // controller.fetchteacherdata(

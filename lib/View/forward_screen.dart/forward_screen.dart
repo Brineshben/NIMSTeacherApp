@@ -283,8 +283,10 @@ class _ForwardScreenState extends State<ForwardScreen>
                           String? formattedDate;
 
                           try {
+                            // formattedDate =
+                            //     DateFormat('EEE hh:mm a').format(sentTime!);
                             formattedDate =
-                                DateFormat('EEE hh:mm a').format(sentTime!);
+                                DateFormat('EEE HH:mm').format(sentTime!);
                           } catch (e) {}
                           String? userId = Get.find<UserAuthController>()
                               .userData
@@ -584,7 +586,9 @@ class _ForwardScreenState extends State<ForwardScreen>
                                 DateTime? sentTime = lastMsg.sandAt;
                                 String? formattedDate;
                                 try {
-                                  formattedDate = DateFormat('EEE hh:mm a')
+                                  // formattedDate = DateFormat('EEE hh:mm a')
+                                  //     .format(sentTime!);
+                                  formattedDate = DateFormat('EEE HH:mm')
                                       .format(sentTime!);
                                 } catch (e) {}
                                 String? userId = Get.find<UserAuthController>()

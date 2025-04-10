@@ -67,7 +67,7 @@ class _ApproveRejectedState extends State<ApproveRejected> {
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
-                      color: Color.fromRGBO(230, 236, 254, 8), width: 1.0),
+                      color: Color.fromRGBO(230, 236, 254, 0.966), width: 1.0),
                   borderRadius: BorderRadius.all(Radius.circular(20.0)),
                 ),
                 fillColor: Colorutils.Whitecolor,

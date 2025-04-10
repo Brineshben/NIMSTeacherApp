@@ -56,13 +56,14 @@ class FeedViewChatScreen extends StatefulWidget {
 }
 
 class _FeedViewChatScreenState extends State<FeedViewChatScreen>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   TextEditingController messageCtr = TextEditingController();
   FeedViewController feedViewController = Get.find<FeedViewController>();
   UserAuthController userAuthController = Get.find<UserAuthController>();
   GroupedViewListController groupedViewListController =
       Get.find<GroupedViewListController>();
   Timer? chatUpdate;
+  bool isAppPaused = false;
 
   // late bool isKeboardOpen;
   // late double keybordHeight;
@@ -72,6 +73,7 @@ class _FeedViewChatScreenState extends State<FeedViewChatScreen>
 
   @override
   void initState() {
+    WidgetsBinding.instance.addObserver(this);
     Get.find<PageIndexController>().message.value = null;
     Get.find<PageIndexController>().isChatScreen.value = true;
     super.initState();
@@ -161,7 +163,25 @@ class _FeedViewChatScreenState extends State<FeedViewChatScreen>
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      // App is in background
+      isAppPaused = true;
+    } else if (state == AppLifecycleState.resumed) {
+      // App is resumed
+      isAppPaused = false;
+    } else if (state == AppLifecycleState.inactive) {
+      // App is inactive (e.g., incoming call)
+      print("App inactive");
+    } else if (state == AppLifecycleState.detached) {
+      // App is detached
+      print("App detached");
+    }
+  }
+
+  @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     // Get.find<FeedViewController>().chatFeedViewScrollController.value.dispose();
     Get.find<PageIndexController>().isChatScreen.value = false;
     if (chatUpdate != null) {
@@ -174,6 +194,8 @@ class _FeedViewChatScreenState extends State<FeedViewChatScreen>
     // context.loaderOverlay.show();
     int notiId = "${widget.msgData?.classTeacherClass}${widget.msgData?.batch}${widget.msgData?.subjectId}".hashCode;
     await FcmService().removeNotificationWithPayload(notiId);
+
+    Get.find<FeedViewController>().isLoading.value = true; // for avoiding previous message showing
 
     ChatFeedViewReqModel chatFeedViewReqModel = ChatFeedViewReqModel(
       teacherId: userAuthController.userData.value.userId,
@@ -209,9 +231,11 @@ class _FeedViewChatScreenState extends State<FeedViewChatScreen>
               subId: widget.msgData?.subjectId ?? "",
               context: context);
         }
-        await feedViewController
-            .fetchFeedViewMsgListPeriodically(chatFeedViewReqModel);
-        await groupedViewListController.fetchGroupedViewListPeriodically();
+        if(!isAppPaused) {
+          await feedViewController
+              .fetchFeedViewMsgListPeriodically(chatFeedViewReqModel);
+          await groupedViewListController.fetchGroupedViewListPeriodically();
+        }
       },
     );
   }
@@ -2021,6 +2045,15 @@ messageMoreShowDialog(BuildContext context, Widget widget, Offset position,
   print("reaction ------------ ${data}");
   double safeAreaVerticalPadding = MediaQuery.of(context).padding.top +
       MediaQuery.of(context).padding.bottom;
+
+      // for checking keyboard is disable then it unfocus // ---
+  final bottomInset =
+      WidgetsBinding.instance.platformDispatcher.views.first.viewInsets.bottom;
+ 
+  if (bottomInset == 0.0) {
+    FocusManager.instance.primaryFocus?.unfocus();
+  }
+  //------
 
   showDialog(
     barrierColor: Colors.black.withOpacity(0.3),

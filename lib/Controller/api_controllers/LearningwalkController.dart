@@ -29,11 +29,14 @@ class LearningWalkController extends GetxController {
       String? userId = Get.find<UserAuthController>().userData.value.userId;
       String? acYr = Get.find<UserAuthController>().userData.value.academicYear;
       String? schoolID = Get.find<UserAuthController>().userData.value.schoolId;
+      List<String> roleIds = Get.find<UserAuthController>().userData.value.roleIds ?? [];
+      bool admin = roleIds.contains("rolepri12") || roleIds.contains("role12123") || roleIds.contains("5e37f0f7f50ca66f1d22d74b");
       Map<String, dynamic> resp = await ApiServices.getClass(
           userId: userId.toString(),
           academicYear: acYr.toString(),
           schoolId: schoolID.toString(),
-          admin: true);
+        isAdmin: admin,
+      );
 
       // lessonDataApi.value = LessonObservationData.fromJson(resp);
 
@@ -58,12 +61,14 @@ class LearningWalkController extends GetxController {
       String? userId = Get.find<UserAuthController>().userData.value.userId;
       String? acYr = Get.find<UserAuthController>().userData.value.academicYear;
       String? schoolID = Get.find<UserAuthController>().userData.value.schoolId;
+      List<String> roleIds = Get.find<UserAuthController>().userData.value.roleIds ?? [];
+      bool admin = roleIds.contains("rolepri12") || roleIds.contains("role12123") || roleIds.contains("5e37f0f7f50ca66f1d22d74b");
 
       Map<String, dynamic> resp = await ApiServices.getBatch(
           userId: userId.toString(),
           academicYear: acYr.toString(),
           schoolId: schoolID.toString(),
-          admin: true,
+          admin: admin,
           classId: details.value?.sId ?? " ",
           cirriculam: details.value?.curriculumIds ?? [],
           session: details.value?.sessionIds ?? []);

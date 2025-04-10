@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_getx_widget.dart';
 import 'package:intl/intl.dart';
+import 'package:teacherapp/View/Home_Page/leader_home.dart';
 
 import '../../Controller/api_controllers/LearningFocusController.dart';
 import '../../Controller/api_controllers/LearningwalkController.dart';
@@ -323,8 +324,7 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                           ),
                                           enabledBorder: OutlineInputBorder(
                                             borderSide: const BorderSide(
-                                              color: Color.fromRGBO(
-                                                  230, 236, 254, 8),
+                                              color: Color.fromRGBO(230, 236, 254, 0.966),
                                               width: 1.0,
                                             ),
                                             borderRadius:
@@ -334,8 +334,7 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                           ),
                                           focusedBorder: OutlineInputBorder(
                                             borderSide: const BorderSide(
-                                              color: Color.fromRGBO(
-                                                  230, 236, 254, 8),
+                                              color: Color.fromRGBO(230, 236, 254, 0.966),
                                               width: 1.0,
                                             ),
                                             borderRadius:
@@ -343,8 +342,7 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                                 Radius.circular(10.0))
                                                 .r,
                                           ),
-                                          fillColor: const Color.fromRGBO(
-                                              230, 236, 254, 8),
+                                          fillColor: const Color.fromRGBO(230, 236, 254, 0.966),
                                           filled: true),
                                       isExpanded: true,
                                       padding: EdgeInsets.only(
@@ -397,8 +395,8 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                       autovalidateMode:AutovalidateMode.onUserInteraction,
 
                                       maxLength: 1000,
-                                      validator: (val) => val!.isEmpty
-                                          ? 'Please Enter Summary'
+                                      validator: (val) => val!.trim().isEmpty
+                                          ? 'Please Enter Focus of Learning Walk'
                                           : null,
                                       controller:    _FocusLWController,
                                       // focusNode: keyboardController.summaryFocusNode.value,
@@ -407,7 +405,7 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                               color: Colors.black26),
                                           contentPadding: EdgeInsets.symmetric(
                                               vertical: 10.h, horizontal: 20.w),
-                                          hintText: " Enter Focus of Learning Walk",
+                                          hintText: " Focus of Learning Walk",
                                           border: OutlineInputBorder(
                                             borderRadius: const BorderRadius.all(
                                               Radius.circular(10.0),
@@ -415,8 +413,7 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                           ),
                                           enabledBorder: OutlineInputBorder(
                                             borderSide: const BorderSide(
-                                                color: Color.fromRGBO(
-                                                    230, 236, 254, 8),
+                                                color: Color.fromRGBO(230, 236, 254, 0.966),
                                                 width: 1.0),
                                             borderRadius: const BorderRadius.all(
                                                 Radius.circular(22))
@@ -424,8 +421,7 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                           ),
                                           focusedBorder: OutlineInputBorder(
                                             borderSide: const BorderSide(
-                                                color: Color.fromRGBO(
-                                                    230, 236, 254, 8),
+                                                color: Color.fromRGBO(230, 236, 254, 0.966),
                                                 width: 1.0),
                                             borderRadius: const BorderRadius.all(
                                                 Radius.circular(30.0))
@@ -475,7 +471,7 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                           autovalidateMode:AutovalidateMode.onUserInteraction,
 
                                           maxLength: 1000,
-                                          validator: (val) => val!.isEmpty
+                                          validator: (val) => val!.trim().isEmpty
                                               ? 'Please Enter Question to Ask Pupils'
                                               : null,
                                           controller:
@@ -499,8 +495,7 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                               enabledBorder:
                                               OutlineInputBorder(
                                                 borderSide: const BorderSide(
-                                                    color: Color.fromRGBO(
-                                                        230, 236, 254, 8),
+                                                    color: Color.fromRGBO(230, 236, 254, 0.966),
                                                     width: 1.0),
                                                 borderRadius:
                                                 const BorderRadius.all(
@@ -511,8 +506,7 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                               focusedBorder:
                                               OutlineInputBorder(
                                                 borderSide: const BorderSide(
-                                                    color: Color.fromRGBO(
-                                                        230, 236, 254, 8),
+                                                    color: Color.fromRGBO(230, 236, 254, 0.966),
                                                     width: 1.0),
                                                 borderRadius:
                                                 const BorderRadius.all(
@@ -536,7 +530,7 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                           autovalidateMode:AutovalidateMode.onUserInteraction,
 
                                           maxLength: 1000,
-                                          validator: (val) => val!.isEmpty
+                                          validator: (val) => val!.trim().isEmpty
                                               ? 'Please Enter Question to Ask Teacher'
                                               : null,
                                           controller:
@@ -560,8 +554,7 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                               enabledBorder:
                                               OutlineInputBorder(
                                                 borderSide: const BorderSide(
-                                                    color: Color.fromRGBO(
-                                                        230, 236, 254, 8),
+                                                    color: Color.fromRGBO(230, 236, 254, 0.966),
                                                     width: 1.0),
                                                 borderRadius:
                                                 const BorderRadius.all(
@@ -572,8 +565,7 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                               focusedBorder:
                                               OutlineInputBorder(
                                                 borderSide: const BorderSide(
-                                                    color: Color.fromRGBO(
-                                                        230, 236, 254, 8),
+                                                    color: Color.fromRGBO(230, 236, 254, 0.966),
                                                     width: 1.0),
                                                 borderRadius:
                                                 const BorderRadius.all(
@@ -600,7 +592,7 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                       autovalidateMode:AutovalidateMode.onUserInteraction,
 
                                       maxLength: 1000,
-                                      validator: (val) => val!.isEmpty
+                                      validator: (val) => val!.trim().isEmpty
                                           ? 'Please Enter  Summary'
                                           : null,
                                       controller: _summaryController,
@@ -618,8 +610,7 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                           ),
                                           enabledBorder: OutlineInputBorder(
                                             borderSide: const BorderSide(
-                                                color: Color.fromRGBO(
-                                                    230, 236, 254, 8),
+                                                color: Color.fromRGBO(230, 236, 254, 0.966),
                                                 width: 1.0),
                                             borderRadius: const BorderRadius.all(
                                                 Radius.circular(22))
@@ -627,8 +618,7 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                           ),
                                           focusedBorder: OutlineInputBorder(
                                             borderSide: const BorderSide(
-                                                color: Color.fromRGBO(
-                                                    230, 236, 254, 8),
+                                                color: Color.fromRGBO(230, 236, 254, 0.966),
                                                 width: 1.0),
                                             borderRadius: const BorderRadius.all(
                                                 Radius.circular(30.0))
@@ -652,7 +642,7 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                       controller: _whatWentWellController,
                                       // focusNode: keyboardController.whatWentWellFocusNode.value,
                                       maxLength: 1000,
-                                      validator: (val) => val!.isEmpty
+                                      validator: (val) => val!.trim().isEmpty
                                           ? 'Please Enter What went well'
                                           : null,
                                       decoration: InputDecoration(
@@ -668,8 +658,7 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                           ),
                                           enabledBorder: OutlineInputBorder(
                                             borderSide: const BorderSide(
-                                                color: Color.fromRGBO(
-                                                    230, 236, 254, 8),
+                                                color: Color.fromRGBO(230, 236, 254, 0.966),
                                                 width: 1.0),
                                             borderRadius: const BorderRadius.all(
                                                 Radius.circular(22))
@@ -677,8 +666,7 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                           ),
                                           focusedBorder: OutlineInputBorder(
                                             borderSide: const BorderSide(
-                                                color: Color.fromRGBO(
-                                                    230, 236, 254, 8),
+                                                color: Color.fromRGBO(230, 236, 254, 0.966),
                                                 width: 1.0),
                                             borderRadius: const BorderRadius.all(
                                                 Radius.circular(30.0))
@@ -701,7 +689,7 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                       autovalidateMode:AutovalidateMode.onUserInteraction,
 
                                       maxLength: 1000,
-                                      validator: (val) => val!.isEmpty
+                                      validator: (val) => val!.trim().isEmpty
                                           ? 'Please Enter Even better if'
                                           : null,
                                       controller: _evenBetterIfController,
@@ -719,8 +707,7 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                           ),
                                           enabledBorder: OutlineInputBorder(
                                             borderSide: const BorderSide(
-                                                color: Color.fromRGBO(
-                                                    230, 236, 254, 8),
+                                                color: Color.fromRGBO(230, 236, 254, 0.966),
                                                 width: 1.0),
                                             borderRadius: const BorderRadius.all(
                                                 Radius.circular(22))
@@ -728,8 +715,7 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                           ),
                                           focusedBorder: OutlineInputBorder(
                                             borderSide: const BorderSide(
-                                                color: Color.fromRGBO(
-                                                    230, 236, 254, 8),
+                                                color: Color.fromRGBO(230, 236, 254, 0.966),
                                                 width: 1.0),
                                             borderRadius: const BorderRadius.all(
                                                 Radius.circular(30.0))
@@ -857,12 +843,13 @@ class _LearningWalknew2State extends State<LearningWalknew2> with WidgetsBinding
                                                     LearningwalksubmitController>()
                                                     .Sendlearningwalksubmit(
                                                     data: submitLW);
+                                               
                                               } else {
                                                 final dbHelper = LearningWalkDB();
                                                 final result = await dbHelper
                                                     .insertLearningWalk(
                                                     submitLW.toMap());
-                                                print("brineshDB--${result}");
+                                                print("brineshDB--${result}");                        
                                                 TeacherAppPopUps.submitFailedThreeLearningBack(
                                                   title: "Success",
                                                   message: "Learning Walk Added Successfully",

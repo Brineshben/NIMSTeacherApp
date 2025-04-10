@@ -5,15 +5,14 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:teacherapp/Controller/api_controllers/userAuthController.dart';
 import 'package:teacherapp/Controller/ui_controllers/page_controller.dart';
+import 'package:teacherapp/Services/common_services.dart';
 import 'package:teacherapp/Utils/Colors.dart';
 import 'package:teacherapp/Utils/font_util.dart';
 import 'package:teacherapp/View/Menu/drawer.dart';
 import 'package:teacherapp/View/RoleNavigation/choice_page.dart';
 import 'package:teacherapp/View/Login_page/login.dart';
-import 'package:teacherapp/View/RoleNavigation/hos_listing.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import '../Services/common_services.dart';
+import '../Controller/api_controllers/appUpdateController.dart';
 import '../Services/controller_handling.dart';
 import '../Services/shared_preferences.dart';
 
@@ -28,8 +27,12 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    navigate();
-
+    // navigate();
+    WidgetsBinding.instance.addPostFrameCallback(
+          (timeStamp) {
+        showUpdateDialog(context);
+      },
+    );
   }
 
   Future<void> navigate() async {
@@ -75,7 +78,7 @@ class _SplashScreenState extends State<SplashScreen> {
         await SharedPrefs().removeLoginCreds();
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => const LoginPage()),
-            (_) => false);
+                (_) => false);
         HandleControllers.createGetControllers();
       }
     } else {
@@ -96,5 +99,200 @@ class _SplashScreenState extends State<SplashScreen> {
           ),
         ));
   }
- 
+
+  void showUpdateDialog(BuildContext context) async {
+
+    await Get.find<AppUpdateController>().getUpdate().then(
+          (value) {
+        if (value) {
+          print('showing the app snakdialog');
+          showDialog(
+
+            context: context,
+            builder: (context) {
+              return PopScope(
+                canPop: false,
+                child: AlertDialog(
+                  backgroundColor: Colorutils.transparent,
+                  content: Container(
+                    height: 400.h,
+                    width: 200.h,
+                    decoration: BoxDecoration(
+                        color: Colorutils.white,
+                        borderRadius: BorderRadius.circular(15.h)),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 15.h, vertical: 25.h),
+                      child: GetBuilder<AppUpdateController>(
+                          builder: (controller) {
+                            if (controller.isLoading) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            } else if (controller.isError) {
+                              return InkWell(
+                                onTap: () async {
+                                  await Get.find<AppUpdateController>().getUpdate();
+                                },
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "Something went wrong. Please try again.",
+                                      textAlign: TextAlign.center,
+                                      style: TeacherAppFonts.interW400_20sp
+                                          .copyWith(color: Colorutils.black),
+                                    ),
+                                    hSpace(20.h),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10.h),
+                                        color: Colors.blue,
+                                      ),
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 15.w, vertical: 10.h),
+                                        child: Text("Retry",
+                                            style: TeacherAppFonts
+                                                .interW500_16sp_letters1),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            } else {
+                              return Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  SizedBox(
+                                      height: 100.h,
+                                      width: 100.h,
+                                      child: FittedBox(
+                                          child: Image.asset(
+                                              "assets/images/update_warning.jpg"))),
+                                  Text(
+                                    "Update Now",
+                                    style: TeacherAppFonts.interW600_25sp_textWhite
+                                        .copyWith(color: Colorutils.black),
+                                  ),
+                                  controller.isAfterUpdate
+                                      ? Text(
+                                    "The app has expired and can no longer be used. Please update immediately to continue.",
+                                    style: TeacherAppFonts.interW400_20sp
+                                        .copyWith(color: Colorutils.black),
+                                    textAlign: TextAlign.center,
+                                  )
+                                      : RichText(
+                                    textAlign: TextAlign.center,
+                                    text: TextSpan(children: [
+                                      TextSpan(
+                                        text:
+                                        "The Teacher App will expire on ",
+                                        style: TeacherAppFonts.interW400_20sp
+                                            .copyWith(
+                                            color: Colorutils.black),
+                                      ),
+                                      TextSpan(
+                                        text: controller.finalDate,
+                                        style: TeacherAppFonts
+                                            .interW600_20sp_textWhite
+                                            .copyWith(
+                                            color: Colorutils.black),
+                                      ),
+                                      TextSpan(
+                                        text:
+                                        ". Please install the new app using the update button below.",
+                                        style: TeacherAppFonts.interW400_20sp
+                                            .copyWith(
+                                            color: Colorutils.black),
+                                      ),
+                                    ]),
+                                  ),
+                                  // Text(
+                                  //   "Latest version of School Diary available. Please update before.",
+                                  //   style: FontsStyle()
+                                  //       .interW400_20sp
+                                  //       .copyWith(color: ColorUtil.black),
+                                  //   textAlign: TextAlign.center,
+                                  // ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      controller.isAfterUpdate
+                                          ? SizedBox()
+                                          : InkWell(
+                                        onTap: () {
+                                          Navigator.pop(context);
+
+                                          navigate();
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                            BorderRadius.circular(10.h),
+                                            color: Colorutils.red,
+                                          ),
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 15.w,
+                                                vertical: 10.h),
+                                            child: Text("Cancel",
+                                                style: TeacherAppFonts
+                                                    .interW500_16sp_letters1
+                                                    .copyWith(
+                                                    color: Colorutils
+                                                        .white)),
+                                          ),
+                                        ),
+                                      ),
+                                      controller.isAfterUpdate
+                                          ? SizedBox()
+                                          : wSpace(20.h),
+                                      InkWell(
+                                        onTap: () async {
+                                          await launchUrl(
+                                              Uri.parse(controller.link),
+                                              mode: LaunchMode.externalApplication);
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                            BorderRadius.circular(10.h),
+                                            color: Colorutils.green,
+                                          ),
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 15.w, vertical: 10.h),
+                                            child: Text("Update",
+                                                style: TeacherAppFonts
+                                                    .interW500_16sp_letters1
+                                                    .copyWith(
+                                                    color: Colorutils.white)),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              );
+                            }
+                          }),
+                    ),
+                  ),
+                ),
+              );
+            },
+          ).then(
+                (value) {
+              // navigation(true);
+              navigate();
+            },
+          );
+        } else {
+          // navigation(true);
+          navigate();
+        }
+      },
+    );
+  }
 }

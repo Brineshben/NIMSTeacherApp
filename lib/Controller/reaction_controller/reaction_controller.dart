@@ -9,7 +9,7 @@ import 'package:teacherapp/Models/api_models/parent_chatting_model.dart';
 import 'package:teacherapp/Services/reaction_service/reaction_service.dart';
 import 'package:teacherapp/Services/snackBar.dart';
 import 'package:teacherapp/Utils/constant_function.dart';
-import 'package:teacherapp/View/Chat_View/feed_view%20_chat_screen.dart';
+import 'package:teacherapp/View/Chat_View/feed_view_chat_screen.dart';
 import 'package:teacherapp/View/Chat_View/parent_chat_screen.dart';
 
 class ReactionController extends GetxController {

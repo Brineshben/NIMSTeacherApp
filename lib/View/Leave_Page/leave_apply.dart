@@ -14,6 +14,7 @@ import 'package:teacherapp/Services/api_services.dart';
 import 'package:teacherapp/Services/check_connectivity.dart';
 import 'package:teacherapp/Services/snackBar.dart';
 import 'package:teacherapp/Utils/api_constants.dart';
+import 'package:text_scroll/text_scroll.dart';
 import '../../Models/api_models/leave_req_list_api_model.dart';
 import '../../Utils/Colors.dart';
 import '../../Utils/constants.dart';
@@ -31,7 +32,7 @@ class LeaveApply extends StatefulWidget {
   State<LeaveApply> createState() => _ObsResultState();
 }
 
-class _ObsResultState extends State<LeaveApply> {
+class _ObsResultState extends State<LeaveApply> with SingleTickerProviderStateMixin{
   get questionData => null;
 
   get isChecked => null;
@@ -45,6 +46,10 @@ class _ObsResultState extends State<LeaveApply> {
   String? _filePath;
   final TextEditingController _reasonController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  bool _floatExpand = false;
+  Animation<Size>? _textAnimation;
+  AnimationController? textController;
+  
 
   Future<void> _selectFromDate(BuildContext context) async
   {
@@ -92,7 +97,8 @@ class _ObsResultState extends State<LeaveApply> {
   Future<void> _pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ['jpg', 'pdf', 'doc'],
+      allowedExtensions: ['pdf', 'jpg', 'jpeg', 'png', 'docx', 'doc', 'csv']
+ ,
     );
 
     if (result != null) {
@@ -108,6 +114,41 @@ class _ObsResultState extends State<LeaveApply> {
         _filePath = null;
       });
     }
+  }
+
+
+   Future<void> _callAnimation() async {
+    setState(() {
+      _floatExpand = !_floatExpand;
+    });
+    if (_floatExpand) {
+      textController!.forward();
+    } else {
+      textController!.reverse();
+      await Future.delayed(const Duration(milliseconds: 100));
+    }
+  }
+
+  @override
+  void initState() {
+    textController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 300));
+    super.initState();
+    // _saveKeyboard();
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    _textAnimation = textController!.drive(
+      Tween<Size>(
+        begin: const Size(0, 0),
+        end: Size(MediaQuery.of(context).size.width * 0.7, 0),
+      ),
+    );
+    _textAnimation!.addListener(() => setState(() {}));
+ 
   }
 
   @override
@@ -452,6 +493,45 @@ class _ObsResultState extends State<LeaveApply> {
                                         ),
                                       ],
                                     ),
+                                   Padding(
+              padding: EdgeInsets.only(left: 10.w),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    InkWell(
+                      splashColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onTap: _callAnimation,
+                      child: const Icon(
+                        Icons.info_outline,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    if (_floatExpand)
+                      Container(
+                        constraints: BoxConstraints(
+                            maxWidth: _textAnimation!.value.width),
+                        child: TextScroll(
+                          "Allowed formats : pdf, jpg, jpeg, png, docx, doc, csv",
+                          mode: TextScrollMode.bouncing,
+                          velocity:
+                              const Velocity(pixelsPerSecond: Offset(50, 0)),
+                          delayBefore: const Duration(seconds: 1),
+                          pauseBetween: const Duration(seconds: 2),
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14.h,
+                            color: Colors.black,
+                          ),
+                          textAlign: TextAlign.center,
+                          selectable: true,
+                        ),
+                      ),
+                    
+                  ],
+                ),
+              ),
                                     SizedBox(height: 25.h,),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.center,
@@ -531,6 +611,7 @@ class _ObsResultState extends State<LeaveApply> {
         filePath: _filePath!,
       );
       docPath = resp.toString();
+      print('docPath $docPath');
     }
     if(fromDate != 'DD-MM-YYYY') {
       if(toDate != 'DD-MM-YYYY') {
@@ -680,4 +761,5 @@ class _ObsResultState extends State<LeaveApply> {
       ),
     );
   }
+ 
 }

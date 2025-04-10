@@ -1,8 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:loader_overlay/loader_overlay.dart';
+import 'package:path/path.dart';
 import 'package:teacherapp/Controller/api_controllers/userAuthController.dart';
 import 'package:teacherapp/Controller/db_controller/Feed_db_controller.dart';
 import 'package:teacherapp/Services/shared_preferences.dart';
@@ -10,6 +13,7 @@ import 'package:teacherapp/Utils/Colors.dart';
 import 'package:teacherapp/Utils/font_util.dart';
 import 'package:teacherapp/View/Login_page/login.dart';
 
+import '../../Controller/api_controllers/LearningwalkSubmit.dart';
 import '../../Controller/ui_controllers/page_controller.dart';
 import '../../Services/api_services.dart';
 import '../../Services/controller_handling.dart';
@@ -150,54 +154,58 @@ class TeacherAppPopUps {
     required Color iconColor,
   }) {
     return Get.dialog(
-      AlertDialog(
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(20.0)),
-        ),
-        title: Column(
-          children: [
-            Icon(
-              iconData,
-              color: iconColor,
-              size: 50.w,
-            ),
-            if (title != null) SizedBox(height: 10.w),
-            if (title != null)
-              Text(
-                title,
-                style: TeacherAppFonts.interW600_18sp_textWhite.copyWith(
-                  color: Colors.black,
-                ),
+      barrierDismissible: false,
+      PopScope(
+        canPop: false,
+        child: AlertDialog(
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20.0)),
+          ),
+          title: Column(
+            children: [
+              Icon(
+                iconData,
+                color: iconColor,
+                size: 50.w,
               ),
+              if (title != null) SizedBox(height: 10.w),
+              if (title != null)
+                Text(
+                  title,
+                  style: TeacherAppFonts.interW600_18sp_textWhite.copyWith(
+                    color: Colors.black,
+                  ),
+                ),
+            ],
+          ),
+          content: Text(
+            message,
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 16.sp),
+          ),
+          actionsAlignment: MainAxisAlignment.center,
+          actions: [
+            FilledButton(
+              onPressed: () {
+                Get.back();
+                Get.back();
+                Get.back();
+              },
+              style: ButtonStyle(
+                backgroundColor: WidgetStateProperty.all(Colorutils.letters1),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    actionName,
+                    style: TextStyle(color: Colors.white, fontSize: 16.sp),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
-        content: Text(
-          message,
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 16.sp),
-        ),
-        actionsAlignment: MainAxisAlignment.center,
-        actions: [
-          FilledButton(
-            onPressed: () {
-              Get.back();
-              Get.back();
-              Get.back();
-            },
-            style: ButtonStyle(
-              backgroundColor: WidgetStateProperty.all(Colorutils.letters1),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  actionName,
-                  style: TextStyle(color: Colors.white, fontSize: 16.sp),
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -210,53 +218,59 @@ class TeacherAppPopUps {
     required Color iconColor,
   }) {
     return Get.dialog(
-      AlertDialog(
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(20.0)),
-        ),
-        title: Column(
-          children: [
-            Icon(
-              iconData,
-              color: iconColor,
-              size: 50.w,
-            ),
-            if (title != null) SizedBox(height: 10.w),
-            if (title != null)
-              Text(
-                title,
-                style: TeacherAppFonts.interW600_18sp_textWhite.copyWith(
-                  color: Colors.black,
-                ),
+      barrierDismissible: false,
+      PopScope(
+        canPop:  false,
+        child: AlertDialog(
+          
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20.0)),
+          ),
+          title: Column(
+            children: [
+              Icon(
+                iconData,
+                color: iconColor,
+                size: 50.w,
               ),
+              if (title != null) SizedBox(height: 10.w),
+              if (title != null)
+                Text(
+                  title,
+                  style: TeacherAppFonts.interW600_18sp_textWhite.copyWith(
+                    color: Colors.black,
+                  ),
+                ),
+            ],
+          ),
+          content: Text(
+            message,
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 16.sp),
+          ),
+          actionsAlignment: MainAxisAlignment.center,
+          actions: [
+            FilledButton(
+              onPressed: () {
+                Get.back();
+                Get.back();
+                Get.back();
+              },
+              style: ButtonStyle(
+                backgroundColor: WidgetStateProperty.all(Colorutils.letters1),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    actionName,
+                    style: TextStyle(color: Colors.white, fontSize: 16.sp),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
-        content: Text(
-          message,
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 16.sp),
-        ),
-        actionsAlignment: MainAxisAlignment.center,
-        actions: [
-          FilledButton(
-            onPressed: () {
-              Get.back();
-              Get.back();
-            },
-            style: ButtonStyle(
-              backgroundColor: WidgetStateProperty.all(Colorutils.letters1),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  actionName,
-                  style: TextStyle(color: Colors.white, fontSize: 16.sp),
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -772,7 +786,9 @@ class TeacherAppPopUps {
   }
 
   static logOutPopUp({required BuildContext context}) {
+        SpringlishController springlishController =  Get.find<SpringlishController>();
     return Get.dialog(
+      barrierDismissible:  false,
       AlertDialog(
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(20.0)),
@@ -801,36 +817,39 @@ class TeacherAppPopUps {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(
-                  width: 100.w,
-                  child: FittedBox(
-                    child: FilledButton(
-                      onPressed: () async {
-                        Navigator.pop(context);
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: WidgetStateProperty.all(Colors.red),
-                      ),
-                      child: Row(
-                        children: [
-                          Center(
-                            child: Text(
-                              "Cancel",
-                              style: TextStyle(
-                                  color: Colors.white, fontSize: 16.sp),
-                            ),
-                          ),
-                        ],
-                      ),
+                          height: 45.0.h,
+                  width: 108.w,
+                  child: Obx(()=> FilledButton( 
+                    
+                    onPressed:  springlishController.lououtbool.value?null:() async {
+                      Navigator.pop(context);
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStateProperty.all(Colors.red),
                     ),
-                  ),
+                    child: Row(
+                      children: [
+                        Center(
+                          child: Text(
+                            "Cancel",
+                            style: TextStyle(
+                                color: Colors.white, fontSize: 16.sp),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),),
                 ),
                 SizedBox(
-                  width: 100.w,
-                  child: FilledButton(
-                    onPressed: () async {
+                  height: 45.h,
+                  width: 108.w,
+                  child: Obx(()=>FilledButton(
+                    onPressed: springlishController.lououtbool.value?null:() async {
+                  //  context.loaderOverlay.show();
+            springlishController.lououtbool.value = true;
                       await Get.find<FeedDBController>()
                           .deleteMessageDBLogout();
-
+      
                       ////
                       try {
                         await ApiServices.fcmtokenlogout(
@@ -843,27 +862,38 @@ class TeacherAppPopUps {
                         print("firebase token delete error --------- $e");
                       }
                       ////
-                      HandleControllers.deleteAllGetControllers();
-
-                      await SharedPrefs().removeLoginData();
+                    await SharedPrefs().removeLoginData();
                       await SharedPrefs().removeLoginCreds();
-
-                      Navigator.of(context).pushAndRemoveUntil(
+                    
+                      HandleControllers.deleteAllGetControllers();
+      
+                      
+                   
+                    if(context.mounted){
+                    Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
                               builder: (context) => const LoginPage()),
                           (_) => false);
-
-                      HandleControllers.createGetControllers();
+                    } 
+                     springlishController.lououtbool.value =false;
+                     
+      
+                     Get.delete<SpringlishController>();
+           HandleControllers.createGetControllers();
+            // context.loaderOverlay.hide();
+                     
                     },
-                    style: ButtonStyle(
+                    style:  ButtonStyle(
                       backgroundColor:
                           WidgetStateProperty.all(Colorutils.letters1),
                     ),
-                    child: Text(
+                    child: springlishController.lououtbool.value? Center(
+                      child: sprinkFadingCircle,
+                    ): Text(
                       "Ok",
                       style: TextStyle(color: Colors.white, fontSize: 16.sp),
-                    ),
-                  ),
+                    )  ,
+                  )),
                 ),
               ],
             ),
@@ -898,4 +928,24 @@ class DashedLinePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) => false;
+}
+
+
+final sprinkFadingCircle = SpinKitFadingCircle(
+  size: 10,
+  itemBuilder: (BuildContext context, int index) {
+    return DecoratedBox(
+        decoration: BoxDecoration(
+      color: Colorutils.chatcolor,
+      borderRadius: BorderRadius.circular(12)
+    ));
+  },
+);
+
+bool lougoutbool = false;
+
+
+
+class SpringlishController extends GetxController{
+  RxBool lououtbool = false.obs;
 }

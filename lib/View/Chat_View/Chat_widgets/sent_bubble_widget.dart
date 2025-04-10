@@ -11,12 +11,13 @@ import 'package:teacherapp/Controller/forward_controller.dart/forward_controller
 import 'package:teacherapp/Controller/search_controller/search_controller.dart';
 import 'package:teacherapp/Services/common_services.dart';
 import 'package:teacherapp/Utils/Colors.dart';
+import 'package:teacherapp/Utils/constant_function.dart';
 import 'package:teacherapp/View/Chat_View/Chat_widgets/audio_file_widget.dart';
 import 'package:teacherapp/View/Chat_View/Chat_widgets/replay_in_message_widget.dart';
 
 import '../../../Models/api_models/chat_feed_view_model.dart';
 import '../../../Utils/font_util.dart';
-import '../feed_view _chat_screen.dart';
+import '../feed_view_chat_screen.dart';
 import 'audio_widget.dart';
 import 'file_widget.dart';
 
@@ -289,7 +290,7 @@ class SentMessageBubble extends StatelessWidget {
                                                 SizedBox(height: 5.h)
                                               ],
                                             ),
-                                            SizedBox(width: 20.h),
+                                            SizedBox(width: 5.h),
                                             Row(
                                               children: [
                                                 Text(
@@ -489,20 +490,20 @@ class SentMessageBubble extends StatelessWidget {
   }
 }
 
-String messageBubbleTimeFormat(String? dateTime) {
-  // Check if the input date-time string is null
-  if (dateTime == null) {
-    return "--";
-  }
+// String messageBubbleTimeFormat(String? dateTime) {
+//   // Check if the input date-time string is null
+//   if (dateTime == null) {
+//     return "--";
+//   }
 
-  // Parse the input date-time string
-  DateTime parsedDateTime = DateTime.parse(dateTime);
+//   // Parse the input date-time string
+//   DateTime parsedDateTime = DateTime.parse(dateTime);
 
-  // Format the parsed DateTime to the desired time format
-  String formattedTime = DateFormat('HH:mm').format(parsedDateTime);
+//   // Format the parsed DateTime to the desired time format
+//   String formattedTime = DateFormat('HH:mm').format(parsedDateTime);
 
-  return formattedTime;
-}
+//   return formattedTime;
+// }
 
 // String chatFormatDate(String? dateTime) {
 //   // Check if the input date-time string is null

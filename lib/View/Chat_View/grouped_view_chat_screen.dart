@@ -16,6 +16,7 @@ import 'package:teacherapp/Services/common_services.dart';
 import 'package:teacherapp/Services/snackBar.dart';
 import 'package:teacherapp/Utils/Colors.dart';
 import 'package:teacherapp/Utils/api_constants.dart';
+import 'package:teacherapp/Utils/constant_function.dart';
 import 'package:teacherapp/Utils/font_util.dart';
 import 'package:teacherapp/View/Chat_View/Chat_widgets/audio_file_widget.dart';
 import 'package:teacherapp/View/Chat_View/Chat_widgets/chat_search.dart';
@@ -660,7 +661,7 @@ class SentMessageBubble extends StatelessWidget {
                                               SizedBox(height: 5.h)
                                             ],
                                           ),
-                                          SizedBox(width: 20.h),
+                                          SizedBox(width: 5.h),
                                           Row(
                                             children: [
                                               Text(
@@ -1041,7 +1042,7 @@ class ReceiveMessageBubble extends StatelessWidget {
                                                   SizedBox(height: 5.h),
                                                 ],
                                               ),
-                                              SizedBox(width: 20.h),
+                                              SizedBox(width: 5.h),
                                               Text(
                                                 // "17:47",
                                                 messageBubbleTimeFormat(time),

@@ -9,7 +9,7 @@ import 'package:teacherapp/Controller/api_controllers/userAuthController.dart';
 import 'package:teacherapp/Controller/db_controller/Feed_db_controller.dart';
 import 'package:teacherapp/Controller/db_controller/parent_db_controller.dart';
 import 'package:teacherapp/Services/snackBar.dart';
-import 'package:teacherapp/View/Chat_View/feed_view%20_chat_screen.dart';
+import 'package:teacherapp/View/Chat_View/feed_view_chat_screen.dart';
 import 'package:teacherapp/View/Chat_View/parent_chat_screen.dart';
 import 'package:teacherapp/View/forward_screen.dart/forward_screen.dart';
 

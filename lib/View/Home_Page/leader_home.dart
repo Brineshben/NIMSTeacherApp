@@ -104,7 +104,7 @@ class _LeaderState extends State<Leader> {
                                       fontWeight: FontWeight.w600),
                                 ),
                                 // if(hosName != null)
-                                //
+                                
                                 //   SizedBox(
                                 //       width: 150.w,
                                 //       child: SingleChildScrollView(
@@ -115,7 +115,7 @@ class _LeaderState extends State<Leader> {
                                 //               "HOS : $hosName",
                                 //               style: TextStyle(fontSize: 17.h,fontWeight: FontWeight.bold),
                                 //             ),
-                                //
+                                
                                 //           ],
                                 //         ),
                                 //       ))
@@ -146,7 +146,7 @@ class _LeaderState extends State<Leader> {
                   
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20),
-                                    color: const Color.fromRGBO(101, 63, 244, 1),
+                                    color: const Color.fromARGB(255, 102, 63, 244),
                                   ),
                                   child: Row(
                                     children: [
@@ -172,8 +172,7 @@ class _LeaderState extends State<Leader> {
                                               "Lesson  \nObservation ",
                                               style: TextStyle(
                                                   fontSize: 23.h,
-                                                  color: const Color.fromRGBO(
-                                                      240, 236, 254, 8)),
+                                                  color: const Color.fromARGB(247, 240, 236, 254)),
                                             )),
                                       ),
                                     ],
@@ -225,8 +224,7 @@ class _LeaderState extends State<Leader> {
                                             "Learning  \nWalk",
                                             style: TextStyle(
                                                 fontSize: 23.h,
-                                                color: const Color.fromRGBO(
-                                                    240, 236, 254, 8)),
+                                                color: const Color.fromARGB(248, 240, 236, 254)),
                                           )),
                                     ),
                                   ],
@@ -262,7 +260,7 @@ class _LeaderState extends State<Leader> {
                                         padding: const EdgeInsets.all(8).w,
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(12),
-                                          color: const Color.fromRGBO(0, 136, 170, 8),
+                                          color: const Color.fromARGB(248, 0, 136, 170),
                                         ),
                                         // height: 28,
                                         // width: 100,

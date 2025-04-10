@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+import 'package:teacherapp/View/Home_Page/leader_home.dart';
 
 import '../../Models/api_models/LearningwalkSubmit.dart';
 import '../../Services/api_services.dart';
@@ -28,14 +29,14 @@ class LearningwalksubmitController extends GetxController {
       Map<String, dynamic> resp = await ApiServices.getLearningwalksubmit(data: data);
       print("-----learning resp-------$resp");
       if (resp['status']['code'] == 200) {
+   
         TeacherAppPopUps.submitFailedTwoBackforupdate (
             title: resp["status"]["message"],
             message: resp["data"]["message"],
             actionName: "Ok",
             iconData: Icons.check_circle_outline,
             iconColor: Colors.green);
-
-
+         
       }
       else {
         final dbHelper =

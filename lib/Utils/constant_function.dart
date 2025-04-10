@@ -12,6 +12,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:teacherapp/Services/check_connectivity.dart';
 import 'package:teacherapp/Services/snackBar.dart';
@@ -82,6 +83,22 @@ Future<bool> checkInternetWithReturnBool(
         color: Colors.red);
     return false;
   }
+}
+
+String messageBubbleTimeFormat(String? dateTime) {
+  // Check if the input date-time string is null
+  if (dateTime == null) {
+    return "--";
+  }
+ 
+  // Parse the input date-time string
+  DateTime parsedDateTime = DateTime.parse(dateTime);
+ 
+  // Format the parsed DateTime to the desired time format
+  // String formattedTime = DateFormat('h:mm a').format(parsedDateTime);
+  String formattedTime = DateFormat('HH:mm').format(parsedDateTime);
+
+  return formattedTime;
 }
 
 Duration parseDuration(String durationString) {

@@ -16,7 +16,7 @@ import '../../../Controller/api_controllers/chatClassGroupController.dart';
 import '../../../Models/api_models/chat_group_api_model.dart';
 import '../../../Utils/Colors.dart';
 import '../../../Utils/font_util.dart';
-import '../../Chat_View/feed_view _chat_screen.dart';
+import '../../Chat_View/feed_view_chat_screen.dart';
 
 class GroupChatList extends StatelessWidget {
   const GroupChatList({super.key});
@@ -150,8 +150,10 @@ class GroupChatList extends StatelessWidget {
                       // print("-------colorInt---------$colorInt");
                       try {
                         print("date = $sentTime");
+                        // formattedDate =
+                        //     DateFormat('EEE hh:mm a').format(sentTime!);
                         formattedDate =
-                            DateFormat('EEE hh:mm a').format(sentTime!);
+                            DateFormat('EEE HH:mm').format(sentTime!);
                       } catch (e) {}
                       String? userId =
                           Get.find<UserAuthController>().userData.value.userId;

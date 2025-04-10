@@ -27,7 +27,7 @@ import 'package:teacherapp/Utils/constant_function.dart';
 import 'package:teacherapp/Utils/font_util.dart';
 import 'package:teacherapp/View/Chat_View/Chat_widgets/audio_file_widget.dart';
 import 'package:teacherapp/View/Chat_View/Chat_widgets/chat_search.dart';
-import 'package:teacherapp/View/Chat_View/feed_view%20_chat_screen.dart';
+import 'package:teacherapp/View/Chat_View/feed_view_chat_screen.dart';
 import 'package:text_scroll/text_scroll.dart';
 import '../../Controller/api_controllers/parentChatController.dart';
 import '../../Models/api_models/parent_chat_list_api_model.dart';
@@ -52,16 +52,18 @@ class ParentChatScreen extends StatefulWidget {
   State<ParentChatScreen> createState() => _ParentChatScreenState();
 }
 
-class _ParentChatScreenState extends State<ParentChatScreen> {
+class _ParentChatScreenState extends State<ParentChatScreen> with WidgetsBindingObserver {
   TextEditingController messageCtr = TextEditingController();
   ParentChattingController parentChattingController =
       Get.find<ParentChattingController>();
   UserAuthController userAuthController = Get.find<UserAuthController>();
   Timer? chatUpdate;
+  bool isAppPaused = false;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     Get.find<ChatSearchController>().setValueDefault(); // for set default//
     Get.find<ParentChattingController>().isShowDialogShow =
         false; // for set default//
@@ -113,11 +115,29 @@ class _ParentChatScreenState extends State<ParentChatScreen> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     parentChattingController.parentChatScrollController.value.dispose();
     if (chatUpdate != null) {
       chatUpdate!.cancel();
     }
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      // App is in background
+      isAppPaused = true;
+    } else if (state == AppLifecycleState.resumed) {
+      // App is resumed
+      isAppPaused = false;
+    } else if (state == AppLifecycleState.inactive) {
+      // App is inactive (e.g., incoming call)
+      print("App inactive");
+    } else if (state == AppLifecycleState.detached) {
+      // App is detached
+      print("App detached");
+    }
   }
 
   Future<void> initialize() async {
@@ -151,8 +171,10 @@ class _ParentChatScreenState extends State<ParentChatScreen> {
               context: context,
               studentId: widget.msgData?.studentId ?? "");
         }
-        await parentChattingController
-            .fetchParentMsgListPeriodically(chattingReqModel);
+        if(!isAppPaused) {
+          await parentChattingController
+              .fetchParentMsgListPeriodically(chattingReqModel);
+        }
       },
     );
   }
@@ -1632,6 +1654,15 @@ messageMoreShowDialog(BuildContext context, Widget widget, Offset position,
   double safeAreaVerticalPadding = MediaQuery.of(context).padding.top +
       MediaQuery.of(context).padding.bottom;
 
+      // for checking keyboard is disable then it unfocus // ---
+  final bottomInset =
+      WidgetsBinding.instance.platformDispatcher.views.first.viewInsets.bottom;
+ 
+  if (bottomInset == 0.0) {
+    FocusManager.instance.primaryFocus?.unfocus();
+  }
+  //------
+
   showDialog(
     barrierColor: Colors.black.withOpacity(0.3),
     context: context,
@@ -1969,7 +2000,7 @@ class SentMessageBubble extends StatelessWidget {
                                                 SizedBox(height: 5.h)
                                               ],
                                             ),
-                                            SizedBox(width: 20.h),
+                                            SizedBox(width: 5.h),
                                             Row(
                                               children: [
                                                 Text(
@@ -2138,20 +2169,20 @@ class SentMessageBubble extends StatelessWidget {
   }
 }
 
-String messageBubbleTimeFormat(String? dateTime) {
-  // Check if the input date-time string is null
-  if (dateTime == null) {
-    return "--";
-  }
+// String messageBubbleTimeFormat(String? dateTime) {
+//   // Check if the input date-time string is null
+//   if (dateTime == null) {
+//     return "--";
+//   }
 
-  // Parse the input date-time string
-  DateTime parsedDateTime = DateTime.parse(dateTime);
+//   // Parse the input date-time string
+//   DateTime parsedDateTime = DateTime.parse(dateTime);
 
-  // Format the parsed DateTime to the desired time format
-  String formattedTime = DateFormat('HH:mm').format(parsedDateTime);
+//   // Format the parsed DateTime to the desired time format
+//   String formattedTime = DateFormat('HH:mm').format(parsedDateTime);
 
-  return formattedTime;
-}
+//   return formattedTime;
+// }
 
 String chatFormatDate(String? dateTime) {
   // Check if the input date-time string is null
@@ -2661,7 +2692,7 @@ class ReceiveMessageBubble extends StatelessWidget {
                                                 SizedBox(height: 5.h),
                                               ],
                                             ),
-                                            SizedBox(width: 20.h),
+                                            SizedBox(width: 5.h),
                                             Text(
                                               // "17:47",
                                               messageBubbleTimeFormat(time),

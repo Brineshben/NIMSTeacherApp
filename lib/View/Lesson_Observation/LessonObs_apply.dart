@@ -312,16 +312,14 @@ class _LessonObservationApplyState extends State<LessonObservationApply> {
                                                 ),
                                                 enabledBorder: OutlineInputBorder(
                                                   borderSide: const BorderSide(
-                                                      color: Color.fromRGBO(
-                                                          230, 236, 254, 8),
+                                                      color: Color.fromRGBO(230, 236, 254, 0.968),
                                                       width: 1.0),
                                                   borderRadius: const BorderRadius.all(
                                                       Radius.circular(22)).r,
                                                 ),
                                                 focusedBorder: OutlineInputBorder(
                                                   borderSide: const BorderSide(
-                                                      color: Color.fromRGBO(
-                                                          230, 236, 254, 8),
+                                                      color: Color.fromRGBO(230, 236, 254, 0.968),
                                                       width: 1.0),
                                                   borderRadius: const BorderRadius.all(
                                                       Radius.circular(30.0)).r,
@@ -360,16 +358,14 @@ class _LessonObservationApplyState extends State<LessonObservationApply> {
                                                 ),
                                                 enabledBorder: OutlineInputBorder(
                                                   borderSide: const BorderSide(
-                                                      color: Color.fromRGBO(
-                                                          230, 236, 254, 8),
+                                                      color: Color.fromRGBO(230, 236, 254, 0.968),
                                                       width: 1.0),
                                                   borderRadius: const BorderRadius.all(
                                                       Radius.circular(22)).r,
                                                 ),
                                                 focusedBorder: OutlineInputBorder(
                                                   borderSide: const BorderSide(
-                                                      color: Color.fromRGBO(
-                                                          230, 236, 254, 8),
+                                                      color: Color.fromRGBO(230, 236, 254, 0.968),
                                                       width: 1.0),
                                                   borderRadius: const BorderRadius.all(
                                                       Radius.circular(30.0)).r,
@@ -409,16 +405,14 @@ class _LessonObservationApplyState extends State<LessonObservationApply> {
                                                 ),
                                                 enabledBorder: OutlineInputBorder(
                                                   borderSide: const BorderSide(
-                                                      color: Color.fromRGBO(
-                                                          230, 236, 254, 8),
+                                                      color: Color.fromRGBO(230, 236, 254, 0.968),
                                                       width: 1.0),
                                                   borderRadius: const BorderRadius.all(
                                                       Radius.circular(22)).r,
                                                 ),
                                                 focusedBorder: OutlineInputBorder(
                                                   borderSide: const BorderSide(
-                                                      color: Color.fromRGBO(
-                                                          230, 236, 254, 8),
+                                                      color: Color.fromRGBO(230, 236, 254, 0.968),
                                                       width: 1.0),
                                                   borderRadius: const BorderRadius.all(
                                                       Radius.circular(30.0)).r,

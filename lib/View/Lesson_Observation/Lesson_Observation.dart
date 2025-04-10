@@ -129,14 +129,12 @@ class _LessonObservationState extends State<LessonObservation> {
                                          enabledBorder:  const OutlineInputBorder(
                                            borderRadius: BorderRadius.all(Radius.circular(10)),
                                                   borderSide: BorderSide(
-                                                      color: Color.fromRGBO(
-                                                          230, 236, 254, 8),
+                                                      color: Color.fromRGBO(230, 236, 254, 0.968),
                                                       width: 1.0),
                                                 ),
                                              filled: true,
                                            
-                                             fillColor: Color.fromRGBO(
-                                                  230, 236, 254, 8),
+                                             fillColor: Color.fromRGBO(230, 236, 254, 0.973),
                                                   border: OutlineInputBorder(
                                                  
                                                     borderRadius: const BorderRadius.all(
@@ -281,14 +279,12 @@ class _LessonObservationState extends State<LessonObservation> {
                                                                              enabledBorder:  const OutlineInputBorder(
                                                                                      borderRadius: BorderRadius.all(Radius.circular(10)),
                                                 borderSide: BorderSide(
-                                                    color: Color.fromRGBO(
-                                                        230, 236, 254, 8),
+                                                    color: Color.fromRGBO(230, 236, 254, 0.96),
                                                     width: 1.0),
                                               ),
                                            filled: true,
                                                                        
-                                           fillColor: Color.fromRGBO(
-                                                230, 236, 254, 8),
+                                           fillColor: Color.fromRGBO(230, 236, 254, 0.973),
                                                 border: OutlineInputBorder(
                                                
                                                   borderRadius: const BorderRadius.all(
@@ -425,14 +421,12 @@ class _LessonObservationState extends State<LessonObservation> {
                                                                            enabledBorder:  const OutlineInputBorder(
                                                                                    borderRadius: BorderRadius.all(Radius.circular(10)),
                                               borderSide: BorderSide(
-                                                  color: Color.fromRGBO(
-                                                      230, 236, 254, 8),
+                                                  color: Color.fromRGBO(230, 236, 254, 0.973),
                                                   width: 1.0),
                                             ),
                                                                                      filled: true,
                                                                                    
-                                                                                     fillColor: Color.fromRGBO(
-                                              230, 236, 254, 8),
+                                                                                     fillColor: Color.fromRGBO(230, 236, 254, 0.973),
                                               border: OutlineInputBorder(
                                              
                                                 borderRadius: const BorderRadius.all(
@@ -667,15 +661,13 @@ class _LessonObservationState extends State<LessonObservation> {
                                                 enabledBorder:
                                                 const OutlineInputBorder(
                                                   borderSide: BorderSide(
-                                                      color: Color.fromRGBO(
-                                                          230, 236, 254, 8),
+                                                      color: Color.fromRGBO(230, 236, 254, 0.96),
                                                       width: 1.0),
                                                 ),
                                                 focusedBorder:
                                                 OutlineInputBorder(
                                                   borderSide: const BorderSide(
-                                                      color: Color.fromRGBO(
-                                                          230, 236, 254, 8),
+                                                      color: Color.fromRGBO(230, 236, 254, 0.968),
                                                       width: 1.0),
                                                   borderRadius:
                                                   const BorderRadius.all(
@@ -683,8 +675,7 @@ class _LessonObservationState extends State<LessonObservation> {
                                                           10.0))
                                                       .r,
                                                 ),
-                                                fillColor: const Color.fromRGBO(
-                                                    230, 236, 254, 8),
+                                                fillColor: const Color.fromARGB(248, 230, 236, 254),
                                                 filled: true),
                                             cursorColor: Colors.grey,
                                             keyboardType: TextInputType.text,
@@ -723,15 +714,13 @@ class _LessonObservationState extends State<LessonObservation> {
                                                 enabledBorder:
                                                     const OutlineInputBorder(
                                                   borderSide: BorderSide(
-                                                      color: Color.fromRGBO(
-                                                          230, 236, 254, 8),
+                                                      color: Color.fromRGBO(230, 236, 254, 0.968),
                                                       width: 1.0),
                                                 ),
                                                 focusedBorder:
                                                     OutlineInputBorder(
                                                   borderSide: const BorderSide(
-                                                      color: Color.fromRGBO(
-                                                          230, 236, 254, 8),
+                                                      color: Color.fromRGBO(230, 236, 254, 0.968),
                                                       width: 1.0),
                                                   borderRadius:
                                                       const BorderRadius.all(
@@ -739,8 +728,7 @@ class _LessonObservationState extends State<LessonObservation> {
                                                                   10.0))
                                                           .r,
                                                 ),
-                                                fillColor: const Color.fromRGBO(
-                                                    230, 236, 254, 8),
+                                                fillColor: const Color.fromARGB(248, 230, 236, 254),
                                                 filled: true),
                                             cursorColor: Colors.grey,
                                             keyboardType: TextInputType.text,

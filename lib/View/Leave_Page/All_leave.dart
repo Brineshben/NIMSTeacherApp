@@ -70,7 +70,7 @@ class _allleaveState extends State<allleave> {
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
-                      color: Color.fromRGBO(230, 236, 254, 8), width: 1.0),
+                      color: Color.fromRGBO(230, 236, 254, 0.966), width: 1.0),
                   borderRadius: BorderRadius.all(Radius.circular(20.0)),
                 ),
                 fillColor: Colorutils.Whitecolor,
@@ -402,15 +402,15 @@ class _allleaveState extends State<allleave> {
                                                               ),
                                                               enabledBorder: OutlineInputBorder(
                                                                 borderSide:
-                                                                BorderSide(color: Color.fromRGBO(230, 236, 254, 8), width: 1.0),
+                                                                BorderSide(color: Color.fromRGBO(230, 236, 254, 0.966), width: 1.0),
                                                                 borderRadius: BorderRadius.all(Radius.circular(10)),
                                                               ),
                                                               focusedBorder: OutlineInputBorder(
                                                                 borderSide:
-                                                                BorderSide(color: Color.fromRGBO(230, 236, 254, 8), width: 1.0),
+                                                                BorderSide(color: Color.fromRGBO(230, 236, 254, 0.966), width: 1.0),
                                                                 borderRadius: BorderRadius.all(Radius.circular(5)),
                                                               ),
-                                                              fillColor: Color.fromRGBO(230, 236, 254, 8),
+                                                              fillColor: Color.fromRGBO(230, 236, 254, 0.966),
                                                               filled: true),
                                                           keyboardType: TextInputType.text,
                                                           maxLines: 5,
@@ -1031,15 +1031,15 @@ class _allleaveState extends State<allleave> {
                 //                                               ),
                 //                                               enabledBorder: OutlineInputBorder(
                 //                                                 borderSide:
-                //                                                 BorderSide(color: Color.fromRGBO(230, 236, 254, 8), width: 1.0),
+                //                                                 BorderSide(color:Color.fromRGBO(230, 236, 254, 0.966),, width: 1.0),
                 //                                                 borderRadius: BorderRadius.all(Radius.circular(10)),
                 //                                               ),
                 //                                               focusedBorder: OutlineInputBorder(
                 //                                                 borderSide:
-                //                                                 BorderSide(color: Color.fromRGBO(230, 236, 254, 8), width: 1.0),
+                //                                                 BorderSide(color:Color.fromRGBO(230, 236, 254, 0.966),, width: 1.0),
                 //                                                 borderRadius: BorderRadius.all(Radius.circular(5)),
                 //                                               ),
-                //                                               fillColor: Color.fromRGBO(230, 236, 254, 8),
+                //                                               fillColor:Color.fromRGBO(230, 236, 254, 0.966),,
                 //                                               filled: true),
                 //                                           keyboardType: TextInputType.text,
                 //                                           maxLines: 5,

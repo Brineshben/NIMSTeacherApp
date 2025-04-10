@@ -101,8 +101,7 @@ class _LearningWalkState extends State<LearningWalk> {
                                               ),
                                               enabledBorder: OutlineInputBorder(
                                                 borderSide: const BorderSide(
-                                                  color: Color.fromRGBO(
-                                                      230, 236, 254, 8),
+                                                  color: Color.fromRGBO(230, 236, 254, 0.966),
                                                   width: 1.0,
                                                 ),
                                                 borderRadius: const BorderRadius
@@ -112,8 +111,7 @@ class _LearningWalkState extends State<LearningWalk> {
                                               ),
                                               focusedBorder: OutlineInputBorder(
                                                 borderSide: const BorderSide(
-                                                  color: Color.fromRGBO(
-                                                      230, 236, 254, 8),
+                                                  color: Color.fromRGBO(230, 236, 254, 0.966),
                                                   width: 1.0,
                                                 ),
                                                 borderRadius: const BorderRadius
@@ -121,8 +119,7 @@ class _LearningWalkState extends State<LearningWalk> {
                                                     Radius.circular(10.0))
                                                     .r,
                                               ),
-                                              fillColor: const Color.fromRGBO(
-                                                  230, 236, 254, 8),
+                                              fillColor: Color.fromRGBO(230, 236, 254, 0.966),
                                               filled: true),
                                           isExpanded: true,
                                           padding: EdgeInsets.only(
@@ -178,8 +175,7 @@ class _LearningWalkState extends State<LearningWalk> {
                                               ),
                                               enabledBorder: OutlineInputBorder(
                                                 borderSide: const BorderSide(
-                                                  color: Color.fromRGBO(
-                                                      230, 236, 254, 8),
+                                                  color: Color.fromRGBO(230, 236, 254, 0.966),
                                                   width: 1.0,
                                                 ),
                                                 borderRadius: const BorderRadius
@@ -189,8 +185,7 @@ class _LearningWalkState extends State<LearningWalk> {
                                               ),
                                               focusedBorder: OutlineInputBorder(
                                                 borderSide: const BorderSide(
-                                                  color: Color.fromRGBO(
-                                                      230, 236, 254, 8),
+                                                  color: Color.fromRGBO(230, 236, 254, 0.966),
                                                   width: 1.0,
                                                 ),
                                                 borderRadius: const BorderRadius
@@ -198,8 +193,7 @@ class _LearningWalkState extends State<LearningWalk> {
                                                     Radius.circular(10.0))
                                                     .r,
                                               ),
-                                              fillColor: const Color.fromRGBO(
-                                                  230, 236, 254, 8),
+                                              fillColor: const Color.fromRGBO(230, 236, 254, 0.966),
                                               filled: true),
                                           padding: EdgeInsets.only(
                                               left: 10.w, right: 5.w),
@@ -257,8 +251,7 @@ class _LearningWalkState extends State<LearningWalk> {
                                               ),
                                               enabledBorder: OutlineInputBorder(
                                                 borderSide: const BorderSide(
-                                                  color: Color.fromRGBO(
-                                                      230, 236, 254, 8),
+                                                  color: Color.fromRGBO(230, 236, 254, 0.966),
                                                   width: 1.0,
                                                 ),
                                                 borderRadius: const BorderRadius
@@ -268,8 +261,7 @@ class _LearningWalkState extends State<LearningWalk> {
                                               ),
                                               focusedBorder: OutlineInputBorder(
                                                 borderSide: const BorderSide(
-                                                  color: Color.fromRGBO(
-                                                      230, 236, 254, 8),
+                                                  color: Color.fromRGBO(230, 236, 254, 0.966),
                                                   width: 1.0,
                                                 ),
                                                 borderRadius: const BorderRadius
@@ -277,8 +269,7 @@ class _LearningWalkState extends State<LearningWalk> {
                                                     Radius.circular(10.0))
                                                     .r,
                                               ),
-                                              fillColor: const Color.fromRGBO(
-                                                  230, 236, 254, 8),
+                                              fillColor: const Color.fromRGBO(230, 236, 254, 0.966),
                                               filled: true),
                                           padding: EdgeInsets.only(
                                               left: 10.w, right: 5.w),

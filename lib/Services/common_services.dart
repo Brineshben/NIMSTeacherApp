@@ -41,7 +41,8 @@ String convertTimeFormat(String? inputDate) {
     DateTime dateTime = DateTime.parse(inputDate);
 
     // Format the DateTime to the desired format
-    String formattedTime = DateFormat('hh:mma').format(dateTime).toUpperCase();
+    // String formattedTime = DateFormat('hh:mma').format(dateTime).toUpperCase();
+    String formattedTime = DateFormat('HH:mm').format(dateTime).toUpperCase();
 
     return formattedTime;
   } catch (e) {
@@ -88,8 +89,10 @@ String chatRoomDateAndTimeFormat(String? dateTimeString) {
     DateTime startOfWeek = today.subtract(
         Duration(days: today.weekday - 1)); // Start of the current week
 
-    DateFormat timeFormat = DateFormat('h:mm a'); // e.g., 3:41 PM
-    DateFormat dayFormat = DateFormat('EEE h:mm a'); // e.g., Wed 3:41 PM
+    // DateFormat timeFormat = DateFormat('h:mm a'); // e.g., 3:41 PM
+    // DateFormat dayFormat = DateFormat('EEE h:mm a'); // e.g., Wed 3:41 PM
+    DateFormat timeFormat = DateFormat('HH:mm'); // e.g., 18:20
+    DateFormat dayFormat = DateFormat('EEE HH:mm'); // e.g., Wed 18:20
     DateFormat dateFormat =
         DateFormat('MM/dd/yyyy'); // e.g., 10/10/2024 10:50 PM
 

@@ -13,7 +13,7 @@ import 'package:teacherapp/Controller/api_controllers/parentChatListController.d
 import 'package:teacherapp/Controller/home_controller/home_controller.dart';
 import 'package:teacherapp/Controller/ui_controllers/page_controller.dart';
 import 'package:teacherapp/Models/api_models/chat_group_api_model.dart';
-import 'package:teacherapp/View/Chat_View/feed_view%20_chat_screen.dart';
+import 'package:teacherapp/View/Chat_View/feed_view_chat_screen.dart';
 import 'package:teacherapp/View/Menu/layer_dummy.dart';
 import 'package:teacherapp/View/Menu/main_page.dart';
 import '../../main.dart';

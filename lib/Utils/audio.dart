@@ -15,7 +15,7 @@ class SingleAudio {
 
     if (!_isPlaying) {
       try {
-        await playerController.startPlayer(finishMode: FinishMode.pause);
+        await playerController.startPlayer();
       } catch (e) {
         print("playerControllererror -------------------------- $e");
       }

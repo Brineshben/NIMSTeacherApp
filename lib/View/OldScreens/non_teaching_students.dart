@@ -184,9 +184,10 @@ class _NonTeacherStudentListState extends State<NonTeacherStudentList> {
             ourStudentList = newStudentList[0]
                 ["feeDetails"]; // You can safely access the element here.
             // modifiedStudentList = newStudentList[0]['feeDetails'];
-          
-           ourStudentList.sort((a, b) => a['username'].toLowerCase().compareTo(b['username'].toLowerCase()));
-
+            try {
+              ourStudentList
+                  .sort((a, b) => a['username'].compareTo(b['username']));
+            } catch(e) {}
           }
           for (var index = 0; index < ourStudentList.length; index++) {
             ourStudentList[index].addAll({"is_present": true});
@@ -247,8 +248,12 @@ class _NonTeacherStudentListState extends State<NonTeacherStudentList> {
             for (var j = 0; j < isStudentListnull.length; j++) {
               if (isStudentListnull[j]["feeDetails"]
                   .containsKey("roll_number")) {
-                isStudentListnull.sort((a, b) => a["feeDetails"]["roll_number"]
-                    .compareTo(b["feeDetails"]["roll_number"]));
+                try {
+                  isStudentListnull.sort((a, b) {
+                    return a["feeDetails"]["roll_number"]
+                        .compareTo(b["feeDetails"]["roll_number"]);
+                  });
+                } catch(e) {}
               }
             }
             log("the after taken $isStudentListnull");
@@ -591,19 +596,19 @@ class _NonTeacherStudentListState extends State<NonTeacherStudentList> {
                             ),
                             enabledBorder: const OutlineInputBorder(
                               borderSide: BorderSide(
-                                  color: Color.fromRGBO(230, 236, 254, 8),
+                                  color:Color.fromRGBO(230, 236, 254, 0.966),
                                   width: 1.0),
                               borderRadius:
                                   BorderRadius.all(Radius.circular(10)),
                             ),
                             focusedBorder: const OutlineInputBorder(
                               borderSide: BorderSide(
-                                  color: Color.fromRGBO(230, 236, 254, 8),
+                                  color:Color.fromRGBO(230, 236, 254, 0.966),
                                   width: 1.0),
                               borderRadius:
                                   BorderRadius.all(Radius.circular(10.0)),
                             ),
-                            fillColor: const Color.fromRGBO(230, 236, 254, 8),
+                            fillColor: const Color.fromRGBO(230, 236, 254, 0.966),
                             filled: true),
                       ),
                     ),
@@ -911,7 +916,7 @@ class _NonTeacherStudentListState extends State<NonTeacherStudentList> {
                                                                     } else {
                                                                       snackBar(
                                                                           context: context,
-                                                                          message: "You cant edit attendance.",
+                                                                          message: "You can't edit attendance",
                                                                           color: Colors.red);
                                                                     }
                                                                     // afterAttendanceTaken == null ||

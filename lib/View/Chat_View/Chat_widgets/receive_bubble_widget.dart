@@ -11,12 +11,13 @@ import 'package:teacherapp/Controller/search_controller/search_controller.dart';
 import 'package:teacherapp/Models/api_models/chat_feed_view_model.dart';
 import 'package:teacherapp/Utils/Colors.dart';
 import 'package:teacherapp/Utils/api_constants.dart';
+import 'package:teacherapp/Utils/constant_function.dart';
 import 'package:teacherapp/View/Chat_View/Chat_widgets/audio_file_widget.dart';
 import 'package:teacherapp/View/Chat_View/Chat_widgets/replay_in_message_widget.dart';
 import 'package:teacherapp/View/Chat_View/Chat_widgets/sent_bubble_widget.dart';
 
 import '../../../Utils/font_util.dart';
-import '../feed_view _chat_screen.dart';
+import '../feed_view_chat_screen.dart';
 import 'audio_widget.dart';
 import 'file_widget.dart';
 
@@ -397,7 +398,7 @@ class ReceiveMessageBubble extends StatelessWidget {
                                                     SizedBox(height: 5.h),
                                                   ],
                                                 ),
-                                                SizedBox(width: 20.h),
+                                                SizedBox(width: 5.h),
                                                 Text(
                                                   // "17:47",
                                                   messageBubbleTimeFormat(time),

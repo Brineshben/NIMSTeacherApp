@@ -74,7 +74,7 @@ class LessonLearningController extends GetxController {
             lessonDataApi.value.data?.details?.lessonObservations?.list ?? [];
       }
     } catch (e) {
-      print("-----------lesson obs error--------------");
+      print("-----------lesson obs error-----$e---------");
     } finally {}
   }
 
@@ -133,8 +133,8 @@ class LessonLearningController extends GetxController {
         firstDate: DateTime(initialYr),
         lastDate: DateTime.now(),
       );
-      if (picked != null) {
-        selectedDateController.value.text = 'Date : ${picked.day.toString().padLeft(2, '0')}-${picked.month.toString().padLeft(2, '0')}-${picked.year}';
+      if (picked != null) {//Picked Date display here
+        selectedDateController.value.text = '${picked.day.toString().padLeft(2, '0')}-${picked.month.toString().padLeft(2, '0')}-${picked.year}';
         selectedDate.value = picked;
       }
 

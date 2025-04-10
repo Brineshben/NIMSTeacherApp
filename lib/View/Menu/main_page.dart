@@ -14,7 +14,7 @@ import '../../Controller/home_controller/home_controller.dart';
 import '../../Models/api_models/chat_group_api_model.dart';
 import '../../Utils/constants.dart';
 import '../../main.dart';
-import '../Chat_View/feed_view _chat_screen.dart';
+import '../Chat_View/feed_view_chat_screen.dart';
 import '../Home_Page/Home_Widgets/bottom_navigationbar.dart';
 import 'drawer.dart';
 
